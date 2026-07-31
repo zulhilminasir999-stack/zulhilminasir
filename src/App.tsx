@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import CaseStudyPage from "./pages/CaseStudyPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import ScrollToTop from "./components/ScrollToTop";
+import BackToTopButton from "./components/BackToTopButton";
 import { LoadingScreen } from "./components/LoadingScreen";
 import StickyStackScrollDemo from "./components/StickyStackScrollDemo";
 import { RevealProvider } from "./context/RevealContext";
@@ -51,6 +52,7 @@ export default function App() {
   return (
     <RevealProvider>
       <ScrollToTop />
+      <BackToTopButton />
       <AnimatePresence>
         {isLoading && <LoadingScreen key="loader" />}
       </AnimatePresence>
