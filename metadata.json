@@ -1,0 +1,6 @@
+{
+  "name": "Zulhilmi Nasir Portfolio",
+  "description": "A minimalist and responsive all-in-one portfolio featuring interactive galleries, comprehensive design case studies, an interactive brand planner, and an AI-powered co-designer tutor to showcase Zulhilmi's design and AI prompt specialist expertise.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

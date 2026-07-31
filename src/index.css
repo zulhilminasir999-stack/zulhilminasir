@@ -1,0 +1,842 @@
+@font-face {
+  font-family: 'Madinah Authentic';
+  src: url('/fonts/madinah-authentic.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-signature: "Madinah Authentic", cursive;
+  
+  --color-brand-primary: #8e8e93; /* Premium soft grey */
+  --color-brand-accent: #27272a;  /* Dark soft grey */
+
+  --animate-marquee: marquee 75s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 75s linear infinite;
+  --animate-float-slow: float-slow 25s ease-in-out infinite;
+  --animate-float-medium: float-medium 20s ease-in-out infinite;
+  --animate-float-fast: float-fast 15s ease-in-out infinite;
+
+  @keyframes float-slow {
+    0% { transform: translate(0px, 0px) rotate(0deg) scale(1); }
+    50% { transform: translate(40px, -65px) rotate(90deg) scale(1.15); }
+    100% { transform: translate(-30px, 30px) rotate(180deg) scale(0.95); }
+  }
+  @keyframes float-medium {
+    0% { transform: translate(0px, 0px) rotate(0deg) scale(1); }
+    50% { transform: translate(-60px, 55px) rotate(-120deg) scale(0.85); }
+    100% { transform: translate(35px, -45px) rotate(240deg) scale(1.05); }
+  }
+  @keyframes float-fast {
+    0% { transform: translate(0px, 0px) rotate(0deg) scale(1); }
+    50% { transform: translate(30px, -30px) rotate(60deg) scale(1.2); }
+    100% { transform: translate(-25px, 25px) rotate(120deg) scale(0.9); }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes marquee-reverse {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+
+  @keyframes shine {
+    0% { background-position: -100% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  --animate-shine: shine 3s infinite linear;
+  --animate-pulse-slow: pulse 2s infinite ease-in-out;
+}
+
+/* Custom card hover utilities */
+.card-shine-effect {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  background-size: 200% 100%;
+}
+
+.dark .card-shine-effect {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  background-size: 200% 100%;
+}
+
+/* Base scrollbar and refined grid structures */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b; /* Zinc 950 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a; /* Zinc 800 */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b; /* Zinc 600 */
+}
+
+/* Custom animation classes for cinematic reveal effects */
+.mask-line {
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Editorial aesthetic typography layout */
+.editorial-lead {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  line-height: 1.4;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  .editorial-lead {
+    font-size: 2.5rem;
+  }
+}
+
+/* ==========================================================================
+   MODERN EDITORIAL LIGHT/DARK MODE STRUCTURAL OVERRIDES
+   ========================================================================== */
+
+/* High-contrast and smooth transitions */
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* Light theme overrides propagate when html.light is toggled */
+html.light,
+html.light body,
+.light {
+  background-color: #fafafa !important;
+  color: #09090b !important;
+}
+
+/* Dynamic scrollbars */
+html.light ::-webkit-scrollbar-track {
+  background: #f4f4f5 !important;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #e4e4e7 !important;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #d4d4d8 !important;
+}
+
+/* Container / Header mapping */
+.light header {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border-color: #e4e4e7 !important;
+}
+
+@media (min-width: 768px) {
+  .light header {
+    background-color: transparent !important;
+    border-color: transparent !important;
+  }
+}
+
+.light header nav a.nav-menu-btn {
+  color: inherit !important;
+}
+.light header nav a:not(.nav-menu-btn) {
+  color: #71717a !important;
+}
+.light header nav a:not(.nav-menu-btn):hover {
+  color: #09090b !important;
+}
+
+.light .bg-zinc-950/80 {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.light .bg-zinc-950 {
+  background-color: #fafafa !important;
+}
+
+/* Tickers & Marquees */
+.light .bg-zinc-900\/60 {
+  background-color: #f4f4f5 !important;
+  border-color: #e4e4e7 !important;
+}
+.light .animate-marquee span,
+.light .animate-marquee-reverse span {
+  color: #71717a !important;
+}
+.light #contact-section .animate-marquee span,
+.light #contact-section .animate-marquee-reverse span,
+.light #contact-section .animate-marquee svg {
+  color: #ffffff !important;
+}
+
+/* Bento Cells and Cards */
+.light .bg-zinc-900\/10,
+.light .bg-zinc-900\/30,
+.light .bg-zinc-900\/50,
+.light .bg-zinc-900\/65,
+.light .bg-zinc-900\/60,
+.light .bg-zinc-900\/70,
+.light .bg-zinc-900\/80,
+.light .bg-zinc-900\/20,
+.light .bg-zinc-900,
+.light .bg-zinc-950 {
+  background-color: #ffffff !important;
+  border-color: #e4e4e7 !important;
+}
+
+/* Badges changed from orange to soft grey */
+.light .bg-orange-500\/5 {
+  background-color: rgba(113, 113, 122, 0.08) !important;
+}
+.light .bg-orange-950 {
+  background-color: #f4f4f5 !important;
+}
+.light .text-orange-455,
+.light .text-orange-450 {
+  color: #52525b !important; /* Soft grey 600 */
+}
+.light .text-orange-350 {
+  color: #71717a !important; /* Soft grey 500 */
+}
+
+/* General Typography Hierarchy Overrides */
+.light .text-zinc-100,
+.light .text-zinc-200,
+.light h1,
+.light h2,
+.light h3,
+.light h4,
+.light h5,
+.light h6 {
+  color: #09090b !important;
+}
+
+.light .text-zinc-300 {
+  color: #27272a !important;
+}
+
+.light .text-zinc-400,
+.light .text-zinc-500 {
+  color: #71717a !important;
+}
+
+.light .text-zinc-650 {
+  color: #a1a1aa !important;
+}
+
+/* Forms & UI Inputs */
+.light select,
+.light input,
+.light textarea {
+  background-color: #ffffff !important;
+  color: #09090b !important;
+  border: 1px solid #e4e4e7 !important;
+}
+.light select:focus,
+.light input:focus,
+.light textarea:focus {
+  border-color: #71717a !important;
+  box-shadow: 0 0 0 1px rgba(113, 113, 122, 0.2) !important;
+  outline: none;
+}
+
+/* Interactive elements / Lists items active slots */
+.light .hover\:bg-zinc-900\/20:hover {
+  background-color: #fafafa !important;
+}
+.light .bg-zinc-150 {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+}
+.light .bg-zinc-100 {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+}
+.light .bg-zinc-100:hover {
+  background-color: #27272a !important;
+}
+
+/* Section Dividers */
+.light .border-zinc-900,
+.light .border-zinc-950,
+.light .border-zinc-900\/40,
+.light .border-zinc-900\/60,
+.light .border-zinc-900\/80,
+.light .border-zinc-800,
+.light .border-zinc-700 {
+  border-color: #e4e4e7 !important;
+}
+
+/* Dialog / Modal Elements */
+.light #project-modal-mask {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
+}
+.light #project-modal-card {
+  background-color: #ffffff !important;
+  border-color: #e4e4e7 !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* AI Prompt Code Block / Spec-views */
+.light .bg-orange-500\/5.border-orange-500\/10 {
+  background-color: #f4f4f5 !important;
+  border-color: #e4e4e7 !important;
+}
+
+/* Lead Panel Fallback */
+.light #empty-leads,
+.light #no-lead-selected {
+  background-color: #fafafa !important;
+  border-color: #e4e4e7 !important;
+}
+
+/* ==========================================================================
+   TARGETED TYPOGRAPHY FONT-SIZE UPGRADES FOR CHOSEN SECTIONS
+   ========================================================================== */
+#about-section h3,
+#gallery-section h3,
+#prompt-section h3,
+#contact-section h3 {
+  font-size: 1.45rem !important;
+}
+
+#about-section h4,
+#gallery-section h4,
+#prompt-section h4,
+#contact-section h4 {
+  font-size: 1.025rem !important;
+}
+
+#about-section h5,
+#gallery-section h5,
+#prompt-section h5,
+#contact-section h5 {
+  font-size: 0.975rem !important;
+}
+
+#about-section p,
+#gallery-section p,
+#prompt-section p,
+#contact-section p {
+  font-size: 0.925rem !important;
+  line-height: 1.6 !important;
+}
+
+#about-section span,
+#gallery-section span,
+#prompt-section span,
+#contact-section span {
+  font-size: 0.825rem !important;
+}
+
+#about-section h1 span,
+#about-section h2 span,
+#gallery-section h1 span,
+#gallery-section h2 span,
+#prompt-section h1 span,
+#prompt-section h2 span,
+#contact-section h1 span,
+#contact-section h2 span {
+  font-size: inherit !important;
+}
+
+/* ==========================================================================
+   TITLING GOTHIC FB STANDARD FONT FOR CHOSEN INTERACTIVE ELEMENT GROUPS
+   ========================================================================== */
+header nav a,
+header nav button,
+header span,
+header a,
+button[id^="filter-tab-"],
+[id^="project-card-"] span,
+button[id^="cat-"] {
+  font-family: "Titling Gothic FB Standard", "Inter", sans-serif !important;
+}
+
+/* Custom Loader Styles */
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  background-color: #fafafa;
+}
+
+html:not(.light) .loader-container {
+  background-color: #09090b;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  max-width: 90vw;
+  margin: auto;
+  font-weight: 900;
+  font-family: var(--font-sans);
+  font-size: 28px;
+  text-align: center;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  background: radial-gradient(circle closest-side,#0A2947 94%,#0000) right/calc(200% - 1em) 100%;
+  animation: l24 1s infinite alternate linear;
+}
+
+.loader::before {
+  content: "Zulhilmi Nasir...";
+  color: #0000;
+  background: inherit;
+  background-image: radial-gradient(circle closest-side,#fff 94%,#0A2947);
+  -webkit-background-clip: text;
+  background-clip: text;
+  display: block;
+}
+
+@keyframes l24 {
+  100% {
+    background-position: left
+  }
+}
+
+/* Custom premium transition hover effect for header navigation menu buttons */
+.nav-menu-btn {
+  background: transparent;
+  border: none;
+  position: relative;
+  transition: color 0.5s ease, transform 0.3s ease;
+  cursor: pointer;
+  z-index: 10;
+  overflow: hidden;
+  border-radius: 9999px;
+  padding: 0.375rem 1rem !important; /* 6px vertical, 16px horizontal to look incredible as capsules */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-menu-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #0A2947;
+  transition: width 0.5s ease;
+  z-index: 2;
+}
+
+.nav-menu-btn:hover,
+.nav-menu-btn.active {
+  color: #ffffff !important; /* Match user request */
+  transition-delay: 0.1s;
+}
+
+/* Instant transitions or smooth transitions for active state */
+.nav-menu-btn.active {
+  transition-delay: 0s;
+}
+
+.nav-menu-btn:hover::before,
+.nav-menu-btn.active::before {
+  width: 100%;
+}
+
+.nav-menu-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  width: 100%;
+  background-color: #0A2947;
+  transition: height 0.3s ease;
+  z-index: -1;
+}
+
+.nav-menu-btn:hover::after,
+.nav-menu-btn.active::after {
+  height: 100%;
+}
+
+.nav-menu-btn:hover::after {
+  transition-delay: 0s;
+}
+
+.nav-menu-btn.active::after {
+  transition-delay: 0s;
+}
+
+.nav-relocation-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+.nav-relocation-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  width: 100%;
+  background-color: #0A2947;
+  transition: height 0.3s ease;
+  z-index: -1;
+}
+
+.nav-relocation-btn:hover {
+  color: #ffffff !important;
+}
+
+.nav-relocation-btn:hover::after {
+  height: 100%;
+}
+
+.nav-relocation-btn:hover svg {
+  color: #ffffff !important;
+}
+
+/* Dark theme specific nav buttons for Case Study page */
+.nav-menu-btn-dark-theme {
+  background: transparent;
+  border: none;
+  position: relative;
+  transition: color 0.5s ease, transform 0.3s ease;
+  cursor: pointer;
+  z-index: 10;
+  overflow: hidden;
+  border-radius: 9999px;
+  padding: 0.375rem 1rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-menu-btn-dark-theme:hover,
+.nav-menu-btn-dark-theme.active {
+  color: #0A2947 !important;
+  transition-delay: 0.1s;
+}
+
+.nav-menu-btn-dark-theme::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  width: 100%;
+  background-color: #ffffff;
+  transition: height 0.3s ease;
+  z-index: -1;
+}
+
+.nav-menu-btn-dark-theme:hover::after,
+.nav-menu-btn-dark-theme.active::after {
+  height: 100%;
+}
+
+/* Light theme support */
+html.light .nav-menu-btn:hover,
+html.light .nav-menu-btn.active {
+  color: #ffffff !important;
+}
+
+/* Custom Get In Touch Button Hover Effect (Uiverse.io by Mangesh636 adapted for our theme) */
+.get-in-touch-btn {
+  background: transparent !important;
+  position: relative;
+  padding: 0.5rem 1.25rem !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1.5px solid #0A2947 !important;
+  border-radius: 25px !important;
+  outline: none;
+  overflow: hidden;
+  color: #0A2947 !important;
+  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, transform 0.2s ease, opacity 0.2s ease;
+  text-align: center;
+  z-index: 10;
+}
+
+.get-in-touch-btn::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  content: "";
+  border-radius: 50%;
+  display: block;
+  width: 20em;
+  height: 20em;
+  left: -5em;
+  text-align: center;
+  transition: box-shadow 0.5s ease-out;
+  z-index: -1;
+  box-shadow: inset 0 0 0 0px #0A2947;
+}
+
+.get-in-touch-btn:hover {
+  color: #ffffff !important;
+  border: 1.5px solid #0A2947 !important;
+}
+
+.get-in-touch-btn:hover::before {
+  box-shadow: inset 0 0 0 10em #0A2947;
+}
+
+/* For dark mode / dark backgrounds if used inside dark sections */
+.get-in-touch-btn-dark {
+  background: transparent !important;
+  position: relative;
+  padding: 0.5rem 1.25rem !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1.5px solid #ffffff !important;
+  border-radius: 25px !important;
+  outline: none;
+  overflow: hidden;
+  color: #ffffff !important;
+  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, transform 0.2s ease, opacity 0.2s ease;
+  text-align: center;
+  z-index: 10;
+}
+
+.get-in-touch-btn-dark::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  content: "";
+  border-radius: 50%;
+  display: block;
+  width: 20em;
+  height: 20em;
+  left: -5em;
+  text-align: center;
+  transition: box-shadow 0.5s ease-out;
+  z-index: -1;
+  box-shadow: inset 0 0 0 0px #ffffff;
+}
+
+.get-in-touch-btn-dark:hover {
+  color: #0A2947 !important;
+  border: 1.5px solid #ffffff !important;
+}
+
+.get-in-touch-btn-dark:hover::before {
+  box-shadow: inset 0 0 0 10em #ffffff;
+}
+
+/* Optimization for Tablet / Medium Screen Devices only to prevent menu crowding and provide pristine spacing */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .nav-menu-btn {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 11px !important;
+  }
+  
+  .get-in-touch-btn, 
+  .get-in-touch-btn-dark,
+  .get-in-touch-btn-hero {
+    padding: 0.25rem 0.65rem !important;
+    font-size: 9.5px !important;
+  }
+}
+
+/* Custom Cyan Shimmer Animations for the Hero Get In Touch Button */
+@keyframes border-shimmer {
+  0% {
+    stroke-dashoffset: 200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes grid-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-12deg);
+  }
+  50% {
+    transform: translateX(150%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(150%) skewX(-12deg);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.02);
+  }
+}
+
+.animate-border-shimmer {
+  stroke-dasharray: 40 160;
+  animation: border-shimmer 3s linear infinite;
+}
+
+/* Hero Get In Touch Button with cyan glow and animated shimmer - clear transparent background */
+.get-in-touch-btn-hero {
+  background: transparent !important;
+  position: relative;
+  padding: 0.5rem 1.25rem !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 25px !important;
+  outline: none;
+  overflow: hidden;
+  color: #ffffff !important;
+  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.3s ease;
+  text-align: center;
+  z-index: 10;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 4px 15px -2px rgba(6, 182, 212, 0.12), 0 0 10px 1px rgba(6, 182, 212, 0.08);
+}
+
+.get-in-touch-btn-hero::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  content: "";
+  border-radius: 50%;
+  display: block;
+  width: 20em;
+  height: 20em;
+  left: -5em;
+  text-align: center;
+  transition: box-shadow 0.5s ease-out;
+  z-index: -1;
+  box-shadow: inset 0 0 0 0px #ffffff;
+}
+
+.get-in-touch-btn-hero:hover {
+  color: #0A2947 !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 8px 25px -4px rgba(255, 255, 255, 0.3), 0 0 25px 2px rgba(6, 182, 212, 0.25);
+}
+
+.get-in-touch-btn-hero:hover::before {
+  box-shadow: inset 0 0 0 10em #ffffff;
+}
+
+/* Ensure capabilities section (Featured Projects) retains white colors on light theme */
+.light #capabilities-section h2,
+.light #capabilities-section p,
+.light #capabilities-section span,
+.light #capabilities-section .text-white {
+  color: #ffffff !important;
+}
+
+.light #capabilities-section .text-white\/60 {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Lenis Recommended CSS Styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+
+
+
+
+
