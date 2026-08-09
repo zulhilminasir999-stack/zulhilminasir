@@ -22,7 +22,7 @@ function ScrollWord({ word, index, total, progress }: ScrollWordProps) {
     <span className="relative inline-block mr-[0.25em] select-none">
       <motion.span 
         style={{ opacity }} 
-        className="font-sans font-extrabold text-white"
+        className="font-sans font-medium text-white"
       >
         {word}
       </motion.span>
@@ -87,6 +87,7 @@ export default function TechBanner() {
     { name: "Antigravity", path: "/logos/antigravity_w.png" , customScale: "2.5" },
   ];
 
+  const isHoveredRef = useRef(false);
   const isDraggingRef = useRef(false);
   const inMomentumRef = useRef(false);
   const shouldResumeRef = useRef(true);
@@ -115,6 +116,9 @@ export default function TechBanner() {
       const period = singleWidth + 48; // 48px is the gap size (gap-12)
 
       if (isDraggingRef.current) {
+        currentX = currentXRef.current;
+      } else if (isHoveredRef.current) {
+        // Pause marquee movement while user is hovering
         currentX = currentXRef.current;
       } else {
         if (inMomentumRef.current) {
@@ -239,7 +243,12 @@ export default function TechBanner() {
       <div className="absolute inset-0 bg-gradient-to-r from-[#02040A]/95 via-[#02040A]/60 to-transparent pointer-events-none z-10" />
 
       {/* Smooth bottom gradient overlay blending to the next section's background (#0A2947) */}
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0A2947] to-transparent pointer-events-none z-10" />
+      <div 
+        className="absolute inset-x-0 bottom-0 h-48 sm:h-64 md:h-80 lg:h-[400px] pointer-events-none z-10" 
+        style={{
+          background: 'linear-gradient(to bottom, rgba(10, 41, 71, 0) 0%, rgba(10, 41, 71, 0.08) 20%, rgba(10, 41, 71, 0.3) 40%, rgba(10, 41, 71, 0.65) 65%, rgba(10, 41, 71, 0.92) 85%, rgba(10, 41, 71, 1) 95%, rgba(10, 41, 71, 1) 100%)'
+        }}
+      />
 
       {/* Content wrapper on the left side */}
       <div className="relative z-20 w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:pt-32 pb-20 text-left flex flex-col gap-6 sm:gap-8 md:gap-10">
@@ -261,7 +270,7 @@ export default function TechBanner() {
 
         {/* Scroll-Reveal Bold Paragraph */}
         <div className="w-full max-w-2xl sm:max-w-3xl mt-4 sm:mt-6 md:mt-8">
-          <p className="font-sans font-extrabold text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-white/20">
+          <p className="font-sans font-medium text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-white/20">
             {linesWithIndices.map((lineWords, lineIdx) => (
               <span key={lineIdx} className="block">
                 {lineWords.map(({ word, index }) => (
@@ -283,6 +292,8 @@ export default function TechBanner() {
           <div 
             ref={marqueeContainerRef}
             className="relative w-full flex items-center overflow-hidden py-4 cursor-grab active:cursor-grabbing touch-pan-y"
+            onMouseEnter={() => { isHoveredRef.current = true; }}
+            onMouseLeave={() => { isHoveredRef.current = false; }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}

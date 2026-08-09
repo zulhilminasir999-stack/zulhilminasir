@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useSpring, AnimatePresence } from "motion/react";
 import { useEffect, useState, useRef, MouseEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
+import { useNavigationType } from "react-router-dom";
 
 interface HoverImageShowcase {
   title: string;
@@ -21,8 +22,20 @@ interface HoverImageListProps {
 }
 
 export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
+  const navType = useNavigationType();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(() => {
+    const saved = sessionStorage.getItem("capabilities_expanded_index");
+    return saved !== null ? parseInt(saved, 10) : null;
+  });
+  
+  useEffect(() => {
+    if (expandedIndex !== null) {
+      sessionStorage.setItem("capabilities_expanded_index", expandedIndex.toString());
+    } else {
+      sessionStorage.removeItem("capabilities_expanded_index");
+    }
+  }, [expandedIndex]);
   const [rotate, setRotate] = useState(0);
   const lastX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -180,7 +193,7 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
             <motion.div
               initial={false}
               animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: (navType === "POP" && expandedIndex === idx) ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
               className={`overflow-hidden transition-colors duration-500 relative ${
                 isExpanded ? "bg-[#0A2947]" : "bg-zinc-50/30"
               }`}
@@ -199,12 +212,14 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
 
               <div className="px-6 sm:px-12 lg:px-16 pb-12 sm:pb-16 pt-2 relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {item.showcases?.map((showcase, sIdx) => (
+                  {item.showcases?.map((showcase, sIdx) => {
+                    const isRestoredFromPop = navType === "POP" && expandedIndex === idx;
+                    return (
                     <motion.div
                       key={sIdx}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={isRestoredFromPop ? false : { opacity: 0, y: 20 }}
                       animate={isExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                      transition={{ delay: 0.1 + sIdx * 0.1, duration: 0.4 }}
+                      transition={{ delay: isRestoredFromPop ? 0 : 0.1 + sIdx * 0.1, duration: isRestoredFromPop ? 0 : 0.4 }}
                       onClick={(e) => {
                         e.stopPropagation();
                         onItemClick?.(item, idx);
@@ -226,7 +241,8 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
                         {showcase.title}
                       </h4>
                     </motion.div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </motion.div>

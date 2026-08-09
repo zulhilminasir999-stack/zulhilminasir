@@ -12,6 +12,7 @@ interface PortfolioItem {
   url: string;
   client: string;
   year: string;
+  objectPosition?: string;
 }
 
 const PORTFOLIO_ITEMS: PortfolioItem[] = [
@@ -20,32 +21,33 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     title: "TG PowerWrap Website",
     category: "Corporate Website",
     defaultImage: "/Images/tgpw1.jpg",
-    url: "/case-study-project/nectar-organic",
+    url: "/case-study-project/TGPowerWrap",
     client: "TG PowerWrap Sdn Bhd",
     year: "2026"
   },
   {
-    id: "scrambler",
-    title: "Scrambler",
-    category: "Creative Photography",
+    id: "triply",
+    title: "Triply | AI-powered Travel Compinion",
+    category: "Mobile UI/UX Design",
     defaultImage: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study-project/komorebi-editorial",
-    client: "Scrambler Motorcycles",
+    client: "Triply",
     year: "2025"
   },
   {
     id: "zudio-garage",
-    title: "Zudio Garage®",
-    category: "Business Platform",
-    defaultImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study-project/zenith-cms",
-    client: "Zudio Group",
+    title: "CK Lighting Online Store",
+    category: "E-commerce Website",
+    defaultImage: "/Images/ck1.jpg",
+    objectPosition: "center 30%",
+    url: "/case-study-project/ck-lighting",
+    client: "CK Lighting Sdn Bhd",
     year: "2026"
   },
   {
     id: "flakeslake",
-    title: "Flakeslake",
-    category: "E-Commerce Marketplace",
+    title: "RepX | AI- powered Fitness",
+    category: "Mobile UI/UX Design",
     defaultImage: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study-project/breeze-cargo",
     client: "Flakeslake App",
@@ -53,8 +55,8 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
   },
   {
     id: "rural-arena",
-    title: "Rural Arena",
-    category: "Web Brand Experience",
+    title: "Warisan Ayah 3Q Catering",
+    category: "Brand Identity",
     defaultImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study-project/aistudio-brand",
     client: "Rural Arena Foundation",
@@ -121,6 +123,7 @@ export function LatestPortfolio() {
                 src={item.defaultImage}
                 alt={item.title}
                 className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0"
+                style={{ objectPosition: item.objectPosition || "center center" }}
                 referrerPolicy="no-referrer"
               />
               {/* Elegant dark gradient mask for high readability */}
@@ -159,7 +162,7 @@ export function LatestPortfolio() {
 
               <div className="flex items-center justify-between w-full">
                 {/* Left side: Large Title */}
-                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-sans font-extrabold tracking-tighter text-white leading-[0.8] select-none pr-4">
+                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-sans font-semibold tracking-tighter text-white leading-[1.1] sm:leading-[1] select-none pr-4">
                   {item.title}
                 </h3>
 

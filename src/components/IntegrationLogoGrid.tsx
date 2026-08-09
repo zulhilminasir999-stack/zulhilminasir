@@ -32,6 +32,7 @@ export default function IntegrationLogoGrid({ theme }: { theme?: "light" | "dark
   const trackRef = useRef<HTMLDivElement>(null);
   const singleTrackRef = useRef<HTMLDivElement>(null);
 
+  const isHoveredRef = useRef(false);
   const isDraggingRef = useRef(false);
   const inMomentumRef = useRef(false);
   const shouldResumeRef = useRef(true);
@@ -60,6 +61,9 @@ export default function IntegrationLogoGrid({ theme }: { theme?: "light" | "dark
       const period = singleWidth + 96; // 96px is the gap size (gap-24)
 
       if (isDraggingRef.current) {
+        currentX = currentXRef.current;
+      } else if (isHoveredRef.current) {
+        // Pause marquee movement while user is hovering
         currentX = currentXRef.current;
       } else {
         if (inMomentumRef.current) {
@@ -197,6 +201,8 @@ export default function IntegrationLogoGrid({ theme }: { theme?: "light" | "dark
       <div 
         ref={containerRef}
         className="relative z-10 w-full flex items-center overflow-hidden py-8 cursor-grab active:cursor-grabbing touch-pan-y"
+        onMouseEnter={() => { isHoveredRef.current = true; }}
+        onMouseLeave={() => { isHoveredRef.current = false; }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}

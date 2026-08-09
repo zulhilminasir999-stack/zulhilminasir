@@ -159,10 +159,11 @@ export default function ServicesSection({ theme = "light" }: ServicesSectionProp
   const gap = isMobile ? 8 : 12;
   
   // Ratios that sum to exactly 1.00 (100% of available width)
-  const thinRatio = isMobile ? 0.0875 : 0.10;
-  const activeRatio = isMobile ? 0.65 : 0.60;
+  // 1 active + 5 collapsed cards = 6 cards total (5 gaps)
+  const thinRatio = isMobile ? 0.06 : 0.07;
+  const activeRatio = isMobile ? 0.70 : 0.65;
 
-  const availableWidth = Math.max(viewportWidth - 4 * gap, 280);
+  const availableWidth = Math.max(viewportWidth - 5 * gap, 280);
   const cardWidthThin = availableWidth * thinRatio;
   const cardWidthActive = availableWidth * activeRatio;
 

@@ -91,13 +91,14 @@ export default function CaseStudyPage() {
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetSectionId: string) => {
     if (e && e.preventDefault) e.preventDefault();
     
-    // Prevent navigating to Projects from Case Study page since we are already viewing a project
-    if (targetSectionId === '#capabilities-section' || targetSectionId === 'capabilities') {
+    const rawId = targetSectionId.replace('#', '');
+    
+    if (rawId === 'capabilities-section' || rawId === 'capabilities') {
+      navigate(-1);
       return;
     }
     
     triggerReveal(() => {
-      const rawId = targetSectionId.replace('#', '');
       if (rawId === 'hero-section' || rawId === 'hero') {
         navigate('/');
       } else {
@@ -625,18 +626,10 @@ export default function CaseStudyPage() {
            {/* Image 2 */}
            <div className="sticky top-0 h-screen w-full overflow-hidden">
              <img 
-               src={galleryImages[1]} 
-               alt="Gallery 2"
+               src="/Images/TGPW Visual Guideline.jpg" 
+               alt="TGPW Visual Guideline"
                className="w-full h-full object-cover" 
                referrerPolicy="no-referrer"
-               onError={(e) => {
-                 const img = e.currentTarget;
-                 if (img.src.includes('.jpg')) {
-                   img.src = img.src.replace('.jpg', '.jpj');
-                 } else if (img.src.includes('.jpj')) {
-                   img.src = img.src.replace('.jpj', '.jpg');
-                 }
-               }}
              />
            </div>
            {/* Image 3 */}
@@ -661,7 +654,7 @@ export default function CaseStudyPage() {
         {/* Section 5: The Challenge */}
         <div className="w-full bg-white text-zinc-900 z-50 relative py-8 md:py-10">
           <div className="w-full px-6 sm:px-12 lg:px-16 space-y-8 md:space-y-10">
-             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
+             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 mb-12 md:mb-20">
               <div className="md:col-span-4 relative">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-medium tracking-tight text-zinc-900">The Challenge</h2>
@@ -676,7 +669,7 @@ export default function CaseStudyPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
               <div className="md:col-span-6 h-[400px] sm:h-[600px] lg:h-[800px]">
                 <img 
-                  src="/Images/TGPW Mobile.jpg" 
+                  src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (capability?.id === "web-design-cms" || capability?.id === "zenith-cms" || capability?.id === "ck-lighting") ? "/CK Lighting Web/ck5.jpg" : (galleryImages[2] || capability?.image)} 
                   className="w-full h-full object-cover" 
                   alt="Gallery 3"
                   referrerPolicy="no-referrer"
@@ -692,7 +685,7 @@ export default function CaseStudyPage() {
               </div>
               <div className="md:col-span-6 flex flex-col gap-4 lg:gap-6 h-[400px] sm:h-[600px] lg:h-[800px]">
                 <img 
-                  src="/Images/4.jpg" 
+                  src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (galleryImages[3] || galleryImages[0] || capability?.image)} 
                   className="w-full flex-1 object-cover min-h-0" 
                   alt="Gallery 4"
                   referrerPolicy="no-referrer"
@@ -706,7 +699,7 @@ export default function CaseStudyPage() {
                   }}
                 />
                 <img 
-                  src="/Images/Thumbnail Mobile TGPW2.jpg" 
+                  src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/5.jpg" : (galleryImages[5] || galleryImages[4] || galleryImages[1] || capability?.image)} 
                   className="w-full flex-1 object-cover min-h-0" 
                   alt="Gallery 5"
                   referrerPolicy="no-referrer"
@@ -829,16 +822,6 @@ export default function CaseStudyPage() {
                           referrerPolicy="no-referrer"
                         />
                       </div>
-
-                      {/* Text descriptions */}
-                      <div className="space-y-1 text-left">
-                        <h5 className="font-sans font-bold text-lg text-zinc-900 group-hover:text-zinc-600 transition-colors uppercase leading-snug">
-                          {relatedCap.title}
-                        </h5>
-                        <p className="font-sans text-xs text-zinc-500 line-clamp-2">
-                          {relatedCap.subtitle}
-                        </p>
-                      </div>
                     </div>
                   </Link>
                 ));
@@ -848,10 +831,35 @@ export default function CaseStudyPage() {
         </div>
       </main>
 
+      {/* Pre-Footer Image Section */}
+      <section className="w-full relative overflow-hidden bg-[#0A2947] -mb-1">
+        <div className="w-full h-[350px] sm:h-[500px] md:h-[650px] lg:h-[800px] relative">
+          <img 
+            src="/hero-bg.jpg" 
+            alt="Hero Background" 
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+          {/* Smooth multi-stop bottom color blend into footer background */}
+          <div 
+            className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none z-10" 
+            style={{
+              background: 'linear-gradient(to bottom, rgba(10, 41, 71, 0) 0%, rgba(10, 41, 71, 0.1) 20%, rgba(10, 41, 71, 0.35) 40%, rgba(10, 41, 71, 0.7) 65%, rgba(10, 41, 71, 0.95) 82%, rgba(10, 41, 71, 1) 90%, rgba(10, 41, 71, 1) 100%)'
+            }}
+          />
+        </div>
+      </section>
+
       {/* Footer Section */}
-      <footer className="relative overflow-hidden bg-[#0A2947] text-white pt-24 pb-0">
-        {/* Grain texture in the background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay">
+      <footer id="contact-section" className="relative overflow-hidden bg-[#0A2947] text-white pt-24 pb-0">
+        {/* Grain texture in the background with soft top mask */}
+        <div 
+          className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay"
+          style={{
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)'
+          }}
+        >
           <svg viewBox="0 0 250 250" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
             <filter id="noiseFilter">
               <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />

@@ -15,6 +15,7 @@ interface ExperienceItem {
   period: string;
   summary: string;
   bullets: string[];
+  image: string;
 }
 
 const EXPERIENCE_DATA: ExperienceItem[] = [
@@ -32,7 +33,8 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       "Supported digital transformation initiatives by modernizing company branch websites using a Content Management System (CMS) and restructuring documentation layouts.",
       "Enhanced digital visibility for branch services by incorporating basic SEO, GEO, and AEO best practices during the redesign and structuring of WordPress landing pages.",
       "Utilized Adobe Illustrator and Photoshop for vector graphics, packaging mockups, UI designs, and digital content creation, and leveraged AI-assisted tools to enhance design efficiency, ideation, and visual development."
-    ]
+    ],
+    image: "/Images/tgpw1.jpg"
   },
   {
     id: "ecraft",
@@ -46,7 +48,8 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       "Optimized Shopee marketplace visuals such as product images, banners, and promotional materials to strengthen brand presence and improve conversion performance.",
       "Developed responsive web designs optimized for desktop and mobile, ensuring cross-browser compatibility and seamless user experience using SiteGiant.",
       "Managed product listings and visual assets via SiteGiant CMS while collaborating with marketing teams to produce compelling campaign materials."
-    ]
+    ],
+    image: "/Images/ck1.jpg"
   },
   {
     id: "marketing",
@@ -60,7 +63,8 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       "Developed brand identity assets such as logos and social media cover designs, ensuring visual consistency and strong audience engagement.",
       "Managed social media content creation for six businesses, including promotional visuals, copywriting, and content writing to strengthen brand presence.",
       "Produced 10–13 content pieces monthly and supported video recording sessions for business-focused graphic and social media content."
-    ]
+    ],
+    image: "/Images/3.jpg"
   }
 ];
 
@@ -130,11 +134,6 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
           </h2>
         </div>
         <div className="col-span-1 md:col-span-12 lg:col-span-4 pt-4 md:pt-4 lg:pt-4">
-          <p className={`text-[13px] leading-relaxed font-sans max-w-sm mx-auto md:max-w-xl lg:max-w-sm text-center md:text-center lg:text-right lg:ml-auto ${
-            isLight ? "text-zinc-500" : "text-zinc-400"
-          }`}>
-            A chronological record of strategic creative leadership, brand transformation, and digital experience engineering.
-          </p>
         </div>
       </div>
 
@@ -208,12 +207,16 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                       {/* Content Grid */}
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
                         {/* Summary Column */}
-                        <div className="lg:col-span-5">
-                          <p className={`text-lg sm:text-xl md:text-2xl font-medium leading-[1.3] tracking-tight min-h-[4em] ${
-                            isLight ? "text-zinc-800" : "text-zinc-200"
-                          }`}>
-                            <TypewriterText text={item.summary} active={isOpen} isLight={isLight} />
-                          </p>
+                        <div className="lg:col-span-5 flex flex-col gap-6">
+                          {/* Monochrome rectangle preview image that restores full color on hover */}
+                          <div className="relative w-full aspect-[16/10] overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50 group/img">
+                            <img 
+                              src={item.image} 
+                              alt={`${item.company} preview`}
+                              className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700 ease-in-out cursor-pointer hover:scale-[1.03]"
+                              referrerPolicy="no-referrer"
+                            />
+                          </div>
                         </div>
 
                         {/* Bullets Column */}

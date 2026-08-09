@@ -45,7 +45,7 @@ import ContactForm from "../components/ContactForm";
 import StripeMeshGradient from "../components/StripeMeshGradient";
 import { FloatingMenu } from "../components/FloatingMenu";
 import LeftSideTicker from "../components/LeftSideTicker";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useNavigationType } from "react-router-dom";
 import { HoverImageList } from "@/components/unlumen-ui/hover-image-list";
 import { LatestPortfolio } from "@/components/unlumen-ui/latest-portfolio";
 import { CreativeApproach } from "../components/CreativeApproach";
@@ -62,6 +62,7 @@ interface HomePageProps {
 export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   const navigate = useNavigate();
   const { hash } = useLocation();
+  const navType = useNavigationType();
   const [activeFilter, setActiveFilter] = useState<ProjectCategory>("ALL");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isAtTop, setIsAtTop] = useState(true);
@@ -151,10 +152,27 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
   const mountedWithLoading = React.useRef(isLoading);
 
+  // Continuously track scroll position in sessionStorage so back navigation always restores perfectly
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+    const trackScroll = () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
+      }, 50); // Small debounce
+    };
+    
+    window.addEventListener("scroll", trackScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", trackScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
+
   // Scroll to hash if present on client-side navigation, otherwise start at the top on app load
   useEffect(() => {
     if (!isLoading) {
-      sessionStorage.removeItem("home_scroll_position");
+      const savedScrollPosition = sessionStorage.getItem("home_scroll_position");
       
       const targetHash = window.location.hash;
       const isInitialAppLoad = mountedWithLoading.current;
@@ -181,6 +199,25 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         const timers = [10, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(scrollToHash, delay));
         return () => timers.forEach(id => clearTimeout(id));
       } else {
+        // If we have a saved scroll position and we navigated back (POP), restore it
+        if (savedScrollPosition && navType === "POP") {
+          const targetY = parseInt(savedScrollPosition, 10);
+          if (!isNaN(targetY)) {
+            const restoreScroll = () => {
+              window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
+              document.documentElement.scrollTop = targetY;
+              document.body.scrollTop = targetY;
+              if (lenisRef.current) {
+                lenisRef.current.scrollTo(targetY, { immediate: true });
+              }
+            };
+            
+            restoreScroll();
+            const timers = [10, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(restoreScroll, delay));
+            return () => timers.forEach(id => clearTimeout(id));
+          }
+        }
+
         // Initial app load or no hash -> force scroll to top
         if (isInitialAppLoad && targetHash) {
           // Clean up hash from URL visually if we are forcing to top on load
@@ -188,6 +225,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         }
 
         const forceScrollToTop = () => {
+          sessionStorage.removeItem("capabilities_expanded_index");
           window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
           document.documentElement.scrollTop = 0;
           document.body.scrollTop = 0;
@@ -733,7 +771,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       {/* Featured Projects Section */}
       <section 
         id="projects-outer-section" 
-        className="relative w-full pt-0 pb-0 bg-[#0A2947] z-20"
+        className="relative w-full pt-0 pb-0 bg-[#0A2947] z-20 -mt-1"
       >
         {/* Latest Portfolio Segment */}
         <LatestPortfolio />
@@ -769,11 +807,35 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       {/* Creative Approach Section matching attached image */}
       <CreativeApproach />
 
+      {/* Pre-Footer Image Section */}
+      <section className="w-full relative overflow-hidden bg-[#0A2947] -mb-1">
+        <div className="w-full h-[350px] sm:h-[500px] md:h-[650px] lg:h-[800px] relative">
+          <img 
+            src="/hero-bg.jpg" 
+            alt="Hero Background" 
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+          {/* Smooth multi-stop bottom color blend into footer background */}
+          <div 
+            className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none z-10" 
+            style={{
+              background: 'linear-gradient(to bottom, rgba(10, 41, 71, 0) 0%, rgba(10, 41, 71, 0.1) 20%, rgba(10, 41, 71, 0.35) 40%, rgba(10, 41, 71, 0.7) 65%, rgba(10, 41, 71, 0.95) 82%, rgba(10, 41, 71, 1) 90%, rgba(10, 41, 71, 1) 100%)'
+            }}
+          />
+        </div>
+      </section>
 
       {/* Footer Section */}
       <footer id="contact-section" className="relative overflow-hidden bg-[#0A2947] text-white pt-24 pb-0">
-        {/* Grain texture in the background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay">
+        {/* Grain texture in the background with soft top mask */}
+        <div 
+          className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay"
+          style={{
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)'
+          }}
+        >
           <svg viewBox="0 0 250 250" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
             <filter id="noiseFilter">
               <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />

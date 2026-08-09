@@ -35,18 +35,6 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }, 380);
   }, []);
 
-  // Trigger reveal on route location change if not already revealing
-  useEffect(() => {
-    if (location.pathname !== lastPath) {
-      setLastPath(location.pathname);
-      if (!isRevealing) {
-        triggerReveal(() => {
-          window.scrollTo(0, 0);
-        });
-      }
-    }
-  }, [location.pathname, lastPath, isRevealing, triggerReveal]);
-
   return (
     <RevealContext.Provider value={{ isRevealing, triggerReveal }}>
       {children}

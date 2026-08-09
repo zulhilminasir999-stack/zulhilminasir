@@ -54,13 +54,14 @@ export default function ProjectDetailPage() {
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetSectionId: string) => {
     if (e && e.preventDefault) e.preventDefault();
     
-    // Prevent navigating to Projects from Case Study Project page since we are already viewing a project
-    if (targetSectionId === '#capabilities-section' || targetSectionId === 'capabilities') {
+    const rawId = targetSectionId.replace('#', '');
+    
+    if (rawId === 'capabilities-section' || rawId === 'capabilities') {
+      navigate(-1);
       return;
     }
     
     triggerReveal(() => {
-      const rawId = targetSectionId.replace('#', '');
       if (rawId === 'hero-section' || rawId === 'hero') {
         navigate('/');
       } else {
@@ -69,7 +70,7 @@ export default function ProjectDetailPage() {
     });
   };
 
-  const project = PORTFOLIO_PROJECTS.find(p => p.id === id);
+  const project = PORTFOLIO_PROJECTS.find(p => p.id === id || (id === "zenith-cms" && p.id === "ck-lighting"));
 
   useEffect(() => {
     const updateTime = () => {
@@ -451,7 +452,7 @@ export default function ProjectDetailPage() {
               src={currentHeroImage || ((project?.galleryImages && project.galleryImages.length > 0) ? project.galleryImages[0] : (project?.imageUrl || ""))} 
               alt={`${project?.title || "Project"} background`}
               className="w-full h-full object-cover select-none pointer-events-none"
-              style={{ objectPosition: "center 30%" }}
+              style={{ objectPosition: project?.objectPosition || "center 30%" }}
               referrerPolicy="no-referrer"
             />
             {/* Elegant overlay: dark gradients for beautiful visual blending and high legibility */}
@@ -483,7 +484,7 @@ export default function ProjectDetailPage() {
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4">
-                <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-zinc-900">{project.title}</h2>
+                <h2 className="text-2xl font-medium tracking-tight text-zinc-900">{project.title}</h2>
               </div>
               <div className="md:col-span-8">
                 <p className="text-2xl md:text-3xl font-light leading-snug text-zinc-700">
@@ -546,7 +547,7 @@ export default function ProjectDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4 relative">
                 <div>
-                  <h2 className="text-4xl font-medium tracking-tight text-zinc-900">Overview</h2>
+                  <h2 className="text-2xl font-medium tracking-tight text-zinc-900">Overview</h2>
                 </div>
               </div>
               <div className="md:col-span-8 space-y-8 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
@@ -559,64 +560,75 @@ export default function ProjectDetailPage() {
           </div>
         </section>
 
-        {/* Section 4: Full-width Images (Sticky Stacking) */}
-        <div className="relative bg-zinc-900 z-50 w-full" style={{ height: "300vh" }}>
+        {/* Section 4: Full-width Images */}
+        <div 
+          className="relative bg-zinc-900 z-50 w-full" 
+          style={{ height: project?.id === "TGPowerWrap" ? "200vh" : undefined }}
+        >
            {/* Image 1 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
-             <img 
-               src={(project.galleryImages && project.galleryImages.length > 1) ? project.galleryImages[1] : project.imageUrl} 
-               alt="Gallery 1"
-               className="w-full h-full object-cover" 
-               referrerPolicy="no-referrer"
-             />
-           </div>
-           {/* Image 2 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
-             <img 
-               src={(project.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : "/Images/TGPW Visual Guideline.jpg"} 
-               alt="Gallery 2"
-               className="w-full h-full object-cover" 
-               referrerPolicy="no-referrer"
-               onError={(e) => {
-                 const img = e.currentTarget;
-                 if (img.src.includes('.jpg')) {
-                   img.src = img.src.replace('.jpg', '.jpj');
-                 } else if (img.src.includes('.jpj')) {
-                   img.src = img.src.replace('.jpj', '.jpg');
-                 }
-               }}
-             />
-           </div>
-           {/* Image 3 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
-             <img 
-               src={(project.galleryImages && project.galleryImages.length > 3) ? project.galleryImages[3] : "/Images/Thumbnail Mobile TGPW.jpg"} 
-               alt="Gallery 3"
-               className="w-full h-full object-cover" 
-               referrerPolicy="no-referrer"
-               onError={(e) => {
-                 const img = e.currentTarget;
-                 if (img.src.includes('.jpg')) {
-                   img.src = img.src.replace('.jpg', '.jpj');
-                 } else if (img.src.includes('.jpj')) {
-                   img.src = img.src.replace('.jpj', '.jpg');
-                 }
-               }}
-             />
-           </div>
+           {(() => {
+             const img1Src = (project?.galleryImages && project.galleryImages.length > 1) ? project.galleryImages[1] : (project?.imageUrl || "");
+             const isLongImage = img1Src.includes('ck2') || img1Src.includes('ck3') || img1Src.includes('ck');
+             if (isLongImage) {
+               return (
+                 <div 
+                   className="z-10 w-full"
+                   style={{ position: "sticky", bottom: 0 }}
+                 >
+                   <img 
+                     src={img1Src} 
+                     alt="Gallery 1"
+                     className="w-full h-auto block select-none" 
+                     referrerPolicy="no-referrer"
+                     onError={(e) => {
+                       const img = e.currentTarget;
+                       if (img.src.includes('.jpg')) {
+                         img.src = img.src.replace('.jpg', '.jpj');
+                       } else if (img.src.includes('.jpj')) {
+                         img.src = img.src.replace('.jpj', '.jpg');
+                       }
+                     }}
+                   />
+                 </div>
+               );
+             }
+             return (
+               <div className="sticky top-0 h-screen w-full overflow-hidden z-10">
+                 <img 
+                   src={img1Src} 
+                   alt="Gallery 1"
+                   className="w-full h-full object-cover" 
+                   referrerPolicy="no-referrer"
+                 />
+               </div>
+             );
+           })()}
+
+           {/* Image 2 - Specific for TG PowerWrap Website (TGPowerWrap) */}
+           {project?.id === "TGPowerWrap" && (
+             <div className="sticky top-0 h-screen w-full overflow-hidden z-20 bg-zinc-900">
+               <img 
+                 src="/Images/TGPW Visual Guideline.jpg" 
+                 alt="TGPW Visual Guideline"
+                 className="w-full h-full object-cover" 
+                 referrerPolicy="no-referrer"
+               />
+             </div>
+           )}
+
         </div>
 
         {/* Section 5: The Challenge (Sticky Left) */}
-        <div className="w-full bg-white text-zinc-900 z-50 relative py-8 md:py-10">
-          <div className="w-full px-6 sm:px-12 lg:px-16 space-y-8 md:space-y-10">
-             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
+        <div className="w-full bg-white text-zinc-900 z-50 relative py-16 md:py-24 lg:py-32">
+          <div className="w-full px-6 sm:px-12 lg:px-16 space-y-12 md:space-y-20">
+             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 mt-6 mb-16 md:mt-10 md:mb-28">
               <div className="md:col-span-4 relative">
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-medium tracking-tight text-zinc-900">The Challenge</h2>
+                  <h2 className="text-2xl font-medium tracking-tight text-zinc-900">The Challenge</h2>
                 </div>
               </div>
               <div className="md:col-span-8 space-y-6 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
-                <p>{project.challenge || "Athletes struggled to interpret and act on the data their smart clothing collected. Existing apps in the market were either too complex for casual users or too simplified for professional athletes. The gap between advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}</p>
+                <p className="mb-6">{project.challenge || "Athletes struggled to interpret and act on the data their smart clothing collected. Existing apps in the market were either too complex for casual users or too simplified for professional athletes. The gap between advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}</p>
               </div>
             </div>
             
@@ -624,9 +636,9 @@ export default function ProjectDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
               <div className="md:col-span-6 h-[400px] sm:h-[600px] lg:h-[800px]">
                 <img 
-                  src="/Images/TGPW Mobile.jpg" 
+                  src={(project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || ""))} 
                   className="w-full h-full object-cover" 
-                  alt="Gallery 3"
+                  alt={`${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     const img = e.currentTarget;
@@ -640,9 +652,9 @@ export default function ProjectDetailPage() {
               </div>
               <div className="md:col-span-6 flex flex-col gap-4 lg:gap-6 h-[400px] sm:h-[600px] lg:h-[800px]">
                 <img 
-                  src="/Images/4.jpg" 
+                  src={(project?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : ((project?.galleryImages && project.galleryImages.length > 3) ? project.galleryImages[3] : (project?.imageUrl || ""))} 
                   className="w-full flex-1 object-cover min-h-0" 
-                  alt="Gallery 4"
+                  alt={`${project?.title || "Gallery"} 4`}
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     const img = e.currentTarget;
@@ -654,9 +666,9 @@ export default function ProjectDetailPage() {
                   }}
                 />
                 <img 
-                  src="/Images/Thumbnail Mobile TGPW2.jpg" 
+                  src={(project?.id === "TGPowerWrap") ? "/Images/5.jpg" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || "")))} 
                   className="w-full flex-1 object-cover min-h-0" 
-                  alt="Gallery 5"
+                  alt={`${project?.title || "Gallery"} 5`}
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     const img = e.currentTarget;
@@ -667,6 +679,18 @@ export default function ProjectDetailPage() {
                     }
                   }}
                 />
+              </div>
+            </div>
+
+            {/* The Solution / User Flow */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 pt-12 md:pt-20 lg:pt-24 pb-6 md:pb-10">
+              <div className="md:col-span-4">
+                <h3 className="text-2xl font-medium tracking-tight text-zinc-900">User Flow</h3>
+              </div>
+              <div className="md:col-span-8 space-y-6 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
+                <p>
+                  {project.solution || "The digital product needed to handle complex data streams from advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}
+                </p>
               </div>
             </div>
 
@@ -712,15 +736,15 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* Section 7: The Solution & Key Results (After Sticky Images) */}
-        <div className="w-full bg-white text-zinc-900 z-50 relative py-8 md:py-10">
-          <div className="w-full px-6 sm:px-12 lg:px-16 space-y-8 md:space-y-10">
+        <div className="w-full bg-white text-zinc-900 z-50 relative py-16 md:py-24 lg:py-32">
+          <div className="w-full px-6 sm:px-12 lg:px-16 space-y-16 md:space-y-24">
             {/* The Solution */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
               <div className="md:col-span-4">
-                <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-zinc-900">The Solution</h3>
+                <h3 className="text-2xl font-medium tracking-tight text-zinc-900">The Solution</h3>
               </div>
               <div className="md:col-span-8 space-y-6 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
-                <p>
+                <p className="mb-4">
                   {project.solution || "The digital product needed to handle complex data streams from advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}
                 </p>
               </div>
@@ -728,9 +752,9 @@ export default function ProjectDetailPage() {
 
             {/* Key Results */}
             {project.results && project.results.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 pt-8 md:pt-10 border-t border-zinc-200">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 pt-12 md:pt-16 lg:pt-20">
                 <div className="md:col-span-4">
-                  <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-zinc-900">Key Results</h3>
+                  <h3 className="text-2xl font-medium tracking-tight text-zinc-900">Key Results</h3>
                 </div>
                 <div className="md:col-span-8">
                   <ul className="grid grid-cols-1 gap-6">
@@ -750,10 +774,10 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* Related Capabilities block (Below Sticky Images) */}
-        <div className="w-full bg-white relative z-40 py-8 md:py-10 px-6 sm:px-12 lg:px-16">
+        <div className="w-full bg-white relative z-40 py-16 md:py-24 px-6 sm:px-12 lg:px-16">
           <div className="w-full space-y-6 md:space-y-8">
             <div className="space-y-2">
-              <h4 className="font-sans font-medium text-2xl sm:text-3xl tracking-tight text-zinc-900 uppercase">
+              <h4 className="font-sans font-medium text-2xl tracking-tight text-zinc-900 uppercase">
                 Related Capabilities
               </h4>
             </div>
@@ -775,16 +799,6 @@ export default function ProjectDetailPage() {
                         referrerPolicy="no-referrer"
                       />
                     </div>
-
-                    {/* Text descriptions */}
-                    <div className="space-y-1 text-left">
-                      <h5 className="font-sans font-bold text-lg text-zinc-900 group-hover:text-zinc-600 transition-colors uppercase leading-snug">
-                        {relatedCap.title}
-                      </h5>
-                      <p className="font-sans text-xs text-zinc-500 line-clamp-2">
-                        {relatedCap.subtitle}
-                      </p>
-                    </div>
                   </div>
                 </Link>
               ))}
@@ -796,10 +810,35 @@ export default function ProjectDetailPage() {
       {/* Floating back button */}
       <FloatingMenu visible={showSideMenu} theme="dark" onNavClick={(targetId) => handleNavClick({ preventDefault: () => {} } as any, targetId)} />
 
+      {/* Pre-Footer Image Section */}
+      <section className="w-full relative overflow-hidden bg-[#0A2947] -mb-1">
+        <div className="w-full h-[350px] sm:h-[500px] md:h-[650px] lg:h-[800px] relative">
+          <img 
+            src="/hero-bg.jpg" 
+            alt="Hero Background" 
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+          {/* Smooth multi-stop bottom color blend into footer background */}
+          <div 
+            className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none z-10" 
+            style={{
+              background: 'linear-gradient(to bottom, rgba(10, 41, 71, 0) 0%, rgba(10, 41, 71, 0.1) 20%, rgba(10, 41, 71, 0.35) 40%, rgba(10, 41, 71, 0.7) 65%, rgba(10, 41, 71, 0.95) 82%, rgba(10, 41, 71, 1) 90%, rgba(10, 41, 71, 1) 100%)'
+            }}
+          />
+        </div>
+      </section>
+
       {/* Footer Section */}
-      <footer className="relative overflow-hidden bg-[#0A2947] text-white pt-24 pb-0">
-        {/* Grain texture in the background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay">
+      <footer id="contact-section" className="relative overflow-hidden bg-[#0A2947] text-white pt-24 pb-0">
+        {/* Grain texture in the background with soft top mask */}
+        <div 
+          className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay"
+          style={{
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)'
+          }}
+        >
           <svg viewBox="0 0 250 250" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
             <filter id="noiseFilter">
               <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />

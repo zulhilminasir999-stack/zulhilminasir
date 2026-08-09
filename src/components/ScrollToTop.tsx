@@ -1,15 +1,17 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigationType } from "react-router-dom";
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation();
+  const navType = useNavigationType();
 
   useEffect(() => {
     // If there is a hash, skip scroll-to-top to maintain position or use hash navigation
     if (hash) return;
 
-    // If we are returning to "/" and have a saved scroll position, do not scroll to top
-    if (pathname === "/" && sessionStorage.getItem("home_scroll_position")) {
+    // If we are returning to "/" via a POP (back/forward) navigation, do not scroll to top.
+    // The HomePage will handle restoring the exact scroll position.
+    if (pathname === "/" && navType === "POP") {
       return;
     }
 

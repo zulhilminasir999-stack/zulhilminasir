@@ -89,7 +89,7 @@ export const AI_TOOLS_LIST = [
 
 export const PORTFOLIO_PROJECTS: Project[] = [
   {
-    id: "nectar-organic",
+    id: "TGPowerWrap",
     title: "TG PowerWrap Website",
     subtitle: "Corporate Website",
     category: "PACKAGING",
@@ -181,31 +181,32 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     ]
   },
   {
-    id: "zenith-cms",
-    title: "Zenith Workspace Hub",
-    subtitle: "WordPress Elementor Multi-Service Redesign",
+    id: "ck-lighting",
+    title: "CK Lighting Online Store",
+    subtitle: "E-Commerce Webstore & Brand Experience",
     category: "WEB_DEV",
     categoryLabel: "CMS & Full Web Development",
-    year: "2025",
-    imageUrl: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200",
-    client: "Zenith Coworking & Technology Group",
-    toolsUsed: ["WordPress Elementor Pro", "Wix Layout Engine", "Custom CSS Variables", "Figma Design System"],
-    summary: "Constructed an elite corporate CMS portal featuring dynamic slot-booking widgets, regional community forums, and highly responsiveness, configured through a bespoke Elementor styling template.",
-    challenge: "Traditional templates had poor mobile load times and did not support complex custom integrations for multi-hub bookings requested by the brand's international directors.",
-    solution: "Engineered a custom theme setup in Elementor Pro, completely overriding typical theme overheads. Wired custom Javascript to handle rapid interactive room filters and embedded interactive maps styled with elegant dark themes.",
+    year: "2026",
+    imageUrl: "/Images/ck1.jpg",
+    objectPosition: "center 30%",
+    client: "CK Lighting Sdn Bhd",
+    toolsUsed: ["SiteGiant", "Adobe Photoshop", "Custom CSS", "Figma Design System"],
+    summary: "Constructed an elite corporate CMS portal featuring dynamic product cataloging, regional store highlights, and high responsiveness.",
+    challenge: "Traditional templates had poor mobile load times and did not support complex custom integrations for multi-hub product showcases.",
+    solution: "Engineered a custom webstore setup in SiteGiant, completely optimizing site navigation, responsive layout across banners, icons, and product visuals.",
     results: [
-      "Improved Google PageSpeed Score to 96/100 on mobile devices.",
-      "Direct room bookings online increased by 310% post-relaunch."
+      "Improved mobile conversion and site performance.",
+      "Direct online inquiries increased substantially post-relaunch."
     ],
     galleryImages: [
-      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1542744094-3a31f103e35f?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1200"
+      "/Images/ck1.jpg",
+      "/Images/ck2.jpg",
+      "/CK Lighting Web/ck5.jpg",
+      "/CK Lighting Web/ck4.jpg",
+      "/CK Lighting Web/ck6.jpg"
     ],
     links: [
-      { label: "Launch Live Zenith Portal", url: "#" }
+      { label: "Launch Live CK Lighting Portal", url: "#" }
     ]
   },
   {

@@ -72,7 +72,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   const descY = useTransform(smoothScrollProgress, [0.32, 0.65], [300, 0]);
 
   // 5. Scroll the content block up naturally as the user scrolls further (from scroll 0.70 to 1.0)
-  const naturalScrollY = useTransform(smoothScrollProgress, [0.70, 1.0], ["0vh", "-30vh"]);
+  const naturalScrollY = useTransform(smoothScrollProgress, [0.70, 1.0], ["0vh", "-10vh"]);
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden" style={{ paddingBottom: 0 }}>
@@ -169,7 +169,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
             y: descY,
             transformOrigin: "center center"
           }}
-          className="text-zinc-500 text-[2.8vw] sm:text-[2.4vw] md:text-2xl lg:text-3xl xl:text-4xl tracking-tight leading-none whitespace-nowrap font-semibold font-sans text-center mt-6 px-4"
+          className="text-zinc-500 text-[2.8vw] sm:text-[2.4vw] md:text-2xl lg:text-3xl xl:text-4xl tracking-tight leading-none whitespace-nowrap font-semibold font-sans text-center mt-2 px-4"
         >
           Perfectly aligned creative and production expertise to increase digital impact.
         </motion.p>
