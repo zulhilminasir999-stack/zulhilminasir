@@ -79,7 +79,7 @@ export function LatestPortfolio() {
   };
 
   return (
-    <div className="w-full bg-[#0A2947]">
+    <div className="w-full bg-[#2563EB]">
 
       {/* Main Header Row */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 px-6 sm:px-12 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-10 sm:pb-14 items-start border-b border-white/5">
@@ -145,7 +145,7 @@ export function LatestPortfolio() {
                     transform: "translate(-50%, -50%)",
                     pointerEvents: "none",
                   }}
-                  className="hidden md:flex z-30 w-24 h-24 rounded-full bg-[#0A2947] text-white flex-col items-center justify-center font-sans text-xs tracking-widest font-extrabold shadow-2xl"
+                  className="hidden md:flex z-30 w-24 h-24 rounded-full bg-[#2563EB] text-white flex-col items-center justify-center font-sans text-xs tracking-widest font-extrabold shadow-2xl"
                 >
                   <span className="text-white font-sans font-black text-[11px] tracking-widest uppercase leading-none">VIEW</span>
                   <span className="text-white font-sans font-black text-[11px] tracking-widest uppercase leading-none mt-1">SITE</span>

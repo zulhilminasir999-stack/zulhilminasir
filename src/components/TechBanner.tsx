@@ -242,20 +242,20 @@ export default function TechBanner() {
       {/* Ambient dark gradient overlay to ensure text readability on the left */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#02040A]/95 via-[#02040A]/60 to-transparent pointer-events-none z-10" />
 
-      {/* Smooth bottom gradient overlay blending to the next section's background (#0A2947) */}
+      {/* Smooth bottom gradient overlay blending to the next section's background (#2563EB) */}
       <div 
         className="absolute inset-x-0 bottom-0 h-48 sm:h-64 md:h-80 lg:h-[400px] pointer-events-none z-10" 
         style={{
-          background: 'linear-gradient(to bottom, rgba(10, 41, 71, 0) 0%, rgba(10, 41, 71, 0.08) 20%, rgba(10, 41, 71, 0.3) 40%, rgba(10, 41, 71, 0.65) 65%, rgba(10, 41, 71, 0.92) 85%, rgba(10, 41, 71, 1) 95%, rgba(10, 41, 71, 1) 100%)'
+          background: 'linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.08) 20%, rgba(37, 99, 235, 0.3) 40%, rgba(37, 99, 235, 0.65) 65%, rgba(37, 99, 235, 0.92) 85%, rgba(37, 99, 235, 1) 95%, rgba(37, 99, 235, 1) 100%)'
         }}
       />
 
-      {/* Content wrapper on the left side */}
-      <div className="relative z-20 w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:pt-32 pb-20 text-left flex flex-col gap-6 sm:gap-8 md:gap-10">
+      {/* Content wrapper on the left side aligned precisely with Featured Projects */}
+      <div className="relative z-20 w-full max-w-4xl lg:max-w-5xl px-6 sm:px-12 lg:px-16 pt-20 sm:pt-24 lg:pt-28 pb-16 sm:pb-20 text-left flex flex-col items-start gap-6 sm:gap-8 md:gap-10">
         {/* Section Title: SOFTWARE & AI INTEGRATION */}
-        <div className="w-full">
+        <div className="w-full text-left">
           <h2 
-            className="text-4xl sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none !text-white"
+            className="text-4xl sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none !text-white text-left"
             style={{ color: "#ffffff" }}
           >
             <WordsStagger className="text-inherit">
@@ -268,11 +268,11 @@ export default function TechBanner() {
           </h2>
         </div>
 
-        {/* Scroll-Reveal Bold Paragraph */}
-        <div className="w-full max-w-2xl sm:max-w-3xl mt-4 sm:mt-6 md:mt-8">
-          <p className="font-sans font-medium text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-white/20">
+        {/* Scroll-Reveal Bold Paragraph aligned left */}
+        <div className="w-full max-w-2xl sm:max-w-3xl text-left">
+          <p className="font-sans font-medium text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-white/20 text-left">
             {linesWithIndices.map((lineWords, lineIdx) => (
-              <span key={lineIdx} className="block">
+              <span key={lineIdx} className="block text-left">
                 {lineWords.map(({ word, index }) => (
                   <ScrollWord 
                     key={index} 
@@ -287,8 +287,8 @@ export default function TechBanner() {
           </p>
         </div>
 
-        {/* Copy of Logo grid slide animation (In original colors, not monochrome/grayscale) */}
-        <div className="w-full relative mt-4 sm:mt-6">
+        {/* Copy of Logo grid slide animation aligned left */}
+        <div className="w-full relative mt-2 sm:mt-4 text-left">
           <div 
             ref={marqueeContainerRef}
             className="relative w-full flex items-center overflow-hidden py-4 cursor-grab active:cursor-grabbing touch-pan-y"
@@ -300,8 +300,8 @@ export default function TechBanner() {
             onPointerCancel={handlePointerUp}
             onTouchStart={() => setActiveLogo(null)}
             style={{
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
-              maskImage: "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)"
+              WebkitMaskImage: "linear-gradient(to right, black 0%, black 85%, transparent 100%)",
+              maskImage: "linear-gradient(to right, black 0%, black 85%, transparent 100%)"
             }}
           >
             {/* Marquee Content Belt */}

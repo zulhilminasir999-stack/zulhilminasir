@@ -21,7 +21,7 @@ interface ExperienceItem {
 const EXPERIENCE_DATA: ExperienceItem[] = [
   {
     id: "factor",
-    company: "Digital & E-Commerce Web Designer",
+    company: "Digital & Web Designer",
     role: "JumpFactor",
     location: "Newton Research & Development Centre",
     period: "Dec 2024 - Aug 2026",
@@ -121,14 +121,12 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
       {/* Editorial Header Accent - Similar to Latest Portfolio */}
       <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 pb-16 items-start transition-colors duration-300`}>
         <div className="col-span-1 md:col-span-12 lg:col-span-8 text-center md:text-center lg:text-left">
-          <h2 className={`text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-center lg:text-left ${
-            isLight ? "text-zinc-950" : "text-white"
-          }`}>
-            <WordsStagger className="text-inherit">
+          <h2 className="text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-center lg:text-left text-[#2563EB]">
+            <WordsStagger className="text-[#2563EB]">
               PROFESSIONAL
             </WordsStagger>
             <br />
-            <WordsStagger className="text-inherit" delay={0.35}>
+            <WordsStagger className="text-[#2563EB]" delay={0.35}>
               CHRONOLOGY
             </WordsStagger>
           </h2>
@@ -153,8 +151,8 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                 className="w-full flex items-center justify-between py-10 sm:py-12 text-left group focus:outline-none"
               >
                 <div className="flex items-baseline gap-4">
-                  <h3 className={`text-xl sm:text-2xl md:text-3xl font-medium tracking-tight transition-all duration-500 ${
-                    isOpen ? "opacity-100" : "opacity-40 group-hover:opacity-100"
+                  <h3 className={`text-xl sm:text-2xl md:text-3xl font-medium tracking-tight transition-all duration-500 group-hover:!text-[#2563EB] ${
+                    isOpen ? "opacity-100 !text-[#2563EB]" : "opacity-40 group-hover:opacity-100"
                   }`}>
                     {item.company}
                   </h3>
@@ -173,7 +171,7 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                   )}
                   <div className={`p-2 rounded-full border transition-all duration-500 ${
                     isOpen 
-                      ? "rotate-45 bg-[#0A2947] border-[#0A2947] text-white" 
+                      ? "rotate-45 bg-[#2563EB] border-[#2563EB] text-white" 
                       : "border-zinc-200 text-zinc-400 group-hover:border-zinc-400 group-hover:text-zinc-900"
                   }`}>
                     <Plus size={18} />

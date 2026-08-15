@@ -8,7 +8,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const PORT = 3000;
 
 app.use(express.json());
 
@@ -64,7 +64,7 @@ app.post("/api/prompt-craft", async (req, res) => {
     `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-2.5-flash",
       contents: craftPrompt,
       config: {
         responseMimeType: "application/json",
@@ -125,7 +125,7 @@ app.post("/api/generate-brief", async (req, res) => {
     `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-2.5-flash",
       contents: briefPrompt,
       config: {
         responseMimeType: "application/json",

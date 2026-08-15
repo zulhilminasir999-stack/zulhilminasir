@@ -182,8 +182,13 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
 }
 
-.light header nav a.nav-menu-btn {
-  color: inherit !important;
+.light header nav a.nav-menu-btn.nav-btn-black:not(.active):not(:hover),
+.light header nav button.nav-menu-btn.nav-btn-black:not(.active):not(:hover) {
+  color: #000000 !important;
+}
+.light header nav a.nav-menu-btn.nav-btn-white:not(.active):not(:hover),
+.light header nav button.nav-menu-btn.nav-btn-white:not(.active):not(:hover) {
+  color: #ffffff !important;
 }
 .light header nav a:not(.nav-menu-btn) {
   color: #71717a !important;
@@ -243,6 +248,14 @@ html.light ::-webkit-scrollbar-thumb:hover {
 }
 .light .text-orange-350 {
   color: #71717a !important; /* Soft grey 500 */
+}
+
+/* Career Timeline section company name hover */
+#career-section button:hover h3,
+#career-section .group:hover h3,
+.light #career-section button:hover h3,
+.light #career-section .group:hover h3 {
+  color: #2563EB !important;
 }
 
 /* General Typography Hierarchy Overrides */
@@ -341,28 +354,24 @@ html.light ::-webkit-scrollbar-thumb:hover {
    TARGETED TYPOGRAPHY FONT-SIZE UPGRADES FOR CHOSEN SECTIONS
    ========================================================================== */
 #about-section h3,
-#gallery-section h3,
 #prompt-section h3,
 #contact-section h3 {
   font-size: 1.45rem !important;
 }
 
 #about-section h4,
-#gallery-section h4,
 #prompt-section h4,
 #contact-section h4 {
   font-size: 1.025rem !important;
 }
 
 #about-section h5,
-#gallery-section h5,
 #prompt-section h5,
 #contact-section h5 {
   font-size: 0.975rem !important;
 }
 
 #about-section p,
-#gallery-section p,
 #prompt-section p,
 #contact-section p {
   font-size: 0.925rem !important;
@@ -370,7 +379,6 @@ html.light ::-webkit-scrollbar-thumb:hover {
 }
 
 #about-section span,
-#gallery-section span,
 #prompt-section span,
 #contact-section span {
   font-size: 0.825rem !important;
@@ -378,8 +386,6 @@ html.light ::-webkit-scrollbar-thumb:hover {
 
 #about-section h1 span,
 #about-section h2 span,
-#gallery-section h1 span,
-#gallery-section h2 span,
 #prompt-section h1 span,
 #prompt-section h2 span,
 #contact-section h1 span,
@@ -431,7 +437,7 @@ html:not(.light) .loader-container {
   text-align: center;
   line-height: 1;
   letter-spacing: -0.02em;
-  background: radial-gradient(circle closest-side,#0A2947 94%,#0000) right/calc(200% - 1em) 100%;
+  background: radial-gradient(circle closest-side,#2563EB 94%,#0000) right/calc(200% - 1em) 100%;
   animation: l24 1s infinite alternate linear;
 }
 
@@ -439,7 +445,7 @@ html:not(.light) .loader-container {
   content: "Zulhilmi Nasir...";
   color: #0000;
   background: inherit;
-  background-image: radial-gradient(circle closest-side,#fff 94%,#0A2947);
+  background-image: radial-gradient(circle closest-side,#fff 94%,#2563EB);
   -webkit-background-clip: text;
   background-clip: text;
   display: block;
@@ -467,6 +473,17 @@ html:not(.light) .loader-container {
   justify-content: center;
 }
 
+.nav-menu-btn.nav-btn-white:not(.active):not(:hover),
+.nav-menu-btn.nav-btn-white:not(.active):not(:hover) span {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.nav-menu-btn.nav-btn-black:not(.active):not(:hover),
+.nav-menu-btn.nav-btn-black:not(.active):not(:hover) span {
+  color: #000000 !important;
+}
+
 .nav-menu-btn::before {
   content: "";
   position: absolute;
@@ -474,13 +491,15 @@ html:not(.light) .loader-container {
   bottom: 0;
   height: 2px;
   width: 0;
-  background-color: #0A2947;
+  background-color: #2563EB;
   transition: width 0.5s ease;
   z-index: 2;
 }
 
 .nav-menu-btn:hover,
-.nav-menu-btn.active {
+.nav-menu-btn:hover span,
+.nav-menu-btn.active,
+.nav-menu-btn.active span {
   color: #ffffff !important; /* Match user request */
   transition-delay: 0.1s;
 }
@@ -502,7 +521,7 @@ html:not(.light) .loader-container {
   bottom: 0;
   height: 0;
   width: 100%;
-  background-color: #0A2947;
+  background-color: #2563EB;
   transition: height 0.3s ease;
   z-index: -1;
 }
@@ -534,7 +553,7 @@ html:not(.light) .loader-container {
   bottom: 0;
   height: 0;
   width: 100%;
-  background-color: #0A2947;
+  background-color: #2563EB;
   transition: height 0.3s ease;
   z-index: -1;
 }
@@ -569,7 +588,7 @@ html:not(.light) .loader-container {
 
 .nav-menu-btn-dark-theme:hover,
 .nav-menu-btn-dark-theme.active {
-  color: #0A2947 !important;
+  color: #ffffff !important;
   transition-delay: 0.1s;
 }
 
@@ -580,7 +599,7 @@ html:not(.light) .loader-container {
   bottom: 0;
   height: 0;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #2563EB;
   transition: height 0.3s ease;
   z-index: -1;
 }
@@ -592,7 +611,9 @@ html:not(.light) .loader-container {
 
 /* Light theme support */
 html.light .nav-menu-btn:hover,
-html.light .nav-menu-btn.active {
+html.light .nav-menu-btn:hover span,
+html.light .nav-menu-btn.active,
+html.light .nav-menu-btn.active span {
   color: #ffffff !important;
 }
 
@@ -608,12 +629,12 @@ html.light .nav-menu-btn.active {
   font-weight: 600 !important;
   text-decoration: none;
   cursor: pointer;
-  border: 1.5px solid #0A2947 !important;
+  border: 1.5px solid #000000 !important;
   border-radius: 25px !important;
   outline: none;
   overflow: hidden;
-  color: #0A2947 !important;
-  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, transform 0.2s ease, opacity 0.2s ease;
+  color: #000000 !important;
+  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, background-color 0.3s ease-out;
   text-align: center;
   z-index: 10;
 }
@@ -634,16 +655,16 @@ html.light .nav-menu-btn.active {
   text-align: center;
   transition: box-shadow 0.5s ease-out;
   z-index: -1;
-  box-shadow: inset 0 0 0 0px #0A2947;
+  box-shadow: inset 0 0 0 0px #2563EB;
 }
 
 .get-in-touch-btn:hover {
   color: #ffffff !important;
-  border: 1.5px solid #0A2947 !important;
+  border: 1.5px solid #2563EB !important;
 }
 
 .get-in-touch-btn:hover::before {
-  box-shadow: inset 0 0 0 10em #0A2947;
+  box-shadow: inset 0 0 0 10em #2563EB;
 }
 
 /* For dark mode / dark backgrounds if used inside dark sections */
@@ -663,7 +684,7 @@ html.light .nav-menu-btn.active {
   outline: none;
   overflow: hidden;
   color: #ffffff !important;
-  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, transform 0.2s ease, opacity 0.2s ease;
+  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, background-color 0.3s ease-out;
   text-align: center;
   z-index: 10;
 }
@@ -684,16 +705,16 @@ html.light .nav-menu-btn.active {
   text-align: center;
   transition: box-shadow 0.5s ease-out;
   z-index: -1;
-  box-shadow: inset 0 0 0 0px #ffffff;
+  box-shadow: inset 0 0 0 0px #2563EB;
 }
 
 .get-in-touch-btn-dark:hover {
-  color: #0A2947 !important;
-  border: 1.5px solid #ffffff !important;
+  color: #ffffff !important;
+  border: 1.5px solid #2563EB !important;
 }
 
 .get-in-touch-btn-dark:hover::before {
-  box-shadow: inset 0 0 0 10em #ffffff;
+  box-shadow: inset 0 0 0 10em #2563EB;
 }
 
 /* Optimization for Tablet / Medium Screen Devices only to prevent menu crowding and provide pristine spacing */
@@ -766,7 +787,7 @@ html.light .nav-menu-btn.active {
   outline: none;
   overflow: hidden;
   color: #ffffff !important;
-  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.3s ease;
+  transition: color 0.3s 0.1s ease-out, border-color 0.3s ease-out, box-shadow 0.3s ease;
   text-align: center;
   z-index: 10;
   backdrop-filter: blur(8px) !important;
@@ -789,17 +810,17 @@ html.light .nav-menu-btn.active {
   text-align: center;
   transition: box-shadow 0.5s ease-out;
   z-index: -1;
-  box-shadow: inset 0 0 0 0px #ffffff;
+  box-shadow: inset 0 0 0 0px #2563EB;
 }
 
 .get-in-touch-btn-hero:hover {
-  color: #0A2947 !important;
-  border: 1px solid #ffffff !important;
-  box-shadow: 0 8px 25px -4px rgba(255, 255, 255, 0.3), 0 0 25px 2px rgba(6, 182, 212, 0.25);
+  color: #ffffff !important;
+  border: 1px solid #2563EB !important;
+  box-shadow: 0 8px 25px -4px rgba(37, 99, 235, 0.4), 0 0 25px 2px rgba(37, 99, 235, 0.3);
 }
 
 .get-in-touch-btn-hero:hover::before {
-  box-shadow: inset 0 0 0 10em #ffffff;
+  box-shadow: inset 0 0 0 10em #2563EB;
 }
 
 /* Ensure capabilities section (Featured Projects) retains white colors on light theme */

@@ -95,12 +95,12 @@ export function CreativeApproach() {
           {/* Left Column: Sticky Title & Image */}
           <div className="md:col-span-5 relative h-full">
             <div className="sticky top-[50vh] -translate-y-1/2 flex flex-col items-center md:items-start text-center md:text-left z-10 space-y-8 lg:space-y-12">
-              <h2 className="font-sans font-bold text-5xl md:text-[50px] lg:text-[70px] tracking-tighter text-zinc-950 uppercase leading-[0.9] select-none text-center md:text-left bg-white/80 md:bg-transparent backdrop-blur-md md:backdrop-blur-none rounded-2xl md:rounded-none py-4 md:py-0">
-                <WordsStagger className="text-inherit">
+              <h2 className="font-sans font-bold text-5xl md:text-[50px] lg:text-[70px] tracking-tighter text-[#2563EB] uppercase leading-[0.9] select-none text-center md:text-left bg-white/80 md:bg-transparent backdrop-blur-md md:backdrop-blur-none rounded-2xl md:rounded-none py-4 md:py-0">
+                <WordsStagger className="text-[#2563EB]">
                   WORKFLOW
                 </WordsStagger>
                 <br />
-                <WordsStagger className="text-inherit" delay={0.35}>
+                <WordsStagger className="text-[#2563EB]" delay={0.35}>
                   STEPS
                 </WordsStagger>
               </h2>
@@ -141,8 +141,8 @@ export function CreativeApproach() {
                   className="flex flex-row items-start text-left gap-6 md:gap-8 lg:gap-10 transition-opacity duration-300 ease-out will-change-opacity"
                   style={{ opacity: 0.2 }}
                 >
-                  {/* Number in Dark Blue */}
-                  <div className="text-[#1A4B82] font-sans font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mt-1 sm:mt-0">
+                  {/* Number in Modern Blue */}
+                  <div className="text-[#2563EB] font-sans font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mt-1 sm:mt-0">
                     {step.number}
                   </div>
 

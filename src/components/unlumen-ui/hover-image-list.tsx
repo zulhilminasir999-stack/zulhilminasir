@@ -76,7 +76,7 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeaveContainer}
-      className="relative w-full border-t border-zinc-200 select-none z-30 transition-all duration-700 ease-[0.16,1,0.3,1] pb-0"
+      className="relative w-full border-t border-zinc-200 select-none z-50 transition-all duration-700 ease-[0.16,1,0.3,1] pb-0"
       id="hover-image-list-container"
     >
       {/* Global faint grain texture */}
@@ -107,8 +107,8 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
                 const nextExpanded = isExpanded ? null : idx;
                 setExpandedIndex(nextExpanded);
               }}
-              className={`group relative w-full flex items-center justify-between py-12 sm:py-16 md:py-20 cursor-pointer transition-all duration-500 px-6 sm:px-12 lg:px-16 ${
-                (isHovered || isExpanded) ? "bg-[#0A2947]" : "hover:bg-[#0A2947]"
+              className={`group relative w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer transition-all duration-500 px-6 sm:px-12 lg:px-16 ${
+                (isHovered || isExpanded) ? "bg-[#2563EB]" : "hover:bg-[#2563EB]"
               }`}
             >
               {/* SVG Noise Overlay */}
@@ -123,30 +123,18 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
                 </div>
               )}
 
-              {/* Left side: Horizontal Line and Wording */}
-              <div className="relative z-10 flex items-center flex-1 min-w-0 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
-                {/* Horizontal line */}
-                <motion.div 
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  style={{ transformOrigin: "left" }}
-                  transition={{ duration: 1.2, delay: idx * 0.15 + 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  className={`h-[3px] w-8 sm:w-16 md:w-20 lg:w-24 transition-all duration-500 shrink-0 ${
-                    (isHovered || isExpanded) ? "bg-white" : "bg-[#09090b]"
-                  }`} 
-                />
-
+              {/* Left side: Wording */}
+              <div className="relative z-10 flex items-center flex-1 min-w-0">
                 {/* Text and category */}
                 <div className="flex flex-col items-start text-left gap-1 sm:gap-2">
-                  <div className={`text-3xl sm:text-5xl md:text-6xl lg:text-[53px] font-sans font-bold tracking-tighter transition-colors duration-500 uppercase ${
+                  <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-medium tracking-tighter transition-colors duration-500 uppercase ${
                     (isHovered || isExpanded) ? "text-white" : "text-[#09090b]"
                   }`}>
                     {item.label}
                   </div>
                   {item.category && (
                     <span 
-                      className={`text-[13px] font-mono tracking-wider uppercase transition-all duration-500 transform translate-y-1 group-hover:translate-y-0 font-medium ${
+                      className={`text-[12px] font-mono tracking-wider uppercase transition-all duration-500 transform translate-y-1 group-hover:translate-y-0 font-medium ${
                         (isHovered || isExpanded) ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                       }`}
                       style={{ color: (isHovered || isExpanded) ? "rgba(255, 255, 255, 0.8)" : "rgb(113, 113, 122)" }}
@@ -167,22 +155,22 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
                       animate={{ opacity: 1, scale: 1, rotate: -45 }}
                       exit={{ opacity: 0, scale: 0.6, rotate: 0 }}
                       transition={{ duration: 0.3, ease: "easeOut" }}
-                      className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border border-white bg-white flex items-center justify-center text-[#0A2947]"
+                      className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border border-white bg-white flex items-center justify-center text-[#2563EB]"
                     >
                       <ArrowUpRight className="w-6 h-6 sm:w-8 sm:h-8" />
                     </motion.div>
                   ) : (
                     <motion.div
-                      key="number"
+                      key="arrow-idle"
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
                       transition={{ duration: 0.3, ease: "easeOut" }}
-                      className={`font-sans font-bold text-2xl sm:text-4xl md:text-5xl lg:text-[45px] tracking-tight transition-colors duration-500 ${
-                        isHovered ? "text-white" : "text-[#0A2947]"
+                      className={`flex items-center justify-center transition-colors duration-500 ${
+                        isHovered ? "text-white" : "text-[#2563EB]"
                       }`}
                     >
-                      <span>{`{`}{String(idx + 1).padStart(2, "0")}{`}`}</span>
+                      <ArrowUpRight className="w-8 h-8 sm:w-10 sm:h-10 rotate-90" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -195,7 +183,7 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
               animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
               transition={{ duration: (navType === "POP" && expandedIndex === idx) ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
               className={`overflow-hidden transition-colors duration-500 relative ${
-                isExpanded ? "bg-[#0A2947]" : "bg-zinc-50/30"
+                isExpanded ? "bg-[#2563EB]" : "bg-zinc-50/30"
               }`}
             >
               {/* SVG Noise Overlay for expanded state */}
@@ -268,7 +256,7 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
           opacity: { duration: 0.25, ease: "easeOut" },
           rotate: { type: "spring", damping: 35, stiffness: 150 },
         }}
-        className="pointer-events-none fixed top-0 left-0 w-52 h-[260px] sm:w-[260px] sm:h-[325px] md:w-[310px] md:h-[390px] rounded-xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.25)] bg-zinc-100 border-none z-50 origin-center"
+        className="pointer-events-none fixed top-0 left-0 w-52 h-[260px] sm:w-[260px] sm:h-[325px] md:w-[310px] md:h-[390px] rounded-xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.25)] bg-zinc-100 border-none z-[9999] origin-center"
       >
         {items.map((item, idx) => {
           const isActive = hoveredIndex === idx;

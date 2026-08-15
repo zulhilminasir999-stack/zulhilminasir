@@ -70,8 +70,8 @@ export const LoadingScreen = () => {
               className="text-6xl sm:text-7xl md:text-9xl font-normal italic tracking-tight select-none font-serif"
               style={{ 
                 fontFamily: '"Cormorant Garamond", Georgia, serif',
-                color: '#0A2947',
-                filter: 'drop-shadow(0 4px 6px rgba(10, 41, 71, 0.2))'
+                color: '#2563EB',
+                filter: 'drop-shadow(0 4px 6px rgba(37, 99, 235, 0.2))'
               }}
             >
               {Math.round(progress)}%

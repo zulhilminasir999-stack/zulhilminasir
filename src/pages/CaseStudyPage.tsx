@@ -317,9 +317,7 @@ export default function CaseStudyPage() {
                       <div className="flex items-center">
                         <motion.button
                           layoutId="header-brand-link"
-                          initial={{ x: -40, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          transition={{ type: "spring", stiffness: 150, damping: 18 }}
+                          transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           onClick={(e) => handleNavClick(e, "#hero-section")}
                           className="group flex items-center gap-1.5 transition-colors duration-300 hover:opacity-85 text-white cursor-pointer"
                         >
@@ -354,27 +352,21 @@ export default function CaseStudyPage() {
                       {/* Get In Touch Button */}
                       <div className="flex items-center">
                         <motion.button
-                              layoutId="header-contact-btn"
-                              transition={{ 
-                                type: "spring", 
-                                stiffness: 140, 
-                                damping: 20,
-                                mass: 1,
-                                opacity: { duration: 0.3 }
-                              }}
-                              onClick={(e) => handleNavClick(e, "#contact-section")}
-                              className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 md:!text-[13px] lg:!py-1.5 lg:!px-4 lg:!text-[15px] whitespace-nowrap cursor-pointer"
-                            >
-                              {/* Shimmer Effect Wrapper */}
-                              <div className="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-0 rounded-[25px] overflow-hidden">
-                                {/* Ambient internal cyan glow */}
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.18)_0%,transparent_70%)] animate-[glow-pulse_3s_ease-in-out_infinite]" />
-                                
-                                {/* Scanning grid sweep light */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
-                              </div>
-                              <span className="relative z-10 text-[15px] md:text-[13px] lg:text-[15px] font-medium">Get In Touch</span>
-                            </motion.button>
+                          layoutId="header-contact-btn"
+                          transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                          onClick={(e) => handleNavClick(e, "#contact-section")}
+                          className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 md:!text-[13px] lg:!py-1.5 lg:!px-4 lg:!text-[15px] whitespace-nowrap cursor-pointer"
+                        >
+                          {/* Shimmer Effect Wrapper */}
+                          <div className="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-0 rounded-[25px] overflow-hidden">
+                            {/* Ambient internal cyan glow */}
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.18)_0%,transparent_70%)] animate-[glow-pulse_3s_ease-in-out_infinite]" />
+                            
+                            {/* Scanning grid sweep light */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
+                          </div>
+                          <span className="relative z-10 text-[15px] md:text-[13px] lg:text-[15px] font-medium">Get In Touch</span>
+                        </motion.button>
                       </div>
                     </>
                   ) : (
@@ -383,28 +375,28 @@ export default function CaseStudyPage() {
                       <motion.div 
                         layoutId="header-nav-capsule"
                         transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                        className="flex items-center bg-white/30 border border-white/20 rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur-md"
+                        className="flex items-center bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)] rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300"
                       >
                         <motion.button
                           layoutId="header-brand-link"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           onClick={(e) => handleNavClick(e, "#hero-section")}
-                          className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-[#0A2947] hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
+                          className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-white hover:text-cyan-300 hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
                         >
                           ZN
                         </motion.button>
 
-                        <nav className="flex items-center space-x-1 md:space-x-1 lg:space-x-2 text-[11px] md:text-[10.5px] lg:text-[13px] font-normal tracking-normal text-black">
-                          <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn cursor-pointer">
+                        <nav className="flex items-center space-x-1 md:space-x-1 lg:space-x-2 text-[11px] md:text-[10.5px] lg:text-[13px] font-normal tracking-normal">
+                          <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
                             <span className="text-[13px] md:text-[11px] lg:text-[13px]">About</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn cursor-pointer">
+                          <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
                             <span className="text-[13px] md:text-[11px] lg:text-[13px]">Career</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn cursor-pointer">
+                          <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
                             <span className="text-[13px] md:text-[11px] lg:text-[13px]">Services</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn cursor-pointer">
+                          <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
                             <span className="hidden lg:inline text-[13px] md:text-[11px] lg:text-[13px]">Software & AI Solution</span>
                             <span className="inline lg:hidden text-[13px] md:text-[11px] lg:text-[13px]">Software</span>
                           </button>
@@ -413,25 +405,15 @@ export default function CaseStudyPage() {
                           </button>
                         </nav>
 
-                         {/* Get In Touch Button inside capsule */}
-                         <motion.div
-                           className="ml-6 md:ml-3 lg:ml-6 flex items-center h-10"
-                         >
-                           <motion.button
-                             layoutId="header-contact-btn"
-                             transition={{ 
-                               type: "spring", 
-                               stiffness: 140, 
-                               damping: 20,
-                               mass: 1,
-                               opacity: { duration: 0.3 }
-                             }}
-                             onClick={(e) => handleNavClick(e, "#contact-section")}
-                             className="get-in-touch-btn whitespace-nowrap md:!py-1.5 md:!px-3.5 md:!text-[11px] lg:!py-1.5 lg:!px-4 lg:!text-[13px] cursor-pointer"
-                           >
-                             <span className="text-[13px] md:text-[11px] lg:text-[13px]">Get In Touch</span>
-                           </motion.button>
-                         </motion.div>
+                        {/* Get In Touch Button inside capsule */}
+                        <motion.button
+                          layoutId="header-contact-btn"
+                          transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                          onClick={(e) => handleNavClick(e, "#contact-section")}
+                          className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn-dark whitespace-nowrap md:!py-1.5 md:!px-3.5 md:!text-[11px] lg:!py-1.5 lg:!px-4 lg:!text-[13px] cursor-pointer"
+                        >
+                          <span className="text-[13px] md:text-[11px] lg:text-[13px]">Get In Touch</span>
+                        </motion.button>
                       </motion.div>
                     </div>
                   )}
@@ -810,9 +792,9 @@ export default function CaseStudyPage() {
                   <Link
                     key={relatedCap.id}
                     to={`/case-study/${relatedCap.id}`}
-                    className="group border border-zinc-100 bg-zinc-50 hover:bg-zinc-100/55 rounded-2xl p-5 transition-all duration-300 h-full flex flex-col justify-between cursor-pointer block shadow-sm hover:shadow-md"
+                    className="group bg-transparent p-0 transition-all duration-300 h-full flex flex-col justify-between cursor-pointer block"
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {/* Photo area */}
                       <div className="aspect-[16/10] rounded-xl overflow-hidden relative border bg-zinc-100 border-zinc-200">
                         <img 
@@ -821,6 +803,17 @@ export default function CaseStudyPage() {
                           className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 transition-all duration-700 pointer-events-none"
                           referrerPolicy="no-referrer"
                         />
+                      </div>
+                      {/* Title at below left side */}
+                      <div className="text-left pt-1">
+                        <h5 className="font-sans font-medium text-lg sm:text-xl text-zinc-900 group-hover:text-zinc-600 transition-colors">
+                          {relatedCap.title}
+                        </h5>
+                        {relatedCap.subtitle && (
+                          <p className="text-xs text-zinc-500 font-sans mt-0.5 line-clamp-1">
+                            {relatedCap.subtitle}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </Link>
@@ -832,7 +825,7 @@ export default function CaseStudyPage() {
       </main>
 
       {/* Pre-Footer Image Section */}
-      <section className="w-full relative overflow-hidden bg-[#0A2947] -mb-1">
+      <section className="w-full relative overflow-hidden bg-[#2563EB] -mb-1">
         <div className="w-full h-[350px] sm:h-[500px] md:h-[650px] lg:h-[800px] relative">
           <img 
             src="/hero-bg.jpg" 
@@ -844,30 +837,14 @@ export default function CaseStudyPage() {
           <div 
             className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none z-10" 
             style={{
-              background: 'linear-gradient(to bottom, rgba(10, 41, 71, 0) 0%, rgba(10, 41, 71, 0.1) 20%, rgba(10, 41, 71, 0.35) 40%, rgba(10, 41, 71, 0.7) 65%, rgba(10, 41, 71, 0.95) 82%, rgba(10, 41, 71, 1) 90%, rgba(10, 41, 71, 1) 100%)'
+              background: 'linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.1) 20%, rgba(37, 99, 235, 0.35) 40%, rgba(37, 99, 235, 0.7) 65%, rgba(37, 99, 235, 0.95) 82%, rgba(37, 99, 235, 1) 90%, rgba(37, 99, 235, 1) 100%)'
             }}
           />
         </div>
       </section>
 
       {/* Footer Section */}
-      <footer id="contact-section" className="relative overflow-hidden bg-[#0A2947] text-white pt-24 pb-0">
-        {/* Grain texture in the background with soft top mask */}
-        <div 
-          className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay"
-          style={{
-            maskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)',
-            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)'
-          }}
-        >
-          <svg viewBox="0 0 250 250" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            <filter id="noiseFilter">
-              <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-            </filter>
-            <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-          </svg>
-        </div>
-
+      <footer id="contact-section" className="relative overflow-hidden bg-[#2563EB] text-white pt-24 pb-0">
         <div className="relative z-10 w-full mx-auto select-none">
           {/* Top content wrapper with margins */}
           <div className="px-6 sm:px-12 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start mb-24">
@@ -875,11 +852,11 @@ export default function CaseStudyPage() {
             {/* Left part: Time, Title and pill button */}
             <div className="lg:col-span-8 flex flex-col items-start text-left">
               {/* Dynamic local time */}
-              <div className="text-xs text-white/50 flex items-center gap-2 mb-8 tracking-wider uppercase font-mono">
+              <div className="text-xs text-white flex items-center gap-2 mb-8 tracking-wider uppercase font-sans">
                 {localTime && parseInt(localTime.split(":")[0], 10) >= 6 && parseInt(localTime.split(":")[0], 10) < 18 ? (
-                  <Sun className="h-4 w-4 text-white/60" />
+                  <Sun className="h-4 w-4 text-white" />
                 ) : (
-                  <Moon className="h-4 w-4 text-white/60" />
+                  <Moon className="h-4 w-4 text-white" />
                 )}
                 <span>
                   {localTime ? `${localTime} Kuala Lumpur, MY` : "05:03 PM Kuala Lumpur, MY"}
@@ -894,7 +871,7 @@ export default function CaseStudyPage() {
               {/* Get in touch button from the image */}
               <button
                 onClick={(e) => handleNavClick(e, "#contact-section")}
-                className="inline-flex items-center gap-2 bg-white text-[#0A2947] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"
+                className="inline-flex items-center gap-2 bg-white text-[#2563EB] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"
               >
                 <span className="text-xs">✦</span>
                 <span>Get in touch</span>
@@ -905,34 +882,34 @@ export default function CaseStudyPage() {
             <div className="lg:col-span-4 grid grid-cols-2 gap-8 lg:justify-items-end w-full text-left">
               {/* Explore Column */}
               <div className="flex flex-col gap-3 text-sm lg:min-w-[120px]">
-                <span className="text-white/30 font-mono text-xs uppercase tracking-widest mb-2 font-bold">Explore</span>
+                <span className="text-white font-sans text-xs uppercase tracking-widest mb-2 font-bold">Explore</span>
                 <button 
                   onClick={(e) => handleNavClick(e, "#hero-section")}
-                  className="text-white/70 hover:text-white transition-colors text-[15px] text-left cursor-pointer"
+                  className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   Home
                 </button>
                 <button 
                   onClick={(e) => handleNavClick(e, "#about-section")} 
-                  className="text-white/70 hover:text-white transition-colors text-[15px] text-left cursor-pointer"
+                  className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   About
                 </button>
                 <button 
                   onClick={(e) => handleNavClick(e, "#career-section")} 
-                  className="text-white/70 hover:text-white transition-colors text-[15px] text-left cursor-pointer"
+                  className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   Career
                 </button>
                 <button 
                   onClick={(e) => handleNavClick(e, "#services-section")} 
-                  className="text-white/70 hover:text-white transition-colors text-[15px] text-left cursor-pointer"
+                  className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   Services
                 </button>
                 <button 
                   onClick={(e) => handleNavClick(e, "#capabilities-section")} 
-                  className="text-white/40 text-[15px] text-left cursor-default"
+                  className="text-white hover:text-white/80 text-[15px] text-left cursor-default"
                 >
                   Projects
                 </button>
@@ -940,12 +917,12 @@ export default function CaseStudyPage() {
 
               {/* Socials Column */}
               <div className="flex flex-col gap-3 text-sm lg:min-w-[120px]">
-                <span className="text-white/30 font-mono text-xs uppercase tracking-widest mb-2 font-bold">Socials</span>
+                <span className="text-white font-sans text-xs uppercase tracking-widest mb-2 font-bold">Socials</span>
                 <a 
                   href="https://linkedin.com" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   LinkedIn
                 </a>
@@ -953,7 +930,7 @@ export default function CaseStudyPage() {
                   href="https://facebook.com" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Facebook
                 </a>
@@ -961,7 +938,7 @@ export default function CaseStudyPage() {
                   href="https://x.com" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   The X
                 </a>
@@ -969,7 +946,7 @@ export default function CaseStudyPage() {
                   href="https://t.me" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Telegram
                 </a>
@@ -979,14 +956,14 @@ export default function CaseStudyPage() {
           </div>
 
           {/* Metadata Row */}
-          <div className="flex justify-between items-end px-6 sm:px-12 lg:px-16 text-[10px] text-white/30 uppercase tracking-widest font-mono mb-2 text-left">
+          <div className="flex justify-between items-end px-6 sm:px-12 lg:px-16 text-[10px] text-white uppercase tracking-widest font-sans mb-2 text-left">
             <div>
               <div>2026 ZULHILMI,</div>
               <div>ALL RIGHTS RESERVED</div>
             </div>
             <div className="text-right">
-              <a href="#" className="hover:text-white transition-colors block">TERMS</a>
-              <a href="#" className="hover:text-white transition-colors block mt-1">PRIVACY POLICY</a>
+              <a href="#" className="hover:text-white/80 transition-colors block">TERMS</a>
+              <a href="#" className="hover:text-white/80 transition-colors block mt-1">PRIVACY POLICY</a>
             </div>
           </div>
 

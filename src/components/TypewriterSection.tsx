@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, useTransform, MotionValue, useSpring } from "motion/react";
 
 interface TypewriterSectionProps {
@@ -62,17 +62,62 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   const whiteCircleScale = useTransform(smoothScrollProgress, [0.12, 0.65], [0, 20]);
 
   // 3. "what i do" text fades in, scales up, and moves up from scroll 0.22 to 0.58
-  const galleryScale = useTransform(smoothScrollProgress, [0.22, 0.58], [0.15, 1]);
+  const galleryScale = useTransform(smoothScrollProgress, [0.22, 0.58], [0.7, 1]);
   const galleryOpacity = useTransform(smoothScrollProgress, [0.22, 0.50], [0, 1]);
-  const galleryY = useTransform(smoothScrollProgress, [0.22, 0.58], [280, 0]);
-
-  // 4. Description text fades in, scales up, and moves up from scroll 0.32 to 0.65
-  const descScale = useTransform(smoothScrollProgress, [0.32, 0.65], [0.5, 1]);
-  const descOpacity = useTransform(smoothScrollProgress, [0.32, 0.58], [0, 1]);
-  const descY = useTransform(smoothScrollProgress, [0.32, 0.65], [300, 0]);
+  const galleryY = useTransform(smoothScrollProgress, [0.22, 0.58], [120, 0]);
 
   // 5. Scroll the content block up naturally as the user scrolls further (from scroll 0.70 to 1.0)
   const naturalScrollY = useTransform(smoothScrollProgress, [0.70, 1.0], ["0vh", "-10vh"]);
+
+  // Refs for auto-scaling text to perfectly match the width of the container
+  const h1ContainerRef = useRef<HTMLDivElement>(null);
+  const h1TextRef = useRef<HTMLHeadingElement>(null);
+  const pTextRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const resizeText = () => {
+      if (h1ContainerRef.current) {
+        const containerWidth = h1ContainerRef.current.clientWidth;
+        if (containerWidth > 0) {
+          // Scale H1
+          if (h1TextRef.current) {
+            h1TextRef.current.style.fontSize = "100px";
+            const h1Width = h1TextRef.current.scrollWidth;
+            if (h1Width > 0) {
+              // We added -0.04em margin on left and right = -0.08em total
+              // At 100px font size, that's -8px.
+              const visualWidth = h1Width - 8;
+              const h1Scale = containerWidth / visualWidth;
+              h1TextRef.current.style.fontSize = `${100 * h1Scale}px`;
+            }
+          }
+          // Scale P
+          if (pTextRef.current) {
+            pTextRef.current.style.fontSize = "10px"; // smaller baseline for paragraph
+            const pWidth = pTextRef.current.scrollWidth;
+            if (pWidth > 0) {
+              const pScale = containerWidth / pWidth;
+              pTextRef.current.style.fontSize = `${10 * pScale}px`;
+            }
+          }
+        }
+      }
+    };
+
+    // Initial resize
+    resizeText();
+    
+    // Add small delay to ensure fonts are loaded
+    const timeoutId = setTimeout(resizeText, 100);
+    const timeoutId2 = setTimeout(resizeText, 500);
+    
+    window.addEventListener("resize", resizeText);
+    return () => {
+      window.removeEventListener("resize", resizeText);
+      clearTimeout(timeoutId);
+      clearTimeout(timeoutId2);
+    };
+  }, []);
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden" style={{ paddingBottom: 0 }}>
@@ -147,7 +192,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
         style={{
           y: naturalScrollY,
         }}
-        className="absolute inset-x-0 top-0 bottom-0 flex flex-col items-center justify-center z-20 px-4 w-full select-none pointer-events-none"
+        className="absolute inset-x-0 top-0 bottom-0 flex flex-col items-center justify-end pb-[22vh] md:pb-[28vh] z-20 w-full p-0 m-0 pointer-events-none"
       >
         <motion.div 
           style={{
@@ -156,23 +201,27 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
             y: galleryY,
             transformOrigin: "center center"
           }}
-          className="flex justify-center w-full"
+          className="flex justify-center w-full p-0 m-0 px-0 mx-0"
         >
-          <h1 className="font-sans font-black text-[10vw] sm:text-[11vw] md:text-[12vw] lg:text-[13.5vw] tracking-tighter text-[#1A4B82] text-center leading-[0.85] select-none whitespace-nowrap">
-            Ideas in Action
-          </h1>
+          <div className="flex flex-col items-center pointer-events-auto -translate-y-12 w-full p-0 m-0 px-6 sm:px-12 lg:px-16">
+            <div ref={h1ContainerRef} className="w-full flex justify-center items-center overflow-visible">
+              <h1 ref={h1TextRef} style={{ fontSize: "clamp(60px, 15vw, 217.24px)", marginLeft: "-0.04em", marginRight: "-0.04em" }} className="font-sans font-black tracking-tighter text-[#1A4B82] text-center leading-[0.85] whitespace-nowrap p-0 m-0 select-none origin-center">
+                Ideas in Action
+              </h1>
+            </div>
+            <p 
+              id="ideas-in-action-subtitle"
+              ref={pTextRef}
+              style={{ 
+                margin: "20px 0 0 0", 
+                padding: "0" 
+              }} 
+              className="text-[#666666] font-medium text-center whitespace-nowrap tracking-tight leading-none select-none block origin-center"
+            >
+              Perfectly aligned creative and production expertise to increase digital impact
+            </p>
+          </div>
         </motion.div>
-        <motion.p 
-          style={{
-            scale: descScale,
-            opacity: descOpacity,
-            y: descY,
-            transformOrigin: "center center"
-          }}
-          className="text-zinc-500 text-[2.8vw] sm:text-[2.4vw] md:text-2xl lg:text-3xl xl:text-4xl tracking-tight leading-none whitespace-nowrap font-semibold font-sans text-center mt-2 px-4"
-        >
-          Perfectly aligned creative and production expertise to increase digital impact.
-        </motion.p>
       </motion.div>
 
       {/* Tailwind keyframes style injection for custom cursor blinking */}

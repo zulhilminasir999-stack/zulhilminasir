@@ -1,356 +1,307 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
-import { WordsStagger } from "../../registry/spell-ui/words-stagger";
 
 interface ServiceItem {
   id: string;
   title: string;
+  shortTitle: React.ReactNode;
   image: string;
   description: string;
-  ctaText: string;
-  ctaLink: string;
+  tags: string[];
 }
 
 const SERVICES_DATA: ServiceItem[] = [
   {
-    id: "web-design",
-    title: "WEB DESIGN & CMS",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80",
-    description: "Custom-crafted high-performance websites built with React, Vite, and flexible CMS integrations. We bridge the gap between creative visual layouts and pixel-perfect front-end architecture to empower content teams and scale seamlessly.",
-    ctaText: "View CMS projects",
-    ctaLink: "#capabilities-section"
-  },
-  {
-    id: "ui-ux",
-    title: "UI/UX DESIGN",
-    image: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&w=1200&q=80",
-    description: "User-centric design systems, clickable wireframes, and high-fidelity interactive prototypes. We conduct meticulous research and map out seamless user flows that balance intuitive usability with modern, elegant aesthetic precision.",
-    ctaText: "Explore UI/UX works",
-    ctaLink: "#capabilities-section"
-  },
-  {
-    id: "ai-native-dev",
-    title: "AI-NATIVE DEVELOPMENT",
-    image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=1200&q=80",
-    description: "Architecting intelligent web applications powered by Gemini AI and LLM agents. We blend rapid AI-assisted development with clean TypeScript engineering to ship robust, future-ready digital platforms in record time.",
-    ctaText: "Explore AI projects",
-    ctaLink: "#capabilities-section"
-  },
-  {
     id: "brand-identity",
-    title: "BRAND IDENTITY",
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=1200&q=80",
-    description: "Comprehensive brand strategy, visual direction, custom typography pairings, and structured style guides. We shape the complete aesthetic DNA of a business, establishing a confident and highly memorable market presence.",
-    ctaText: "See brand systems",
-    ctaLink: "#capabilities-section"
+    title: "Brand Identity",
+    shortTitle: (
+      <>
+        Brand<br />Identity
+      </>
+    ),
+    image: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=1200&q=80",
+    description: "Comprehensive brand strategy, visual direction, custom typography pairings, and structured style guides.",
+    tags: ["Logo Design", "Visual Systems", "Brand Guidelines", "Rebranding", "Typography", "Asset Libraries"],
   },
   {
-    id: "packaging",
-    title: "PACKAGING",
-    image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80",
-    description: "Tactile, sustainable physical packaging designs and photorealistic 3D mockups. We construct brand containers, bottle styling, and custom carton boxes engineered to elevate the unboxing experience and command retail attention.",
-    ctaText: "View packaging designs",
-    ctaLink: "#capabilities-section"
+    id: "product-design",
+    title: "Product Design",
+    shortTitle: (
+      <>
+        Product<br />Design
+      </>
+    ),
+    image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&w=1200&q=80",
+    description: "User-centric design systems, clickable wireframes, and high-fidelity interactive prototypes. We map seamless flows.",
+    tags: ["User Experience Design", "Visual Design", "Design Systems", "Flows", "Prototypes", "Interaction"],
   },
   {
-    id: "visual-design",
-    title: "VISUAL DESIGN",
+    id: "web-systems",
+    title: "Web Systems",
+    shortTitle: (
+      <>
+        Web<br />Systems
+      </>
+    ),
+    image: "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?auto=format&fit=crop&w=1200&q=80",
+    description: "Custom-crafted high-performance websites built with React, Vite, and flexible CMS integrations.",
+    tags: ["Website Design", "CMS Setup", "Components", "Content Structure", "Performance", "SEO Base"],
+  },
+  {
+    id: "development",
+    title: "Development",
+    shortTitle: <>Development</>,
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1200&q=80",
+    description: "Architecting intelligent web applications powered by Gemini AI and LLM agents. Clean TypeScript engineering.",
+    tags: ["Frontend", "Framer", "Components", "Animation", "Integration", "Optimization"],
+  },
+  {
+    id: "content-messaging",
+    title: "Content & Messaging",
+    shortTitle: (
+      <>
+        Content &<br />Messaging
+      </>
+    ),
     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
-    description: "High-impact brand assets, promotional key visuals, and custom-tailored marketing collateral. We combine traditional graphic design fundamentals with state-of-the-art prompt engineering to construct visuals that command engagement.",
-    ctaText: "Discover key visuals",
-    ctaLink: "#capabilities-section"
-  }
+    description: "High-impact brand assets, promotional key visuals, and custom-tailored marketing collateral for maximum engagement.",
+    tags: ["Key Visuals", "Marketing Assets", "Social Media", "Copywriting", "Illustrations", "Prompting"],
+  },
+  {
+    id: "motion-interaction",
+    title: "Motion & Interaction",
+    shortTitle: (
+      <>
+        Motion &<br />Interaction
+      </>
+    ),
+    image: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=1200&q=80",
+    description: "Movement explains structure, used to guide, not to impress. We craft seamless transitions and interactive logic.",
+    tags: ["UI Animation", "Microinteractions", "Transitions", "Motion Systems", "Prototyping", "Interaction Logic"],
+  },
 ];
 
-const N = SERVICES_DATA.length;
-const COPIES = 7;
-const CAROUSEL_ITEMS = Array.from({ length: N * COPIES }, (_, i) => ({
-  ...SERVICES_DATA[i % N],
-  uniqueId: `${SERVICES_DATA[i % N].id}-${i}`,
-  originalIndex: i % N,
-  trackIndex: i
-}));
+export default function ServicesSection({ isDark }: { isDark: boolean }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeService = SERVICES_DATA[activeIndex];
 
-interface ServicesSectionProps {
-  theme?: "light" | "dark";
-}
-
-export default function ServicesSection({ theme = "light" }: ServicesSectionProps) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const [viewportWidth, setViewportWidth] = useState(0);
-  
-  // Start activeIndex in the middle copy (index 15)
-  const [activeIndex, setActiveIndex] = useState(15);
-  const [transitionEnabled, setTransitionEnabled] = useState(true);
-
-  // Measure viewport width dynamically using ResizeObserver
+  // Auto-rotate services with synchronized timer reset
   useEffect(() => {
-    if (!viewportRef.current) return;
-    const observer = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        setViewportWidth(entry.contentRect.width);
-      }
-    });
-    observer.observe(viewportRef.current);
-    return () => observer.disconnect();
-  }, []);
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % SERVICES_DATA.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [activeIndex]);
 
-  const handleNext = () => {
-    if (!transitionEnabled) return;
-    const nextIndex = activeIndex + 1;
-    setActiveIndex(nextIndex);
-
-    // If we reach Copy 5 (index 25), teleport back to Copy 2 (index 10) after the transition finishes
-    if (nextIndex >= 25) {
-      setTimeout(() => {
-        setTransitionEnabled(false);
-        setActiveIndex(nextIndex - 15); // Teleport back by 15 items
-        setTimeout(() => {
-          setTransitionEnabled(true);
-        }, 50);
-      }, 500); // 500ms transition duration
-    }
-  };
-
-  const handlePrev = () => {
-    if (!transitionEnabled) return;
-    const prevIndex = activeIndex - 1;
-    setActiveIndex(prevIndex);
-
-    // If we go below Copy 2 (index 10), teleport forward to Copy 5 (index 25) after the transition
-    if (prevIndex < 10) {
-      setTimeout(() => {
-        setTransitionEnabled(false);
-        setActiveIndex(prevIndex + 15); // Teleport forward by 15 items
-        setTimeout(() => {
-          setTransitionEnabled(true);
-        }, 50);
-      }, 500);
-    }
-  };
-
-  const handleCardClick = (trackIndex: number) => {
-    if (!transitionEnabled) return;
-    setActiveIndex(trackIndex);
-
-    // Dynamic teleportation to keep the active index in the safe middle zone
-    if (trackIndex >= 25) {
-      setTimeout(() => {
-        setTransitionEnabled(false);
-        setActiveIndex(trackIndex - 15);
-        setTimeout(() => {
-          setTransitionEnabled(true);
-        }, 50);
-      }, 500);
-    } else if (trackIndex < 10) {
-      setTimeout(() => {
-        setTransitionEnabled(false);
-        setActiveIndex(trackIndex + 15);
-        setTimeout(() => {
-          setTransitionEnabled(true);
-        }, 50);
-      }, 500);
-    }
-  };
-
-  // Determine width variables based on screen size
-  const isMobile = viewportWidth < 640;
-  const gap = isMobile ? 8 : 12;
-  
-  // Ratios that sum to exactly 1.00 (100% of available width)
-  // 1 active + 5 collapsed cards = 6 cards total (5 gaps)
-  const thinRatio = isMobile ? 0.06 : 0.07;
-  const activeRatio = isMobile ? 0.70 : 0.65;
-
-  const availableWidth = Math.max(viewportWidth - 5 * gap, 280);
-  const cardWidthThin = availableWidth * thinRatio;
-  const cardWidthActive = availableWidth * activeRatio;
-
-  // The alignment translation:
-  // To make the active card's left edge flush with the left boundary of the viewport (x = 0),
-  // we translate the track past all activeIndex thin cards and their gaps.
-  const translationPx = viewportWidth ? -(activeIndex * (cardWidthThin + gap)) : 0;
-
-  const activeItem = CAROUSEL_ITEMS[activeIndex] || CAROUSEL_ITEMS[15];
-
-  const isDark = theme === "dark";
+  const activeColor = "#FF3333";
+  const textColor = isDark ? "text-white" : "text-zinc-900";
+  const mutedTextColor = isDark ? "text-zinc-400" : "text-zinc-500";
+  const bgColor = isDark ? "bg-zinc-950" : "bg-white";
 
   return (
-    <section 
-      id="services-section" 
-      className={`relative w-full py-24 transition-colors duration-300 overflow-hidden ${
-        isDark 
-          ? "bg-zinc-950" 
-          : "bg-white"
-      }`}
+    <section
+      id="services-section"
+      className={`relative w-full min-h-screen pt-16 sm:pt-20 md:pt-24 pb-28 sm:pb-36 md:pb-44 lg:pb-52 px-6 sm:px-12 lg:px-16 flex flex-col justify-center overflow-hidden transition-colors duration-500 ${bgColor} ${textColor}`}
     >
-      <div className="w-full px-6 sm:px-12 lg:px-16 mx-auto">
+      <div className="w-full flex-1 flex flex-col md:flex-row items-stretch justify-between relative z-10 min-h-[500px] md:min-h-[580px] lg:min-h-[640px]">
         
-        {/* Header Area */}
-        <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 mb-12 items-center`}>
-          <div className="col-span-1 md:col-span-12 lg:col-span-8 text-center md:text-center lg:text-left">
-            <h2 className={`text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-center lg:text-left ${
-              isDark ? "text-white" : "text-zinc-950"
-            }`}>
-              <WordsStagger className="text-inherit">
-                SERVICES
-              </WordsStagger>
-              <span className="hidden md:inline lg:hidden"> </span>
-              <br className="block md:hidden lg:block" />
-              <WordsStagger className="text-inherit" delay={0.35}>
-                PROVIDED
-              </WordsStagger>
-            </h2>
-          </div>
-          <div className="col-span-1 md:col-span-12 lg:col-span-4">
-            <p className={`${
-              isDark ? "text-white/75" : "text-zinc-500"
-            } text-[14px] leading-relaxed font-sans max-w-sm ml-auto md:max-w-xl lg:max-w-sm text-right`}>
-              We deliver high-performance digital experiences and thoughtful design solutions tailored to elevate your business and engage your audience.
-            </p>
-          </div>
-        </div>
-
-        {/* Carousel Slider Viewport Wrapper */}
-        <div className="relative group/carousel">
-          <div 
-            ref={viewportRef} 
-            className="relative w-full overflow-hidden rounded-lg"
-          >
-            <div 
-              className="flex items-center h-[340px] sm:h-[380px] md:h-[460px]"
-              style={{
-                gap: `${gap}px`,
-                transform: `translateX(${translationPx}px)`,
-                transition: transitionEnabled ? "transform 500ms cubic-bezier(0.16, 1, 0.3, 1)" : "none",
-                width: `${CAROUSEL_ITEMS.length * (cardWidthThin + gap)}px`,
-                willChange: "transform"
-              }}
-            >
-              {CAROUSEL_ITEMS.map((item) => {
-                const isActive = item.trackIndex === activeIndex;
-                const cardWidth = isActive ? cardWidthActive : cardWidthThin;
-                
-                return (
-                  <div
-                    key={item.uniqueId}
-                    onClick={() => handleCardClick(item.trackIndex)}
-                    className="relative h-full overflow-hidden cursor-pointer select-none rounded-md md:rounded-lg origin-center flex-shrink-0 group"
-                    style={{
-                      width: `${cardWidth}px`,
-                      transition: transitionEnabled ? "width 500ms cubic-bezier(0.16, 1, 0.3, 1)" : "none",
-                      willChange: "width"
-                    }}
-                  >
-                    {/* Background Image - Absolutely no distortion */}
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
-                      style={{ objectPosition: "center center" }}
-                      referrerPolicy="no-referrer"
-                    />
-                    
-                    {/* Subtle vignette gradient overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-t from-zinc-950/75 via-zinc-950/20 to-transparent transition-opacity duration-500 ${
-                      isActive ? "opacity-100" : "opacity-40"
-                    }`} />
-
-                    {/* Card Title Overlay - Located at the bottom left in white */}
-                    <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between z-10 pointer-events-none">
-                      <div className="flex flex-col">
-                        <span className={`font-sans font-bold tracking-tight uppercase !text-white transition-all duration-500 ease-[0.16,1,0.3,1] block ${
-                          isActive 
-                            ? "text-lg sm:text-xl md:text-2xl opacity-100" 
-                            : "text-[10px] opacity-0 pointer-events-none select-none"
-                        }`}>
-                          {item.title}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Info Paragraph below carousel - Staggered fade in/out on active slide changes */}
-        <div className="mt-12 w-full flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
-          <div className="flex-1 max-w-4xl">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeItem.originalIndex}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-4 text-center md:text-center lg:text-left"
+        {/* Left Column: Navigation List & Bottom Quote */}
+        <div
+          id="services-nav-container"
+          className="w-full md:w-1/4 lg:w-[22%] shrink-0 flex flex-col justify-between pt-4 relative z-30 pointer-events-auto"
+        >
+          <div id="services-title-list" className="flex flex-col space-y-4">
+            {SERVICES_DATA.map((service, index) => (
+              <button
+                id={`service-nav-item-${service.id}`}
+                key={service.id}
+                onMouseEnter={() => setActiveIndex(index)}
+                onClick={() => setActiveIndex(index)}
+                className={`text-left text-sm md:text-base lg:text-lg font-sans transition-all duration-300 w-fit cursor-pointer ${
+                  activeIndex === index
+                    ? "font-medium"
+                    : `${mutedTextColor} hover:${textColor}`
+                }`}
+                style={{ color: activeIndex === index ? activeColor : undefined }}
               >
-                <p className={`text-sm sm:text-base leading-relaxed max-w-3xl mx-auto lg:mx-0 text-center md:text-center lg:text-left ${
-                  isDark ? "text-zinc-400" : "text-zinc-600"
-                }`}>
-                  {activeItem.description}
-                </p>
-                
-                <div className="pt-2 flex justify-center lg:justify-start">
-                  <a
-                    href={activeItem.ctaLink}
-                    onClick={(e) => {
-                      const el = document.getElementById(activeItem.ctaLink.substring(1));
-                      if (el) {
-                        e.preventDefault();
-                        // Smooth scroll down to capabilities
-                        const lenis = (window as any).lenisInstance;
-                        if (lenis) {
-                          lenis.scrollTo(el, { duration: 1.2 });
-                        } else {
-                          el.scrollIntoView({ behavior: "smooth" });
-                        }
-                      }
-                    }}
-                    className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold tracking-wider uppercase group transition-colors duration-200 cursor-pointer ${
-                      isDark 
-                        ? "text-emerald-400 hover:text-white" 
-                        : "text-[#0A2947] hover:text-emerald-600"
-                    }`}
-                  >
-                    <span>{activeItem.ctaText}</span>
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </a>
-                </div>
-              </motion.div>
+                {service.title}
+              </button>
+            ))}
+          </div>
+
+          {/* Description aligned with Image Bottom */}
+          <div id="services-description" className="hidden md:flex items-end pb-2">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={`desc-${activeService.id}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className={`text-[10px] md:text-[11px] leading-relaxed uppercase tracking-[0.15em] font-semibold max-w-[280px] ${mutedTextColor}`}
+              >
+                <span style={{ color: activeColor }} className="mr-2 text-base align-text-top leading-none">{"//"}</span>
+                {activeService.description}
+              </motion.p>
             </AnimatePresence>
           </div>
-
-          {/* Navigation Arrows - Aligned top with description on the right side */}
-          <div className="flex items-center justify-center lg:justify-end space-x-3 shrink-0">
-            <button
-              onClick={handlePrev}
-              className={`p-3 rounded-full border active:scale-95 transition-all duration-200 shadow-sm cursor-pointer nav-relocation-btn ${
-                isDark 
-                  ? "border-zinc-800 bg-zinc-900 text-zinc-300 border-zinc-700" 
-                  : "border-zinc-200 bg-white text-zinc-700 border-zinc-300"
-              }`}
-              aria-label="Previous service"
-            >
-              <ChevronLeft className="h-5 w-5 transition-colors duration-300" />
-            </button>
-            <button
-              onClick={handleNext}
-              className={`p-3 rounded-full border active:scale-95 transition-all duration-200 shadow-sm cursor-pointer nav-relocation-btn ${
-                isDark 
-                  ? "border-zinc-800 bg-zinc-900 text-zinc-300 border-zinc-700" 
-                  : "border-zinc-200 bg-white text-zinc-700 border-zinc-300"
-              }`}
-              aria-label="Next service"
-            >
-              <ChevronRight className="h-5 w-5 transition-colors duration-300" />
-            </button>
-          </div>
         </div>
 
+        {/* Center & Right Column: Image & Extended Tags Panel */}
+        <div className="flex-1 flex items-end justify-end relative my-8 md:my-0 pt-4 pb-2">
+          
+          {/* Unified Container for Direct Pixel Difference Blending */}
+          <div className="relative flex items-end justify-center pointer-events-auto shrink-0">
+            
+            {/* Image Frame (No overflow-hidden to prevent stacking isolation) */}
+            <div className="relative h-[430px] sm:h-[500px] md:h-[560px] lg:h-[620px] xl:h-[660px] aspect-[10/11] rounded-none shrink-0">
+              <AnimatePresence initial={false}>
+                <motion.div
+                  key={`image-${activeService.id}`}
+                  initial={{ clipPath: "inset(0% 0% 0% 100%)" }}
+                  animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    clipPath: { duration: 0.85, ease: [0.65, 0, 0.35, 1] },
+                    opacity: { duration: 0.2, delay: 0.85 },
+                  }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <img
+                    id="service-featured-image"
+                    src={activeService.image}
+                    alt={activeService.title}
+                    className="w-full h-full object-cover select-none cursor-pointer block rounded-none"
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Progress loading indicator inside the image at the bottom */}
+              <div className="absolute bottom-5 inset-x-0 flex justify-center z-10 px-6 pointer-events-none">
+                <div className="w-20 sm:w-28 lg:w-32 h-[3px] rounded-full overflow-hidden bg-white/30 backdrop-blur-xs">
+                  <motion.div
+                    key={`progress-bar-${activeIndex}`}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 4.5, ease: "linear" }}
+                    className="h-full w-full bg-[#FF4500]"
+                    style={{ transformOrigin: "left center" }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Dynamic Optical Inversion Text with True mix-blend-mode: difference */}
+            <div 
+              style={{ mixBlendMode: "difference" }}
+              className="absolute inset-y-0 -left-[12%] sm:-left-[16%] md:-left-[20%] lg:-left-[24%] flex items-center z-30 pointer-events-none mix-blend-difference"
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`text-${activeService.id}`}
+                  id="service-center-title-container"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35 }}
+                  style={{ mixBlendMode: "difference" }}
+                  className="w-[120vw] max-w-[480px] sm:max-w-[560px] md:max-w-[640px] lg:max-w-[720px] pointer-events-auto select-text mix-blend-difference"
+                >
+                  <h2
+                    id="service-center-heading"
+                    style={{
+                      mixBlendMode: "difference",
+                      color: "#FFFFFF",
+                    }}
+                    className="text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[7.5vw] leading-[0.9] font-sans font-bold tracking-tighter cursor-text select-text drop-shadow-none mix-blend-difference"
+                  >
+                    {activeService.shortTitle}
+                  </h2>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+          </div>
+
+          {/* Right Column: Tags List & Big Index */}
+          <div
+            id="services-tags-container"
+            style={{ backgroundColor: "#f2f2f2" }}
+            className="flex-1 min-w-[170px] lg:min-w-[210px] max-w-[320px] xl:max-w-[400px] flex flex-col justify-between rounded-none border-none bg-[#f2f2f2] h-[430px] sm:h-[500px] md:h-[560px] lg:h-[620px] xl:h-[660px] self-end text-left relative z-20 pointer-events-auto mt-8 md:my-0 pt-6 pb-4 pl-6 sm:pl-8 -mr-6 sm:-mr-12 lg:-mr-16 pr-6 sm:pr-12 lg:pr-16 hidden md:flex"
+          >
+            {/* Tags List */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                id="services-tags-list"
+                key={`tags-${activeService.id}`}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.4 }}
+                className="flex flex-col space-y-2 lg:space-y-3 items-start text-left pt-2 text-black"
+              >
+                {activeService.tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="text-xs md:text-sm lg:text-[15px] font-sans font-medium text-black text-left"
+                    style={{ color: "#000000" }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Index Number aligned with Image Bottom and Website Theme Right Edge (Plus Icon Grid Line) */}
+            <div id="services-index-number" className="flex justify-end items-end w-full p-0 m-0 pb-0 text-right">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`index-${activeIndex}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4 }}
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-sans font-semibold leading-none text-zinc-400 select-none tracking-tight p-0 m-0 text-right inline-block"
+                >
+                  {(activeIndex + 1).toString().padStart(2, "0")}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Mobile-only Bottom Description & Index */}
+      <div className="w-full flex md:hidden flex-col justify-between items-start mt-8 relative z-20 pb-2">
+        <div className="w-full flex justify-between items-end">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={`desc-mob-${activeService.id}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className={`text-[11px] leading-relaxed uppercase tracking-[0.15em] font-semibold max-w-[280px] ${mutedTextColor}`}
+            >
+              <span style={{ color: activeColor }} className="mr-2 text-base align-text-top leading-none">{"//"}</span>
+              {activeService.description}
+            </motion.p>
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`index-mob-${activeIndex}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="text-2xl sm:text-3xl font-sans font-semibold leading-none text-zinc-400 dark:text-zinc-500 select-none tracking-tight"
+            >
+              {(activeIndex + 1).toString().padStart(2, "0")}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );

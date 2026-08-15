@@ -93,7 +93,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     offset: ["start start", "end end"],
   });
 
-  const galleryBg = useTransform(galleryScrollY, [0.50, 0.70], ["#0A2947", "#ffffff"]);
+  const galleryBg = useTransform(galleryScrollY, [0.50, 0.70], ["#2563EB", "#ffffff"]);
 
   // Initialize Lenis smooth scroll
   const lenisRef = React.useRef<Lenis | null>(null);
@@ -287,6 +287,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
   const [isScrollingUp, setIsScrollingUp] = useState(true);
   const [activeSection, setActiveSection] = useState("");
+  const isSoftwareSection = activeSection === "integration-section";
+  const isProjectsSection = activeSection === "capabilities-section" || activeSection === "projects-outer-section" || activeSection === "contact-section";
+  const isWhiteTextSection = isSoftwareSection || isProjectsSection;
   const { triggerReveal } = useReveal();
 
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetId: string) => {
@@ -371,7 +374,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       }
       
       // Track active section on scroll for desktop menu highlights
-      const sectionIds = ["about-section", "career-section", "services-section", "creative-approach", "integration-section", "capabilities-section", "gallery-section", "contact-section"];
+      const sectionIds = ["about-section", "career-section", "services-section", "integration-section", "projects-outer-section", "capabilities-section", "gallery-section", "creative-approach", "contact-section"];
       let currentSection = "";
       const scrollPosition = currentY + 160; // Offset for header height and offset
       for (const id of sectionIds) {
@@ -486,7 +489,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             <span className="hidden lg:inline text-[15px] md:text-[13px] lg:text-[15px] font-medium">Software & AI Solution</span>
                             <span className="inline lg:hidden text-[15px] md:text-[13px] lg:text-[15px] font-medium">Software</span>
                           </a>
-                          <a href="#capabilities-section" onClick={(e) => handleNavClick(e, '#capabilities-section')} className={`nav-menu-btn ${activeSection === "capabilities-section" || activeSection === "gallery-section" ? "active" : ""}`}>
+                          <a href="#capabilities-section" onClick={(e) => handleNavClick(e, '#capabilities-section')} className={`nav-menu-btn ${isProjectsSection ? "active" : ""}`}>
                             <span className="text-[15px] md:text-[13px] lg:text-[15px] font-medium">Projects</span>
                           </a>
                         </motion.nav>
@@ -495,15 +498,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                         <div className="flex items-center">
                           <motion.a
                             layoutId="header-contact-btn"
-                            initial={{ x: -80, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ 
-                              type: "spring", 
-                              stiffness: 140, 
-                              damping: 20,
-                              mass: 1,
-                              opacity: { duration: 0.3 }
-                            }}
+                            transition={{ type: "spring", stiffness: 380, damping: 35 }}
                             href="#contact-section"
                             onClick={(e) => handleNavClick(e, '#contact-section')}
                             className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 md:!text-[13px] lg:!py-1.5 lg:!px-4 lg:!text-[15px] cursor-pointer"
@@ -526,7 +521,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                         <motion.div 
                           layoutId="header-nav-capsule"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                          className="flex items-center bg-white/30 border border-white/20 rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur-md"
+                          className={`flex items-center rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300 backdrop-blur-2xl ${
+                            isWhiteTextSection 
+                              ? "bg-white/10 border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)]" 
+                              : "bg-white/30 border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]"
+                          }`}
                         >
                           {/* ZN Button / Logo inside capsule */}
                           <motion.a
@@ -534,49 +533,65 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             transition={{ type: "spring", stiffness: 380, damping: 35 }}
                             href="#hero-section"
                             onClick={(e) => handleNavClick(e, '#hero-section')}
-                            className="font-display font-semibold text-base tracking-tight text-[#0A2947] hover:scale-105 transition-all mr-10 md:mr-5 lg:mr-10 flex items-center h-6 cursor-pointer"
+                            className={`font-display font-semibold text-base tracking-tight transition-all mr-10 md:mr-5 lg:mr-10 flex items-center h-6 cursor-pointer ${
+                              isWhiteTextSection 
+                                ? "text-white hover:text-cyan-300" 
+                                : "text-[#0A2947] hover:text-[#2563EB]"
+                            }`}
                           >
                             ZN
                           </motion.a>
 
                           {/* Navigation Links inside capsule */}
-                          <nav className="flex items-center space-x-2.5 md:space-x-1.5 lg:space-x-2.5 text-[15px] md:text-[13px] lg:text-[15px] font-medium tracking-normal text-black">
-                            <a href="#about-section" onClick={(e) => handleNavClick(e, '#about-section')} className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""}`}>
+                          <nav className="flex items-center space-x-2.5 md:space-x-1.5 lg:space-x-2.5 text-[15px] md:text-[13px] lg:text-[15px] font-medium tracking-normal">
+                            <a 
+                              href="#about-section" 
+                              onClick={(e) => handleNavClick(e, '#about-section')} 
+                              className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "about-section" ? "nav-btn-white" : "nav-btn-black"}`}
+                            >
                               <span>About</span>
                             </a>
-                            <a href="#career-section" onClick={(e) => handleNavClick(e, '#career-section')} className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""}`}>
+                            <a 
+                              href="#career-section" 
+                              onClick={(e) => handleNavClick(e, '#career-section')} 
+                              className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "career-section" ? "nav-btn-white" : "nav-btn-black"}`}
+                            >
                               <span>Career</span>
                             </a>
-                            <a href="#services-section" onClick={(e) => handleNavClick(e, '#services-section')} className={`nav-menu-btn ${activeSection === "services-section" ? "active" : ""}`}>
+                            <a 
+                              href="#services-section" 
+                              onClick={(e) => handleNavClick(e, '#services-section')} 
+                              className={`nav-menu-btn ${activeSection === "services-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "services-section" ? "nav-btn-white" : "nav-btn-black"}`}
+                            >
                               <span>Services</span>
                             </a>
-                            <a href="#integration-section" onClick={(e) => handleNavClick(e, '#integration-section')} className={`nav-menu-btn ${activeSection === "integration-section" ? "active" : ""}`}>
-                              <span>Software & AI Solution</span>
+                            <a 
+                              href="#integration-section" 
+                              onClick={(e) => handleNavClick(e, '#integration-section')} 
+                              className={`nav-menu-btn ${isSoftwareSection ? "active" : ""} ${isWhiteTextSection && !isSoftwareSection ? "nav-btn-white" : "nav-btn-black"}`}
+                            >
+                              <span className="hidden lg:inline">Software & AI Solution</span>
+                              <span className="inline lg:hidden">Software</span>
                             </a>
-                            <a href="#capabilities-section" onClick={(e) => handleNavClick(e, '#capabilities-section')} className={`nav-menu-btn ${activeSection === "capabilities-section" || activeSection === "gallery-section" ? "active" : ""}`}>
+                            <a 
+                              href="#capabilities-section" 
+                              onClick={(e) => handleNavClick(e, '#capabilities-section')} 
+                              className={`nav-menu-btn ${isProjectsSection ? "active" : ""} ${isWhiteTextSection && !isProjectsSection ? "nav-btn-white" : "nav-btn-black"}`}
+                            >
                               <span>Projects</span>
                             </a>
                           </nav>
 
                           {/* Get In Touch Button inside capsule */}
-                          <motion.div
-                            className="ml-6 md:ml-3 lg:ml-6 flex items-center h-10"
+                          <motion.a
+                            layoutId="header-contact-btn"
+                            transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                            href="#contact-section"
+                            onClick={(e) => handleNavClick(e, '#contact-section')}
+                            className={`ml-6 md:ml-3 lg:ml-6 ${isWhiteTextSection ? "get-in-touch-btn-dark" : "get-in-touch-btn"} whitespace-nowrap md:!py-1.5 md:!px-3.5 md:!text-[11px] lg:!py-1.5 lg:!px-4 lg:!text-[13px] cursor-pointer`}
                           >
-                            <motion.a
-                              layoutId="header-contact-btn"
-                              transition={{ 
-                                type: "spring", 
-                                stiffness: 140, 
-                                damping: 20,
-                                mass: 1
-                              }}
-                              href="#contact-section"
-                              onClick={(e) => handleNavClick(e, '#contact-section')}
-                              className="get-in-touch-btn whitespace-nowrap md:!py-1.5 md:!px-3.5 md:!text-[11px] lg:!py-1.5 lg:!px-4 lg:!text-[13px] cursor-pointer"
-                            >
-                              <span className="text-[13px] md:text-[11px] lg:text-[13px]">Get In Touch</span>
-                            </motion.a>
-                          </motion.div>
+                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">Get In Touch</span>
+                          </motion.a>
                         </motion.div>
                       </div>
                     )}
@@ -761,7 +776,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           <WorkInNumbers theme={theme} />
 
           {/* Services Section - Beautiful Stripe-style expanding carousel */}
-          <ServicesSection theme={theme} />
+          <ServicesSection isDark={false} />
 
           {/* Cinematic Futuristic Technology Banner - Edge-to-edge, no padding */}
           <TechBanner />
@@ -771,21 +786,21 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       {/* Featured Projects Section */}
       <section 
         id="projects-outer-section" 
-        className="relative w-full pt-0 pb-0 bg-[#0A2947] z-20 -mt-1"
+        className="relative w-full pt-0 pb-0 bg-[#2563EB] z-20 -mt-1"
       >
         {/* Latest Portfolio Segment */}
         <LatestPortfolio />
       </section>
 
       {/* Unified Sticky-Scroll Section: Typewriter Section & What I Do Portal Reveal */}
-      <motion.div ref={galleryRef} style={{ backgroundColor: galleryBg }} className="relative w-full h-[220vh] z-30">
+      <motion.div id="gallery-section" ref={galleryRef} style={{ backgroundColor: galleryBg }} className="relative w-full h-[220vh] z-30">
         <motion.div style={{ backgroundColor: galleryBg }} className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
           <TypewriterSection scrollYProgress={galleryScrollY} />
         </motion.div>
       </motion.div>
 
       {/* 4. Capability Cards Section on white background */}
-      <div className="w-full bg-white relative z-30 pt-4 pb-0">
+      <div className="w-full bg-white relative z-50 pt-4 pb-0 -mt-[15vh] sm:-mt-[25vh] lg:-mt-[30vh]">
         <HoverImageList 
           items={CAPABILITIES_DATA.map(cap => ({
             id: cap.id,
@@ -808,7 +823,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       <CreativeApproach />
 
       {/* Pre-Footer Image Section */}
-      <section className="w-full relative overflow-hidden bg-[#0A2947] -mb-1">
+      <section className="w-full relative overflow-hidden bg-[#2563EB] -mb-1">
         <div className="w-full h-[350px] sm:h-[500px] md:h-[650px] lg:h-[800px] relative">
           <img 
             src="/hero-bg.jpg" 
@@ -820,30 +835,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           <div 
             className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none z-10" 
             style={{
-              background: 'linear-gradient(to bottom, rgba(10, 41, 71, 0) 0%, rgba(10, 41, 71, 0.1) 20%, rgba(10, 41, 71, 0.35) 40%, rgba(10, 41, 71, 0.7) 65%, rgba(10, 41, 71, 0.95) 82%, rgba(10, 41, 71, 1) 90%, rgba(10, 41, 71, 1) 100%)'
+              background: 'linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.1) 20%, rgba(37, 99, 235, 0.35) 40%, rgba(37, 99, 235, 0.7) 65%, rgba(37, 99, 235, 0.95) 82%, rgba(37, 99, 235, 1) 90%, rgba(37, 99, 235, 1) 100%)'
             }}
           />
         </div>
       </section>
 
       {/* Footer Section */}
-      <footer id="contact-section" className="relative overflow-hidden bg-[#0A2947] text-white pt-24 pb-0">
-        {/* Grain texture in the background with soft top mask */}
-        <div 
-          className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay"
-          style={{
-            maskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)',
-            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 120px)'
-          }}
-        >
-          <svg viewBox="0 0 250 250" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            <filter id="noiseFilter">
-              <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-            </filter>
-            <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-          </svg>
-        </div>
-
+      <footer id="contact-section" className="relative overflow-hidden bg-[#2563EB] text-white pt-24 pb-0">
         <div className="relative z-10 w-full mx-auto select-none">
           {/* Top content wrapper with margins */}
           <div className="px-6 sm:px-12 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start mb-24">
@@ -851,11 +850,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             {/* Left part: Time, Title and pill button */}
             <div className="lg:col-span-8 flex flex-col items-start">
               {/* Dynamic local time */}
-              <div className="text-xs text-white/50 flex items-center gap-2 mb-8 tracking-wider uppercase font-mono">
+              <div className="text-xs text-white flex items-center gap-2 mb-8 tracking-wider uppercase font-sans">
                 {localTime && parseInt(localTime.split(":")[0], 10) >= 6 && parseInt(localTime.split(":")[0], 10) < 18 ? (
-                  <Sun className="h-4 w-4 text-white/60" />
+                  <Sun className="h-4 w-4 text-white" />
                 ) : (
-                  <Moon className="h-4 w-4 text-white/60" />
+                  <Moon className="h-4 w-4 text-white" />
                 )}
                 <span>
                   {localTime ? `${localTime} Kuala Lumpur, MY` : "05:03 PM Kuala Lumpur, MY"}
@@ -871,7 +870,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               <a
                 href="#contact-section"
                 onClick={(e) => handleNavClick(e, '#contact-section')}
-                className="inline-flex items-center gap-2 bg-white text-[#0A2947] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"
+                className="inline-flex items-center gap-2 bg-white text-[#2563EB] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"
               >
                 <span className="text-xs">✦</span>
                 <span>Get in touch</span>
@@ -882,39 +881,39 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             <div className="lg:col-span-4 grid grid-cols-2 gap-8 lg:justify-items-end w-full">
               {/* Explore Column */}
               <div className="flex flex-col gap-3 text-sm lg:min-w-[120px]">
-                <span className="text-white/30 font-mono text-xs uppercase tracking-widest mb-2 font-bold">Explore</span>
+                <span className="text-white font-sans text-xs uppercase tracking-widest mb-2 font-bold">Explore</span>
                 <a 
                   href="#hero-section" 
                   onClick={(e) => handleNavClick(e, '#hero-section')} 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Home
                 </a>
                 <a 
                   href="#about-section" 
                   onClick={(e) => handleNavClick(e, '#about-section')} 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   About
                 </a>
                 <a 
                   href="#career-section" 
                   onClick={(e) => handleNavClick(e, '#career-section')} 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Career
                 </a>
                 <a 
                   href="#services-section" 
                   onClick={(e) => handleNavClick(e, '#services-section')} 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Services
                 </a>
                 <a 
                   href="#capabilities-section" 
                   onClick={(e) => handleNavClick(e, '#capabilities-section')} 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Projects
                 </a>
@@ -922,12 +921,12 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
               {/* Socials Column */}
               <div className="flex flex-col gap-3 text-sm lg:min-w-[120px]">
-                <span className="text-white/30 font-mono text-xs uppercase tracking-widest mb-2 font-bold">Socials</span>
+                <span className="text-white font-sans text-xs uppercase tracking-widest mb-2 font-bold">Socials</span>
                 <a 
                   href="https://linkedin.com" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   LinkedIn
                 </a>
@@ -935,7 +934,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   href="https://facebook.com" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Facebook
                 </a>
@@ -943,7 +942,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   href="https://x.com" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   The X
                 </a>
@@ -951,7 +950,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   href="https://t.me" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-white/70 hover:text-white transition-colors text-[15px]"
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Telegram
                 </a>
@@ -961,14 +960,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           </div>
 
           {/* Metadata Row */}
-          <div className="flex justify-between items-end px-6 sm:px-12 lg:px-16 text-[10px] text-white/30 uppercase tracking-widest font-mono mb-2">
+          <div className="flex justify-between items-end px-6 sm:px-12 lg:px-16 text-[10px] text-white uppercase tracking-widest font-sans mb-2">
             <div>
               <div>2026 ZULHILMI,</div>
               <div>ALL RIGHTS RESERVED</div>
             </div>
             <div className="text-right">
-              <a href="#" className="hover:text-white transition-colors block">TERMS</a>
-              <a href="#" className="hover:text-white transition-colors block mt-1">PRIVACY POLICY</a>
+              <a href="#" className="hover:text-white/80 transition-colors block">TERMS</a>
+              <a href="#" className="hover:text-white/80 transition-colors block mt-1">PRIVACY POLICY</a>
             </div>
           </div>
 
@@ -977,7 +976,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             <svg viewBox="0 0 620 111" className="w-full h-auto m-0 p-0 block select-none translate-y-[2px]" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="zulhilmi-gradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#0A2947" />
+                  <stop offset="0%" stopColor="#2563EB" />
                   <stop offset="100%" stopColor="#ffffff" />
                 </linearGradient>
               </defs>

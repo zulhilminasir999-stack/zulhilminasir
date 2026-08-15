@@ -160,15 +160,15 @@ export default function WorkInNumbers({ theme = "light" }: WorkInNumbersProps) {
               {/* Number Section with Accent Bar */}
               <div className="md:col-span-4 flex items-center justify-start pr-0 md:pr-4">
                 <div className="flex items-center space-x-6">
-                  {/* Accent Bar (Dark Blue) */}
+                  {/* Accent Bar (Modern Blue) */}
                   <motion.div 
                     initial={{ height: 0 }}
                     animate={{ height: statsVisible ? 110 : 0 }}
                     transition={{ duration: 1.5, delay: idx * 0.2 + 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="w-1 bg-[#0A2947] rounded-full md:block hidden shrink-0" 
+                    className="w-1 bg-[#2563EB] rounded-full md:block hidden shrink-0" 
                   />
                   
-                  <div className={`font-sans font-semibold text-[60px] sm:text-[90px] tracking-tighter select-none leading-none flex items-center text-[#0A2947]`}>
+                  <div className={`font-sans font-semibold text-[60px] sm:text-[90px] tracking-tighter select-none leading-none flex items-center text-[#2563EB]`}>
                     <CountUp end={stat.value} suffix={stat.suffix} trigger={statsVisible} />
                   </div>
                 </div>
