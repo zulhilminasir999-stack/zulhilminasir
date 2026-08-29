@@ -9,14 +9,16 @@ import BackToTopButton from "./components/BackToTopButton";
 import { LoadingScreen } from "./components/LoadingScreen";
 import StickyStackScrollDemo from "./components/StickyStackScrollDemo";
 import { RevealProvider } from "./context/RevealContext";
+import { LenisProvider, useLenis } from "./context/LenisContext";
 
 // Disable browser default scroll restoration to guarantee landing on the top section
 if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
 }
 
-export default function App() {
+function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
+  const { stop, start, scrollTo } = useLenis();
 
   // Keep HTML root node synchronized with light theme configuration on mount for all pages
   useEffect(() => {
@@ -33,24 +35,27 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Prevent scrolling while loading screen is active so user sees first section on complete
+  // Coordinate scroll locking with Lenis & document while loading screen is active
   useEffect(() => {
     if (isLoading) {
+      stop();
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
+      start();
+      scrollTo(0, { immediate: true });
       window.scrollTo(0, 0);
     }
     return () => {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     };
-  }, [isLoading]);
+  }, [isLoading, stop, start, scrollTo]);
 
   return (
-    <RevealProvider>
+    <>
       <ScrollToTop />
       <BackToTopButton />
       <AnimatePresence>
@@ -67,6 +72,17 @@ export default function App() {
         <Route path="/project/:id" element={<ProjectDetailPage />} />
         <Route path="/scroll-demo" element={<StickyStackScrollDemo />} />
       </Routes>
-    </RevealProvider>
+    </>
   );
 }
+
+export default function App() {
+  return (
+    <LenisProvider>
+      <RevealProvider>
+        <AppContent />
+      </RevealProvider>
+    </LenisProvider>
+  );
+}
+

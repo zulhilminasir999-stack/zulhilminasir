@@ -153,13 +153,13 @@ export const PORTFOLIO_PROJECTS: Project[] = [
   },
   {
     id: "aistudio-brand",
-    title: "AI Studio Graphic Toolkit",
-    subtitle: "Brand Identity, Prompt Library & Creative Kit",
+    title: "Pre-school Fee Management",
+    subtitle: "Tadika Mesra, Sungai Petani",
     category: "AI_PROMPT",
-    categoryLabel: "AI Prompt & Visual Identity",
-    year: "2026",
-    imageUrl: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=1200",
-    client: "Zulhilmi Creative Labs (Internal)",
+    categoryLabel: "Web App & System",
+    year: "2025",
+    imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
+    client: "Tadika Mesra, Sungai Petani",
     toolsUsed: ["ChatGPT Extra Prompts", "Google Gemini", "Adobe Photoshop Touchups", "Figma Design Specs"],
     summary: "A world-class, custom-curated, interactive creative toolkit of premium styling prompt recipes designed for digital marketers, mockup artists, and prompt engineers.",
     challenge: "Most AI designers use copy-paste prompts that yield inconsistent, plastic-looking outputs. This project sought to codify a scientific prompt system with predictable, organic lighting, material textures, and graphic scales.",
@@ -187,7 +187,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     category: "WEB_DEV",
     categoryLabel: "CMS & Full Web Development",
     year: "2026",
-    imageUrl: "/Images/ck1.jpg",
+    imageUrl: "/CK Lighting Web/ck1.jpg",
     objectPosition: "center 30%",
     client: "CK Lighting Sdn Bhd",
     toolsUsed: ["SiteGiant", "Adobe Photoshop", "Custom CSS", "Figma Design System"],
@@ -199,11 +199,15 @@ export const PORTFOLIO_PROJECTS: Project[] = [
       "Direct online inquiries increased substantially post-relaunch."
     ],
     galleryImages: [
-      "/Images/ck1.jpg",
-      "/Images/ck2.jpg",
+      "/CK Lighting Web/ck1.jpg",
+      "/CK Lighting Web/ck2.jpg",
       "/CK Lighting Web/ck5.jpg",
       "/CK Lighting Web/ck4.jpg",
-      "/CK Lighting Web/ck6.jpg"
+      "/CK Lighting Web/ck6.jpg",
+      "/CK Lighting Web/CK8.jpg",
+      "/CK Lighting Web/CK9.jpg",
+      "/CK Lighting Web/CK10.jpg",
+      "/CK Lighting Web/ck11.jpg"
     ],
     links: [
       { label: "Launch Live CK Lighting Portal", url: "#" }
@@ -429,7 +433,7 @@ export const DUMMY_RECIPES: PromptRecipe[] = [
 export const CAPABILITIES_DATA: CapabilityDetail[] = [
   {
     id: "web-design-cms",
-    label: "Web Design & CMS",
+    label: "WEB DESIGN & DEV",
     title: "Web Design & CMS Systems",
     subtitle: "High-Performance Responsive Front-Ends & Component Architectures",
     category: "DEVELOPMENT & SYSTEMS",
@@ -479,6 +483,33 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     gallery: [
       "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800",
       "https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&q=80&w=800"
+    ]
+  },
+  {
+    id: "web-app-system",
+    label: "WEB APP & SYSTEM",
+    title: "Web Applications & Scalable Systems",
+    subtitle: "Full-Stack Architecture, High-Performance Backends & Scalable Web Platforms",
+    category: "ENGINEERING & SYSTEMS",
+    categoryLabel: "Web App & System",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
+    summary: "Building robust, enterprise-grade web applications and scalable system architectures. From high-performance backend databases and secure REST APIs to dynamic responsive front-ends designed for seamless user interaction.",
+    challenge: "Growing businesses require robust systems that can handle complex data structures, high concurrent user traffic, and seamless multi-device synchronization without compromising security or speed.",
+    solution: "Architected modular full-stack web applications utilizing clean Express servers, secure database integrations, and optimized React front-ends. Implemented rigorous data validation and state management for reliable performance.",
+    results: [
+      "Scalable system architecture capable of high-throughput data processing.",
+      "Secure API endpoints and robust database management systems.",
+      "Blazing-fast responsive interfaces ensuring optimal user experience across devices."
+    ],
+    toolsUsed: ["React & Vite", "Node.js & Express", "TypeScript", "Tailwind CSS", "PostgreSQL / Firestore"],
+    showcases: [
+      { title: "Pre-school Fee Management", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800", projectId: "aistudio-brand", url: "/case-study-project/aistudio-brand" },
+      { title: "Cloud Portal System", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" },
+      { title: "Analytics Management Hub", image: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=800" }
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
     ]
   },
   {

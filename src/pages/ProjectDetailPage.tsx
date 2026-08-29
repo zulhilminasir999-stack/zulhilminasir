@@ -17,9 +17,9 @@ import {
   Moon
 } from "lucide-react";
 import { PORTFOLIO_PROJECTS, CAPABILITIES_DATA } from "../data";
-import Lenis from "lenis";
 import { FloatingMenu } from "../components/FloatingMenu";
 import { useReveal } from "../context/RevealContext";
+import { useLenis } from "../context/LenisContext";
 
 const AI_RELATED_IMAGES = [
   "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=1200", // Neural pathways AI brain
@@ -38,7 +38,7 @@ const AI_RELATED_IMAGES = [
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const lenisRef = useRef<Lenis | null>(null);
+  const { lenis } = useLenis();
 
   const [headerVisible, setHeaderVisible] = useState(true);
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
@@ -124,32 +124,13 @@ export default function ProjectDetailPage() {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      if (lenisRef.current) {
-        lenisRef.current.scrollTo(0, { immediate: true });
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true });
       }
     };
 
     resetToTop();
     const timers = [0, 20, 50, 100, 200, 400, 800, 1500].map(d => setTimeout(resetToTop, d));
-    
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      syncTouch: true
-    });
-    
-    lenisRef.current = lenis;
-    (window as any).lenisInstance = lenis;
-    lenis.scrollTo(0, { immediate: true });
-    
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    
-    rafId = requestAnimationFrame(raf);
 
     let prevY = window.scrollY;
 
@@ -186,16 +167,11 @@ export default function ProjectDetailPage() {
     }, 120);
     
     return () => {
-      cancelAnimationFrame(rafId);
       timers.forEach(t => clearTimeout(t));
       clearTimeout(revealTimer);
-      if ((window as any).lenisInstance === lenis) {
-        (window as any).lenisInstance = null;
-      }
-      lenis.destroy();
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [id]);
+  }, [id, lenis]);
 
   if (!project) {
     return (
@@ -261,23 +237,23 @@ export default function ProjectDetailPage() {
                       <motion.nav 
                         layoutId="header-nav-capsule-proj"
                         transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                        className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1 md:space-x-1 lg:space-x-2 text-[11px] md:text-[10px] lg:text-[14px] font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
+                        className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1 md:space-x-1 lg:space-x-2 font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
                       >
-                        <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="text-[16px] md:text-[13px] lg:text-[16px]">About</span>
-                        </button>
-                        <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="text-[16px] md:text-[13px] lg:text-[16px]">Career</span>
-                        </button>
                         <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="text-[16px] md:text-[13px] lg:text-[16px]">Services</span>
+                          <span className="text-[15px]">Services</span>
                         </button>
                         <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="hidden lg:inline text-[16px] md:text-[13px] lg:text-[16px]">Software & AI Solution</span>
-                          <span className="inline lg:hidden text-[16px] md:text-[13px] lg:text-[16px]">Software</span>
+                          <span className="hidden lg:inline text-[15px]">Software & AI Solution</span>
+                          <span className="inline lg:hidden text-[15px]">Software</span>
                         </button>
                         <button onClick={(e) => e.preventDefault()} className="nav-menu-btn-dark-theme active cursor-default">
-                          <span className="text-[16px] md:text-[13px] lg:text-[16px]">Projects</span>
+                          <span className="text-[15px]">Projects</span>
+                        </button>
+                        <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                          <span className="text-[15px]">About</span>
+                        </button>
+                        <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                          <span className="text-[15px]">Career</span>
                         </button>
                       </motion.nav>
 
@@ -287,7 +263,7 @@ export default function ProjectDetailPage() {
                           layoutId="header-contact-btn-proj"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           onClick={(e) => handleNavClick(e, "#contact-section")}
-                          className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 md:!text-[12px] lg:!py-1.5 lg:!px-4 lg:!text-[14px] whitespace-nowrap cursor-pointer"
+                          className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 whitespace-nowrap cursor-pointer"
                         >
                           {/* Shimmer Effect Wrapper */}
                           <div className="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-0 rounded-[25px] overflow-hidden">
@@ -297,7 +273,7 @@ export default function ProjectDetailPage() {
                             {/* Scanning grid sweep light */}
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
                           </div>
-                          <span className="relative z-10 text-[13px] md:text-[11px] lg:text-[13px]">Get In Touch</span>
+                          <span className="relative z-10 text-[15px]">Get In Touch</span>
                         </motion.button>
                       </div>
                     </>
@@ -307,33 +283,33 @@ export default function ProjectDetailPage() {
                       <motion.div 
                         layoutId="header-nav-capsule-proj"
                         transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                        className="flex items-center bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)] rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300"
+                        className="flex items-center bg-white/80 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.12)] rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300"
                       >
                         <motion.button
                           layoutId="header-brand-link-proj"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           onClick={(e) => handleNavClick(e, "#hero-section")}
-                          className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-white hover:text-cyan-300 hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
+                          className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-[#0A2947] hover:text-[#2563EB] hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
                         >
                           ZN
                         </motion.button>
 
-                        <nav className="flex items-center space-x-1 md:space-x-1 lg:space-x-2 text-[11px] md:text-[10.5px] lg:text-[13px] font-normal tracking-normal">
-                          <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">About</span>
+                        <nav className="flex items-center space-x-1 md:space-x-1 lg:space-x-2 font-normal tracking-normal">
+                          <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                            <span className="text-[15px]">Services</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">Career</span>
+                          <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                            <span className="hidden lg:inline text-[15px]">Software & AI Solution</span>
+                            <span className="inline lg:hidden text-[15px]">Software</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">Services</span>
+                          <button onClick={(e) => e.preventDefault()} className="nav-menu-btn nav-btn-black active cursor-default">
+                            <span className="text-[15px]">Projects</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
-                            <span className="hidden lg:inline text-[13px] md:text-[11px] lg:text-[13px]">Software & AI Solution</span>
-                            <span className="inline lg:hidden text-[13px] md:text-[11px] lg:text-[13px]">Software</span>
+                          <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                            <span className="text-[15px]">About</span>
                           </button>
-                          <button onClick={(e) => e.preventDefault()} className="nav-menu-btn active cursor-default">
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">Projects</span>
+                          <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                            <span className="text-[15px]">Career</span>
                           </button>
                         </nav>
 
@@ -342,9 +318,9 @@ export default function ProjectDetailPage() {
                           layoutId="header-contact-btn-proj"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           onClick={(e) => handleNavClick(e, "#contact-section")}
-                          className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn-dark whitespace-nowrap md:!py-1.5 md:!px-3.5 md:!text-[11px] lg:!py-1.5 lg:!px-4 lg:!text-[13px] cursor-pointer"
+                          className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                         >
-                          <span className="text-[13px] md:text-[11px] lg:text-[13px]">Get In Touch</span>
+                          <span className="text-[15px]">Get In Touch</span>
                         </motion.button>
                       </motion.div>
                     </div>
@@ -385,18 +361,6 @@ export default function ProjectDetailPage() {
             className="fixed inset-x-0 top-14 bg-[#1a3a5a]/95 backdrop-blur-lg border-b border-white/10 z-40 py-6 px-6 flex flex-col space-y-4 md:hidden text-white shadow-xl"
           >
             <button 
-              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#about-section"); }} 
-              className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
-            >
-              About
-            </button>
-            <button 
-              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#career-section"); }} 
-              className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
-            >
-              Career
-            </button>
-            <button 
               onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#services-section"); }} 
               className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
             >
@@ -413,6 +377,18 @@ export default function ProjectDetailPage() {
               className="font-sans font-medium text-left text-white/40 pb-2 border-b border-white/5 cursor-default"
             >
               Projects
+            </button>
+            <button 
+              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#about-section"); }} 
+              className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
+            >
+              About
+            </button>
+            <button 
+              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#career-section"); }} 
+              className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
+            >
+              Career
             </button>
             <button 
               onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#contact-section"); }} 
@@ -439,8 +415,8 @@ export default function ProjectDetailPage() {
               referrerPolicy="no-referrer"
             />
             {/* Elegant overlay: dark gradients for beautiful visual blending and high legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A2947] via-[#0A2947]/50 to-black/35" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A2947]/80 via-[#0A2947]/30 to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0A2947]/50 via-[#0A2947]/10 to-transparent" />
           </div>
 
           {/* Header Content Container */}
@@ -556,21 +532,13 @@ export default function ProjectDetailPage() {
                return (
                  <div 
                    className="z-10 w-full"
-                   style={{ position: "sticky", bottom: 0 }}
+                   style={project?.id === "ck-lighting" ? {} : { position: "sticky", bottom: 0 }}
                  >
                    <img 
-                     src={img1Src} 
+                     src={project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : img1Src} 
                      alt="Gallery 1"
                      className="w-full h-auto block select-none" 
                      referrerPolicy="no-referrer"
-                     onError={(e) => {
-                       const img = e.currentTarget;
-                       if (img.src.includes('.jpg')) {
-                         img.src = img.src.replace('.jpg', '.jpj');
-                       } else if (img.src.includes('.jpj')) {
-                         img.src = img.src.replace('.jpj', '.jpg');
-                       }
-                     }}
                    />
                  </div>
                );
@@ -578,7 +546,7 @@ export default function ProjectDetailPage() {
              return (
                <div className="sticky top-0 h-screen w-full overflow-hidden z-10">
                  <img 
-                   src={img1Src} 
+                   src={project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : img1Src} 
                    alt="Gallery 1"
                    className="w-full h-full object-cover" 
                    referrerPolicy="no-referrer"
@@ -591,8 +559,8 @@ export default function ProjectDetailPage() {
            {project?.id === "TGPowerWrap" && (
              <div className="sticky top-0 h-screen w-full overflow-hidden z-20 bg-zinc-900">
                <img 
-                 src="/Images/TGPW Visual Guideline.jpg" 
-                 alt="TGPW Visual Guideline"
+                 src="/TGPW/6.jpg" 
+                 alt="TGPW Showcase 6"
                  className="w-full h-full object-cover" 
                  referrerPolicy="no-referrer"
                />
@@ -623,14 +591,6 @@ export default function ProjectDetailPage() {
                   className="w-full h-full object-cover" 
                   alt={`${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    const img = e.currentTarget;
-                    if (img.src.includes('.jpg')) {
-                      img.src = img.src.replace('.jpg', '.jpj');
-                    } else if (img.src.includes('.jpj')) {
-                      img.src = img.src.replace('.jpj', '.jpg');
-                    }
-                  }}
                 />
               </div>
               <div className="md:col-span-6 flex flex-col gap-4 lg:gap-6 h-[400px] sm:h-[600px] lg:h-[800px]">
@@ -639,28 +599,12 @@ export default function ProjectDetailPage() {
                   className="w-full flex-1 object-cover min-h-0" 
                   alt={`${project?.title || "Gallery"} 4`}
                   referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    const img = e.currentTarget;
-                    if (img.src.includes('.jpg')) {
-                      img.src = img.src.replace('.jpg', '.jpj');
-                    } else if (img.src.includes('.jpj')) {
-                      img.src = img.src.replace('.jpj', '.jpg');
-                    }
-                  }}
                 />
                 <img 
-                  src={(project?.id === "TGPowerWrap") ? "/Images/5.jpg" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || "")))} 
+                  src={(project?.id === "TGPowerWrap") ? "/Images/5.jpg" : (project?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || "")))} 
                   className="w-full flex-1 object-cover min-h-0" 
                   alt={`${project?.title || "Gallery"} 5`}
                   referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    const img = e.currentTarget;
-                    if (img.src.includes('.jpg')) {
-                      img.src = img.src.replace('.jpg', '.jpj');
-                    } else if (img.src.includes('.jpj')) {
-                      img.src = img.src.replace('.jpj', '.jpg');
-                    }
-                  }}
                 />
               </div>
             </div>
@@ -680,40 +624,37 @@ export default function ProjectDetailPage() {
           </div>
         </div>
 
-        {/* Section 6: Additional 2 Sticky Full-width Images */}
-        <div className="relative bg-zinc-900 z-50 w-full" style={{ height: "200vh" }}>
+        {/* Section 6: Additional Sticky Full-width Images */}
+        <div className="relative bg-zinc-900 z-50 w-full" style={{ height: project?.id === "ck-lighting" ? "300vh" : "200vh" }}>
            {/* Image 1 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
+           <div className={`sticky top-0 h-screen w-full z-10 ${project?.id === "ck-lighting" ? "flex flex-col justify-center bg-zinc-900 overflow-hidden" : "overflow-hidden flex flex-col justify-center"}`}>
              <img 
-               src={(project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg"} 
+               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg")} 
                alt="Gallery Sticky 1"
-               className="w-full h-full object-cover" 
+               className={`w-full h-full object-cover`}
                referrerPolicy="no-referrer"
-               onError={(e) => {
-                 const img = e.currentTarget;
-                 if (img.src.includes('.jpg')) {
-                   img.src = img.src.replace('.jpg', '.jpj');
-                 } else if (img.src.includes('.jpj')) {
-                   img.src = img.src.replace('.jpj', '.jpg');
-                 }
-               }}
              />
            </div>
-           {/* Image 2 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
+           
+           {/* Image 2 (New CK10.jpg for CK Lighting) */}
+           {project?.id === "ck-lighting" && (
+             <div className="sticky top-0 h-screen w-full z-20 shadow-2xl flex flex-col justify-center bg-zinc-900 overflow-hidden">
+               <img 
+                 src="/CK Lighting Web/CK10.jpg" 
+                 alt="Gallery Sticky CK10"
+                 className="w-full h-full object-cover"
+                 referrerPolicy="no-referrer"
+               />
+             </div>
+           )}
+
+           {/* Image 3 (Previously Image 2) */}
+           <div className={`sticky top-0 h-screen w-full ${project?.id === "ck-lighting" ? "z-30" : "z-20"} shadow-2xl ${project?.id === "ck-lighting" ? "overflow-y-auto overscroll-contain bg-zinc-900" : "overflow-hidden flex flex-col justify-center"}`}>
              <img 
-               src="/Images/Ipad Pro Mockup On Rock.jpg" 
-               alt="Gallery Sticky 2"
-               className="w-full h-full object-cover" 
+               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
+               alt="TGPW Visual Guideline"
+               className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-full object-cover"}`} 
                referrerPolicy="no-referrer"
-               onError={(e) => {
-                 const img = e.currentTarget;
-                 if (img.src.includes('.jpg')) {
-                   img.src = img.src.replace('.jpg', '.jpj');
-                 } else if (img.src.includes('.jpj')) {
-                   img.src = img.src.replace('.jpj', '.jpg');
-                 }
-               }}
              />
            </div>
         </div>
@@ -756,8 +697,18 @@ export default function ProjectDetailPage() {
           </div>
         </div>
 
+        {/* Section 8: Final Full-width Image */}
+        <div className="w-full relative bg-zinc-900 z-50">
+          <img 
+            src={(project?.id === "ck-lighting") ? "/CK Lighting Web/ck11.jpg" : ((project.galleryImages && project.galleryImages.length > 6) ? project.galleryImages[6] : "/Images/Ipad Pro Mockup On Rock.jpg")} 
+            alt="Final Gallery Image"
+            className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-screen object-cover"}`} 
+            referrerPolicy="no-referrer"
+          />
+        </div>
+
         {/* Related Capabilities block (Below Sticky Images) */}
-        <div className="w-full bg-white relative z-40 py-16 md:py-24 px-6 sm:px-12 lg:px-16">
+        <div id="capabilities-section" className="w-full bg-white relative z-50 py-16 md:py-24 px-6 sm:px-12 lg:px-16">
           <div className="w-full space-y-6 md:space-y-8">
             <div className="space-y-2">
               <h4 className="font-sans font-medium text-2xl tracking-tight text-zinc-900 uppercase">
@@ -952,7 +903,7 @@ export default function ProjectDetailPage() {
             <svg viewBox="0 0 620 111" className="w-full h-auto m-0 p-0 block select-none translate-y-[2px]" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="zulhilmi-gradient-proj" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#0A2947" />
+                  <stop offset="0%" stopColor="#2563EB" />
                   <stop offset="100%" stopColor="#ffffff" />
                 </linearGradient>
               </defs>

@@ -15,12 +15,12 @@ export function SectionRevealOverlay({ isVisible }: SectionRevealOverlayProps) {
           {COLUMNS.map((i) => (
             <motion.div
               key={i}
-              className="relative h-full flex-1 bg-white overflow-hidden border-none outline-none"
+              className="relative h-full flex-1 bg-[#2563EB] overflow-hidden border-none outline-none"
               initial={{ y: "100%" }}
               animate={{ y: "0%" }}
               exit={{ y: "-100%" }}
               transition={{
-                duration: 0.65,
+                duration: 0.85,
                 ease: [0.76, 0, 0.24, 1],
                 delay: i * 0.05,
               }}

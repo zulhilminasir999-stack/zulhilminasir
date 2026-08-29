@@ -88,7 +88,7 @@ export function CreativeApproach() {
   ];
 
   return (
-    <section id="creative-approach" className="w-full bg-white relative z-40 pt-[400px] md:pt-[60vh] pb-16">
+    <section id="creative-approach" className="w-full bg-white relative z-40 pt-[220px] md:pt-[32vh] pb-16">
       <div className="w-full px-6 sm:px-12 lg:px-16 pt-10 md:pt-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 pt-12">
           

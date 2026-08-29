@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
+import { useLenis } from "../context/LenisContext";
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation();
   const navType = useNavigationType();
+  const { lenis } = useLenis();
 
   useEffect(() => {
     // If there is a hash, skip scroll-to-top to maintain position or use hash navigation
@@ -25,6 +27,9 @@ export default function ScrollToTop() {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true });
+      }
       
       // Also try to find any scrollable containers that might be stuck
       const scrollables = document.querySelectorAll('.overflow-y-auto, .overflow-auto');
@@ -43,7 +48,7 @@ export default function ScrollToTop() {
     return () => {
       timeoutIds.forEach(id => clearTimeout(id));
     };
-  }, [pathname, hash]);
+  }, [pathname, hash, navType, lenis]);
 
   return null;
 }

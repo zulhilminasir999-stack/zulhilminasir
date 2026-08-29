@@ -12,11 +12,22 @@ interface ScrollWordProps {
 }
 
 function ScrollWord({ word, index, total, progress }: ScrollWordProps) {
-  const start = index / total;
-  const end = Math.min(1, (index + 1.5) / total);
+  // Slower, steady, and ultra-smooth scroll-driven reveal across the sticky scroll runway (0.04 to 0.70)
+  // Generous word overlap creates a continuous, refined progressive illumination instead of abrupt snapping.
+  // After 0.70, the complete illuminated statement stays locked at 100% white until the user leaves the section.
+  const progressStart = 0.04;
+  const progressEnd = 0.70;
+  const wordStep = (progressEnd - progressStart) / total;
+  const wordStart = progressStart + index * wordStep;
+  const wordEnd = Math.min(progressEnd, wordStart + wordStep * 2.5);
   
-  // Animate opacity from 0.12 (dim, integrated into background) to 1.0 (brilliant white)
-  const opacity = useTransform(progress, [start, end], [0.12, 1]);
+  // Animate opacity from 0.18 (soft readable base) to 1.0 (brilliant white), smoothly clamping through the end of the section
+  const opacity = useTransform(
+    progress, 
+    [0, wordStart, wordEnd, 1], 
+    [0.18, 0.18, 1, 1],
+    { clamp: true }
+  );
   
   return (
     <span className="relative inline-block mr-[0.25em] select-none">
@@ -44,10 +55,10 @@ export default function TechBanner() {
 
   const [activeLogo, setActiveLogo] = useState<string | null>(null);
 
-  // Track scroll progress of the banner container for the scroll-reveal text
+  // Track scroll progress of the banner container for the sticky scroll-reveal text
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 75%", "end 85%"],
+    offset: ["start start", "end end"],
   });
 
   const lines = [
@@ -229,134 +240,137 @@ export default function TechBanner() {
     <section 
       id="integration-section"
       ref={containerRef}
-      className="relative w-full bg-[#02040A] aspect-[16/10] md:aspect-[16/9] md:min-h-[650px] lg:min-h-[800px] flex flex-col justify-start overflow-hidden p-0 m-0 select-none z-20"
+      className="relative w-full h-[280vh] sm:h-[300vh] bg-[#02040A] p-0 m-0 select-none z-20"
     >
-      {/* Cinematic Background Image - covering the full container */}
-      <img 
-        src={techLaptopImg}
-        alt="Cinematic Futuristic Technology Scene"
-        className="absolute inset-0 w-full h-full object-cover"
-        referrerPolicy="no-referrer"
-      />
+      {/* Sticky Fullscreen Inner Section */}
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
+        {/* Cinematic Background Image - covering the full container */}
+        <img 
+          src={techLaptopImg}
+          alt="Cinematic Futuristic Technology Scene"
+          className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+          referrerPolicy="no-referrer"
+        />
 
-      {/* Ambient dark gradient overlay to ensure text readability on the left */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#02040A]/95 via-[#02040A]/60 to-transparent pointer-events-none z-10" />
+        {/* Ambient dark gradient overlay to ensure text readability on the left */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#02040A]/95 via-[#02040A]/60 to-transparent pointer-events-none z-10" />
 
-      {/* Smooth bottom gradient overlay blending to the next section's background (#2563EB) */}
-      <div 
-        className="absolute inset-x-0 bottom-0 h-48 sm:h-64 md:h-80 lg:h-[400px] pointer-events-none z-10" 
-        style={{
-          background: 'linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.08) 20%, rgba(37, 99, 235, 0.3) 40%, rgba(37, 99, 235, 0.65) 65%, rgba(37, 99, 235, 0.92) 85%, rgba(37, 99, 235, 1) 95%, rgba(37, 99, 235, 1) 100%)'
-        }}
-      />
+        {/* Smooth bottom gradient overlay blending to the next section's background (#2563EB) */}
+        <div 
+          className="absolute inset-x-0 bottom-0 h-36 sm:h-48 md:h-64 lg:h-80 pointer-events-none z-10" 
+          style={{
+            background: 'linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.08) 20%, rgba(37, 99, 235, 0.3) 40%, rgba(37, 99, 235, 0.65) 65%, rgba(37, 99, 235, 0.92) 85%, rgba(37, 99, 235, 1) 95%, rgba(37, 99, 235, 1) 100%)'
+          }}
+        />
 
-      {/* Content wrapper on the left side aligned precisely with Featured Projects */}
-      <div className="relative z-20 w-full max-w-4xl lg:max-w-5xl px-6 sm:px-12 lg:px-16 pt-20 sm:pt-24 lg:pt-28 pb-16 sm:pb-20 text-left flex flex-col items-start gap-6 sm:gap-8 md:gap-10">
-        {/* Section Title: SOFTWARE & AI INTEGRATION */}
-        <div className="w-full text-left">
-          <h2 
-            className="text-4xl sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none !text-white text-left"
-            style={{ color: "#ffffff" }}
-          >
-            <WordsStagger className="text-inherit">
-              SOFTWARE &
-            </WordsStagger>{" "}
-            <br />
-            <WordsStagger className="text-inherit" delay={0.35}>
-              AI INTEGRATION
-            </WordsStagger>
-          </h2>
-        </div>
-
-        {/* Scroll-Reveal Bold Paragraph aligned left */}
-        <div className="w-full max-w-2xl sm:max-w-3xl text-left">
-          <p className="font-sans font-medium text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-white/20 text-left">
-            {linesWithIndices.map((lineWords, lineIdx) => (
-              <span key={lineIdx} className="block text-left">
-                {lineWords.map(({ word, index }) => (
-                  <ScrollWord 
-                    key={index} 
-                    word={word} 
-                    index={index} 
-                    total={totalWordsCount} 
-                    progress={scrollYProgress} 
-                  />
-                ))}
-              </span>
-            ))}
-          </p>
-        </div>
-
-        {/* Copy of Logo grid slide animation aligned left */}
-        <div className="w-full relative mt-2 sm:mt-4 text-left">
-          <div 
-            ref={marqueeContainerRef}
-            className="relative w-full flex items-center overflow-hidden py-4 cursor-grab active:cursor-grabbing touch-pan-y"
-            onMouseEnter={() => { isHoveredRef.current = true; }}
-            onMouseLeave={() => { isHoveredRef.current = false; }}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-            onTouchStart={() => setActiveLogo(null)}
-            style={{
-              WebkitMaskImage: "linear-gradient(to right, black 0%, black 85%, transparent 100%)",
-              maskImage: "linear-gradient(to right, black 0%, black 85%, transparent 100%)"
-            }}
-          >
-            {/* Marquee Content Belt */}
-            <div 
-              ref={trackRef} 
-              className="flex shrink-0 gap-20 sm:gap-24 items-center will-change-transform"
+        {/* Content wrapper on the left side aligned precisely with Featured Projects */}
+        <div className="relative z-20 w-full max-w-4xl lg:max-w-5xl px-6 sm:px-12 lg:px-16 pt-8 sm:pt-12 pb-8 sm:pb-12 text-left flex flex-col items-start gap-5 sm:gap-7 md:gap-9 my-auto">
+          {/* Section Title: SOFTWARE & AI INTEGRATION */}
+          <div className="w-full text-left">
+            <h2 
+              className="text-4xl sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none !text-white text-left"
+              style={{ color: "#ffffff" }}
             >
-              {[1, 2].map((segmentIdx) => (
-                <div 
-                  key={`tech-logo-segment-${segmentIdx}`}
-                  ref={segmentIdx === 1 ? singleTrackRef : null} 
-                  className="flex shrink-0 gap-20 sm:gap-24 items-center will-change-transform"
-                  aria-hidden={segmentIdx > 1}
-                >
-                  {logos.map((logo, idx) => {
-                    let customSpacingClass = "";
-                    if (logo.name === "Wix") {
-                      customSpacingClass = "-ml-4 -mr-5";
-                    } else if (logo.name === "Illustrator") {
-                      customSpacingClass = "-ml-8 -mr-8";
-                    } else if (logo.name === "Photoshop") {
-                      customSpacingClass = "-ml-8 -mr-8";
-                    } else if (logo.name === "Antigravity") {
-                      customSpacingClass = "ml-6 mr-6";
-                    }
+              <WordsStagger className="text-inherit">
+                SOFTWARE &
+              </WordsStagger>{" "}
+              <br />
+              <WordsStagger className="text-inherit" delay={0.35}>
+                AI INTEGRATION
+              </WordsStagger>
+            </h2>
+          </div>
 
-                    return (
-                      <div
-                        key={`tech-logo-item-${segmentIdx}-${idx}`}
-                        className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 flex items-center justify-center transition-all duration-500 ${
-                          activeLogo === logo.name 
-                            ? "scale-110 z-20" 
-                            : "hover:scale-105"
-                        } group ${customSpacingClass}`}
-                        title={logo.name}
-                      >
-                        <div className={`relative w-full h-full flex items-center justify-center transition-all duration-500 ${
-                          activeLogo === logo.name 
-                            ? "opacity-100" 
-                            : "opacity-85 group-hover:opacity-100"
-                        }`}>
-                          <img
-                            src={logo.path}
-                            alt={logo.name}
-                            className="w-full h-full object-contain pointer-events-none select-none transition-all duration-700"
-                            style={{ transform: logo.customScale ? `scale(${logo.customScale})` : 'scale(1)' }}
-                            loading="lazy"
-                            referrerPolicy="no-referrer"
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+          {/* Scroll-Reveal Bold Paragraph aligned left */}
+          <div className="w-full max-w-2xl sm:max-w-3xl text-left">
+            <p className="font-sans font-medium text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-white/20 text-left">
+              {linesWithIndices.map((lineWords, lineIdx) => (
+                <span key={lineIdx} className="block text-left">
+                  {lineWords.map(({ word, index }) => (
+                    <ScrollWord 
+                      key={index} 
+                      word={word} 
+                      index={index} 
+                      total={totalWordsCount} 
+                      progress={scrollYProgress} 
+                    />
+                  ))}
+                </span>
               ))}
+            </p>
+          </div>
+
+          {/* Copy of Logo grid slide animation aligned left */}
+          <div className="w-full relative mt-1 sm:mt-2 text-left">
+            <div 
+              ref={marqueeContainerRef}
+              className="relative w-full flex items-center overflow-hidden py-3 sm:py-4 cursor-grab active:cursor-grabbing touch-pan-y"
+              onMouseEnter={() => { isHoveredRef.current = true; }}
+              onMouseLeave={() => { isHoveredRef.current = false; }}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+              onTouchStart={() => setActiveLogo(null)}
+              style={{
+                WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+                maskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)"
+              }}
+            >
+              {/* Marquee Content Belt */}
+              <div 
+                ref={trackRef} 
+                className="flex shrink-0 gap-20 sm:gap-24 items-center will-change-transform"
+              >
+                {[1, 2].map((segmentIdx) => (
+                  <div 
+                    key={`tech-logo-segment-${segmentIdx}`}
+                    ref={segmentIdx === 1 ? singleTrackRef : null} 
+                    className="flex shrink-0 gap-20 sm:gap-24 items-center will-change-transform"
+                    aria-hidden={segmentIdx > 1}
+                  >
+                    {logos.map((logo, idx) => {
+                      let customSpacingClass = "";
+                      if (logo.name === "Wix") {
+                        customSpacingClass = "-ml-4 -mr-5";
+                      } else if (logo.name === "Illustrator") {
+                        customSpacingClass = "-ml-8 -mr-8";
+                      } else if (logo.name === "Photoshop") {
+                        customSpacingClass = "-ml-8 -mr-8";
+                      } else if (logo.name === "Antigravity") {
+                        customSpacingClass = "ml-6 mr-6";
+                      }
+
+                      return (
+                        <div
+                          key={`tech-logo-item-${segmentIdx}-${idx}`}
+                          className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 flex items-center justify-center transition-all duration-500 ${
+                            activeLogo === logo.name 
+                              ? "scale-110 z-20" 
+                              : "hover:scale-105"
+                          } group ${customSpacingClass}`}
+                          title={logo.name}
+                        >
+                          <div className={`relative w-full h-full flex items-center justify-center transition-all duration-500 ${
+                            activeLogo === logo.name 
+                              ? "opacity-100" 
+                              : "opacity-85 group-hover:opacity-100"
+                          }`}>
+                            <img
+                              src={logo.path}
+                              alt={logo.name}
+                              className="w-full h-full object-contain pointer-events-none select-none transition-all duration-700"
+                              style={{ transform: logo.customScale ? `scale(${logo.customScale})` : 'scale(1)' }}
+                              loading="lazy"
+                              referrerPolicy="no-referrer"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

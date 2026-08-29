@@ -207,7 +207,7 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                         {/* Summary Column */}
                         <div className="lg:col-span-5 flex flex-col gap-6">
                           {/* Monochrome rectangle preview image that restores full color on hover */}
-                          <div className="relative w-full aspect-[16/10] overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/50 group/img">
+                          <div className="relative w-full aspect-[16/10] overflow-hidden rounded-xl group/img">
                             <img 
                               src={item.image} 
                               alt={`${item.company} preview`}

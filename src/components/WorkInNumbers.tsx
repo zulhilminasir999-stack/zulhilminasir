@@ -121,7 +121,7 @@ export default function WorkInNumbers({ theme = "light" }: WorkInNumbersProps) {
   return (
     <section 
       id="work-in-numbers" 
-      className={`relative w-full pt-8 sm:pt-12 pb-10 sm:pb-14 ${
+      className={`relative w-full pt-20 sm:pt-28 pb-10 sm:pb-14 ${
         isLight ? "bg-white" : "bg-zinc-950"
       }`}
     >

@@ -137,8 +137,8 @@
    MODERN EDITORIAL LIGHT/DARK MODE STRUCTURAL OVERRIDES
    ========================================================================== */
 
-/* High-contrast and smooth transitions */
-html {
+/* Smooth transitions */
+html:not(.lenis) {
   scroll-behavior: smooth;
 }
 
@@ -437,7 +437,7 @@ html:not(.light) .loader-container {
   text-align: center;
   line-height: 1;
   letter-spacing: -0.02em;
-  background: radial-gradient(circle closest-side,#2563EB 94%,#0000) right/calc(200% - 1em) 100%;
+  background: radial-gradient(circle closest-side,#ffffff 94%,#0000) right/calc(200% - 1em) 100%;
   animation: l24 1s infinite alternate linear;
 }
 
@@ -445,7 +445,7 @@ html:not(.light) .loader-container {
   content: "Zulhilmi Nasir...";
   color: #0000;
   background: inherit;
-  background-image: radial-gradient(circle closest-side,#fff 94%,#2563EB);
+  background-image: radial-gradient(circle closest-side,#2563EB 94%,#ffffff);
   -webkit-background-clip: text;
   background-clip: text;
   display: block;
@@ -458,6 +458,14 @@ html:not(.light) .loader-container {
 }
 
 /* Custom premium transition hover effect for header navigation menu buttons */
+.get-in-touch-btn span,
+.get-in-touch-btn-dark span,
+.get-in-touch-btn-hero span,
+.nav-menu-btn span,
+.nav-menu-btn-dark-theme span {
+  font-size: 15px !important;
+}
+
 .nav-menu-btn {
   background: transparent;
   border: none;
@@ -625,7 +633,7 @@ html.light .nav-menu-btn.active span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px !important;
+  font-size: 15px !important;
   font-weight: 600 !important;
   text-decoration: none;
   cursor: pointer;
@@ -675,7 +683,7 @@ html.light .nav-menu-btn.active span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px !important;
+  font-size: 15px !important;
   font-weight: 600 !important;
   text-decoration: none;
   cursor: pointer;
@@ -721,14 +729,13 @@ html.light .nav-menu-btn.active span {
 @media (min-width: 768px) and (max-width: 1024px) {
   .nav-menu-btn {
     padding: 0.25rem 0.5rem !important;
-    font-size: 11px !important;
   }
   
   .get-in-touch-btn, 
   .get-in-touch-btn-dark,
   .get-in-touch-btn-hero {
     padding: 0.25rem 0.65rem !important;
-    font-size: 9.5px !important;
+    font-size: 15px !important;
   }
 }
 
@@ -778,7 +785,7 @@ html.light .nav-menu-btn.active span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px !important;
+  font-size: 15px !important;
   font-weight: 600 !important;
   text-decoration: none;
   cursor: pointer;

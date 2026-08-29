@@ -174,7 +174,7 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
               Zulhilmi Nasir,
             </span>
             <span className="font-sans text-[13px] sm:text-[14px] text-zinc-500 font-medium tracking-wide mt-1">
-              Web Designer, Wordpress Developer, UI/UX Design Engineer, Vibe Coding Developer
+              Web Designer, Wordpress Developer, UI/UX Design Engineer, AI Prompt Engineer
             </span>
           </div>
         </div>

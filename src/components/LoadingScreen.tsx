@@ -35,7 +35,7 @@ export const LoadingScreen = () => {
         {columns.map((i) => (
           <motion.div
             key={i}
-            className="h-full flex-1 bg-[#fafafa]"
+            className="h-full flex-1 bg-[#2563EB]"
             initial={{ y: "0%" }}
             exit={{ y: "-100%" }}
             transition={{
@@ -70,8 +70,8 @@ export const LoadingScreen = () => {
               className="text-6xl sm:text-7xl md:text-9xl font-normal italic tracking-tight select-none font-serif"
               style={{ 
                 fontFamily: '"Cormorant Garamond", Georgia, serif',
-                color: '#2563EB',
-                filter: 'drop-shadow(0 4px 6px rgba(37, 99, 235, 0.2))'
+                color: '#ffffff',
+                filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))'
               }}
             >
               {Math.round(progress)}%

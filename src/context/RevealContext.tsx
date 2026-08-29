@@ -22,7 +22,7 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const triggerReveal = useCallback((onMidpoint?: () => void) => {
     setIsRevealing(true);
 
-    // Midpoint: when 5 curtain columns completely cover viewport (~380ms)
+    // Midpoint: when 5 curtain columns completely cover viewport (~1000ms)
     setTimeout(() => {
       if (onMidpoint) {
         onMidpoint();
@@ -32,7 +32,7 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setTimeout(() => {
         setIsRevealing(false);
       }, 120);
-    }, 380);
+    }, 1000);
   }, []);
 
   return (

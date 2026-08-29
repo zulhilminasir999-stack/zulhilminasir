@@ -64,7 +64,7 @@ app.post("/api/prompt-craft", async (req, res) => {
     `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.7-flash",
       contents: craftPrompt,
       config: {
         responseMimeType: "application/json",
@@ -125,7 +125,7 @@ app.post("/api/generate-brief", async (req, res) => {
     `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.7-flash",
       contents: briefPrompt,
       config: {
         responseMimeType: "application/json",

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Lenis from "lenis";
 import { ParallaxCardWrapper } from "../components/ui/parallax-card-wrapper";
 import { motion, AnimatePresence, LayoutGroup, useScroll, useTransform } from "motion/react";
 import { 
@@ -44,7 +43,7 @@ import CareerTimeline from "../components/CareerTimeline";
 import ContactForm from "../components/ContactForm";
 import StripeMeshGradient from "../components/StripeMeshGradient";
 import { FloatingMenu } from "../components/FloatingMenu";
-import LeftSideTicker from "../components/LeftSideTicker";
+import ServiceCardSlider from "../components/ServiceCardSlider";
 import { useNavigate, useLocation, useNavigationType } from "react-router-dom";
 import { HoverImageList } from "@/components/unlumen-ui/hover-image-list";
 import { LatestPortfolio } from "@/components/unlumen-ui/latest-portfolio";
@@ -53,6 +52,7 @@ import ServicesSection from "../components/unlumen-ui/ServicesSection";
 import TypewriterSection from "../components/TypewriterSection";
 import TechBanner from "../components/TechBanner";
 import { useReveal } from "../context/RevealContext";
+import { useLenis } from "../context/LenisContext";
 
 interface HomePageProps {
   isLoading: boolean;
@@ -63,6 +63,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   const navigate = useNavigate();
   const { hash } = useLocation();
   const navType = useNavigationType();
+  const { lenis } = useLenis();
   const [activeFilter, setActiveFilter] = useState<ProjectCategory>("ALL");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isAtTop, setIsAtTop] = useState(true);
@@ -95,39 +96,6 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
   const galleryBg = useTransform(galleryScrollY, [0.50, 0.70], ["#2563EB", "#ffffff"]);
 
-  // Initialize Lenis smooth scroll
-  const lenisRef = React.useRef<Lenis | null>(null);
-
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.4,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // ultra smooth momentum ease
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-    });
-
-    lenisRef.current = lenis;
-    (window as any).lenisInstance = lenis;
-
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-
-    rafId = requestAnimationFrame(raf);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      if ((window as any).lenisInstance === lenis) {
-        (window as any).lenisInstance = null;
-      }
-      lenis.destroy();
-    };
-  }, []);
-
   useEffect(() => {
     const checkWidth = () => {
       setIsMobileScreen(window.innerWidth < 640);
@@ -138,17 +106,6 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     window.addEventListener("resize", checkWidth);
     return () => window.removeEventListener("resize", checkWidth);
   }, []);
-
-  // Pause Lenis while loading screen is active, start on completion
-  useEffect(() => {
-    if (lenisRef.current) {
-      if (isLoading) {
-        lenisRef.current.stop();
-      } else {
-        lenisRef.current.start();
-      }
-    }
-  }, [isLoading]);
 
   const mountedWithLoading = React.useRef(isLoading);
 
@@ -186,8 +143,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           if (el) {
             const targetY = el.getBoundingClientRect().top + window.scrollY;
             window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
-            if (lenisRef.current) {
-              lenisRef.current.scrollTo(targetY, { immediate: true });
+            if (lenis) {
+              lenis.scrollTo(targetY, { immediate: true });
             }
             setActiveSection(rawId);
             setIsHeaderScrolled(targetY > 80);
@@ -207,8 +164,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
               document.documentElement.scrollTop = targetY;
               document.body.scrollTop = targetY;
-              if (lenisRef.current) {
-                lenisRef.current.scrollTo(targetY, { immediate: true });
+              if (lenis) {
+                lenis.scrollTo(targetY, { immediate: true });
               }
             };
             
@@ -229,8 +186,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
           document.documentElement.scrollTop = 0;
           document.body.scrollTop = 0;
-          if (lenisRef.current) {
-            lenisRef.current.scrollTo(0, { immediate: true });
+          if (lenis) {
+            lenis.scrollTo(0, { immediate: true });
           }
           setActiveSection("hero-section");
           setIsHeaderScrolled(false);
@@ -242,7 +199,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         return () => timers.forEach(id => clearTimeout(id));
       }
     }
-  }, [isLoading]);
+  }, [isLoading, lenis]);
 
   // Reset active slide states
   useEffect(() => {
@@ -286,10 +243,35 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   const [headerVisible, setHeaderVisible] = useState(true);
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
   const [isScrollingUp, setIsScrollingUp] = useState(true);
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState("hero-section");
+  const [capabilitiesExpandedIndex, setCapabilitiesExpandedIndex] = useState<number | null>(() => {
+    const saved = sessionStorage.getItem("capabilities_expanded_index");
+    return saved !== null ? parseInt(saved, 10) : null;
+  });
   const isSoftwareSection = activeSection === "integration-section";
-  const isProjectsSection = activeSection === "capabilities-section" || activeSection === "projects-outer-section" || activeSection === "contact-section";
-  const isWhiteTextSection = isSoftwareSection || isProjectsSection;
+  const isProjectsSection = activeSection === "capabilities-section" || activeSection === "projects-outer-section";
+  const isServicesSection = activeSection === "services-section" || activeSection === "work-in-numbers";
+
+  // Sections that have a dark or saturated blue background (where navigation should use white text)
+  const isDarkBackgroundSection = 
+    activeSection === "hero-section" ||
+    activeSection === "integration-section" ||
+    activeSection === "projects-outer-section" ||
+    activeSection === "contact-section";
+
+  // Sections that have a clean white background (where navigation MUST use bold black text during scroll)
+  const isLightBackgroundSection = 
+    activeSection === "services-section" ||
+    activeSection === "work-in-numbers" ||
+    activeSection === "gallery-section" ||
+    activeSection === "capabilities-section" ||
+    activeSection === "hover-list-section" ||
+    activeSection === "creative-approach" ||
+    activeSection === "about-section" ||
+    activeSection === "career-section";
+
+  const isWhiteTextSection = (isDarkBackgroundSection && !isLightBackgroundSection) || 
+    ((activeSection === "capabilities-section" || activeSection === "hover-list-section") && capabilitiesExpandedIndex !== null && !isScrollingUp);
   const { triggerReveal } = useReveal();
 
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetId: string) => {
@@ -319,8 +301,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         setActiveSection(isHero ? "hero-section" : rawId);
 
         // Disable lenis smooth scroll temporarily to jump instantly
-        if (lenisRef.current) {
-          lenisRef.current.stop();
+        if (lenis) {
+          lenis.stop();
         }
         
         // Jump directly to top/target section without any smooth scrolling
@@ -329,9 +311,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         document.body.scrollTop = targetY;
         
         // Restart lenis and sync its position instantly
-        if (lenisRef.current) {
-          lenisRef.current.start();
-          lenisRef.current.scrollTo(targetY, { immediate: true });
+        if (lenis) {
+          lenis.start();
+          lenis.scrollTo(targetY, { immediate: true });
         }
 
         // Clean URL hash so refreshing the browser starts cleanly at top section
@@ -374,18 +356,23 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       }
       
       // Track active section on scroll for desktop menu highlights
-      const sectionIds = ["about-section", "career-section", "services-section", "integration-section", "projects-outer-section", "capabilities-section", "gallery-section", "creative-approach", "contact-section"];
-      let currentSection = "";
-      const scrollPosition = currentY + 160; // Offset for header height and offset
-      for (const id of sectionIds) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const top = rect.top + currentY;
-          const bottom = top + el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < bottom) {
-            currentSection = id;
-            break;
+      const servicesEl = document.getElementById("services-section");
+      const servicesTop = servicesEl ? servicesEl.getBoundingClientRect().top + currentY : window.innerHeight;
+      const sectionIds = ["services-section", "work-in-numbers", "integration-section", "projects-outer-section", "capabilities-section", "hover-list-section", "gallery-section", "creative-approach", "about-section", "career-section", "contact-section"];
+      let currentSection = "hero-section";
+      const scrollPosition = currentY + 140; // Offset for header height
+
+      if (scrollPosition >= servicesTop) {
+        for (const id of sectionIds) {
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const top = rect.top + currentY;
+            const bottom = top + el.offsetHeight;
+            if (scrollPosition >= top && scrollPosition < bottom) {
+              currentSection = id;
+              break;
+            }
           }
         }
       }
@@ -476,21 +463,21 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1.5 md:space-x-1.5 lg:space-x-2.5 font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
                         >
-                          <a href="#about-section" onClick={(e) => handleNavClick(e, '#about-section')} className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""}`}>
-                            <span className="text-[15px] md:text-[13px] lg:text-[15px] font-medium">About</span>
-                          </a>
-                          <a href="#career-section" onClick={(e) => handleNavClick(e, '#career-section')} className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""}`}>
-                            <span className="text-[15px] md:text-[13px] lg:text-[15px] font-medium">Career</span>
-                          </a>
-                          <a href="#services-section" onClick={(e) => handleNavClick(e, '#services-section')} className={`nav-menu-btn ${activeSection === "services-section" ? "active" : ""}`}>
-                            <span className="text-[15px] md:text-[13px] lg:text-[15px] font-medium">Services</span>
+                          <a href="#services-section" onClick={(e) => handleNavClick(e, '#services-section')} className={`nav-menu-btn ${isServicesSection ? "active" : ""}`}>
+                            <span className="text-[15px] font-medium">Services</span>
                           </a>
                           <a href="#integration-section" onClick={(e) => handleNavClick(e, '#integration-section')} className={`nav-menu-btn ${activeSection === "integration-section" ? "active" : ""}`}>
-                            <span className="hidden lg:inline text-[15px] md:text-[13px] lg:text-[15px] font-medium">Software & AI Solution</span>
-                            <span className="inline lg:hidden text-[15px] md:text-[13px] lg:text-[15px] font-medium">Software</span>
+                            <span className="hidden lg:inline text-[15px] font-medium">Software & AI Solution</span>
+                            <span className="inline lg:hidden text-[15px] font-medium">Software</span>
                           </a>
                           <a href="#capabilities-section" onClick={(e) => handleNavClick(e, '#capabilities-section')} className={`nav-menu-btn ${isProjectsSection ? "active" : ""}`}>
-                            <span className="text-[15px] md:text-[13px] lg:text-[15px] font-medium">Projects</span>
+                            <span className="text-[15px] font-medium">Projects</span>
+                          </a>
+                          <a href="#about-section" onClick={(e) => handleNavClick(e, '#about-section')} className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""}`}>
+                            <span className="text-[15px] font-medium">About</span>
+                          </a>
+                          <a href="#career-section" onClick={(e) => handleNavClick(e, '#career-section')} className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""}`}>
+                            <span className="text-[15px] font-medium">Career</span>
                           </a>
                         </motion.nav>
 
@@ -501,7 +488,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             transition={{ type: "spring", stiffness: 380, damping: 35 }}
                             href="#contact-section"
                             onClick={(e) => handleNavClick(e, '#contact-section')}
-                            className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 md:!text-[13px] lg:!py-1.5 lg:!px-4 lg:!text-[15px] cursor-pointer"
+                            className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                           >
                             {/* Shimmer Effect Wrapper */}
                             <div className="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-0 rounded-[25px] overflow-hidden">
@@ -511,7 +498,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               {/* Scanning grid sweep light */}
                               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
                             </div>
-                            <span className="relative z-10 text-[15px] md:text-[13px] lg:text-[15px] font-medium">Get In Touch</span>
+                            <span className="relative z-10 text-[15px] font-medium">Get In Touch</span>
                           </motion.a>
                         </div>
                       </>
@@ -524,7 +511,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           className={`flex items-center rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300 backdrop-blur-2xl ${
                             isWhiteTextSection 
                               ? "bg-white/10 border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)]" 
-                              : "bg-white/30 border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]"
+                              : "bg-white/85 border border-zinc-200/90 shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]"
                           }`}
                         >
                           {/* ZN Button / Logo inside capsule */}
@@ -536,7 +523,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             className={`font-display font-semibold text-base tracking-tight transition-all mr-10 md:mr-5 lg:mr-10 flex items-center h-6 cursor-pointer ${
                               isWhiteTextSection 
                                 ? "text-white hover:text-cyan-300" 
-                                : "text-[#0A2947] hover:text-[#2563EB]"
+                                : "text-zinc-950 hover:text-[#2563EB]"
                             }`}
                           >
                             ZN
@@ -545,23 +532,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           {/* Navigation Links inside capsule */}
                           <nav className="flex items-center space-x-2.5 md:space-x-1.5 lg:space-x-2.5 text-[15px] md:text-[13px] lg:text-[15px] font-medium tracking-normal">
                             <a 
-                              href="#about-section" 
-                              onClick={(e) => handleNavClick(e, '#about-section')} 
-                              className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "about-section" ? "nav-btn-white" : "nav-btn-black"}`}
-                            >
-                              <span>About</span>
-                            </a>
-                            <a 
-                              href="#career-section" 
-                              onClick={(e) => handleNavClick(e, '#career-section')} 
-                              className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "career-section" ? "nav-btn-white" : "nav-btn-black"}`}
-                            >
-                              <span>Career</span>
-                            </a>
-                            <a 
                               href="#services-section" 
                               onClick={(e) => handleNavClick(e, '#services-section')} 
-                              className={`nav-menu-btn ${activeSection === "services-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "services-section" ? "nav-btn-white" : "nav-btn-black"}`}
+                              className={`nav-menu-btn ${isServicesSection ? "active" : ""} ${isWhiteTextSection && !isServicesSection ? "nav-btn-white" : "nav-btn-black"}`}
                             >
                               <span>Services</span>
                             </a>
@@ -580,6 +553,20 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             >
                               <span>Projects</span>
                             </a>
+                            <a 
+                              href="#about-section" 
+                              onClick={(e) => handleNavClick(e, '#about-section')} 
+                              className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "about-section" ? "nav-btn-white" : "nav-btn-black"}`}
+                            >
+                              <span>About</span>
+                            </a>
+                            <a 
+                              href="#career-section" 
+                              onClick={(e) => handleNavClick(e, '#career-section')} 
+                              className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "career-section" ? "nav-btn-white" : "nav-btn-black"}`}
+                            >
+                              <span>Career</span>
+                            </a>
                           </nav>
 
                           {/* Get In Touch Button inside capsule */}
@@ -588,9 +575,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             transition={{ type: "spring", stiffness: 380, damping: 35 }}
                             href="#contact-section"
                             onClick={(e) => handleNavClick(e, '#contact-section')}
-                            className={`ml-6 md:ml-3 lg:ml-6 ${isWhiteTextSection ? "get-in-touch-btn-dark" : "get-in-touch-btn"} whitespace-nowrap md:!py-1.5 md:!px-3.5 md:!text-[11px] lg:!py-1.5 lg:!px-4 lg:!text-[13px] cursor-pointer`}
+                            className={`ml-6 md:ml-3 lg:ml-6 ${isWhiteTextSection ? "get-in-touch-btn-dark" : "get-in-touch-btn"} whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer`}
                           >
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">Get In Touch</span>
+                            <span className="text-[15px]">Get In Touch</span>
                           </motion.a>
                         </motion.div>
                       </div>
@@ -637,11 +624,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     exit={{ opacity: 0, height: 0 }}
                     className="md:hidden border-b border-zinc-900 bg-zinc-950 p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-zinc-400"
                   >
-                    <a href="#about-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">About</a>
-                    <a href="#career-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Career</a>
                     <a href="#services-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Services</a>
                     <a href="#integration-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Software & AI Solutions</a>
                     <a href="#capabilities-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#capabilities-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Projects</a>
+                    <a href="#about-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">About</a>
+                    <a href="#career-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Career</a>
                     <a href="#contact-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="hover:text-zinc-100">Collaborate</a>
                   </motion.div>
                 )}
@@ -686,54 +673,32 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             </span>
           </div>
 
-          {/* Vertical Right Side Ticker (the current service text scroll reveal animation) */}
-          <LeftSideTicker />
-
-
-
           <motion.div 
             style={{ scale: heroScale, opacity: heroOpacity, y: heroY }}
-            className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-between py-6 md:py-10"
+            className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-end py-6 md:py-10"
           >
-            {/* Top Row: Service heading */}
-            <div className="grid grid-cols-1 w-full">
-              <div className="p-0 m-0">
-                <div className="space-y-4 -translate-y-2 sm:-translate-y-2 md:-translate-y-4 lg:-translate-y-6">
-                  <h2 className="font-sans font-semibold text-2xl sm:text-3xl md:text-[44px] lg:text-[44px] tracking-tight !text-white leading-[1.15] max-w-2xl md:max-w-4xl text-left">
-                    <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white md:whitespace-nowrap" highlightWords={{ "Design": "font-serif italic font-normal text-[32px] sm:text-[38px] md:text-[55px] lg:text-[55px]" }}>
-                      Crafting Digital Design that
-                    </WordsStagger>
-                    <br className="hidden md:block" />
-                    <WordsStagger trigger={!isLoading} delay={0.45} className="!text-white md:whitespace-nowrap">
-                      Elevate SaaS & AI Innovators
-                    </WordsStagger>
+            {/* Bottom Row: Crafting Digital Design heading aligned side-by-side with ServiceCardSlider */}
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-16 md:pt-0 pointer-events-auto">
+              <div className="p-0 m-0 text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl">
+                <div className="space-y-4 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10">
+                  <h2 className="font-sans font-semibold text-xl sm:text-2xl md:text-[34px] lg:text-[40px] xl:text-[46px] tracking-tight !text-white leading-[1.22] text-left">
+                    <span className="block whitespace-nowrap overflow-visible">
+                      <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.16em]" }}>
+                        Crafting SaaS Design & Web Solutions
+                      </WordsStagger>
+                    </span>
+                    <span className="block whitespace-nowrap overflow-visible mt-1 sm:mt-1.5 md:mt-2">
+                      <WordsStagger trigger={!isLoading} delay={0.45} className="!text-white flex-nowrap whitespace-nowrap">
+                        Augmented by AI-Powered Innovation
+                      </WordsStagger>
+                    </span>
                   </h2>
                 </div>
               </div>
-            </div>
 
-            {/* Bottom Row: ZULHILMI heading */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end w-full mt-auto pt-16 md:pt-0">
-              <div className="md:col-span-5 text-left p-0 m-0">
-                <motion.h1 
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-                  className="m-0 p-0 font-sans font-black text-[9vw] sm:text-[10.5vw] md:text-[11.5vw] leading-[0.8] tracking-tighter !text-white uppercase select-none text-left -ml-[0.04em] translate-y-6 sm:translate-y-8 md:translate-y-12 lg:translate-y-16"
-                >
-                  ZULHILMI
-                </motion.h1>
-              </div>
-              <div className="md:col-span-7 flex justify-end p-0 m-0">
-                <motion.h1 
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                  style={{ y: useTransform(scrollYProgress, [0, 1], [0, -600]) }}
-                  className="m-0 p-0 font-sans font-black text-[9vw] sm:text-[10.5vw] md:text-[11.5vw] leading-[0.8] tracking-tighter !text-white uppercase select-none text-right w-full translate-y-6 sm:translate-y-8 md:translate-y-12 lg:translate-y-16"
-                >
-                  NASIR
-                </motion.h1>
+              {/* Interactive 3D Stacked Service Deck Slider Container */}
+              <div className="self-start lg:self-end shrink-0 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
+                <ServiceCardSlider />
               </div>
             </div>
           </motion.div>
@@ -741,42 +706,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
         {/* Beautiful Overlapping Slider-up Container stacking over the Sticky Hero */}
         <div className="relative z-20 bg-white">
-          {/* Embedded AboutMe30Sec Section */}
-          <motion.section 
-            id="about-section" 
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative w-full pt-24 pb-16 transition-all duration-300 ${
-              theme === "light"
-                ? "bg-white"
-                : "bg-zinc-950"
-            }`}
-          >
-            <div className="relative z-10 w-full px-6 sm:px-12 lg:px-16">
-              {/* Mount AboutMe30Sec with dynamic theme prop */}
-              <AboutMe30Sec theme={theme} />
-            </div>
-          </motion.section>
-
-          {/* Career Timeline Section */}
-          <section id="career-section" className={`relative w-full py-16 sm:py-20 transition-colors duration-300 ${
-            theme === "light"
-              ? "bg-white"
-              : "bg-zinc-950/40"
-          }`}>
-            <div className="relative z-10 w-full px-6 sm:px-12 lg:px-16">
-              {/* Render CareerTimeline */}
-              <CareerTimeline theme={theme} />
-            </div>
-          </section>
+          {/* Services Section - Beautiful Stripe-style expanding carousel */}
+          <ServicesSection isDark={false} />
 
           {/* Work In Numbers Section */}
           <WorkInNumbers theme={theme} />
-
-          {/* Services Section - Beautiful Stripe-style expanding carousel */}
-          <ServicesSection isDark={false} />
 
           {/* Cinematic Futuristic Technology Banner - Edge-to-edge, no padding */}
           <TechBanner />
@@ -800,7 +734,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       </motion.div>
 
       {/* 4. Capability Cards Section on white background */}
-      <div className="w-full bg-white relative z-50 pt-4 pb-0 -mt-[15vh] sm:-mt-[25vh] lg:-mt-[30vh]">
+      <div id="hover-list-section" className="w-full bg-white relative z-50 pt-4 pb-0 -mt-[15vh] sm:-mt-[25vh] lg:-mt-[30vh]">
         <HoverImageList 
           items={CAPABILITIES_DATA.map(cap => ({
             id: cap.id,
@@ -809,14 +743,68 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             category: cap.categoryLabel,
             showcases: cap.showcases
           }))} 
-          onItemClick={(item, idx) => {
-            const detail = CAPABILITIES_DATA[idx];
-            if (detail) {
-              sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
-              navigate(`/case-study/${detail.id}`);
-            }
+          onExpandedChange={(idx) => setCapabilitiesExpandedIndex(idx)}
+          onItemClick={(item, idx, showcase) => {
+            sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
+            triggerReveal(() => {
+              if (showcase) {
+                if (showcase.url) {
+                  navigate(showcase.url);
+                  return;
+                }
+                if (showcase.projectId) {
+                  navigate(`/case-study-project/${showcase.projectId}`);
+                  return;
+                }
+                const lowerTitle = showcase.title.toLowerCase();
+                if (lowerTitle.includes("pre-school fee management") || lowerTitle.includes("official duty")) {
+                  navigate(`/case-study-project/aistudio-brand`);
+                  return;
+                }
+                const matchedProject = PORTFOLIO_PROJECTS.find(p => p.title.toLowerCase() === lowerTitle);
+                if (matchedProject) {
+                  navigate(`/case-study-project/${matchedProject.id}`);
+                  return;
+                }
+              }
+              const detail = CAPABILITIES_DATA[idx];
+              if (detail) {
+                navigate(`/case-study/${detail.id}`);
+              }
+            });
           }}
         />
+
+        {/* Embedded AboutMe30Sec Section */}
+        <motion.section 
+          id="about-section" 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+          className={`relative w-full pt-20 sm:pt-28 pb-16 transition-all duration-300 ${
+            theme === "light"
+              ? "bg-white"
+              : "bg-zinc-950"
+          }`}
+        >
+          <div className="relative z-10 w-full px-6 sm:px-12 lg:px-16">
+            {/* Mount AboutMe30Sec with dynamic theme prop */}
+            <AboutMe30Sec theme={theme} />
+          </div>
+        </motion.section>
+
+        {/* Career Timeline Section */}
+        <section id="career-section" className={`relative w-full py-16 sm:py-20 transition-colors duration-300 ${
+          theme === "light"
+            ? "bg-white"
+            : "bg-zinc-950/40"
+        }`}>
+          <div className="relative z-10 w-full px-6 sm:px-12 lg:px-16">
+            {/* Render CareerTimeline */}
+            <CareerTimeline theme={theme} />
+          </div>
+        </section>
       </div>
 
       {/* Creative Approach Section matching attached image */}

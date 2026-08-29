@@ -12,11 +12,11 @@ const ZNIcon = ({ className, size }: { className?: string; size?: number }) => (
 
 const menuItems = [
   { id: "hero", icon: ZNIcon, label: "Home" },
-  { id: "about", icon: User, label: "About" },
-  { id: "career", icon: Briefcase, label: "Career" },
   { id: "services", icon: Sparkles, label: "Services" },
   { id: "integration", icon: Wrench, label: "Software" },
-  { id: "capabilities", icon: LayoutGrid, label: "Projects" }
+  { id: "capabilities", icon: LayoutGrid, label: "Projects" },
+  { id: "about", icon: User, label: "About" },
+  { id: "career", icon: Briefcase, label: "Career" }
 ];
 
 export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { visible?: boolean; theme?: "light" | "dark"; onNavClick?: (targetId: string) => void }) {
@@ -36,11 +36,11 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
 
   const currentMenuItems = isMobile 
     ? [
-        { id: "about", icon: User, label: "About" },
-        { id: "career", icon: Briefcase, label: "Career" },
         { id: "services", icon: Sparkles, label: "Services" },
         { id: "integration", icon: Wrench, label: "Software" },
-        { id: "capabilities", icon: LayoutGrid, label: "Projects" }
+        { id: "capabilities", icon: LayoutGrid, label: "Projects" },
+        { id: "about", icon: User, label: "About" },
+        { id: "career", icon: Briefcase, label: "Career" }
       ]
     : menuItems;
 

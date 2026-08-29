@@ -6,6 +6,8 @@ import { useNavigationType } from "react-router-dom";
 interface HoverImageShowcase {
   title: string;
   image: string;
+  projectId?: string;
+  url?: string;
 }
 
 interface HoverImageItem {
@@ -18,10 +20,11 @@ interface HoverImageItem {
 
 interface HoverImageListProps {
   items: HoverImageItem[];
-  onItemClick?: (item: HoverImageItem, index: number) => void;
+  onItemClick?: (item: HoverImageItem, index: number, showcase?: HoverImageShowcase) => void;
+  onExpandedChange?: (index: number | null) => void;
 }
 
-export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
+export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverImageListProps) {
   const navType = useNavigationType();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(() => {
@@ -35,7 +38,10 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
     } else {
       sessionStorage.removeItem("capabilities_expanded_index");
     }
-  }, [expandedIndex]);
+    if (onExpandedChange) {
+      onExpandedChange(expandedIndex);
+    }
+  }, [expandedIndex, onExpandedChange]);
   const [rotate, setRotate] = useState(0);
   const lastX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -127,14 +133,14 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
               <div className="relative z-10 flex items-center flex-1 min-w-0">
                 {/* Text and category */}
                 <div className="flex flex-col items-start text-left gap-1 sm:gap-2">
-                  <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-medium tracking-tighter transition-colors duration-500 uppercase ${
+                  <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-semibold tracking-tighter transition-colors duration-500 uppercase ${
                     (isHovered || isExpanded) ? "text-white" : "text-[#09090b]"
                   }`}>
                     {item.label}
                   </div>
                   {item.category && (
                     <span 
-                      className={`text-[12px] font-mono tracking-wider uppercase transition-all duration-500 transform translate-y-1 group-hover:translate-y-0 font-medium ${
+                      className={`text-[12px] font-sans tracking-wider uppercase transition-all duration-500 transform translate-y-1 group-hover:translate-y-0 font-medium ${
                         (isHovered || isExpanded) ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                       }`}
                       style={{ color: (isHovered || isExpanded) ? "rgba(255, 255, 255, 0.8)" : "rgb(113, 113, 122)" }}
@@ -210,7 +216,7 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
                       transition={{ delay: isRestoredFromPop ? 0 : 0.1 + sIdx * 0.1, duration: isRestoredFromPop ? 0 : 0.4 }}
                       onClick={(e) => {
                         e.stopPropagation();
-                        onItemClick?.(item, idx);
+                        onItemClick?.(item, idx, showcase);
                       }}
                       className="group/card cursor-pointer"
                     >
@@ -279,15 +285,6 @@ export function HoverImageList({ items, onItemClick }: HoverImageListProps) {
                 alt={item.label}
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
-                onError={(e) => {
-                  // Fallback to a high-quality Unsplash image placeholder if the path fails
-                  const fallbackUrls = [
-                    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
-                    "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800",
-                    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800"
-                  ];
-                  e.currentTarget.src = fallbackUrls[idx % fallbackUrls.length];
-                }}
               />
             </motion.div>
           );

@@ -31,14 +31,14 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Mobile UI/UX Design",
     defaultImage: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study-project/komorebi-editorial",
-    client: "Triply",
+    client: "Triply App",
     year: "2025"
   },
   {
     id: "zudio-garage",
     title: "CK Lighting Online Store",
     category: "E-commerce Website",
-    defaultImage: "/Images/ck1.jpg",
+    defaultImage: "/CK Lighting Web/ck1.jpg",
     objectPosition: "center 30%",
     url: "/case-study-project/ck-lighting",
     client: "CK Lighting Sdn Bhd",
@@ -50,16 +50,16 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Mobile UI/UX Design",
     defaultImage: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study-project/breeze-cargo",
-    client: "Flakeslake App",
+    client: "RepX App",
     year: "2026"
   },
   {
     id: "rural-arena",
-    title: "Warisan Ayah 3Q Catering",
-    category: "Brand Identity",
+    title: "Pre-school Fee Management",
+    category: "Web App & System",
     defaultImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study-project/aistudio-brand",
-    client: "Rural Arena Foundation",
+    client: "Tadika Mesra, Sungai Petani",
     year: "2025"
   }
 ];
@@ -115,7 +115,7 @@ export function LatestPortfolio() {
             onMouseEnter={() => setHoveredCardId(item.id)}
             onMouseLeave={() => setHoveredCardId(null)}
             onMouseMove={handleMouseMove}
-            className="sticky top-0 h-[80vh] sm:h-screen w-full flex flex-col justify-end group overflow-hidden cursor-pointer bg-zinc-950"
+            className="sticky top-0 h-screen w-full flex flex-col justify-end group overflow-hidden cursor-pointer bg-zinc-950"
           >
             {/* Project Image Background */}
             <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -154,7 +154,7 @@ export function LatestPortfolio() {
             </AnimatePresence>
 
             {/* Bottom Info Overlay */}
-            <div className="absolute bottom-16 sm:bottom-24 lg:bottom-32 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col">
+            <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col">
               {/* Category above the main title */}
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3">
                 {item.category}

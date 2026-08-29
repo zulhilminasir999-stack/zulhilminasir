@@ -72,6 +72,8 @@ export interface CapabilityDetail {
   showcases?: {
     title: string;
     image: string;
+    projectId?: string;
+    url?: string;
   }[];
   gallery?: string[];
 }

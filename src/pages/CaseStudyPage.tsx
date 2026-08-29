@@ -20,9 +20,9 @@ import {
   Moon
 } from "lucide-react";
 import { CAPABILITIES_DATA } from "../data";
-import Lenis from "lenis";
 import { FloatingMenu } from "../components/FloatingMenu";
 import { useReveal } from "../context/RevealContext";
+import { useLenis } from "../context/LenisContext";
 import webDesignMockupImg from "../assets/images/web_design_mockup_1783179228755.jpg";
 import darkUiMockupImg from "../assets/images/dark_ui_mockup_1783179382977.jpg";
 import minimalistUiMockupImg from "../assets/images/minimalist_ui_mockup_1783179396760.jpg";
@@ -75,7 +75,7 @@ const CATEGORY_RANDOM_PHOTOS: Record<string, string[]> = {
 export default function CaseStudyPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const lenisRef = useRef<Lenis | null>(null);
+  const { lenis } = useLenis();
 
   const [headerVisible, setHeaderVisible] = useState(true);
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
@@ -164,33 +164,14 @@ export default function CaseStudyPage() {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      if (lenisRef.current) {
-        lenisRef.current.scrollTo(0, { immediate: true });
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true });
       }
     };
 
     resetToTop();
     // Exponentially spaced attempts to catch any race conditions
     const timers = [0, 20, 50, 100, 200, 400, 800, 1500].map(d => setTimeout(resetToTop, d));
-    
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      syncTouch: true
-    });
-    
-    lenisRef.current = lenis;
-    (window as any).lenisInstance = lenis;
-    lenis.scrollTo(0, { immediate: true });
-    
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    
-    rafId = requestAnimationFrame(raf);
 
     let prevY = window.scrollY;
 
@@ -230,16 +211,11 @@ export default function CaseStudyPage() {
     }, 120);
     
     return () => {
-      cancelAnimationFrame(rafId);
       timers.forEach(t => clearTimeout(t));
       clearTimeout(revealTimer);
-      if ((window as any).lenisInstance === lenis) {
-        (window as any).lenisInstance = null;
-      }
-      lenis.destroy();
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [id]);
+  }, [id, lenis]);
 
   const randomizePhoto = () => {
     if (!capability) return;
@@ -329,23 +305,23 @@ export default function CaseStudyPage() {
                       <motion.nav 
                         layoutId="header-nav-capsule"
                         transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                        className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1 md:space-x-1 lg:space-x-2 text-[11px] md:text-[10px] lg:text-[14px] font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
+                        className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1 md:space-x-1 lg:space-x-2 font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
                       >
-                        <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="text-[16px] md:text-[13px] lg:text-[16px]">About</span>
-                        </button>
-                        <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="text-[16px] md:text-[13px] lg:text-[16px]">Career</span>
-                        </button>
                         <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="text-[16px] md:text-[13px] lg:text-[16px]">Services</span>
+                          <span className="text-[15px]">Services</span>
                         </button>
                         <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="hidden lg:inline text-[16px] md:text-[13px] lg:text-[16px]">Software & AI Solution</span>
-                          <span className="inline lg:hidden text-[16px] md:text-[13px] lg:text-[16px]">Software</span>
+                          <span className="hidden lg:inline text-[15px]">Software & AI Solution</span>
+                          <span className="inline lg:hidden text-[15px]">Software</span>
                         </button>
                         <button onClick={(e) => e.preventDefault()} className="nav-menu-btn-dark-theme active cursor-default">
-                          <span className="text-[16px] md:text-[13px] lg:text-[16px]">Projects</span>
+                          <span className="text-[15px]">Projects</span>
+                        </button>
+                        <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                          <span className="text-[15px]">About</span>
+                        </button>
+                        <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                          <span className="text-[15px]">Career</span>
                         </button>
                       </motion.nav>
 
@@ -355,7 +331,7 @@ export default function CaseStudyPage() {
                           layoutId="header-contact-btn"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           onClick={(e) => handleNavClick(e, "#contact-section")}
-                          className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 md:!text-[13px] lg:!py-1.5 lg:!px-4 lg:!text-[15px] whitespace-nowrap cursor-pointer"
+                          className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 whitespace-nowrap cursor-pointer"
                         >
                           {/* Shimmer Effect Wrapper */}
                           <div className="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-0 rounded-[25px] overflow-hidden">
@@ -365,7 +341,7 @@ export default function CaseStudyPage() {
                             {/* Scanning grid sweep light */}
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
                           </div>
-                          <span className="relative z-10 text-[15px] md:text-[13px] lg:text-[15px] font-medium">Get In Touch</span>
+                          <span className="relative z-10 text-[15px] font-medium">Get In Touch</span>
                         </motion.button>
                       </div>
                     </>
@@ -375,33 +351,33 @@ export default function CaseStudyPage() {
                       <motion.div 
                         layoutId="header-nav-capsule"
                         transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                        className="flex items-center bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)] rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300"
+                        className="flex items-center bg-white/80 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.12)] rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300"
                       >
                         <motion.button
                           layoutId="header-brand-link"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           onClick={(e) => handleNavClick(e, "#hero-section")}
-                          className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-white hover:text-cyan-300 hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
+                          className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-[#0A2947] hover:text-[#2563EB] hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
                         >
                           ZN
                         </motion.button>
 
                         <nav className="flex items-center space-x-1 md:space-x-1 lg:space-x-2 text-[11px] md:text-[10.5px] lg:text-[13px] font-normal tracking-normal">
-                          <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">About</span>
+                          <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                            <span className="text-[15px]">Services</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">Career</span>
+                          <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                            <span className="hidden lg:inline text-[15px]">Software & AI Solution</span>
+                            <span className="inline lg:hidden text-[15px]">Software</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">Services</span>
+                          <button onClick={(e) => e.preventDefault()} className="nav-menu-btn nav-btn-black active cursor-default">
+                            <span className="text-[15px]">Projects</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn nav-btn-white cursor-pointer">
-                            <span className="hidden lg:inline text-[13px] md:text-[11px] lg:text-[13px]">Software & AI Solution</span>
-                            <span className="inline lg:hidden text-[13px] md:text-[11px] lg:text-[13px]">Software</span>
+                          <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                            <span className="text-[15px]">About</span>
                           </button>
-                          <button onClick={(e) => e.preventDefault()} className="nav-menu-btn active cursor-default">
-                            <span className="text-[13px] md:text-[11px] lg:text-[13px]">Projects</span>
+                          <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                            <span className="text-[15px]">Career</span>
                           </button>
                         </nav>
 
@@ -410,9 +386,9 @@ export default function CaseStudyPage() {
                           layoutId="header-contact-btn"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           onClick={(e) => handleNavClick(e, "#contact-section")}
-                          className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn-dark whitespace-nowrap md:!py-1.5 md:!px-3.5 md:!text-[11px] lg:!py-1.5 lg:!px-4 lg:!text-[13px] cursor-pointer"
+                          className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                         >
-                          <span className="text-[13px] md:text-[11px] lg:text-[13px]">Get In Touch</span>
+                          <span className="text-[15px]">Get In Touch</span>
                         </motion.button>
                       </motion.div>
                     </div>
@@ -456,11 +432,11 @@ export default function CaseStudyPage() {
           >
             <nav className="flex flex-col space-y-6">
               {[
-                { label: "About", href: "#about-section" },
-                { label: "Career", href: "#career-section" },
                 { label: "Services", href: "#services-section" },
                 { label: "Software & AI Solutions", href: "#integration-section" },
                 { label: "Projects", href: "#capabilities-section" },
+                { label: "About", href: "#about-section" },
+                { label: "Career", href: "#career-section" },
                 { label: "Contact", href: "#contact-section" },
               ].map((link) => (
                 <button
@@ -608,8 +584,8 @@ export default function CaseStudyPage() {
            {/* Image 2 */}
            <div className="sticky top-0 h-screen w-full overflow-hidden">
              <img 
-               src="/Images/TGPW Visual Guideline.jpg" 
-               alt="TGPW Visual Guideline"
+               src="/TGPW/6.jpg" 
+               alt="TGPW Showcase 6"
                className="w-full h-full object-cover" 
                referrerPolicy="no-referrer"
              />
@@ -621,14 +597,6 @@ export default function CaseStudyPage() {
                alt="Gallery 3"
                className="w-full h-full object-cover" 
                referrerPolicy="no-referrer"
-               onError={(e) => {
-                 const img = e.currentTarget;
-                 if (img.src.includes('.jpg')) {
-                   img.src = img.src.replace('.jpg', '.jpj');
-                 } else if (img.src.includes('.jpj')) {
-                   img.src = img.src.replace('.jpj', '.jpg');
-                 }
-               }}
              />
            </div>
         </div>
@@ -655,14 +623,6 @@ export default function CaseStudyPage() {
                   className="w-full h-full object-cover" 
                   alt="Gallery 3"
                   referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    const img = e.currentTarget;
-                    if (img.src.includes('.jpg')) {
-                      img.src = img.src.replace('.jpg', '.jpj');
-                    } else if (img.src.includes('.jpj')) {
-                      img.src = img.src.replace('.jpj', '.jpg');
-                    }
-                  }}
                 />
               </div>
               <div className="md:col-span-6 flex flex-col gap-4 lg:gap-6 h-[400px] sm:h-[600px] lg:h-[800px]">
@@ -671,28 +631,12 @@ export default function CaseStudyPage() {
                   className="w-full flex-1 object-cover min-h-0" 
                   alt="Gallery 4"
                   referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    const img = e.currentTarget;
-                    if (img.src.includes('.jpg')) {
-                      img.src = img.src.replace('.jpg', '.jpj');
-                    } else if (img.src.includes('.jpj')) {
-                      img.src = img.src.replace('.jpj', '.jpg');
-                    }
-                  }}
                 />
                 <img 
-                  src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/5.jpg" : (galleryImages[5] || galleryImages[4] || galleryImages[1] || capability?.image)} 
+                  src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/5.jpg" : (capability?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (galleryImages[5] || galleryImages[4] || galleryImages[1] || capability?.image)} 
                   className="w-full flex-1 object-cover min-h-0" 
                   alt="Gallery 5"
                   referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    const img = e.currentTarget;
-                    if (img.src.includes('.jpg')) {
-                      img.src = img.src.replace('.jpg', '.jpj');
-                    } else if (img.src.includes('.jpj')) {
-                      img.src = img.src.replace('.jpj', '.jpg');
-                    }
-                  }}
                 />
               </div>
             </div>
@@ -701,39 +645,23 @@ export default function CaseStudyPage() {
         </div>
 
         {/* Section 6: Additional 2 Sticky Full-width Images */}
-        <div className="relative bg-zinc-900 z-50 w-full" style={{ height: "200vh" }}>
+        <div className="relative bg-zinc-900 z-50 w-full" style={{ height: capability?.id === "ck-lighting" ? "auto" : "200vh" }}>
            {/* Image 1 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
+           <div className={`w-full mx-auto ${capability?.id === "ck-lighting" ? "relative h-auto max-w-[1525px]" : "sticky top-0 h-screen overflow-hidden"}`}>
              <img 
-               src={galleryImages[4] || "/Images/TGPW Site Map.jpg"} 
+               src={(capability?.id === "ck-lighting") ? "/CK Lighting Web/ck9.jpg" : (galleryImages[4] || "/Images/TGPW Site Map.jpg")} 
                alt="Gallery Sticky 1"
-               className="w-full h-full object-cover" 
+               className={`w-full ${capability?.id === "ck-lighting" ? "h-auto" : "h-full object-cover"}`}
                referrerPolicy="no-referrer"
-               onError={(e) => {
-                 const img = e.currentTarget;
-                 if (img.src.includes('.jpg')) {
-                   img.src = img.src.replace('.jpg', '.jpj');
-                 } else if (img.src.includes('.jpj')) {
-                   img.src = img.src.replace('.jpj', '.jpg');
-                 }
-               }}
              />
            </div>
            {/* Image 2 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
+           <div className={`w-full mx-auto ${capability?.id === "ck-lighting" ? "relative h-auto max-w-[1525px]" : "sticky top-0 h-screen overflow-hidden"}`}>
              <img 
-               src="/Images/Ipad Pro Mockup On Rock.jpg" 
-               alt="Gallery Sticky 2"
-               className="w-full h-full object-cover" 
+               src={(capability?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
+               alt="TGPW Visual Guideline"
+               className={`w-full ${capability?.id === "ck-lighting" ? "h-auto" : "h-full object-cover"}`} 
                referrerPolicy="no-referrer"
-               onError={(e) => {
-                 const img = e.currentTarget;
-                 if (img.src.includes('.jpg')) {
-                   img.src = img.src.replace('.jpg', '.jpj');
-                 } else if (img.src.includes('.jpj')) {
-                   img.src = img.src.replace('.jpj', '.jpg');
-                 }
-               }}
              />
            </div>
         </div>
@@ -757,7 +685,7 @@ export default function CaseStudyPage() {
             {capability.results && capability.results.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 pt-8 md:pt-10 border-t border-zinc-200">
                 <div className="md:col-span-4">
-                  <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-zinc-900">Key Results</h3>
+                   <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-zinc-900">Key Results</h3>
                 </div>
                 <div className="md:col-span-8">
                   <ul className="grid grid-cols-1 gap-6">
@@ -777,7 +705,7 @@ export default function CaseStudyPage() {
         </div>
 
         {/* Related Capabilities block (Below Sticky Images) */}
-        <div className="w-full bg-white relative z-40 py-8 md:py-10 px-6 sm:px-12 lg:px-16">
+        <div id="capabilities-section" className="w-full bg-white relative z-50 py-8 md:py-10 px-6 sm:px-12 lg:px-16">
           <div className="w-full space-y-6 md:space-y-8">
             <div className="space-y-2">
               <h4 className="font-sans font-medium text-2xl sm:text-3xl tracking-tight text-zinc-900 uppercase">
@@ -972,7 +900,7 @@ export default function CaseStudyPage() {
             <svg viewBox="0 0 620 111" className="w-full h-auto m-0 p-0 block select-none translate-y-[2px]" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="zulhilmi-gradient-case" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#0A2947" />
+                  <stop offset="0%" stopColor="#2563EB" />
                   <stop offset="100%" stopColor="#ffffff" />
                 </linearGradient>
               </defs>
