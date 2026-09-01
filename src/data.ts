@@ -245,13 +245,13 @@ export const PORTFOLIO_PROJECTS: Project[] = [
   },
   {
     id: "komorebi-editorial",
-    title: "Komorebi Woodwork Editorial",
-    subtitle: "Asymmetrical Japanese Layout & Minimal Print Typography",
+    title: "Triply | AI-powered Travel Companion",
+    subtitle: "Mobile UI/UX Design for Travel Planning",
     category: "VISUAL_DESIGN",
-    categoryLabel: "Visual & Graphic Design",
+    categoryLabel: "Mobile UI/UX Design",
     year: "2025",
-    imageUrl: "https://images.unsplash.com/photo-1541462608141-27b2c7453c6e?auto=format&fit=crop&q=80&w=1200",
-    client: "Komorebi Japanese Carpentry Guild",
+    imageUrl: "/Triply/Triply1.jpg",
+    client: "Triply App",
     toolsUsed: ["Adobe InDesign", "Photoshop Camera RAW", "Figma Design Specs", "Grid Alignment Engine"],
     summary: "Crafted a multi-page high-fashion editorial showcase book and dynamic digital layout portfolio inspired by minimalist asymmetrical Japanese grid guidelines.",
     challenge: "Traditional woodwork publications use crowded catalogs. Komorebi requested a visual identity that uses whitespace as a framing device, treating editorial layouts like curated spatial architecture.",
@@ -263,8 +263,8 @@ export const PORTFOLIO_PROJECTS: Project[] = [
       "Eliminated 40% paper waste via pre-calculated custom crop layouts."
     ],
     galleryImages: [
-      "https://images.unsplash.com/photo-1541462608141-27b2c7453c6e?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=1200",
+      "/Triply/Triply1.jpg",
+      "/Triply/Triply2.jpg",
       "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=1200",
       "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=1200",
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200"

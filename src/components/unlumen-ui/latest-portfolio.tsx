@@ -27,9 +27,9 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
   },
   {
     id: "triply",
-    title: "Triply | AI-powered Travel Compinion",
+    title: "Triply | AI-powered Travel Companion",
     category: "Mobile UI/UX Design",
-    defaultImage: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200",
+    defaultImage: "/Triply/Triply1.jpg",
     url: "/case-study-project/komorebi-editorial",
     client: "Triply App",
     year: "2025"

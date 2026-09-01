@@ -427,8 +427,15 @@ export default function ProjectDetailPage() {
               transition={{ duration: 0.6 }}
               className="space-y-4 text-left"
             >
-              <h1 className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl !text-white tracking-tight leading-none uppercase">
-                {project.title}
+              <h1 className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl !text-white tracking-tight leading-none uppercase flex items-center flex-wrap gap-x-3 gap-y-1">
+                {project.title.split('|').map((part, index, array) => (
+                  <React.Fragment key={index}>
+                    <span>{part.trim()}</span>
+                    {index < array.length - 1 && (
+                      <span className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white/50 pb-1">|</span>
+                    )}
+                  </React.Fragment>
+                ))}
               </h1>
               <p className="font-sans font-normal text-base sm:text-lg md:text-xl text-white leading-relaxed max-w-4xl pt-1">
                 {project.subtitle}
@@ -522,7 +529,7 @@ export default function ProjectDetailPage() {
         {/* Section 4: Full-width Images */}
         <div 
           className="relative bg-zinc-900 z-50 w-full" 
-          style={{ height: project?.id === "TGPowerWrap" ? "200vh" : undefined }}
+          style={{ height: (project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial") ? "200vh" : undefined }}
         >
            {/* Image 1 */}
            {(() => {
@@ -549,18 +556,19 @@ export default function ProjectDetailPage() {
                    src={project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : img1Src} 
                    alt="Gallery 1"
                    className="w-full h-full object-cover" 
+                   style={{ objectPosition: project?.id === "komorebi-editorial" ? "center 30%" : undefined }}
                    referrerPolicy="no-referrer"
                  />
                </div>
              );
            })()}
 
-           {/* Image 2 - Specific for TG PowerWrap Website (TGPowerWrap) */}
-           {project?.id === "TGPowerWrap" && (
+           {/* Image 2 */}
+           {(project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial") && (
              <div className="sticky top-0 h-screen w-full overflow-hidden z-20 bg-zinc-900">
                <img 
-                 src="/TGPW/6.jpg" 
-                 alt="TGPW Showcase 6"
+                 src={project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : "/TGPW/6.jpg"} 
+                 alt="Gallery 2"
                  className="w-full h-full object-cover" 
                  referrerPolicy="no-referrer"
                />

@@ -486,8 +486,15 @@ export default function CaseStudyPage() {
               transition={{ duration: 0.6 }}
               className="space-y-4 text-left pb-6"
             >
-              <h1 className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl !text-white tracking-tight leading-none uppercase">
-                {capability.title}
+              <h1 className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl !text-white tracking-tight leading-none uppercase flex items-center flex-wrap gap-x-3 gap-y-1">
+                {capability.title.split('|').map((part, index, array) => (
+                  <React.Fragment key={index}>
+                    <span>{part.trim()}</span>
+                    {index < array.length - 1 && (
+                      <span className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white/50 pb-1">|</span>
+                    )}
+                  </React.Fragment>
+                ))}
               </h1>
               <p className="font-sans font-normal text-base sm:text-lg md:text-xl text-white leading-relaxed max-w-4xl pt-1">
                 {capability.subtitle}
