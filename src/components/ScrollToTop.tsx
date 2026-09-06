@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
-import { useLenis } from "../context/LenisContext";
+import { useLenis } from "lenis/react";
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation();
   const navType = useNavigationType();
-  const { lenis } = useLenis();
+  const lenis = useLenis();
 
   useEffect(() => {
     // If there is a hash, skip scroll-to-top to maintain position or use hash navigation

@@ -19,7 +19,7 @@ import {
 import { PORTFOLIO_PROJECTS, CAPABILITIES_DATA } from "../data";
 import { FloatingMenu } from "../components/FloatingMenu";
 import { useReveal } from "../context/RevealContext";
-import { useLenis } from "../context/LenisContext";
+import { useLenis } from "lenis/react";
 
 const AI_RELATED_IMAGES = [
   "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=1200", // Neural pathways AI brain
@@ -38,7 +38,7 @@ const AI_RELATED_IMAGES = [
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { lenis } = useLenis();
+  const lenis = useLenis();
 
   const [headerVisible, setHeaderVisible] = useState(true);
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
@@ -529,7 +529,7 @@ export default function ProjectDetailPage() {
         {/* Section 4: Full-width Images */}
         <div 
           className="relative bg-zinc-900 z-50 w-full" 
-          style={{ height: (project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial") ? "200vh" : undefined }}
+          style={{ height: project?.id === "komorebi-editorial" ? "300vh" : (project?.id === "TGPowerWrap" ? "200vh" : undefined) }}
         >
            {/* Image 1 */}
            {(() => {
@@ -553,7 +553,7 @@ export default function ProjectDetailPage() {
              return (
                <div className="sticky top-0 h-screen w-full overflow-hidden z-10">
                  <img 
-                   src={project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : img1Src} 
+                   src={project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : project?.id === "komorebi-editorial" ? "/Triply/Triply2.jpg" : img1Src} 
                    alt="Gallery 1"
                    className="w-full h-full object-cover" 
                    style={{ objectPosition: project?.id === "komorebi-editorial" ? "center 30%" : undefined }}
@@ -569,6 +569,18 @@ export default function ProjectDetailPage() {
                <img 
                  src={project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : "/TGPW/6.jpg"} 
                  alt="Gallery 2"
+                 className="w-full h-full object-cover" 
+                 referrerPolicy="no-referrer"
+               />
+             </div>
+           )}
+
+           {/* Image 3 */}
+           {project?.id === "komorebi-editorial" && (
+             <div className="sticky top-0 h-screen w-full overflow-hidden z-30 bg-zinc-900">
+               <img 
+                 src="/Triply/Triply7.jpg" 
+                 alt="Gallery 3"
                  className="w-full h-full object-cover" 
                  referrerPolicy="no-referrer"
                />
@@ -603,13 +615,13 @@ export default function ProjectDetailPage() {
               </div>
               <div className="md:col-span-6 flex flex-col gap-4 lg:gap-6 h-[400px] sm:h-[600px] lg:h-[800px]">
                 <img 
-                  src={(project?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : ((project?.galleryImages && project.galleryImages.length > 3) ? project.galleryImages[3] : (project?.imageUrl || ""))} 
+                  src={(project?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply5.jpg" : ((project?.galleryImages && project.galleryImages.length > 3) ? project.galleryImages[3] : (project?.imageUrl || ""))} 
                   className="w-full flex-1 object-cover min-h-0" 
                   alt={`${project?.title || "Gallery"} 4`}
                   referrerPolicy="no-referrer"
                 />
                 <img 
-                  src={(project?.id === "TGPowerWrap") ? "/Images/5.jpg" : (project?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || "")))} 
+                  src={(project?.id === "TGPowerWrap") ? "/Images/5.jpg" : (project?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply6.png" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || "")))} 
                   className="w-full flex-1 object-cover min-h-0" 
                   alt={`${project?.title || "Gallery"} 5`}
                   referrerPolicy="no-referrer"
@@ -637,7 +649,7 @@ export default function ProjectDetailPage() {
            {/* Image 1 */}
            <div className={`sticky top-0 h-screen w-full z-10 ${project?.id === "ck-lighting" ? "flex flex-col justify-center bg-zinc-900 overflow-hidden" : "overflow-hidden flex flex-col justify-center"}`}>
              <img 
-               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg")} 
+               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg"))} 
                alt="Gallery Sticky 1"
                className={`w-full h-full object-cover`}
                referrerPolicy="no-referrer"
@@ -657,11 +669,11 @@ export default function ProjectDetailPage() {
            )}
 
            {/* Image 3 (Previously Image 2) */}
-           <div className={`sticky top-0 h-screen w-full ${project?.id === "ck-lighting" ? "z-30" : "z-20"} shadow-2xl ${project?.id === "ck-lighting" ? "overflow-y-auto overscroll-contain bg-zinc-900" : "overflow-hidden flex flex-col justify-center"}`}>
+           <div className={`sticky top-0 h-screen w-full ${project?.id === "ck-lighting" ? "z-30" : "z-20"} shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900`}>
              <img 
                src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
                alt="TGPW Visual Guideline"
-               className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-full object-cover"}`} 
+               className={`w-full h-full object-cover`} 
                referrerPolicy="no-referrer"
              />
            </div>

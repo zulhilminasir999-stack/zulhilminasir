@@ -9,7 +9,8 @@ import BackToTopButton from "./components/BackToTopButton";
 import { LoadingScreen } from "./components/LoadingScreen";
 import StickyStackScrollDemo from "./components/StickyStackScrollDemo";
 import { RevealProvider } from "./context/RevealContext";
-import { LenisProvider, useLenis } from "./context/LenisContext";
+import { ReactLenis, useLenis } from "lenis/react";
+import "lenis/dist/lenis.css";
 
 // Disable browser default scroll restoration to guarantee landing on the top section
 if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
@@ -18,7 +19,7 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
 
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
-  const { stop, start, scrollTo } = useLenis();
+  const lenis = useLenis();
 
   // Keep HTML root node synchronized with light theme configuration on mount for all pages
   useEffect(() => {
@@ -38,21 +39,21 @@ function AppContent() {
   // Coordinate scroll locking with Lenis & document while loading screen is active
   useEffect(() => {
     if (isLoading) {
-      stop();
+      lenis?.stop();
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
-      start();
-      scrollTo(0, { immediate: true });
+      lenis?.start();
+      lenis?.scrollTo(0, { immediate: true });
       window.scrollTo(0, 0);
     }
     return () => {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     };
-  }, [isLoading, stop, start, scrollTo]);
+  }, [isLoading, lenis]);
 
   return (
     <>
@@ -78,11 +79,11 @@ function AppContent() {
 
 export default function App() {
   return (
-    <LenisProvider>
+    <ReactLenis root options={{ lerp: 0.05, duration: 1.2, smoothWheel: true }}>
       <RevealProvider>
         <AppContent />
       </RevealProvider>
-    </LenisProvider>
+    </ReactLenis>
   );
 }
 

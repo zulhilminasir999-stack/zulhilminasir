@@ -52,7 +52,7 @@ import ServicesSection from "../components/unlumen-ui/ServicesSection";
 import TypewriterSection from "../components/TypewriterSection";
 import TechBanner from "../components/TechBanner";
 import { useReveal } from "../context/RevealContext";
-import { useLenis } from "../context/LenisContext";
+import { useLenis } from "lenis/react";
 
 interface HomePageProps {
   isLoading: boolean;
@@ -63,7 +63,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   const navigate = useNavigate();
   const { hash } = useLocation();
   const navType = useNavigationType();
-  const { lenis } = useLenis();
+  const lenis = useLenis();
   const [activeFilter, setActiveFilter] = useState<ProjectCategory>("ALL");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isAtTop, setIsAtTop] = useState(true);

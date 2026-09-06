@@ -22,7 +22,7 @@ import {
 import { CAPABILITIES_DATA } from "../data";
 import { FloatingMenu } from "../components/FloatingMenu";
 import { useReveal } from "../context/RevealContext";
-import { useLenis } from "../context/LenisContext";
+import { useLenis } from "lenis/react";
 import webDesignMockupImg from "../assets/images/web_design_mockup_1783179228755.jpg";
 import darkUiMockupImg from "../assets/images/dark_ui_mockup_1783179382977.jpg";
 import minimalistUiMockupImg from "../assets/images/minimalist_ui_mockup_1783179396760.jpg";
@@ -75,7 +75,7 @@ const CATEGORY_RANDOM_PHOTOS: Record<string, string[]> = {
 export default function CaseStudyPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { lenis } = useLenis();
+  const lenis = useLenis();
 
   const [headerVisible, setHeaderVisible] = useState(true);
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);

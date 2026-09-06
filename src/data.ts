@@ -264,7 +264,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     ],
     galleryImages: [
       "/Triply/Triply1.jpg",
-      "/Triply/Triply2.jpg",
+      "/Triply/Triply4.jpg",
       "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=1200",
       "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=1200",
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200"
