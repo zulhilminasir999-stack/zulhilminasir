@@ -9,6 +9,7 @@ interface PortfolioItem {
   title: string;
   category: string;
   defaultImage: string;
+  mobileImage?: string;
   url: string;
   client: string;
   year: string;
@@ -21,6 +22,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     title: "TG PowerWrap Website",
     category: "Corporate Website",
     defaultImage: "/Images/tgpw1.jpg",
+    mobileImage: "/TGPW/tgpw_m1.png",
     url: "/case-study-project/TGPowerWrap",
     client: "TG PowerWrap Sdn Bhd",
     year: "2026"
@@ -30,6 +32,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     title: "Triply | AI-powered Travel Companion",
     category: "Mobile UI/UX Design",
     defaultImage: "/Triply/Triply1.jpg",
+    mobileImage: "/Triply/Triply_m1.png",
     url: "/case-study-project/komorebi-editorial",
     client: "Triply App",
     year: "2025"
@@ -39,6 +42,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     title: "CK Lighting Online Store",
     category: "E-commerce Website",
     defaultImage: "/CK Lighting Web/ck1.jpg",
+    mobileImage: "/CK Lighting Web/CK_m1.png",
     objectPosition: "center 30%",
     url: "/case-study-project/ck-lighting",
     client: "CK Lighting Sdn Bhd",
@@ -84,7 +88,7 @@ export function LatestPortfolio() {
       {/* Main Header Row */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 px-6 sm:px-12 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-10 sm:pb-14 items-start border-b border-white/5">
         <div className="col-span-1 md:col-span-12 lg:col-span-8 text-center md:text-center lg:text-left">
-          <h2 className="text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter text-white uppercase leading-[0.85] select-none text-center md:text-center lg:text-left">
+          <h2 className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter text-white uppercase leading-[0.85] select-none text-center md:text-center lg:text-left">
             <WordsStagger className="text-white">
               FEATURED
             </WordsStagger>
@@ -118,16 +122,42 @@ export function LatestPortfolio() {
             className="sticky top-0 h-screen w-full flex flex-col justify-end group overflow-hidden cursor-pointer bg-zinc-950"
           >
             {/* Project Image Background */}
-            <div className="absolute inset-0 w-full h-full overflow-hidden">
-              <img 
-                src={item.defaultImage}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0"
-                style={{ objectPosition: item.objectPosition || "center center" }}
-                referrerPolicy="no-referrer"
-              />
+            <div className="absolute inset-0 w-full h-full overflow-hidden bg-zinc-950">
+              {item.mobileImage ? (
+                <>
+                  <img 
+                    src={item.mobileImage}
+                    alt={item.title}
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (target.src.endsWith("/CK_m1.png") && !target.src.includes("CK%20Lighting%20Web")) {
+                        target.src = "/CK Lighting Web/CK_m1.png";
+                      } else if (!target.src.endsWith(item.defaultImage)) {
+                        target.src = item.defaultImage;
+                      }
+                    }}
+                    className="block sm:hidden w-full h-full object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0 p-0 m-0"
+                    referrerPolicy="no-referrer"
+                  />
+                  <img 
+                    src={item.defaultImage}
+                    alt={item.title}
+                    className="hidden sm:block w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0"
+                    style={{ objectPosition: item.objectPosition || "center center" }}
+                    referrerPolicy="no-referrer"
+                  />
+                </>
+              ) : (
+                <img 
+                  src={item.defaultImage}
+                  alt={item.title}
+                  className="w-full h-full object-cover object-top sm:object-center transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0 p-0 m-0"
+                  style={{ objectPosition: item.objectPosition || "top center" }}
+                  referrerPolicy="no-referrer"
+                />
+              )}
               {/* Elegant dark gradient mask for high readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10 pointer-events-none" />
             </div>
 
             {/* Custom Interactive Follower Badge */}
@@ -154,23 +184,23 @@ export function LatestPortfolio() {
             </AnimatePresence>
 
             {/* Bottom Info Overlay */}
-            <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col">
-              {/* Category above the main title */}
+            <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col -translate-y-12 sm:translate-y-0">
+              {/* Category above the main title (with client appended on mobile) */}
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3">
-                {item.category}
+                {item.category} <span className="inline sm:hidden opacity-75">- {item.client}</span>
               </p>
 
-              <div className="flex items-center justify-between w-full">
+              <div className="flex flex-row items-center justify-between w-full">
                 {/* Left side: Large Title */}
-                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-sans font-semibold tracking-tighter text-white leading-[1.1] sm:leading-[1] select-none pr-4">
+                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-sans font-semibold tracking-tighter text-white leading-[1.1] sm:leading-[1] select-none pr-0 sm:pr-4">
                   {item.title}
                 </h3>
 
                 {/* Middle: Horizontal Line */}
                 <div className="hidden md:block flex-1 h-[1px] bg-white/30 mx-8" />
 
-                {/* Right side: Client/Brand label */}
-                <div className="text-right font-sans font-normal text-sm sm:text-base md:text-lg lg:text-xl tracking-tight text-white whitespace-nowrap">
+                {/* Right side: Client/Brand label (hidden on mobile, inline above) */}
+                <div className="hidden sm:block text-right font-sans font-normal text-sm md:text-lg lg:text-xl tracking-tight text-white whitespace-nowrap">
                   {item.client}
                 </div>
               </div>

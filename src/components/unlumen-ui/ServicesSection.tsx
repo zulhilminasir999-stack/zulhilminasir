@@ -94,7 +94,7 @@ export default function ServicesSection() {
       <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-8 mb-10 md:mb-16 mt-4 md:mt-8 items-center">
         <div className="col-span-1 md:col-span-12 lg:col-span-8 text-left">
           <h2 
-            className="text-4xl sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-left text-[#2563EB]"
+            className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-left text-[#2563EB]"
           >
             <WordsStagger className="!text-[#2563EB]">
               WHAT I DO
@@ -149,12 +149,12 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        <div className="flex-1 flex items-end justify-end relative my-8 md:my-0 pt-4 pb-2">
+        <div className="flex-1 flex items-end justify-center md:justify-end relative my-8 md:my-0 pt-4 pb-2 -mx-6 sm:mx-0 w-[calc(100%+3rem)] sm:w-auto">
           
-          <div className="relative flex items-end justify-center pointer-events-auto shrink-0 select-text">
+          <div className="relative flex items-end justify-center pointer-events-auto shrink-0 select-text w-full sm:w-auto">
             
             {/* Image Container */}
-            <div className="relative h-[430px] sm:h-[500px] md:h-[560px] lg:h-[620px] xl:h-[660px] aspect-[10/11] rounded-none shrink-0 overflow-hidden z-20 select-text">
+            <div className="relative w-full sm:w-auto aspect-[10/11] sm:h-[500px] md:h-[560px] lg:h-[620px] xl:h-[660px] rounded-none shrink-0 overflow-hidden z-20 select-text">
               <AnimatePresence initial={false}>
                 <motion.div
                   key={`image-${activeService.id}`}

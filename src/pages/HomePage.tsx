@@ -420,7 +420,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
                 isMobile 
-                  ? "bg-zinc-950/45 backdrop-blur-md border-b border-zinc-900/30 h-14" 
+                  ? (isMobileMenuOpen 
+                      ? "bg-zinc-950/95 backdrop-blur-md border-b-0 h-auto" 
+                      : "bg-zinc-950/45 backdrop-blur-md border-b border-zinc-900/30 h-14")
                   : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
               }`}
             >
@@ -595,7 +597,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             handleNavClick(e, '#hero-section');
                           }
                         }}
-                        className={`font-display font-semibold text-sm tracking-tight text-white ${
+                        className={`font-display font-semibold text-sm tracking-tight text-[#2563EB] transition-colors ${
                           !isHeaderScrolled ? "cursor-default select-none pointer-events-none" : "hover:opacity-85 cursor-pointer"
                         }`}
                       >
@@ -606,9 +608,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="p-1 px-2 text-zinc-400 hover:text-zinc-100 cursor-pointer"
+                        className="p-1 px-2 -mr-3 translate-x-1 pl-2 text-[#2563EB] hover:text-[#3B82F6] active:text-[#3B82F6] transition-colors cursor-pointer"
+                        aria-label="Toggle navigation menu"
                       >
-                        <Menu className="h-5 w-5" />
+                        {isMobileMenuOpen ? (
+                          <X className="h-5 w-5" />
+                        ) : (
+                          <Menu className="h-5 w-5" />
+                        )}
                       </button>
                     </div>
                   </>
@@ -622,14 +629,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="md:hidden border-b border-zinc-900 bg-zinc-950 p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-zinc-400"
+                    className="md:hidden m-0 mt-0 border-b border-white/50 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-white shadow-xl overflow-hidden"
                   >
-                    <a href="#services-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Services</a>
-                    <a href="#integration-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Software & AI Solutions</a>
-                    <a href="#capabilities-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#capabilities-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Projects</a>
-                    <a href="#about-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">About</a>
-                    <a href="#career-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="hover:text-zinc-100 pb-2 border-b border-zinc-900/45">Career</a>
-                    <a href="#contact-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="hover:text-zinc-100">Collaborate</a>
+                    <a href="#services-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Services</a>
+                    <a href="#integration-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Software & AI Solutions</a>
+                    <a href="#capabilities-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#capabilities-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Projects</a>
+                    <a href="#about-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">About</a>
+                    <a href="#career-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Career</a>
+                    <a href="#contact-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors">Collaborate</a>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -655,14 +662,13 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             <img 
               src="/hero-bg.jpg" 
               alt="Hero Background" 
-              className="w-full h-full object-cover select-none pointer-events-none" 
-              style={{ objectPosition: "center 20%" }} // Adjust this percentage (e.g., 20%, 30%, 40%) to shift the image Y coordinate down or up
+              className="w-full h-full object-cover select-none pointer-events-none hero-bg-responsive" 
               referrerPolicy="no-referrer"
             />
           </motion.div>
 
           {/* Vertical Left Ticker/Indicator matching the mockup exactly */}
-          <div className="absolute left-6 sm:left-12 lg:left-16 top-[45%] md:top-[50%] -translate-y-1/2 flex flex-col items-start gap-4 pointer-events-none select-none z-20">
+          <div className="absolute left-6 sm:left-12 lg:left-16 top-[35%] md:top-[50%] -translate-y-1/2 flex flex-col items-start gap-4 pointer-events-none select-none z-20">
             <span className="font-sans font-semibold text-xs tracking-wide text-white/50">2K26</span>
             <div className="w-[1px] h-12 md:h-16 bg-white/20 ml-[2px]" />
             <span 
@@ -678,12 +684,13 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-end py-6 md:py-10"
           >
             {/* Bottom Row: Crafting Digital Design heading aligned side-by-side with ServiceCardSlider */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-16 md:pt-0 pointer-events-auto">
-              <div className="p-0 m-0 text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-                <div className="space-y-4 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10">
-                  <h2 className="font-sans font-semibold text-xl sm:text-2xl md:text-[34px] lg:text-[40px] xl:text-[46px] tracking-tight !text-white leading-[1.22] text-left">
+            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-16 md:pt-0 pointer-events-auto">
+              <div className="p-0 m-0 text-center sm:text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl w-full">
+                <div className="space-y-4 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
+                  <h2 className="font-sans font-semibold text-[18px] sm:text-2xl md:text-[34px] lg:text-[40px] xl:text-[46px] tracking-tight !text-white leading-[1.22] text-center sm:text-left">
+                    {/* 2 Lines for all devices */}
                     <span className="block whitespace-nowrap overflow-visible">
-                      <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.16em]" }}>
+                      <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.28em]" }}>
                         Crafting SaaS Design & Web Solutions
                       </WordsStagger>
                     </span>
@@ -697,7 +704,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               </div>
 
               {/* Interactive 3D Stacked Service Deck Slider Container */}
-              <div className="self-start lg:self-end shrink-0 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
+              <div className="self-center sm:self-start lg:self-end shrink-0 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
                 <ServiceCardSlider />
               </div>
             </div>

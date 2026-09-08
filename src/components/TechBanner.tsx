@@ -61,23 +61,12 @@ export default function TechBanner() {
     offset: ["start start", "end end"],
   });
 
-  const lines = [
-    "Passionate UI/UX designer focused",
-    "on creating intuitive, visually compelling",
-    "digital experiences that combine creativity",
-    "with user-centered design."
-  ];
-
-  // Pre-calculate the structure for scroll reveal animation
-  let globalIdx = 0;
-  const linesWithIndices = lines.map(line => {
-    const wordsInLine = line.split(" ");
-    return wordsInLine.map(word => ({
-      word,
-      index: globalIdx++
-    }));
-  });
-  const totalWordsCount = globalIdx;
+  // Sentence data: kept as a single continuous string to allow natural reflowing, but we'll use CSS to force the desired layout bounds.
+  const fullSentence = "Passionate UI/UX designer focused on creating intuitive, visually compelling digital experiences that combine creativity with user-centered design.";
+  
+  // Split into words for the scroll effect
+  const words = fullSentence.split(" ").map((word, index) => ({ word, index }));
+  const totalWordsCount = words.length;
 
   // List of logos (same as IntegrationLogoGrid, using white versions)
   const logos: LogoItem[] = [
@@ -248,7 +237,7 @@ export default function TechBanner() {
         <img 
           src={techLaptopImg}
           alt="Cinematic Futuristic Technology Scene"
-          className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover object-[70%_center] sm:object-center select-none pointer-events-none"
           referrerPolicy="no-referrer"
         />
 
@@ -264,11 +253,11 @@ export default function TechBanner() {
         />
 
         {/* Content wrapper on the left side aligned precisely with Featured Projects */}
-        <div className="relative z-20 w-full max-w-4xl lg:max-w-5xl px-6 sm:px-12 lg:px-16 pt-8 sm:pt-12 pb-8 sm:pb-12 text-left flex flex-col items-start gap-5 sm:gap-7 md:gap-9 my-auto">
+        <div className="relative z-20 w-full max-w-4xl lg:max-w-5xl px-6 sm:px-12 lg:px-16 pt-8 sm:pt-12 pb-8 sm:pb-12 text-center sm:text-left flex flex-col items-center sm:items-start gap-5 sm:gap-7 md:gap-9 my-auto -translate-y-12 sm:translate-y-0">
           {/* Section Title: SOFTWARE & AI INTEGRATION */}
-          <div className="w-full text-left">
+          <div className="w-full text-center sm:text-left -translate-y-4 sm:-translate-y-0">
             <h2 
-              className="text-4xl sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none !text-white text-left"
+              className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[1.05] sm:leading-[0.85] select-none !text-white text-center sm:text-left"
               style={{ color: "#ffffff" }}
             >
               <WordsStagger className="text-inherit">
@@ -282,26 +271,26 @@ export default function TechBanner() {
           </div>
 
           {/* Scroll-Reveal Bold Paragraph aligned left */}
-          <div className="w-full max-w-2xl sm:max-w-3xl text-left">
-            <p className="font-sans font-medium text-lg sm:text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-white/20 text-left">
-              {linesWithIndices.map((lineWords, lineIdx) => (
-                <span key={lineIdx} className="block text-left">
-                  {lineWords.map(({ word, index }) => (
-                    <ScrollWord 
-                      key={index} 
-                      word={word} 
-                      index={index} 
-                      total={totalWordsCount} 
-                      progress={scrollYProgress} 
-                    />
-                  ))}
-                </span>
+          <div className="w-full max-w-2xl sm:max-w-3xl text-center sm:text-left mt-2 sm:mt-0 translate-y-10 sm:translate-y-0">
+            {/* 
+              Desktop: Free-flowing single inline block 
+              Mobile: Restricted to ~270px width (or carefully measured) so it perfectly wraps into 4 exact lines when centered 
+            */}
+            <p className="font-sans font-medium text-[20px] sm:text-2xl md:text-3xl lg:text-4xl leading-[1.4] sm:leading-snug tracking-tight text-white/20 text-center sm:text-left inline-block max-w-[305px] sm:max-w-none">
+              {words.map(({ word, index }) => (
+                <ScrollWord 
+                  key={index} 
+                  word={word} 
+                  index={index} 
+                  total={totalWordsCount} 
+                  progress={scrollYProgress} 
+                />
               ))}
             </p>
           </div>
 
           {/* Copy of Logo grid slide animation aligned left */}
-          <div className="w-full relative mt-1 sm:mt-2 text-left">
+          <div className="w-full relative mt-1 sm:mt-2 text-left translate-y-16 sm:translate-y-0">
             <div 
               ref={marqueeContainerRef}
               className="relative w-full flex items-center overflow-hidden py-3 sm:py-4 cursor-grab active:cursor-grabbing touch-pan-y"

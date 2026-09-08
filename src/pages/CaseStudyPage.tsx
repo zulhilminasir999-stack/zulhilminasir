@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { CAPABILITIES_DATA } from "../data";
 import { FloatingMenu } from "../components/FloatingMenu";
+import { MobileZoomableModal } from "../components/MobileZoomableModal";
 import { useReveal } from "../context/RevealContext";
 import { useLenis } from "lenis/react";
 import webDesignMockupImg from "../assets/images/web_design_mockup_1783179228755.jpg";
@@ -86,7 +87,14 @@ export default function CaseStudyPage() {
   const [showSideMenu, setShowSideMenu] = useState(false);
   const [randomImage, setRandomImage] = useState<string>("");
   const [localTime, setLocalTime] = useState("");
+  const [selectedMobileModalImage, setSelectedMobileModalImage] = useState<string | null>(null);
   const { triggerReveal } = useReveal();
+
+  const handleMobileImageClick = (src: string) => {
+    if (window.innerWidth < 640 && src) {
+      setSelectedMobileModalImage(src);
+    }
+  };
 
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetSectionId: string) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -94,7 +102,6 @@ export default function CaseStudyPage() {
     const rawId = targetSectionId.replace('#', '');
     
     if (rawId === 'capabilities-section' || rawId === 'capabilities') {
-      navigate(-1);
       return;
     }
     
@@ -280,7 +287,9 @@ export default function CaseStudyPage() {
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
               isMobile 
-                ? "bg-zinc-950/45 backdrop-blur-md border-b border-zinc-900/30 h-14" 
+                ? (isMobileMenuOpen 
+                    ? "bg-zinc-950/95 backdrop-blur-md border-b-0 h-auto" 
+                    : "bg-zinc-950/45 backdrop-blur-md border-b border-zinc-900/30 h-14")
                 : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
             }`}
           >
@@ -400,62 +409,44 @@ export default function CaseStudyPage() {
                   <div className="flex items-center">
                     <button
                       onClick={(e) => handleNavClick(e, "#hero-section")}
-                      className="font-display font-semibold text-base tracking-tight text-white flex items-center h-6 cursor-pointer"
+                      className="font-display font-semibold text-sm tracking-tight text-[#2563EB] hover:text-[#3B82F6] transition-colors flex items-center h-6 cursor-pointer"
                     >
-                      ZN
+                      Zulhilmi Nasir
                     </button>
                   </div>
                   
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                      className="h-9 w-9 flex items-center justify-center text-white/90 focus:outline-none"
+                      className="p-1 px-2 -mr-3 translate-x-1 pl-2 text-[#2563EB] hover:text-[#3B82F6] active:text-[#3B82F6] transition-colors focus:outline-none cursor-pointer"
+                      aria-label="Toggle navigation menu"
                     >
-                      {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-6 w-6" />}
+                      {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                     </button>
                   </div>
                 </>
               )}
             </div>
-          </motion.header>
-        )}
-      </AnimatePresence>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobile && isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 bg-zinc-950 pt-24 px-6 sm:px-10"
-          >
-            <nav className="flex flex-col space-y-6">
-              {[
-                { label: "Services", href: "#services-section" },
-                { label: "Software & AI Solutions", href: "#integration-section" },
-                { label: "Projects", href: "#capabilities-section" },
-                { label: "About", href: "#about-section" },
-                { label: "Career", href: "#career-section" },
-                { label: "Contact", href: "#contact-section" },
-              ].map((link) => (
-                <button
-                  key={link.label}
-                  onClick={(e) => {
-                    if (link.label === "Projects") {
-                      e.preventDefault();
-                      return;
-                    }
-                    setIsMobileMenuOpen(false);
-                    handleNavClick(e, link.href);
-                  }}
-                  className={`text-3xl font-medium text-left ${link.label === "Projects" ? "text-white/40 cursor-default" : "text-white/90 hover:text-white transition-colors cursor-pointer"}`}
+            {/* Mobile menu panel */}
+            <AnimatePresence>
+              {isMobile && isMobileMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="md:hidden m-0 mt-0 border-b border-white/50 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-white shadow-xl overflow-hidden"
                 >
-                  {link.label}
-                </button>
-              ))}
-            </nav>
-          </motion.div>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Services</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Software & AI Solutions</button>
+                  <button onClick={(e) => { e.preventDefault(); }} className="font-mono uppercase text-sm tracking-wide text-left text-white/50 pb-2 border-b border-white/50 cursor-default">Projects</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">About</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Career</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors cursor-pointer">Collaborate</button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.header>
         )}
       </AnimatePresence>
 
@@ -463,52 +454,59 @@ export default function CaseStudyPage() {
       <main className="relative z-10">
         
         {/* Full-width Hero Header Section with Background Image */}
-        <div className="relative w-full h-screen flex items-end overflow-hidden mb-4">
-          {/* Background Image with elegant overlay to ensure full readability */}
-          <div className="absolute inset-0 z-0">
+        <div className="relative w-full h-auto sm:h-screen flex flex-col sm:flex-row sm:items-end overflow-hidden mb-4 pt-14 sm:pt-0 bg-white sm:bg-transparent">
+          {/* Background Image: real size landscape on mobile, full-screen on desktop */}
+          <div className="relative sm:absolute sm:inset-0 sm:z-0 w-full overflow-hidden bg-white sm:bg-transparent">
             <img 
               src={randomImage || capability.image} 
               alt={`${capability.title} background`}
-              className="w-full h-full object-cover select-none pointer-events-none"
+              className="w-full h-auto sm:h-full object-contain sm:object-cover select-none pointer-events-none block"
               style={{ objectPosition: "center 30%" }}
               referrerPolicy="no-referrer"
             />
             {/* Elegant overlay: dark gradients for beautiful visual blending and high legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A2947] via-[#0A2947]/50 to-black/35" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A2947] via-[#0A2947]/50 to-black/35 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent pointer-events-none" />
           </div>
 
-          {/* Header Content Container */}
-          <div className="w-full px-6 sm:px-12 lg:px-16 pb-6 md:pb-8 relative z-10">
+          {/* Header Content Container: sits cleanly below the image on mobile */}
+          <div className="w-full px-6 sm:px-12 lg:px-16 pt-6 sm:pt-0 pb-10 sm:pb-8 relative z-10 bg-white sm:bg-transparent">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="space-y-4 text-left pb-6"
+              className="space-y-4 text-left pb-2 sm:pb-6"
             >
-              <h1 className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl !text-white tracking-tight leading-none uppercase flex items-center flex-wrap gap-x-3 gap-y-1">
+              <h1 className="font-sans font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl !text-[#2563EB] sm:!text-white tracking-tight leading-tight sm:leading-none uppercase flex items-center flex-wrap gap-x-3 gap-y-1">
                 {capability.title.split('|').map((part, index, array) => (
                   <React.Fragment key={index}>
-                    <span>{part.trim()}</span>
+                    <span className="text-[#2563EB] sm:text-white">{part.trim()}</span>
                     {index < array.length - 1 && (
-                      <span className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white/50 pb-1">|</span>
+                      <span className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#2563EB]/50 sm:text-white/50 pb-1">|</span>
                     )}
                   </React.Fragment>
                 ))}
               </h1>
-              <p className="font-sans font-normal text-base sm:text-lg md:text-xl text-white leading-relaxed max-w-4xl pt-1">
+              <p className="font-sans font-normal text-base sm:text-lg md:text-xl text-[#2563EB] sm:text-white leading-relaxed max-w-4xl pt-1">
                 {capability.subtitle}
               </p>
+
+              {/* Combined on mobile: Intro summary text integrated into the same single section */}
+              <div className="block sm:hidden pt-4">
+                <p className="text-[20px] font-light leading-snug text-zinc-700">
+                  {capability.summary}
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
         {/* Main Content Area - Light Theme */}
         
-        {/* Section 1: Intro */}
-        <section className="w-full bg-white text-zinc-900 z-20 sticky top-0 h-screen flex flex-col justify-center">
+        {/* Section 1: Intro (Desktop only, combined into header section on mobile) */}
+        <section className="hidden sm:flex w-full bg-white text-zinc-900 z-20 sm:sticky sm:top-0 sm:h-screen flex-col justify-center">
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
-              <div className="md:col-span-4">
+              <div className="hidden sm:block md:col-span-4">
                 <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-zinc-900">{capability.title}</h2>
               </div>
               <div className="md:col-span-8">
@@ -521,7 +519,7 @@ export default function CaseStudyPage() {
         </section>
 
         {/* Section 2: Details */}
-        <section className="w-full bg-zinc-50/95 backdrop-blur-md text-zinc-900 z-30 sticky top-0 h-screen flex flex-col justify-center shadow-2xl">
+        <section className="w-full bg-white sm:bg-zinc-50/95 sm:backdrop-blur-md text-zinc-900 z-30 relative sm:sticky sm:top-0 h-auto sm:h-screen flex flex-col justify-center shadow-none sm:shadow-2xl py-12 sm:py-0">
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4">
@@ -531,28 +529,28 @@ export default function CaseStudyPage() {
               </div>
               <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-y-12 gap-x-8">
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Practice</h4>
-                  <p className="text-zinc-600 text-sm">{capability.categoryLabel}</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Practice</h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">{capability.categoryLabel}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Focus Area</h4>
-                  <p className="text-zinc-600 text-sm">{capability.title}</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Focus Area</h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">{capability.title}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Released</h4>
-                  <p className="text-zinc-600 text-sm">Active</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Released</h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">Active</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Technology & Stack</h4>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Technology & Stack</h4>
                   <div className="flex flex-col gap-1">
                     {capability.toolsUsed.map(tool => (
-                      <span key={tool} className="text-zinc-600 text-sm">{tool}</span>
+                      <span key={tool} className="text-zinc-600 text-[16px] sm:text-sm">{tool}</span>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Scope</h4>
-                  <p className="text-zinc-600 text-sm">Full-scale Implementation</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Scope</h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">Full-scale Implementation</p>
                 </div>
               </div>
             </div>
@@ -560,7 +558,7 @@ export default function CaseStudyPage() {
         </section>
 
         {/* Section 3: Overview */}
-        <section className="w-full bg-white text-zinc-900 z-40 sticky top-0 h-screen flex flex-col justify-center shadow-2xl">
+        <section className="w-full bg-white text-zinc-900 z-40 relative sm:sticky sm:top-0 h-auto sm:h-screen flex flex-col justify-center shadow-none sm:shadow-2xl py-12 sm:py-0">
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4 relative">
@@ -569,7 +567,7 @@ export default function CaseStudyPage() {
                   <h2 className="text-4xl font-medium tracking-tight text-zinc-900">Overview</h2>
                 </div>
               </div>
-              <div className="md:col-span-8 space-y-8 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
+              <div className="md:col-span-8 space-y-6 sm:space-y-8 text-[20px] sm:text-2xl md:text-3xl font-light leading-snug text-zinc-700">
                 <p>{capability.summary}</p>
                 <p>{capability.challenge}</p>
               </div>
@@ -578,31 +576,40 @@ export default function CaseStudyPage() {
         </section>
 
         {/* Section 4: Full-width Images (Sticky Stacking) */}
-        <div className="relative bg-zinc-900 z-50 w-full" style={{ height: "300vh" }}>
+        <div className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block">
            {/* Image 1 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
+           <div 
+             className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden cursor-pointer sm:cursor-default"
+             onClick={() => handleMobileImageClick(galleryImages[0])}
+           >
              <img 
                src={galleryImages[0]} 
                alt="Gallery 1"
-               className="w-full h-full object-cover" 
+               className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
                referrerPolicy="no-referrer"
              />
            </div>
            {/* Image 2 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
+           <div 
+             className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden cursor-pointer sm:cursor-default"
+             onClick={() => handleMobileImageClick("/TGPW/6.jpg")}
+           >
              <img 
                src="/TGPW/6.jpg" 
                alt="TGPW Showcase 6"
-               className="w-full h-full object-cover" 
+               className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
                referrerPolicy="no-referrer"
              />
            </div>
            {/* Image 3 */}
-           <div className="sticky top-0 h-screen w-full overflow-hidden">
+           <div 
+             className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden cursor-pointer sm:cursor-default"
+             onClick={() => handleMobileImageClick(galleryImages[2] || "/Images/Thumbnail Mobile TGPW.jpg")}
+           >
              <img 
                src={galleryImages[2] || "/Images/Thumbnail Mobile TGPW.jpg"} 
                alt="Gallery 3"
-               className="w-full h-full object-cover" 
+               className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
                referrerPolicy="no-referrer"
              />
            </div>
@@ -623,27 +630,30 @@ export default function CaseStudyPage() {
             </div>
             
             {/* Gallery Part */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
-              <div className="md:col-span-6 h-[400px] sm:h-[600px] lg:h-[800px]">
+            <div className="-mx-6 sm:mx-0 grid grid-cols-1 md:grid-cols-12 gap-0 sm:gap-4 lg:gap-6">
+              <div className="md:col-span-6 h-auto sm:h-[600px] lg:h-[800px] cursor-pointer sm:cursor-default">
                 <img 
                   src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (capability?.id === "web-design-cms" || capability?.id === "zenith-cms" || capability?.id === "ck-lighting") ? "/CK Lighting Web/ck5.jpg" : (galleryImages[2] || capability?.image)} 
-                  className="w-full h-full object-cover" 
+                  className="w-full h-auto sm:h-full object-contain sm:object-cover block p-0 m-0" 
                   alt="Gallery 3"
                   referrerPolicy="no-referrer"
+                  onClick={() => handleMobileImageClick((capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (capability?.id === "web-design-cms" || capability?.id === "zenith-cms" || capability?.id === "ck-lighting") ? "/CK Lighting Web/ck5.jpg" : (galleryImages[2] || capability?.image))}
                 />
               </div>
-              <div className="md:col-span-6 flex flex-col gap-4 lg:gap-6 h-[400px] sm:h-[600px] lg:h-[800px]">
+              <div className="md:col-span-6 flex flex-col gap-0 sm:gap-4 lg:gap-6 h-auto sm:h-[600px] lg:h-[800px]">
                 <img 
                   src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (galleryImages[3] || galleryImages[0] || capability?.image)} 
-                  className="w-full flex-1 object-cover min-h-0" 
+                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
                   alt="Gallery 4"
                   referrerPolicy="no-referrer"
+                  onClick={() => handleMobileImageClick((capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (galleryImages[3] || galleryImages[0] || capability?.image))}
                 />
                 <img 
                   src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/5.jpg" : (capability?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (galleryImages[5] || galleryImages[4] || galleryImages[1] || capability?.image)} 
-                  className="w-full flex-1 object-cover min-h-0" 
+                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
                   alt="Gallery 5"
                   referrerPolicy="no-referrer"
+                  onClick={() => handleMobileImageClick((capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/5.jpg" : (capability?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (galleryImages[5] || galleryImages[4] || galleryImages[1] || capability?.image))}
                 />
               </div>
             </div>
@@ -652,22 +662,28 @@ export default function CaseStudyPage() {
         </div>
 
         {/* Section 6: Additional 2 Sticky Full-width Images */}
-        <div className="relative bg-zinc-900 z-50 w-full" style={{ height: capability?.id === "ck-lighting" ? "auto" : "200vh" }}>
+        <div className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block">
            {/* Image 1 */}
-           <div className={`w-full mx-auto ${capability?.id === "ck-lighting" ? "relative h-auto max-w-[1525px]" : "sticky top-0 h-screen overflow-hidden"}`}>
+           <div 
+             className={`w-full mx-auto cursor-pointer sm:cursor-default ${capability?.id === "ck-lighting" ? "relative h-auto max-w-[1525px]" : "relative sm:sticky sm:top-0 h-auto sm:h-screen overflow-hidden"}`}
+             onClick={() => handleMobileImageClick((capability?.id === "ck-lighting") ? "/CK Lighting Web/ck9.jpg" : (galleryImages[4] || "/Images/TGPW Site Map.jpg"))}
+           >
              <img 
                src={(capability?.id === "ck-lighting") ? "/CK Lighting Web/ck9.jpg" : (galleryImages[4] || "/Images/TGPW Site Map.jpg")} 
                alt="Gallery Sticky 1"
-               className={`w-full ${capability?.id === "ck-lighting" ? "h-auto" : "h-full object-cover"}`}
+               className={`w-full h-auto sm:h-full object-contain sm:object-cover block`}
                referrerPolicy="no-referrer"
              />
            </div>
            {/* Image 2 */}
-           <div className={`w-full mx-auto ${capability?.id === "ck-lighting" ? "relative h-auto max-w-[1525px]" : "sticky top-0 h-screen overflow-hidden"}`}>
+           <div 
+             className={`w-full mx-auto cursor-pointer sm:cursor-default ${capability?.id === "ck-lighting" ? "relative h-auto max-w-[1525px]" : "relative sm:sticky sm:top-0 h-auto sm:h-screen overflow-hidden"}`}
+             onClick={() => handleMobileImageClick((capability?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg")}
+           >
              <img 
                src={(capability?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
                alt="TGPW Visual Guideline"
-               className={`w-full ${capability?.id === "ck-lighting" ? "h-auto" : "h-full object-cover"}`} 
+               className={`w-full h-auto sm:h-full object-contain sm:object-cover block`} 
                referrerPolicy="no-referrer"
              />
            </div>
@@ -930,6 +946,13 @@ export default function CaseStudyPage() {
         </div>
       </footer>
       <FloatingMenu visible={showSideMenu} theme="dark" onNavClick={(targetId) => handleNavClick({ preventDefault: () => {} } as any, targetId)} />
+
+      {/* Mobile Floating Full Image Modal with pinch/zoom gestures */}
+      <MobileZoomableModal
+        isOpen={Boolean(selectedMobileModalImage)}
+        imageSrc={selectedMobileModalImage}
+        onClose={() => setSelectedMobileModalImage(null)}
+      />
     </div>
   );
 }

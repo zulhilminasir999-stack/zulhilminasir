@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { PORTFOLIO_PROJECTS, CAPABILITIES_DATA } from "../data";
 import { FloatingMenu } from "../components/FloatingMenu";
+import { MobileZoomableModal } from "../components/MobileZoomableModal";
 import { useReveal } from "../context/RevealContext";
 import { useLenis } from "lenis/react";
 
@@ -49,7 +50,14 @@ export default function ProjectDetailPage() {
   const [showSideMenu, setShowSideMenu] = useState(false);
   const [localTime, setLocalTime] = useState("");
   const [currentHeroImage, setCurrentHeroImage] = useState<string>("");
+  const [selectedMobileModalImage, setSelectedMobileModalImage] = useState<string | null>(null);
   const { triggerReveal } = useReveal();
+
+  const handleMobileImageClick = (src: string) => {
+    if (window.innerWidth < 640 && src) {
+      setSelectedMobileModalImage(src);
+    }
+  };
 
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetSectionId: string) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -57,7 +65,6 @@ export default function ProjectDetailPage() {
     const rawId = targetSectionId.replace('#', '');
     
     if (rawId === 'capabilities-section' || rawId === 'capabilities') {
-      navigate(-1);
       return;
     }
     
@@ -212,7 +219,9 @@ export default function ProjectDetailPage() {
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
               isMobile 
-                ? "bg-zinc-950/45 backdrop-blur-md border-b border-white/10 h-14" 
+                ? (isMobileMenuOpen 
+                    ? "bg-zinc-950/95 backdrop-blur-md border-b-0 h-auto" 
+                    : "bg-zinc-950/45 backdrop-blur-md border-b border-white/10 h-14")
                 : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
             }`}
           >
@@ -332,71 +341,43 @@ export default function ProjectDetailPage() {
                   <div className="flex items-center">
                     <button 
                       onClick={(e) => handleNavClick(e, "#hero-section")}
-                      className="font-display font-black text-xl tracking-tighter text-white cursor-pointer"
+                      className="font-display font-semibold text-sm tracking-tight text-[#2563EB] hover:text-[#3B82F6] transition-colors cursor-pointer"
                     >
-                      ZN
+                      Zulhilmi Nasir
                     </button>
                   </div>
-                  <button 
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="p-1 cursor-pointer hover:bg-white/10 rounded-lg text-white focus:outline-none"
-                    aria-label="Toggle Menu"
-                  >
-                    <Menu className="w-6 h-6" />
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                      className="p-1 px-2 -mr-3 translate-x-1 pl-2 text-[#2563EB] hover:text-[#3B82F6] active:text-[#3B82F6] cursor-pointer rounded-lg focus:outline-none transition-colors"
+                      aria-label="Toggle Menu"
+                    >
+                      {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                    </button>
+                  </div>
                 </>
               )}
             </div>
-          </motion.header>
-        )}
-      </AnimatePresence>
 
-      {/* Mobile Drawer Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-x-0 top-14 bg-[#1a3a5a]/95 backdrop-blur-lg border-b border-white/10 z-40 py-6 px-6 flex flex-col space-y-4 md:hidden text-white shadow-xl"
-          >
-            <button 
-              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#services-section"); }} 
-              className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
-            >
-              Services
-            </button>
-            <button 
-              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#integration-section"); }} 
-              className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
-            >
-              Software & AI Solution
-            </button>
-            <button 
-              onClick={(e) => { e.preventDefault(); }} 
-              className="font-sans font-medium text-left text-white/40 pb-2 border-b border-white/5 cursor-default"
-            >
-              Projects
-            </button>
-            <button 
-              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#about-section"); }} 
-              className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
-            >
-              About
-            </button>
-            <button 
-              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#career-section"); }} 
-              className="font-sans font-medium text-left text-white hover:text-white pb-2 border-b border-white/5 cursor-pointer"
-            >
-              Career
-            </button>
-            <button 
-              onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, "#contact-section"); }} 
-              className="w-full py-3 bg-white text-[#0A2947] rounded-xl font-semibold text-center cursor-pointer"
-            >
-              Get In Touch
-            </button>
-          </motion.div>
+            {/* Mobile menu panel */}
+            <AnimatePresence>
+              {isMobile && isMobileMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="md:hidden m-0 mt-0 border-b border-white/50 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-white shadow-xl overflow-hidden"
+                >
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Services</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Software & AI Solutions</button>
+                  <button onClick={(e) => { e.preventDefault(); }} className="font-mono uppercase text-sm tracking-wide text-left text-white/50 pb-2 border-b border-white/50 cursor-default">Projects</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">About</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Career</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors cursor-pointer">Collaborate</button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.header>
         )}
       </AnimatePresence>
 
@@ -404,49 +385,56 @@ export default function ProjectDetailPage() {
       <main className="relative z-10">
         
         {/* Full-width Hero Header Section with Background Image */}
-        <div className="relative w-full h-screen flex items-end overflow-hidden">
-          {/* Background Image with elegant overlay to ensure full readability */}
-          <div className="absolute inset-0 z-0">
+        <div className="relative w-full h-auto sm:h-screen flex flex-col sm:flex-row sm:items-end overflow-hidden pt-14 sm:pt-0 bg-white sm:bg-transparent">
+          {/* Background Image: real size landscape on mobile, full-screen on desktop */}
+          <div className="relative sm:absolute sm:inset-0 sm:z-0 w-full overflow-hidden bg-white sm:bg-transparent">
             <img 
               src={currentHeroImage || ((project?.galleryImages && project.galleryImages.length > 0) ? project.galleryImages[0] : (project?.imageUrl || ""))} 
               alt={`${project?.title || "Project"} background`}
-              className="w-full h-full object-cover select-none pointer-events-none"
+              className="w-full h-auto sm:h-full object-contain sm:object-cover select-none pointer-events-none block"
               style={{ objectPosition: project?.objectPosition || "center 30%" }}
               referrerPolicy="no-referrer"
             />
-            {/* Elegant overlay: dark gradients for beautiful visual blending and high legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A2947]/80 via-[#0A2947]/30 to-black/20" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0A2947]/50 via-[#0A2947]/10 to-transparent" />
+            {/* Elegant overlay: dark gradients for beautiful visual blending and cinematic feel */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A2947]/80 via-[#0A2947]/30 to-black/20 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0A2947]/50 via-[#0A2947]/10 to-transparent pointer-events-none" />
           </div>
 
-          {/* Header Content Container */}
-          <div className="w-full px-6 sm:px-12 lg:px-16 pb-16 md:pb-24 relative z-10">
+          {/* Header Content Container: sits cleanly below the image on mobile */}
+          <div className="w-full px-6 sm:px-12 lg:px-16 pt-6 sm:pt-0 pb-10 sm:pb-16 md:pb-24 relative z-10 bg-white sm:bg-transparent">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="space-y-4 text-left"
             >
-              <h1 className="font-sans font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl !text-white tracking-tight leading-none uppercase flex items-center flex-wrap gap-x-3 gap-y-1">
+              <h1 className="font-sans font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl !text-[#2563EB] sm:!text-white tracking-tight leading-tight sm:leading-none uppercase flex items-center flex-wrap gap-x-3 gap-y-1">
                 {project.title.split('|').map((part, index, array) => (
                   <React.Fragment key={index}>
-                    <span>{part.trim()}</span>
+                    <span className="text-[#2563EB] sm:text-white">{part.trim()}</span>
                     {index < array.length - 1 && (
-                      <span className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white/50 pb-1">|</span>
+                      <span className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#2563EB]/50 sm:text-white/50 pb-1">|</span>
                     )}
                   </React.Fragment>
                 ))}
               </h1>
-              <p className="font-sans font-normal text-base sm:text-lg md:text-xl text-white leading-relaxed max-w-4xl pt-1">
+              <p className="font-sans font-normal text-base sm:text-lg md:text-xl text-[#2563EB] sm:text-white leading-relaxed max-w-4xl pt-1">
                 {project.subtitle}
               </p>
+
+              {/* Combined on mobile: Intro summary text integrated into the same single section */}
+              <div className="block sm:hidden pt-4">
+                <p className="text-[20px] font-light leading-snug text-zinc-700">
+                  {project.summary || "A digital ecosystem that transforms how athletes interact with their performance wear, creating a seamless connection between garment and user through innovative technology."}
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
         {/* Main Content Area - Light Theme (Replicated from Video) */}
         
-        {/* Section 1: Intro */}
-        <section className="w-full bg-white text-zinc-900 z-20 sticky top-0 h-screen flex flex-col justify-center">
+        {/* Section 1: Intro (Desktop only, combined into header section on mobile) */}
+        <section className="hidden sm:flex w-full bg-white text-zinc-900 z-20 sm:sticky sm:top-0 sm:h-screen flex-col justify-center">
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4">
@@ -462,7 +450,7 @@ export default function ProjectDetailPage() {
         </section>
 
         {/* Section 2: Details */}
-        <section className="w-full bg-zinc-50/95 backdrop-blur-md text-zinc-900 z-30 sticky top-0 h-screen flex flex-col justify-center shadow-2xl">
+        <section className="w-full bg-white sm:bg-zinc-50/95 sm:backdrop-blur-md text-zinc-900 z-30 relative sm:sticky sm:top-0 h-auto sm:h-screen flex flex-col justify-center shadow-none sm:shadow-2xl py-12 sm:py-0">
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4">
@@ -472,35 +460,35 @@ export default function ProjectDetailPage() {
               </div>
               <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-y-12 gap-x-8">
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Client</h4>
-                  <p className="text-zinc-600 text-sm">{project.client || "Stride Athletics"}</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Client</h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">{project.client || "Stride Athletics"}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Project Type</h4>
-                  <p className="text-zinc-600 text-sm">{project.categoryLabel || "Digital Product Design"}</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Project Type</h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">{project.categoryLabel || "Digital Product Design"}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Released</h4>
-                  <p className="text-zinc-600 text-sm">{project.year || "October 11, 2024"}</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Released</h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">{project.year || "October 11, 2024"}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Technology</h4>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Technology</h4>
                   <div className="flex flex-col gap-1">
                     {(project.toolsUsed && project.toolsUsed.length > 0) ? project.toolsUsed.map(tool => (
-                      <span key={tool} className="text-zinc-600 text-sm">{tool}</span>
+                      <span key={tool} className="text-zinc-600 text-[16px] sm:text-sm">{tool}</span>
                     )) : (
                       <>
-                        <span className="text-zinc-600 text-sm">React Native</span>
-                        <span className="text-zinc-600 text-sm">Motion Analysis API</span>
-                        <span className="text-zinc-600 text-sm">Machine Learning</span>
-                        <span className="text-zinc-600 text-sm">Cloud Architecture</span>
+                        <span className="text-zinc-600 text-[16px] sm:text-sm">React Native</span>
+                        <span className="text-zinc-600 text-[16px] sm:text-sm">Motion Analysis API</span>
+                        <span className="text-zinc-600 text-[16px] sm:text-sm">Machine Learning</span>
+                        <span className="text-zinc-600 text-[16px] sm:text-sm">Cloud Architecture</span>
                       </>
                     )}
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 mb-2">Timeframe</h4>
-                  <p className="text-zinc-600 text-sm">3 months</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Timeframe</h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">3 months</p>
                 </div>
               </div>
             </div>
@@ -508,7 +496,7 @@ export default function ProjectDetailPage() {
         </section>
 
         {/* Section 3: Overview (Sticky Left) */}
-        <section className="w-full bg-white text-zinc-900 z-40 sticky top-0 h-screen flex flex-col justify-center shadow-2xl">
+        <section className="w-full bg-white text-zinc-900 z-40 relative sm:sticky sm:top-0 h-auto sm:h-screen flex flex-col justify-center shadow-none sm:shadow-2xl py-12 sm:py-0">
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4 relative">
@@ -516,7 +504,7 @@ export default function ProjectDetailPage() {
                   <h2 className="text-2xl font-medium tracking-tight text-zinc-900">Overview</h2>
                 </div>
               </div>
-              <div className="md:col-span-8 space-y-8 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
+              <div className="md:col-span-8 space-y-6 sm:space-y-8 text-[20px] sm:text-2xl md:text-3xl font-light leading-snug text-zinc-700">
                 <p>{project.summary || "Our solution focused on creating an intuitive digital platform that connects with Stride's performance wear, providing real-time insights and personalized recommendations. The challenge was to make complex performance data accessible and actionable for users of all expertise levels."}</p>
                 <p>
                   {project.challenge || "Stride Athletics had developed cutting-edge performance wear but lacked the digital interface to unlock its full potential. They needed a digital product that would help athletes understand, customize, and maximize the benefits of their smart athletic wear."}
@@ -528,18 +516,21 @@ export default function ProjectDetailPage() {
 
         {/* Section 4: Full-width Images */}
         <div 
-          className="relative bg-zinc-900 z-50 w-full" 
-          style={{ height: project?.id === "komorebi-editorial" ? "300vh" : (project?.id === "TGPowerWrap" ? "200vh" : undefined) }}
+          className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block" 
+          style={{ height: undefined }}
         >
            {/* Image 1 */}
            {(() => {
              const img1Src = (project?.galleryImages && project.galleryImages.length > 1) ? project.galleryImages[1] : (project?.imageUrl || "");
              const isLongImage = img1Src.includes('ck2') || img1Src.includes('ck3') || img1Src.includes('ck');
+             const finalImg1Src = project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : project?.id === "komorebi-editorial" ? "/Triply/Triply2.jpg" : img1Src;
+             
              if (isLongImage) {
                return (
                  <div 
-                   className="z-10 w-full"
-                   style={project?.id === "ck-lighting" ? {} : { position: "sticky", bottom: 0 }}
+                   className="z-10 w-full relative sm:sticky cursor-pointer sm:cursor-default"
+                   style={project?.id === "ck-lighting" ? {} : { bottom: 0 }}
+                   onClick={() => handleMobileImageClick(project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : img1Src)}
                  >
                    <img 
                      src={project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : img1Src} 
@@ -551,11 +542,14 @@ export default function ProjectDetailPage() {
                );
              }
              return (
-               <div className="sticky top-0 h-screen w-full overflow-hidden z-10">
+               <div 
+                 className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-10 cursor-pointer sm:cursor-default"
+                 onClick={() => handleMobileImageClick(finalImg1Src)}
+               >
                  <img 
-                   src={project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : project?.id === "komorebi-editorial" ? "/Triply/Triply2.jpg" : img1Src} 
+                   src={finalImg1Src} 
                    alt="Gallery 1"
-                   className="w-full h-full object-cover" 
+                   className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
                    style={{ objectPosition: project?.id === "komorebi-editorial" ? "center 30%" : undefined }}
                    referrerPolicy="no-referrer"
                  />
@@ -565,11 +559,14 @@ export default function ProjectDetailPage() {
 
            {/* Image 2 */}
            {(project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial") && (
-             <div className="sticky top-0 h-screen w-full overflow-hidden z-20 bg-zinc-900">
+             <div 
+               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-20 bg-zinc-900 cursor-pointer sm:cursor-default"
+               onClick={() => handleMobileImageClick(project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : "/TGPW/6.jpg")}
+             >
                <img 
                  src={project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : "/TGPW/6.jpg"} 
                  alt="Gallery 2"
-                 className="w-full h-full object-cover" 
+                 className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
                  referrerPolicy="no-referrer"
                />
              </div>
@@ -577,11 +574,14 @@ export default function ProjectDetailPage() {
 
            {/* Image 3 */}
            {project?.id === "komorebi-editorial" && (
-             <div className="sticky top-0 h-screen w-full overflow-hidden z-30 bg-zinc-900">
+             <div 
+               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-30 bg-zinc-900 cursor-pointer sm:cursor-default"
+               onClick={() => handleMobileImageClick("/Triply/Triply7.jpg")}
+             >
                <img 
                  src="/Triply/Triply7.jpg" 
                  alt="Gallery 3"
-                 className="w-full h-full object-cover" 
+                 className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
                  referrerPolicy="no-referrer"
                />
              </div>
@@ -604,27 +604,30 @@ export default function ProjectDetailPage() {
             </div>
             
             {/* Gallery Part */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
-              <div className="md:col-span-6 h-[400px] sm:h-[600px] lg:h-[800px]">
+            <div className="-mx-6 sm:mx-0 grid grid-cols-1 md:grid-cols-12 gap-0 sm:gap-4 lg:gap-6">
+              <div className="md:col-span-6 h-auto sm:h-[600px] lg:h-[800px] cursor-pointer sm:cursor-default">
                 <img 
                   src={(project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || ""))} 
-                  className="w-full h-full object-cover" 
+                  className="w-full h-auto sm:h-full object-contain sm:object-cover block p-0 m-0" 
                   alt={`${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
+                  onClick={() => handleMobileImageClick((project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || "")))}
                 />
               </div>
-              <div className="md:col-span-6 flex flex-col gap-4 lg:gap-6 h-[400px] sm:h-[600px] lg:h-[800px]">
+              <div className="md:col-span-6 flex flex-col gap-0 sm:gap-4 lg:gap-6 h-auto sm:h-[600px] lg:h-[800px]">
                 <img 
                   src={(project?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply5.jpg" : ((project?.galleryImages && project.galleryImages.length > 3) ? project.galleryImages[3] : (project?.imageUrl || ""))} 
-                  className="w-full flex-1 object-cover min-h-0" 
+                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
                   alt={`${project?.title || "Gallery"} 4`}
                   referrerPolicy="no-referrer"
+                  onClick={() => handleMobileImageClick((project?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply5.jpg" : ((project?.galleryImages && project.galleryImages.length > 3) ? project.galleryImages[3] : (project?.imageUrl || "")))}
                 />
                 <img 
                   src={(project?.id === "TGPowerWrap") ? "/Images/5.jpg" : (project?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply6.png" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || "")))} 
-                  className="w-full flex-1 object-cover min-h-0" 
+                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
                   alt={`${project?.title || "Gallery"} 5`}
                   referrerPolicy="no-referrer"
+                  onClick={() => handleMobileImageClick((project?.id === "TGPowerWrap") ? "/Images/5.jpg" : (project?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply6.png" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || ""))))}
                 />
               </div>
             </div>
@@ -645,35 +648,44 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* Section 6: Additional Sticky Full-width Images */}
-        <div className="relative bg-zinc-900 z-50 w-full" style={{ height: project?.id === "ck-lighting" ? "300vh" : "200vh" }}>
+        <div className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block">
            {/* Image 1 */}
-           <div className={`sticky top-0 h-screen w-full z-10 ${project?.id === "ck-lighting" ? "flex flex-col justify-center bg-zinc-900 overflow-hidden" : "overflow-hidden flex flex-col justify-center"}`}>
+           <div 
+             className={`relative sm:sticky sm:top-0 h-auto sm:h-screen w-full z-10 cursor-pointer sm:cursor-default ${project?.id === "ck-lighting" ? "flex flex-col justify-center bg-zinc-900 overflow-hidden" : "overflow-hidden flex flex-col justify-center"}`}
+             onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg")))}
+           >
              <img 
                src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg"))} 
                alt="Gallery Sticky 1"
-               className={`w-full h-full object-cover`}
+               className={`w-full h-auto sm:h-full object-contain sm:object-cover block`}
                referrerPolicy="no-referrer"
              />
            </div>
            
            {/* Image 2 (New CK10.jpg for CK Lighting) */}
            {project?.id === "ck-lighting" && (
-             <div className="sticky top-0 h-screen w-full z-20 shadow-2xl flex flex-col justify-center bg-zinc-900 overflow-hidden">
+             <div 
+               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full z-20 shadow-none sm:shadow-2xl flex flex-col justify-center bg-zinc-900 overflow-hidden cursor-pointer sm:cursor-default"
+               onClick={() => handleMobileImageClick("/CK Lighting Web/CK10.jpg")}
+             >
                <img 
                  src="/CK Lighting Web/CK10.jpg" 
                  alt="Gallery Sticky CK10"
-                 className="w-full h-full object-cover"
+                 className="w-full h-auto sm:h-full object-contain sm:object-cover block"
                  referrerPolicy="no-referrer"
                />
              </div>
            )}
 
            {/* Image 3 (Previously Image 2) */}
-           <div className={`sticky top-0 h-screen w-full ${project?.id === "ck-lighting" ? "z-30" : "z-20"} shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900`}>
+           <div 
+             className={`relative sm:sticky sm:top-0 h-auto sm:h-screen w-full ${project?.id === "ck-lighting" ? "z-30" : "z-20"} shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900 cursor-pointer sm:cursor-default`}
+             onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg")}
+           >
              <img 
                src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
                alt="TGPW Visual Guideline"
-               className={`w-full h-full object-cover`} 
+               className={`w-full h-auto sm:h-full object-contain sm:object-cover block`} 
                referrerPolicy="no-referrer"
              />
            </div>
@@ -718,11 +730,14 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* Section 8: Final Full-width Image */}
-        <div className="w-full relative bg-zinc-900 z-50">
+        <div 
+          className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
+          onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/ck11.jpg" : ((project.galleryImages && project.galleryImages.length > 6) ? project.galleryImages[6] : "/Images/Ipad Pro Mockup On Rock.jpg"))}
+        >
           <img 
             src={(project?.id === "ck-lighting") ? "/CK Lighting Web/ck11.jpg" : ((project.galleryImages && project.galleryImages.length > 6) ? project.galleryImages[6] : "/Images/Ipad Pro Mockup On Rock.jpg")} 
             alt="Final Gallery Image"
-            className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-screen object-cover"}`} 
+            className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-auto sm:h-screen object-contain sm:object-cover block"}`} 
             referrerPolicy="no-referrer"
           />
         </div>
@@ -945,6 +960,13 @@ export default function ProjectDetailPage() {
 
         </div>
       </footer>
+
+      {/* Mobile Floating Full Image Modal with pinch/zoom gestures */}
+      <MobileZoomableModal
+        isOpen={Boolean(selectedMobileModalImage)}
+        imageSrc={selectedMobileModalImage}
+        onClose={() => setSelectedMobileModalImage(null)}
+      />
     </div>
   );
 }
