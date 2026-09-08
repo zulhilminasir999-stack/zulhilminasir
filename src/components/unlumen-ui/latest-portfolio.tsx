@@ -99,7 +99,7 @@ export function LatestPortfolio() {
           </h2>
         </div>
         <div className="col-span-1 md:col-span-12 lg:col-span-4 pt-4 md:pt-4 lg:pt-4">
-          <p className="text-white/75 text-[14px] leading-relaxed font-sans max-w-sm ml-auto md:max-w-xl lg:max-w-sm text-right">
+          <p className="text-white/75 text-[14px] leading-relaxed font-sans max-w-sm mx-auto md:max-w-xl lg:max-w-sm lg:ml-auto text-center md:text-center lg:text-right">
             My creative spirit comes alive in the digital realm. Discover high-fidelity works engineered with precision, detail, and seamless interactivity.
           </p>
         </div>

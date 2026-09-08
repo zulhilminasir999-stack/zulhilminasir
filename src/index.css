@@ -880,20 +880,25 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
-/* Mobile Device Only (screen width <= 768px): Entire website font switches to "Satoshi", while preserving script & serif fonts aligned with desktop */
+/* Mobile Device Only (screen width <= 768px): Entire website font switches to "Satoshi", while preserving script, serif & mono fonts aligned with desktop */
 @media screen and (max-width: 768px) {
   :root, html, body {
     --font-sans: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     --font-display: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-    --font-mono: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    --font-mono: "JetBrains Mono", monospace !important;
     --font-serif: "Cormorant Garamond", Georgia, serif !important;
     --font-signature: "Madinah Authentic", cursive !important;
     font-family: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   }
 
   body,
-  body *:not(svg):not(path):not(rect):not(circle):not(g):not(line):not(polyline):not(polygon):not(.font-serif):not(.font-signature):not([style*="Cormorant"]):not([style*="Madinah"]) {
+  body *:not(svg):not(path):not(rect):not(circle):not(g):not(line):not(polyline):not(polygon):not(.font-serif):not(.font-signature):not(.font-mono):not([style*="Cormorant"]):not([style*="Madinah"]):not([style*="JetBrains"]) {
     font-family: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  }
+
+  .font-mono,
+  .font-mono * {
+    font-family: "JetBrains Mono", monospace !important;
   }
 
   .font-serif,
@@ -904,6 +909,10 @@ html.lenis, html.lenis body {
   .font-signature,
   .font-signature * {
     font-family: "Madinah Authentic", cursive !important;
+  }
+
+  .loader {
+    font-weight: 600 !important;
   }
 }
 

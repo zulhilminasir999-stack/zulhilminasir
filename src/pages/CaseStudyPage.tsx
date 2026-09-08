@@ -288,8 +288,8 @@ export default function CaseStudyPage() {
             className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
               isMobile 
                 ? (isMobileMenuOpen 
-                    ? "bg-zinc-950/95 backdrop-blur-md border-b-0 h-auto" 
-                    : "bg-zinc-950/45 backdrop-blur-md border-b border-zinc-900/30 h-14")
+                    ? "bg-white border-b border-zinc-200/80 h-auto shadow-sm" 
+                    : "bg-white border-b border-zinc-200/80 h-14 shadow-sm")
                 : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
             }`}
           >

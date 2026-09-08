@@ -25,6 +25,7 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
   const [activeTab, setActiveTab] = useState("hero");
 
   const [isMobile, setIsMobile] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
   const isLight = theme === "light";
 
   useEffect(() => {
@@ -32,6 +33,50 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Instagram-style scroll behavior: scroll down shrinks/compacts bar, scroll up restores full size, top is 100%
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // At the top of the page -> navigation remains at 100% full size
+      if (currentScrollY <= 20) {
+        setIsCompact(false);
+        lastScrollY = currentScrollY;
+        ticking = false;
+        return;
+      }
+
+      const diff = currentScrollY - lastScrollY;
+
+      // Threshold to prevent flickering from small/micro scroll movements
+      if (Math.abs(diff) >= 8) {
+        if (diff > 0) {
+          // Scrolling down -> compact mode
+          setIsCompact(true);
+        } else {
+          // Scrolling up -> restore to normal/full size
+          setIsCompact(false);
+        }
+        lastScrollY = currentScrollY;
+      }
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(handleScroll);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const currentMenuItems = isMobile 
@@ -120,7 +165,12 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
   return (
     <AnimatePresence>
       {visible && isMobile && (
-        <div className="fixed bottom-0 left-0 right-0 sm:bottom-auto sm:top-1/2 sm:right-0 sm:left-auto sm:-translate-y-1/2 z-[100] h-auto pointer-events-none">
+        <div 
+          className="fixed left-0 right-0 sm:bottom-auto sm:top-1/2 sm:right-0 sm:left-auto sm:-translate-y-1/2 z-[100] h-auto pointer-events-none flex justify-center items-center px-4"
+          style={{
+            bottom: isMobile ? "calc(10px + env(safe-area-inset-bottom, 0px))" : undefined
+          }}
+        >
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -128,14 +178,26 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-row sm:flex-col justify-center items-center relative transition-all duration-[450ms] ease-in-out h-auto pointer-events-auto"
           >
-            <article className="border-t border-zinc-200/80 sm:border-y sm:border-l h-auto ease-in-out duration-500 rounded-t-[24px] sm:rounded-t-none sm:rounded-l-[24px] flex flex-row sm:flex-col p-3 sm:p-1.5 sm:pr-1 gap-1 w-full sm:w-auto justify-around sm:justify-start backdrop-blur-md bg-white/95 sm:bg-white/95 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] sm:shadow-[-10px_0_30px_rgba(0,0,0,0.04)]">
+            <article 
+              className={`border border-zinc-200/90 sm:border-y sm:border-l sm:border-r-0 h-auto rounded-[24px] sm:rounded-t-none sm:rounded-l-[24px] sm:rounded-r-none flex flex-row sm:flex-col gap-1 w-auto justify-center sm:justify-start backdrop-blur-md bg-white/95 sm:bg-white/95 shadow-[0_8px_32px_rgba(0,0,0,0.12)] sm:shadow-[-10px_0_30px_rgba(0,0,0,0.04)] origin-bottom ${
+                isMobile && isCompact 
+                  ? "p-1.5 px-2.5 shadow-[0_4px_16px_rgba(0,0,0,0.08)] scale-[0.88]" 
+                  : "p-2 px-3 sm:p-1.5 sm:pr-1 scale-100"
+              }`}
+              style={{
+                transformOrigin: "bottom center",
+                transition: "transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), padding 0.25s ease, box-shadow 0.25s ease"
+              }}
+            >
               {currentMenuItems.map((item) => {
                 const isSelected = activeTab === item.id;
                 const isCurrentDisabled = isProjectPage && item.id === "capabilities";
                 return (
                   <label
                     key={item.id}
-                    className={`relative w-12 h-11 sm:w-11 sm:h-11 p-1.5 sm:p-2 ease-in-out duration-300 group flex flex-col items-center justify-center transition-all rounded-[14px] ${
+                    className={`relative w-12 sm:w-11 group flex flex-col items-center justify-center transition-all duration-[250ms] rounded-[14px] ${
+                      isMobile && isCompact ? "h-9 p-1" : "h-11 sm:h-11 p-1.5 sm:p-2"
+                    } ${
                       isCurrentDisabled 
                         ? "cursor-default pointer-events-none select-none" 
                         : "cursor-pointer"
@@ -163,8 +225,8 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
                       }}
                     />
                     <item.icon
-                      size={20}
-                      className={`transition-all duration-300 ${
+                      size={isMobile && isCompact ? 18 : 20}
+                      className={`transition-all duration-[250ms] ${
                         isSelected 
                           ? "text-[#2563EB] scale-[1.2] opacity-100" 
                           : "text-zinc-400 group-hover:text-zinc-600 opacity-80 group-hover:opacity-100 group-hover:scale-110"

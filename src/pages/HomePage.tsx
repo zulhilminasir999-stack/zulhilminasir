@@ -94,7 +94,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     offset: ["start start", "end end"],
   });
 
-  const galleryBg = useTransform(galleryScrollY, [0.50, 0.70], ["#2563EB", "#ffffff"]);
+  const galleryBgDesktop = useTransform(galleryScrollY, [0.50, 0.70], ["#2563EB", "#ffffff"]);
+  const galleryBgMobile = useTransform(galleryScrollY, [0.10, 0.24], ["#2563EB", "#ffffff"]);
+  const galleryBg = isMobile ? galleryBgMobile : galleryBgDesktop;
 
   useEffect(() => {
     const checkWidth = () => {
@@ -421,8 +423,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
                 isMobile 
                   ? (isMobileMenuOpen 
-                      ? "bg-zinc-950/95 backdrop-blur-md border-b-0 h-auto" 
-                      : "bg-zinc-950/45 backdrop-blur-md border-b border-zinc-900/30 h-14")
+                      ? "bg-white border-b border-zinc-200/80 h-auto shadow-sm" 
+                      : "bg-white border-b border-zinc-200/80 h-14 shadow-sm")
                   : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
               }`}
             >
@@ -651,13 +653,72 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         <motion.section 
           ref={heroRef}
           id="hero-section" 
-          className="sticky top-0 z-10 pt-24 pb-12 h-screen min-h-[500px] sm:min-h-[600px] lg:min-h-[720px] flex items-stretch overflow-hidden"
+          className="sticky top-0 z-10 pt-0 sm:pt-24 pb-8 sm:pb-12 h-screen min-h-[580px] sm:min-h-[600px] lg:min-h-[720px] flex flex-col justify-between overflow-hidden bg-[#2563EB] sm:bg-transparent"
         >
-          
-          {/* Background Image replacing the solid background completely */}
+          {/* Subtle photographic film grain texture overlay across entire mobile hero background & gradient */}
+          <div 
+            className="block sm:hidden absolute inset-0 pointer-events-none z-[5] opacity-35 mix-blend-overlay"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='heroNoiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23heroNoiseFilter)'/%3E%3C/svg%3E")`,
+              backgroundRepeat: 'repeat',
+            }}
+          />
+          <div 
+            className="block sm:hidden absolute inset-0 pointer-events-none z-[6] opacity-25 mix-blend-soft-light"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='heroNoiseFilterSoft'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23heroNoiseFilterSoft)'/%3E%3C/svg%3E")`,
+              backgroundRepeat: 'repeat',
+            }}
+          />
+
+          {/* Mobile: Landscape Image matching pre-footer size with multi-stop smooth modern blue gradient */}
+          <div className="absolute top-0 left-0 right-0 h-[450px] overflow-hidden block sm:hidden pointer-events-none z-0">
+            <img 
+              src="/hero-bg.jpg" 
+              alt="Hero Background" 
+              className="w-full h-full object-cover select-none pointer-events-none" 
+              style={{ 
+                objectPosition: "center 20%",
+                maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.95) 55%, rgba(0,0,0,0.7) 65%, rgba(0,0,0,0.3) 78%, rgba(0,0,0,0.05) 90%, rgba(0,0,0,0) 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.95) 55%, rgba(0,0,0,0.7) 65%, rgba(0,0,0,0.3) 78%, rgba(0,0,0,0.05) 90%, rgba(0,0,0,0) 100%)',
+              }} 
+              referrerPolicy="no-referrer"
+            />
+            
+            <div 
+              className="absolute inset-0 pointer-events-none z-[8]" 
+              style={{
+                background: 'linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 50%)',
+                maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%)',
+              }}
+            />
+
+            {/* Smooth multi-stop modern blue gradient overlay blending seamlessly into the bottom blue section */}
+            <div 
+              className="absolute inset-0 pointer-events-none z-10" 
+              style={{
+                background: 'linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0) 30%, rgba(37, 99, 235, 0.05) 45%, rgba(37, 99, 235, 0.18) 58%, rgba(37, 99, 235, 0.45) 70%, rgba(37, 99, 235, 0.78) 82%, rgba(37, 99, 235, 0.94) 92%, #2563EB 98%, #2563EB 100%)'
+              }}
+            />
+          </div>
+
+          {/* Left Vertical Indicator for Mobile */}
+          <div className="absolute left-4 sm:left-6 top-[200px] -translate-y-1/2 flex flex-col items-start gap-4 pointer-events-none select-none z-30 block sm:hidden">
+            <span className="font-sans font-semibold text-xs tracking-wide text-white/50">2K26</span>
+            <div className="w-[1px] h-12 bg-white/20 ml-[2px]" />
+            <span 
+              className="font-mono text-[10px] uppercase tracking-widest text-white/50 select-none ml-[2px]"
+              style={{ writingMode: "vertical-lr" }}
+            >
+              ./ portfolio
+            </span>
+          </div>
+
+          {/* Desktop: Background Image */}
           <motion.div 
             style={{ y: heroBgY }}
-            className="absolute inset-0 z-0 overflow-hidden"
+            className="hidden sm:block absolute inset-0 z-0 overflow-hidden"
           >
             <img 
               src="/hero-bg.jpg" 
@@ -668,7 +729,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           </motion.div>
 
           {/* Vertical Left Ticker/Indicator matching the mockup exactly */}
-          <div className="absolute left-6 sm:left-12 lg:left-16 top-[35%] md:top-[50%] -translate-y-1/2 flex flex-col items-start gap-4 pointer-events-none select-none z-20">
+          <div className="hidden sm:flex absolute left-6 sm:left-12 lg:left-16 top-[35%] md:top-[50%] -translate-y-1/2 flex-col items-start gap-4 pointer-events-none select-none z-20">
             <span className="font-sans font-semibold text-xs tracking-wide text-white/50">2K26</span>
             <div className="w-[1px] h-12 md:h-16 bg-white/20 ml-[2px]" />
             <span 
@@ -681,30 +742,56 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
           <motion.div 
             style={{ scale: heroScale, opacity: heroOpacity, y: heroY }}
-            className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-end py-6 md:py-10"
+            className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-end py-6 md:py-10 mt-auto"
           >
             {/* Bottom Row: Crafting Digital Design heading aligned side-by-side with ServiceCardSlider */}
-            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-16 md:pt-0 pointer-events-auto">
+            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-6 md:pt-0 pointer-events-auto">
               <div className="p-0 m-0 text-center sm:text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl w-full">
-                <div className="space-y-4 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
-                  <h2 className="font-sans font-semibold text-[18px] sm:text-2xl md:text-[34px] lg:text-[40px] xl:text-[46px] tracking-tight !text-white leading-[1.22] text-center sm:text-left">
-                    {/* 2 Lines for all devices */}
-                    <span className="block whitespace-nowrap overflow-visible">
-                      <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.28em]" }}>
-                        Crafting SaaS Design & Web Solutions
-                      </WordsStagger>
-                    </span>
-                    <span className="block whitespace-nowrap overflow-visible mt-1 sm:mt-1.5 md:mt-2">
-                      <WordsStagger trigger={!isLoading} delay={0.45} className="!text-white flex-nowrap whitespace-nowrap">
-                        Augmented by AI-Powered Innovation
-                      </WordsStagger>
-                    </span>
+                <div className="space-y-4 -translate-y-2.5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
+                  <h2 className="font-sans font-medium sm:font-semibold text-[20px] sm:text-2xl md:text-[34px] lg:text-[40px] xl:text-[46px] tracking-tight !text-white leading-[1.28] sm:leading-[1.22] text-center sm:text-left">
+                    {/* Mobile: 4 Lines with unified consistent line height */}
+                    <div className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-medium">
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[21px] leading-[1.2] font-medium">
+                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[21px] leading-[1.2] font-medium">
+                          Crafting SaaS Design
+                        </WordsStagger>
+                      </span>
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[27px] leading-[1.2] font-medium">
+                        <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[27px] leading-[1.2] font-medium" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.28em]" }}>
+                          & Web Solutions
+                        </WordsStagger>
+                      </span>
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[30px] leading-[1.2] font-medium">
+                        <WordsStagger trigger={!isLoading} delay={0.4} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[30px] leading-[1.2] font-medium">
+                          Augmented by
+                        </WordsStagger>
+                      </span>
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[20px] leading-[1.2] font-medium pt-1">
+                        <WordsStagger trigger={!isLoading} delay={0.5} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[20px] leading-[1.2] font-medium">
+                          AI-Powered Innovation
+                        </WordsStagger>
+                      </span>
+                    </div>
+
+                    {/* Desktop: 2 Lines */}
+                    <div className="hidden sm:block">
+                      <span className="block whitespace-nowrap overflow-visible">
+                        <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.28em]" }}>
+                          Crafting SaaS Design & Web Solutions
+                        </WordsStagger>
+                      </span>
+                      <span className="block whitespace-nowrap overflow-visible mt-1 sm:mt-1.5 md:mt-2">
+                        <WordsStagger trigger={!isLoading} delay={0.45} className="!text-white flex-nowrap whitespace-nowrap">
+                          Augmented by AI-Powered Innovation
+                        </WordsStagger>
+                      </span>
+                    </div>
                   </h2>
                 </div>
               </div>
 
               {/* Interactive 3D Stacked Service Deck Slider Container */}
-              <div className="self-center sm:self-start lg:self-end shrink-0 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
+              <div className="self-center sm:self-start lg:self-end shrink-0 translate-y-3 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
                 <ServiceCardSlider />
               </div>
             </div>
@@ -734,14 +821,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       </section>
 
       {/* Unified Sticky-Scroll Section: Typewriter Section & What I Do Portal Reveal */}
-      <motion.div id="gallery-section" ref={galleryRef} style={{ backgroundColor: galleryBg }} className="relative w-full h-[220vh] z-30">
+      <motion.div id="gallery-section" ref={galleryRef} style={{ backgroundColor: galleryBg }} className="relative w-full h-[145vh] sm:h-[220vh] z-30">
         <motion.div style={{ backgroundColor: galleryBg }} className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
           <TypewriterSection scrollYProgress={galleryScrollY} />
         </motion.div>
       </motion.div>
 
       {/* 4. Capability Cards Section on white background */}
-      <div id="hover-list-section" className="w-full bg-white relative z-50 pt-4 pb-0 -mt-[15vh] sm:-mt-[25vh] lg:-mt-[30vh]">
+      <div id="hover-list-section" className="w-full bg-white relative z-50 pt-2 sm:pt-4 pb-0 -mt-[56vh] sm:-mt-[25vh] lg:-mt-[30vh]">
         <HoverImageList 
           items={CAPABILITIES_DATA.map(cap => ({
             id: cap.id,

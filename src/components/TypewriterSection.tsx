@@ -55,6 +55,22 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
     }
   }, [charIndex, isFading, stringIndex]);
 
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Create a smoothed progress spring to avoid any notches/jerks during scrolling up or down
   const smoothScrollProgress = useSpring(scrollYProgress, {
     stiffness: 120,
@@ -63,22 +79,42 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
     restDelta: 0.0001
   });
 
-  // Seamless scroll transition ranges with NO gaps
-  // 1. Typewriter fades out, scales down and moves up slightly from scroll 0.0 to 0.22
-  const typewriterOpacity = useTransform(smoothScrollProgress, [0, 0.22], [1, 0]);
-  const typewriterScale = useTransform(smoothScrollProgress, [0, 0.22], [1, 0.92]);
-  const typewriterY = useTransform(smoothScrollProgress, [0, 0.22], [0, -40]);
+  // Desktop scroll transition ranges
+  const typewriterOpacityDesktop = useTransform(smoothScrollProgress, [0, 0.22], [1, 0]);
+  const typewriterScaleDesktop = useTransform(smoothScrollProgress, [0, 0.22], [1, 0.92]);
+  const typewriterYDesktop = useTransform(smoothScrollProgress, [0, 0.22], [0, -40]);
 
-  // 2. White background portal circle expands smoothly from scroll 0.12 to 0.65
-  const whiteCircleScale = useTransform(smoothScrollProgress, [0.12, 0.65], [0, 20]);
+  const whiteCircleScaleDesktop = useTransform(smoothScrollProgress, [0.12, 0.65], [0, 20]);
 
-  // 3. "Ideas in Action" text fades in, scales up, and moves up from scroll 0.22 to 0.58
-  const galleryScale = useTransform(smoothScrollProgress, [0.22, 0.58], [0.7, 1]);
-  const galleryOpacity = useTransform(smoothScrollProgress, [0.22, 0.50], [0, 1]);
-  const galleryY = useTransform(smoothScrollProgress, [0.22, 0.58], [120, 0]);
+  const galleryScaleDesktop = useTransform(smoothScrollProgress, [0.22, 0.58], [0.7, 1]);
+  const galleryOpacityDesktop = useTransform(smoothScrollProgress, [0.22, 0.50], [0, 1]);
+  const galleryYDesktop = useTransform(smoothScrollProgress, [0.22, 0.58], [120, 0]);
 
-  // 5. Scroll the content block up naturally as the user scrolls further (from scroll 0.70 to 1.0)
-  const naturalScrollY = useTransform(smoothScrollProgress, [0.70, 1.0], ["0vh", "-10vh"]);
+  // Mobile-specific scroll transition ranges (reveal earlier right after the expanding white portal circle)
+  const typewriterOpacityMobile = useTransform(smoothScrollProgress, [0, 0.12], [1, 0]);
+  const typewriterScaleMobile = useTransform(smoothScrollProgress, [0, 0.12], [1, 0.92]);
+  const typewriterYMobile = useTransform(smoothScrollProgress, [0, 0.12], [0, -30]);
+
+  const whiteCircleScaleMobile = useTransform(smoothScrollProgress, [0.06, 0.32], [0, 26]);
+
+  const galleryScaleMobile = useTransform(smoothScrollProgress, [0.08, 0.20], [0.88, 1]);
+  const galleryOpacityMobile = useTransform(smoothScrollProgress, [0.08, 0.18], [0, 1]);
+  const galleryYMobile = useTransform(smoothScrollProgress, [0.08, 0.20], [20, 0]);
+
+  const typewriterOpacity = isMobile ? typewriterOpacityMobile : typewriterOpacityDesktop;
+  const typewriterScale = isMobile ? typewriterScaleMobile : typewriterScaleDesktop;
+  const typewriterY = isMobile ? typewriterYMobile : typewriterYDesktop;
+
+  const whiteCircleScale = isMobile ? whiteCircleScaleMobile : whiteCircleScaleDesktop;
+
+  const galleryScale = isMobile ? galleryScaleMobile : galleryScaleDesktop;
+  const galleryOpacity = isMobile ? galleryOpacityMobile : galleryOpacityDesktop;
+  const galleryY = isMobile ? galleryYMobile : galleryYDesktop;
+
+  // 5. Scroll the content block up naturally as the user scrolls further
+  const naturalScrollYDesktop = useTransform(smoothScrollProgress, [0.70, 1.0], ["0vh", "-10vh"]);
+  const naturalScrollYMobile = useTransform(smoothScrollProgress, [0.40, 1.0], ["0vh", "-4vh"]);
+  const naturalScrollY = isMobile ? naturalScrollYMobile : naturalScrollYDesktop;
 
   // Refs for auto-scaling text to perfectly match the width of the container
   const h1ContainerRef = useRef<HTMLDivElement>(null);
@@ -151,7 +187,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
       elements.push(
         <span 
           key={idx} 
-          className={isHighlighted ? "text-white/60 font-medium" : "text-white font-medium"}
+          className={isHighlighted ? "text-white font-medium" : "text-white font-medium"}
         >
           {token}
         </span>
@@ -190,21 +226,20 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
       >
         {/* Top Headline: Typewriter sentence aligned like photo with stable height */}
         <h2 
-          className={`font-sans font-medium text-[24px] sm:text-[30px] md:text-[36px] lg:text-[41px] xl:text-[41px] text-white tracking-tight leading-[1.18] sm:leading-[1.2] transition-opacity duration-1000 min-h-[130px] sm:min-h-[145px] md:min-h-[160px] lg:min-h-[175px] flex flex-col justify-start text-left w-full max-w-[1400px] -mt-8 sm:-mt-12 md:-mt-16 ${
+          className={`font-sans font-medium text-[19px] sm:text-[30px] md:text-[36px] lg:text-[41px] xl:text-[41px] text-white tracking-tight leading-[1.3] sm:leading-[1.2] transition-opacity duration-1000 min-h-[130px] sm:min-h-[145px] md:min-h-[160px] lg:min-h-[175px] flex flex-col justify-start text-left w-full max-w-[1400px] -mt-60 sm:-mt-12 md:-mt-16 ${
             isFading ? "opacity-0" : "opacity-100"
           }`}
         >
           <span 
             id="typewriter-text" 
-            className="text-white font-sans font-medium block whitespace-pre-wrap text-[24px] sm:text-[30px] md:text-[36px] lg:text-[41px] xl:text-[41px]"
-            style={{ fontSize: "41px" }}
+            className="text-white font-sans font-medium block whitespace-pre-wrap text-[19px] sm:text-[30px] md:text-[36px] lg:text-[41px] xl:text-[41px]"
           >
             {renderFormattedText(displayedText)}
           </span>
         </h2>
 
         {/* Bottom Section: 2 Images on left, Text & Button on right - fixed position unaffected by typing */}
-        <div className="w-full flex flex-col sm:flex-row items-start gap-4 sm:gap-6 md:gap-8 mt-16 sm:mt-[90px] md:mt-[110px] lg:mt-[125px]">
+        <div className="w-full flex flex-col sm:flex-row items-start gap-4 sm:gap-6 md:gap-8 mt-24 sm:mt-[90px] md:mt-[110px] lg:mt-[125px] -mb-56 sm:mb-0">
           {/* 2 images located under-left of the sentence */}
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
@@ -250,24 +285,25 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
         </div>
       </motion.div>
 
-      {/* 2. Expanding White Portal Circle (positioned at bottom center without transform conflicts) */}
+      {/* 2. Expanding White Portal Circle (positioned at top layout on mobile, bottom center on desktop) */}
       <motion.div 
         style={{
           scale: whiteCircleScale,
           transformOrigin: "center center",
           left: "calc(50% - 150px)",
-          bottom: "-150px",
+          top: isMobile ? "calc(16% - 150px)" : undefined,
+          bottom: isMobile ? "auto" : "-150px",
           willChange: "transform",
         }}
         className="absolute w-[300px] h-[300px] rounded-full bg-white z-0 pointer-events-none origin-center transform-gpu"
       />
 
-      {/* 3. Content revealed inside the white portal (centered, absolute overlay) */}
+      {/* 3. Content revealed inside the white portal (positioned high in top layout on mobile, bottom on desktop) */}
       <motion.div 
         style={{
           y: naturalScrollY,
         }}
-        className="absolute inset-x-0 top-0 bottom-0 flex flex-col items-center justify-end pb-[22vh] md:pb-[28vh] z-20 w-full p-0 m-0 pointer-events-none"
+        className="absolute inset-x-0 top-0 bottom-0 flex flex-col items-center justify-start pt-[10vh] sm:justify-end sm:pt-0 sm:pb-[22vh] md:pb-[28vh] z-20 w-full p-0 m-0 pointer-events-none"
       >
         <motion.div 
           style={{
@@ -278,9 +314,9 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
           }}
           className="flex justify-center w-full p-0 m-0 px-0 mx-0"
         >
-          <div className="flex flex-col items-center pointer-events-auto -translate-y-12 w-full p-0 m-0 px-6 sm:px-12 lg:px-16">
+          <div className="flex flex-col items-center pointer-events-auto translate-y-0 sm:-translate-y-12 w-full p-0 m-0 px-6 sm:px-12 lg:px-16">
             <div ref={h1ContainerRef} className="w-full flex justify-center items-center overflow-visible">
-              <h1 ref={h1TextRef} style={{ fontSize: "clamp(60px, 15vw, 217.24px)", marginLeft: "-0.04em", marginRight: "-0.04em" }} className="font-sans font-black tracking-tighter text-[#1A4B82] text-center leading-[0.85] whitespace-nowrap p-0 m-0 select-none origin-center">
+              <h1 ref={h1TextRef} style={{ marginLeft: "-0.04em", marginRight: "-0.04em", fontFamily: "Satoshi, sans-serif" }} className="text-[12vw] sm:text-[14vw] md:text-[clamp(60px,15vw,217.24px)] font-black tracking-tighter text-[#1A4B82] text-center leading-[0.85] whitespace-nowrap p-0 m-0 select-none origin-center">
                 Ideas in Action
               </h1>
             </div>
@@ -288,7 +324,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
               id="ideas-in-action-subtitle"
               ref={pTextRef}
               style={{ 
-                margin: "20px 0 0 0", 
+                margin: isMobile ? "12px 0 0 0" : "20px 0 0 0", 
                 padding: "0" 
               }} 
               className="text-[#666666] font-medium text-center whitespace-nowrap tracking-tight leading-none select-none block origin-center"
