@@ -31,6 +31,22 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
     const saved = sessionStorage.getItem("capabilities_expanded_index");
     return saved !== null ? parseInt(saved, 10) : null;
   });
+
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   
   useEffect(() => {
     if (expandedIndex !== null) {
@@ -54,6 +70,7 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
   const y = useSpring(mouseY, springConfig);
 
   const handleMouseMove = (e: MouseEvent) => {
+    if (isMobile) return;
     const deltaX = e.clientX - lastX.current;
     lastX.current = e.clientX;
 
@@ -95,7 +112,7 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
         </svg>
       </div>
       {items.map((item, idx) => {
-        const isHovered = hoveredIndex === idx;
+        const isHovered = !isMobile && hoveredIndex === idx;
         const isExpanded = expandedIndex === idx;
 
         return (
@@ -108,13 +125,20 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
             transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
             <div
-              onMouseEnter={() => setHoveredIndex(idx)}
+              onMouseEnter={() => {
+                if (!isMobile) {
+                  setHoveredIndex(idx);
+                }
+              }}
               onClick={() => {
                 const nextExpanded = isExpanded ? null : idx;
                 setExpandedIndex(nextExpanded);
+                if (isMobile) {
+                  setHoveredIndex(null);
+                }
               }}
               className={`group relative w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer transition-all duration-500 px-6 sm:px-12 lg:px-16 ${
-                (isHovered || isExpanded) ? "bg-[#2563EB]" : "hover:bg-[#2563EB]"
+                (isHovered || isExpanded) ? "bg-[#2563EB]" : "sm:hover:bg-[#2563EB]"
               }`}
             >
               {/* SVG Noise Overlay */}
@@ -244,52 +268,54 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
         );
       })}
 
-      {/* Floating preview element */}
-      <motion.div
-        style={{
-          x,
-          y,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-        animate={{
-          scale: (hoveredIndex !== null && expandedIndex === null) ? 1 : 0.8,
-          opacity: (hoveredIndex !== null && expandedIndex === null) ? 1 : 0,
-          rotate: rotate,
-        }}
-        transition={{
-          scale: { type: "spring", damping: 25, stiffness: 200 },
-          opacity: { duration: 0.25, ease: "easeOut" },
-          rotate: { type: "spring", damping: 35, stiffness: 150 },
-        }}
-        className="pointer-events-none fixed top-0 left-0 w-52 h-[260px] sm:w-[260px] sm:h-[325px] md:w-[310px] md:h-[390px] rounded-xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.25)] bg-zinc-100 border-none z-[9999] origin-center"
-      >
-        {items.map((item, idx) => {
-          const isActive = hoveredIndex === idx;
-          return (
-            <motion.div
-              key={item.label}
-              initial={false}
-              animate={{
-                opacity: isActive ? 1 : 0,
-                scale: isActive ? 1 : 1.05,
-              }}
-              transition={{
-                duration: 0.4,
-                ease: [0.16, 1, 0.3, 1], // Custom ultra-smooth ease
-              }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <img
-                src={item.image}
-                alt={item.label}
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </motion.div>
-          );
-        })}
-      </motion.div>
+      {/* Floating preview element (Desktop only - disabled on mobile) */}
+      {!isMobile && (
+        <motion.div
+          style={{
+            x,
+            y,
+            translateX: "-50%",
+            translateY: "-50%",
+          }}
+          animate={{
+            scale: (hoveredIndex !== null && expandedIndex === null) ? 1 : 0.8,
+            opacity: (hoveredIndex !== null && expandedIndex === null) ? 1 : 0,
+            rotate: rotate,
+          }}
+          transition={{
+            scale: { type: "spring", damping: 25, stiffness: 200 },
+            opacity: { duration: 0.25, ease: "easeOut" },
+            rotate: { type: "spring", damping: 35, stiffness: 150 },
+          }}
+          className="pointer-events-none fixed top-0 left-0 hidden sm:block w-52 h-[260px] sm:w-[260px] sm:h-[325px] md:w-[310px] md:h-[390px] rounded-xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.25)] bg-zinc-100 border-none z-[9999] origin-center"
+        >
+          {items.map((item, idx) => {
+            const isActive = hoveredIndex === idx;
+            return (
+              <motion.div
+                key={item.label}
+                initial={false}
+                animate={{
+                  opacity: isActive ? 1 : 0,
+                  scale: isActive ? 1 : 1.05,
+                }}
+                transition={{
+                  duration: 0.4,
+                  ease: [0.16, 1, 0.3, 1], // Custom ultra-smooth ease
+                }}
+                className="absolute inset-0 w-full h-full"
+              >
+                <img
+                  src={item.image}
+                  alt={item.label}
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      )}
     </div>
   );
 }

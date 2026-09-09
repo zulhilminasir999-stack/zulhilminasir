@@ -92,17 +92,17 @@ export default function ServicesSection() {
     >
       {/* Section Header Row: WHAT I DO + Sentence */}
       <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-8 mb-10 md:mb-16 mt-4 md:mt-8 items-center">
-        <div className="col-span-1 md:col-span-12 lg:col-span-8 text-left">
+        <div className="col-span-1 md:col-span-12 lg:col-span-8 text-center md:text-left">
           <h2 
-            className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-left text-[#2563EB]"
+            className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-left text-[#2563EB]"
           >
-            <WordsStagger className="!text-[#2563EB]">
+            <WordsStagger className="!text-[#2563EB] justify-center md:justify-start">
               WHAT I DO
             </WordsStagger>
           </h2>
         </div>
-        <div className="col-span-1 md:col-span-12 lg:col-span-4 flex items-center">
-          <p className="text-zinc-500 text-[14px] leading-relaxed font-sans max-w-sm ml-auto md:max-w-xl lg:max-w-sm text-left md:text-right">
+        <div className="col-span-1 md:col-span-12 lg:col-span-4 flex items-center justify-center md:justify-end">
+          <p className="text-zinc-500 text-[14px] leading-relaxed font-sans max-w-sm mx-auto md:ml-auto md:mr-0 md:max-w-xl lg:max-w-sm text-center md:text-right">
             My creative spirit comes alive in the digital realm. Discover high-fidelity works engineered with precision, detail, and seamless interactivity.
           </p>
         </div>

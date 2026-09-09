@@ -50,6 +50,7 @@ import { LatestPortfolio } from "@/components/unlumen-ui/latest-portfolio";
 import { CreativeApproach } from "../components/CreativeApproach";
 import ServicesSection from "../components/unlumen-ui/ServicesSection";
 import TypewriterSection from "../components/TypewriterSection";
+import { IdeasInActionHeader } from "../components/IdeasInActionHeader";
 import TechBanner from "../components/TechBanner";
 import { useReveal } from "../context/RevealContext";
 import { useLenis } from "lenis/react";
@@ -69,7 +70,12 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
   const [isXlScreen, setIsXlScreen] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
 
@@ -251,7 +257,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     return saved !== null ? parseInt(saved, 10) : null;
   });
   const isSoftwareSection = activeSection === "integration-section";
-  const isProjectsSection = activeSection === "capabilities-section" || activeSection === "projects-outer-section";
+  const isProjectsSection = activeSection === "capabilities-section" || activeSection === "projects-outer-section" || activeSection === "hover-list-section";
   const isServicesSection = activeSection === "services-section" || activeSection === "work-in-numbers";
 
   // Sections that have a dark or saturated blue background (where navigation should use white text)
@@ -259,13 +265,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     activeSection === "hero-section" ||
     activeSection === "integration-section" ||
     activeSection === "projects-outer-section" ||
+    (isMobile && activeSection === "gallery-section") ||
     activeSection === "contact-section";
 
   // Sections that have a clean white background (where navigation MUST use bold black text during scroll)
   const isLightBackgroundSection = 
     activeSection === "services-section" ||
     activeSection === "work-in-numbers" ||
-    activeSection === "gallery-section" ||
+    (!isMobile && activeSection === "gallery-section") ||
     activeSection === "capabilities-section" ||
     activeSection === "hover-list-section" ||
     activeSection === "creative-approach" ||
@@ -749,25 +756,28 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               <div className="p-0 m-0 text-center sm:text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl w-full">
                 <div className="space-y-4 -translate-y-2.5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
                   <h2 className="font-sans font-medium sm:font-semibold text-[20px] sm:text-2xl md:text-[34px] lg:text-[40px] xl:text-[46px] tracking-tight !text-white leading-[1.28] sm:leading-[1.22] text-center sm:text-left">
-                    {/* Mobile: 4 Lines with unified consistent line height */}
-                    <div className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-medium">
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[21px] leading-[1.2] font-medium">
-                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[21px] leading-[1.2] font-medium">
+                    {/* Mobile: 4 Lines with unified consistent line height and slightly reduced scale size */}
+                    <div 
+                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-medium leading-[23.6px] origin-center scale-[1.1] my-0.5 -translate-y-2.5"
+                      style={{ lineHeight: "23.6px", transform: "scale(1.1) translateY(-10px)", transformOrigin: "center" }}
+                    >
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[21.5px] leading-[inherit] font-medium" style={{ fontSize: "21.5px" }}>
+                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[21.5px] leading-[inherit] font-medium">
                           Crafting SaaS Design
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[27px] leading-[1.2] font-medium">
-                        <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[27px] leading-[1.2] font-medium" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.28em]" }}>
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[27px] leading-[inherit] font-medium">
+                        <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[27px] leading-[inherit] font-medium" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.28em]" }}>
                           & Web Solutions
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[30px] leading-[1.2] font-medium">
-                        <WordsStagger trigger={!isLoading} delay={0.4} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[30px] leading-[1.2] font-medium">
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[30px] leading-[inherit] font-medium">
+                        <WordsStagger trigger={!isLoading} delay={0.4} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[30px] leading-[inherit] font-medium">
                           Augmented by
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[20px] leading-[1.2] font-medium pt-1">
-                        <WordsStagger trigger={!isLoading} delay={0.5} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[20px] leading-[1.2] font-medium">
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[20px] leading-[inherit] font-medium pt-1">
+                        <WordsStagger trigger={!isLoading} delay={0.5} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[20px] leading-[inherit] font-medium">
                           AI-Powered Innovation
                         </WordsStagger>
                       </span>
@@ -791,7 +801,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               </div>
 
               {/* Interactive 3D Stacked Service Deck Slider Container */}
-              <div className="self-center sm:self-start lg:self-end shrink-0 translate-y-3 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
+              <div className="self-center sm:self-start lg:self-end shrink-0 -translate-y-1.5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
                 <ServiceCardSlider />
               </div>
             </div>
@@ -820,15 +830,39 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         <LatestPortfolio />
       </section>
 
-      {/* Unified Sticky-Scroll Section: Typewriter Section & What I Do Portal Reveal */}
-      <motion.div id="gallery-section" ref={galleryRef} style={{ backgroundColor: galleryBg }} className="relative w-full h-[145vh] sm:h-[220vh] z-30">
-        <motion.div style={{ backgroundColor: galleryBg }} className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+      {/* Typewriter & Portal Reveal Section */}
+      {isMobile ? (
+        <div 
+          id="gallery-section" 
+          ref={galleryRef} 
+          className="relative w-full bg-[#2563EB] z-30 pt-0 pb-12 overflow-hidden"
+        >
           <TypewriterSection scrollYProgress={galleryScrollY} />
+        </div>
+      ) : (
+        <motion.div 
+          id="gallery-section" 
+          ref={galleryRef} 
+          style={{ backgroundColor: galleryBg }} 
+          className="relative w-full sm:h-[220vh] z-30"
+        >
+          <motion.div 
+            style={{ backgroundColor: galleryBg }} 
+            className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center"
+          >
+            <TypewriterSection scrollYProgress={galleryScrollY} />
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
 
       {/* 4. Capability Cards Section on white background */}
-      <div id="hover-list-section" className="w-full bg-white relative z-50 pt-2 sm:pt-4 pb-0 -mt-[56vh] sm:-mt-[25vh] lg:-mt-[30vh]">
+      <div id="hover-list-section" className="w-full bg-white relative z-50 pt-16 sm:pt-4 pb-0 mt-0 sm:-mt-[25vh] lg:-mt-[30vh]">
+        <div id="capabilities-section" className="absolute -top-20" />
+        {/* Mobile only: Ideas in Action and subtitle belong to Hover Image List section with white background */}
+        <div className="block sm:hidden w-full px-6 mb-10">
+          <IdeasInActionHeader isMobile={true} />
+        </div>
+
         <HoverImageList 
           items={CAPABILITIES_DATA.map(cap => ({
             id: cap.id,

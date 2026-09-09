@@ -156,8 +156,8 @@ export function LatestPortfolio() {
                   referrerPolicy="no-referrer"
                 />
               )}
-              {/* Elegant dark gradient mask for high readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10 pointer-events-none" />
+              {/* Elegant dark gradient mask: on mobile, restricted strictly to the bottom so top to middle stays original in color */}
+              <div className="absolute bottom-0 left-0 right-0 h-[45%] sm:h-full sm:top-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent sm:from-black/95 sm:via-black/40 sm:to-transparent z-10 pointer-events-none" />
             </div>
 
             {/* Custom Interactive Follower Badge */}
@@ -186,13 +186,13 @@ export function LatestPortfolio() {
             {/* Bottom Info Overlay */}
             <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col -translate-y-12 sm:translate-y-0">
               {/* Category above the main title (with client appended on mobile) */}
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3 drop-shadow-sm">
                 {item.category} <span className="inline sm:hidden opacity-75">- {item.client}</span>
               </p>
 
               <div className="flex flex-row items-center justify-between w-full">
                 {/* Left side: Large Title */}
-                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-sans font-semibold tracking-tighter text-white leading-[1.1] sm:leading-[1] select-none pr-0 sm:pr-4">
+                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-sans font-semibold tracking-tighter text-white leading-[1.1] sm:leading-[1] select-none pr-0 sm:pr-4 drop-shadow-md">
                   {item.title}
                 </h3>
 

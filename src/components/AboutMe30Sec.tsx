@@ -1,4 +1,4 @@
-import { Hand } from "lucide-react";
+import { Hand, ChevronDown, ChevronUp } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 
@@ -130,6 +130,7 @@ const GlobePinIcon = () => (
 export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
   // Theme is synchronized with website
   const isLight = theme === "light";
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div id="about-me-container" className="w-full text-left">
@@ -138,7 +139,7 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="max-w-[850px] mx-auto px-4 sm:px-6 space-y-10"
+        className="max-w-[850px] mx-auto px-0 sm:px-6 space-y-10"
       >
         {/* Bold Headline matching the two-line size of the reference image */}
         <h2 className="font-sans font-bold text-3xl sm:text-4xl md:text-[50px] leading-[1.12] tracking-tight text-zinc-900">
@@ -147,18 +148,55 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
 
         {/* Description paragraphs - justified with last line aligned left */}
         <div className="space-y-6 font-sans text-[17px] sm:text-[19px] leading-[1.65] text-zinc-600 font-normal">
+          {/* Paragraph 1: Always visible */}
           <p style={{ textAlign: "justify", textAlignLast: "left" }}>
             I started my career in visual design, where I learned that great design is more than aesthetics - it's about communication, clarity, and creating memorable user experiences.
           </p>
+
+          {/* Paragraph 2: Always visible */}
           <p style={{ textAlign: "justify", textAlignLast: "left" }}>
             Today, I combine UI/UX design, front-end development, AI-powered workflows, and modern website development using Webflow and WordPress to build intuitive, responsive, and high-performing digital experiences. With over four years of experience in visual design, I bridge the gap between design and development, using AI to accelerate research, content creation, wireframing, prototyping, and design exploration.
           </p>
-          <p style={{ textAlign: "justify", textAlignLast: "left" }}>
-            Whether I'm designing digital products, developing websites with Webflow and WordPress, or integrating AI into the creative process, my goal is to deliver solutions that balance usability, aesthetics, performance, accessibility, and business impact.
-          </p>
-          <p style={{ textAlign: "justify", textAlignLast: "left" }}>
-            For me, great design isn't just about how something looks - it's about how it works, how it feels, and the value it creates for both users and businesses.
-          </p>
+
+          {/* Mobile More Button (at bottom of earlier 2 paragraphs when collapsed) */}
+          {!isExpanded && (
+            <div className="sm:hidden pt-1">
+              <button
+                type="button"
+                id="about-me-more-btn"
+                onClick={() => setIsExpanded(true)}
+                className="inline-flex items-center gap-1.5 text-[#2563EB] font-sans font-medium text-[16px] hover:text-[#1d4ed8] cursor-pointer transition-colors"
+              >
+                <span>More</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
+          {/* Paragraphs 3 & 4: Always visible on desktop (sm:), toggleable on mobile */}
+          <div className={`${isExpanded ? "block" : "hidden"} sm:!block space-y-6 transition-all duration-300`}>
+            <p style={{ textAlign: "justify", textAlignLast: "left" }}>
+              Whether I'm designing digital products, developing websites with Webflow and WordPress, or integrating AI into the creative process, my goal is to deliver solutions that balance usability, aesthetics, performance, accessibility, and business impact.
+            </p>
+            <p style={{ textAlign: "justify", textAlignLast: "left" }}>
+              For me, great design isn't just about how something looks - it's about how it works, how it feels, and the value it creates for both users and businesses.
+            </p>
+
+            {/* Mobile Less Button (at bottom of full texts when expanded) */}
+            {isExpanded && (
+              <div className="sm:hidden pt-1">
+                <button
+                  type="button"
+                  id="about-me-less-btn"
+                  onClick={() => setIsExpanded(false)}
+                  className="inline-flex items-center gap-1.5 text-[#2563EB] font-sans font-medium text-[16px] hover:text-[#1d4ed8] cursor-pointer transition-colors"
+                >
+                  <span>Less</span>
+                  <ChevronUp className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Author details with circular profile image matching the Stephen McShannock style of reference image */}

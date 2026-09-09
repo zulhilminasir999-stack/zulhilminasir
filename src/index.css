@@ -892,7 +892,7 @@ html.lenis, html.lenis body {
   }
 
   body,
-  body *:not(svg):not(path):not(rect):not(circle):not(g):not(line):not(polyline):not(polygon):not(.font-serif):not(.font-signature):not(.font-mono):not([style*="Cormorant"]):not([style*="Madinah"]):not([style*="JetBrains"]) {
+  body *:not(svg):not(path):not(rect):not(circle):not(g):not(line):not(polyline):not(polygon):not(.font-serif):not(.font-signature):not(.font-mono):not([style*="Cormorant"]):not([style*="Madinah"]):not([style*="JetBrains"]):not([style*="Inter"]) {
     font-family: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   }
 
