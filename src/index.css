@@ -1,3 +1,4 @@
+@import "./fonts.css";
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,800,700,600,500,400,300,301,401,501,701,901&display=swap');
 
 @font-face {
@@ -7,6 +8,22 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Monimer Serif';
+  src: url('/fonts/MonimerSerif.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Monimer';
+  src: url('/fonts/MonimerSerif.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 
 @theme {
@@ -14,7 +31,9 @@
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
-  --font-signature: "Madinah Authentic", cursive;
+  --font-signature: "Madinah Authentic", "Pinyon Script", cursive;
+  --font-script: "Pinyon Script", "Italianno", "Alex Brush", cursive;
+  --font-monimer: "Monimer Serif", "Monimer", Georgia, serif;
   --font-satoshi: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
   --color-brand-primary: #8e8e93; /* Premium soft grey */
@@ -73,6 +92,10 @@
 
   --animate-shine: shine 3s infinite linear;
   --animate-pulse-slow: pulse 2s infinite ease-in-out;
+}
+
+.font-monimer {
+  font-family: 'Monimer Serif', 'Monimer', Georgia, serif !important;
 }
 
 /* Hero background responsiveness: zoomed out slightly on mobile with person centered, full-bleed canvas */

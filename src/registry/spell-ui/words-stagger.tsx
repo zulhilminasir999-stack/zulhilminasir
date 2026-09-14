@@ -24,8 +24,8 @@ export function WordsStagger({
   trigger,
   highlightWords,
 }: WordsStaggerProps) {
-  // Split text by words
-  const words = children.split(" ");
+  // Split text by words safely ignoring extra whitespace
+  const words = children.trim().split(/\s+/);
 
   const containerVariants = {
     hidden: {},
@@ -71,6 +71,7 @@ export function WordsStagger({
             <motion.span
               variants={wordVariants}
               className={`inline-block whitespace-nowrap ${customClass}`}
+              style={customClass.includes("font-monimer") ? { fontFamily: "'Monimer Serif', 'Monimer', Georgia, serif" } : undefined}
             >
               {word}
             </motion.span>

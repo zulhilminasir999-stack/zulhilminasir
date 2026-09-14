@@ -255,9 +255,9 @@ export default function TechBanner() {
         {/* Content wrapper on the left side aligned precisely with Featured Projects */}
         <div className="relative z-20 w-full max-w-4xl lg:max-w-5xl px-6 sm:px-12 lg:px-16 pt-8 sm:pt-12 pb-8 sm:pb-12 text-center sm:text-left flex flex-col items-center sm:items-start gap-5 sm:gap-7 md:gap-9 my-auto -translate-y-12 sm:translate-y-0">
           {/* Section Title: SOFTWARE & AI INTEGRATION */}
-          <div className="w-full text-center sm:text-left -translate-y-4 sm:-translate-y-0">
+          <div className="w-full text-center sm:text-left -translate-y-7 sm:-translate-y-0">
             <h2 
-              className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[1.05] sm:leading-[0.85] select-none !text-white text-center sm:text-left"
+              className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[1.05] sm:leading-[0.85] select-none !text-white text-center sm:text-left -translate-y-2 sm:translate-y-0"
               style={{ color: "#ffffff" }}
             >
               <WordsStagger className="text-inherit">
@@ -290,7 +290,7 @@ export default function TechBanner() {
           </div>
 
           {/* Copy of Logo grid slide animation aligned left */}
-          <div className="w-full relative mt-1 sm:mt-2 text-left translate-y-16 sm:translate-y-0">
+          <div className="w-full relative mt-1 sm:mt-2 text-left translate-y-24 sm:translate-y-0">
             <div 
               ref={marqueeContainerRef}
               className="relative w-full flex items-center overflow-hidden py-3 sm:py-4 cursor-grab active:cursor-grabbing touch-pan-y"
@@ -340,11 +340,7 @@ export default function TechBanner() {
                           } group ${customSpacingClass}`}
                           title={logo.name}
                         >
-                          <div className={`relative w-full h-full flex items-center justify-center transition-all duration-500 ${
-                            activeLogo === logo.name 
-                              ? "opacity-100" 
-                              : "opacity-85 group-hover:opacity-100"
-                          }`}>
+                          <div className="relative w-full h-full flex items-center justify-center transition-all duration-500 opacity-100">
                             <img
                               src={logo.path}
                               alt={logo.name}

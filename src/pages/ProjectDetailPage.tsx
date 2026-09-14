@@ -679,13 +679,13 @@ export default function ProjectDetailPage() {
 
            {/* Image 3 (Previously Image 2) */}
            <div 
-             className={`relative sm:sticky sm:top-0 h-auto sm:h-screen w-full ${project?.id === "ck-lighting" ? "z-30" : "z-20"} shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900 cursor-pointer sm:cursor-default`}
-             onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg")}
+             className={`relative w-full ${project?.id === "ck-lighting" ? "sm:sticky sm:top-0 h-auto sm:h-screen z-30 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900" : (project?.id === "komorebi-editorial") ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900"} cursor-pointer sm:cursor-default`}
+             onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply8.jpg" : "/Images/TGPW Visual Guideline.jpg")}
            >
              <img 
-               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
-               alt="TGPW Visual Guideline"
-               className={`w-full h-auto sm:h-full object-contain sm:object-cover block`} 
+               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
+               alt={project?.id === "komorebi-editorial" ? "Triply Design" : "TGPW Visual Guideline"}
+               className={`w-full h-auto ${project?.id === "komorebi-editorial" ? "object-contain" : "sm:h-full object-contain sm:object-cover"} block`} 
                referrerPolicy="no-referrer"
              />
            </div>

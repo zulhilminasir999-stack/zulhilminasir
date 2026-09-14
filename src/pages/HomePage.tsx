@@ -755,44 +755,39 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-6 md:pt-0 pointer-events-auto">
               <div className="p-0 m-0 text-center sm:text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl w-full">
                 <div className="space-y-4 -translate-y-2.5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
-                  <h2 className="font-sans font-medium sm:font-semibold text-[20px] sm:text-2xl md:text-[34px] lg:text-[40px] xl:text-[46px] tracking-tight !text-white leading-[1.28] sm:leading-[1.22] text-center sm:text-left">
-                    {/* Mobile: 4 Lines with unified consistent line height and slightly reduced scale size */}
+                  <h2 className="font-sans font-medium sm:font-semibold text-[19px] sm:text-2xl md:text-[32px] lg:text-[38px] xl:text-[44px] tracking-tight !text-white leading-[1.25] sm:leading-[1.2] text-center sm:text-left">
+                    {/* Mobile: 3 Lines with Satoshi font and Semi-Bold */}
                     <div 
-                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-medium leading-[23.6px] origin-center scale-[1.1] my-0.5 -translate-y-2.5"
-                      style={{ lineHeight: "23.6px", transform: "scale(1.1) translateY(-10px)", transformOrigin: "center" }}
+                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-2.5 text-[23px]"
+                      style={{ fontSize: "23px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-4px)", transformOrigin: "center" }}
                     >
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[21.5px] leading-[inherit] font-medium" style={{ fontSize: "21.5px" }}>
-                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[21.5px] leading-[inherit] font-medium">
-                          Crafting SaaS Design
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[23px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[23px] leading-[1.25] font-semibold">
+                          Agent Experience (AX)
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[27px] leading-[inherit] font-medium">
-                        <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[27px] leading-[inherit] font-medium" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.28em]" }}>
-                          & Web Solutions
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[23px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.32} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[23px] leading-[1.25] font-semibold">
+                          Designer for Humans, AI
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[30px] leading-[inherit] font-medium">
-                        <WordsStagger trigger={!isLoading} delay={0.4} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[30px] leading-[inherit] font-medium">
-                          Augmented by
-                        </WordsStagger>
-                      </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[20px] leading-[inherit] font-medium pt-1">
-                        <WordsStagger trigger={!isLoading} delay={0.5} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[20px] leading-[inherit] font-medium">
-                          AI-Powered Innovation
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[23px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.44} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[23px] leading-[1.25] font-semibold">
+                          agents & Intelligent Systems
                         </WordsStagger>
                       </span>
                     </div>
 
-                    {/* Desktop: 2 Lines */}
-                    <div className="hidden sm:block">
+                    {/* Desktop: 2 Lines with Satoshi font and Semi-Bold */}
+                    <div className="hidden sm:block font-satoshi font-semibold" style={{ fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600 }}>
                       <span className="block whitespace-nowrap overflow-visible">
-                        <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap" highlightWords={{ "Solutions": "font-serif italic font-normal text-[1.28em]" }}>
-                          Crafting SaaS Design & Web Solutions
+                        <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap font-semibold">
+                          Agent Experience (AX) Designer for
                         </WordsStagger>
                       </span>
                       <span className="block whitespace-nowrap overflow-visible mt-1 sm:mt-1.5 md:mt-2">
-                        <WordsStagger trigger={!isLoading} delay={0.45} className="!text-white flex-nowrap whitespace-nowrap">
-                          Augmented by AI-Powered Innovation
+                        <WordsStagger trigger={!isLoading} delay={0.45} className="!text-white flex-nowrap whitespace-nowrap font-semibold">
+                          Humans, AI agents & Intelligent Systems
                         </WordsStagger>
                       </span>
                     </div>

@@ -90,12 +90,12 @@ export function CreativeApproach() {
   return (
     <section id="creative-approach" className="w-full bg-white relative z-40 pt-[220px] md:pt-[32vh] pb-16">
       <div className="w-full px-6 sm:px-12 lg:px-16 pt-10 md:pt-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 pt-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 lg:gap-16 pt-6 md:pt-12">
           
           {/* Left Column: Sticky Title & Image */}
-          <div className="md:col-span-5 relative h-full">
-            <div className="sticky top-[50vh] -translate-y-1/2 flex flex-col items-center md:items-start text-center md:text-left z-10 space-y-8 lg:space-y-12">
-              <h2 className="font-sans font-bold text-5xl md:text-[50px] lg:text-[70px] tracking-tighter text-[#2563EB] uppercase leading-[0.9] select-none text-center md:text-left bg-white/80 md:bg-transparent backdrop-blur-md md:backdrop-blur-none rounded-2xl md:rounded-none py-4 md:py-0">
+          <div className="md:col-span-5 relative h-auto md:h-full pb-0">
+            <div className="static md:sticky md:top-[50vh] md:-translate-y-1/2 flex flex-col items-center md:items-start text-center md:text-left z-10 space-y-4 md:space-y-8 lg:space-y-12">
+              <h2 className="font-sans font-bold text-5xl md:text-[50px] lg:text-[70px] tracking-tighter text-[#2563EB] uppercase leading-[0.9] select-none text-center md:text-left bg-white/80 md:bg-transparent backdrop-blur-md md:backdrop-blur-none rounded-2xl md:rounded-none py-2 md:py-0">
                 <WordsStagger className="text-[#2563EB]">
                   WORKFLOW
                 </WordsStagger>
@@ -133,7 +133,7 @@ export function CreativeApproach() {
 
           {/* Right Column: Scroll Text Fade Items */}
           <div className="md:col-span-7 md:pl-12 lg:pl-20 xl:pl-24">
-            <div className="flex flex-col items-center md:items-start gap-[200px] pt-[30vh] pb-[50vh]">
+            <div className="flex flex-col items-center md:items-start gap-[120px] md:gap-[200px] pt-4 md:pt-[30vh] pb-[30vh] md:pb-[50vh]">
               {steps.map((step, idx) => (
                 <div 
                   key={idx}

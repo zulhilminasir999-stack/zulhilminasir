@@ -156,7 +156,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
         </div>
 
         {/* 1. Typewriter content directly inside the single gallery-section container */}
-        <div className="relative pt-8 pb-4 flex flex-col justify-center z-10 px-6 select-none w-full">
+        <div className="relative pt-16 pb-14 flex flex-col justify-center z-10 px-6 select-none w-full">
           {/* Top Headline: Typewriter sentence aligned like photo with stable height */}
           <h2 
             className={`font-sans font-medium text-[19px] text-white tracking-tight leading-[1.3] transition-opacity duration-1000 min-h-[130px] flex flex-col justify-start text-left w-full mt-0 ${
