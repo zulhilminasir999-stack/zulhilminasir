@@ -290,10 +290,10 @@ export default function TechBanner() {
           </div>
 
           {/* Copy of Logo grid slide animation aligned left */}
-          <div className="w-full relative mt-1 sm:mt-2 text-left translate-y-24 sm:translate-y-0">
+          <div className="w-full relative mt-3 sm:mt-5 text-left translate-y-32 sm:translate-y-6 md:translate-y-8">
             <div 
               ref={marqueeContainerRef}
-              className="relative w-full flex items-center overflow-hidden py-3 sm:py-4 cursor-grab active:cursor-grabbing touch-pan-y"
+              className="relative w-full flex items-center overflow-hidden py-3 sm:py-4 cursor-grab active:cursor-grabbing touch-pan-y translate-y-1 sm:translate-y-2"
               onMouseEnter={() => { isHoveredRef.current = true; }}
               onMouseLeave={() => { isHoveredRef.current = false; }}
               onPointerDown={handlePointerDown}

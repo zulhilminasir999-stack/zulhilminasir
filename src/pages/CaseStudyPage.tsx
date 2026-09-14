@@ -689,10 +689,9 @@ export default function CaseStudyPage() {
            </div>
         </div>
 
-        {/* Section 7: The Solution & Key Results (After Sticky Images) */}
+        {/* Section 7: The Solution */}
         <div className="w-full bg-white text-zinc-900 z-50 relative py-8 md:py-10">
-          <div className="w-full px-6 sm:px-12 lg:px-16 space-y-8 md:space-y-10">
-            {/* The Solution */}
+          <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
               <div className="md:col-span-4">
                 <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-zinc-900">The Solution</h3>
@@ -703,10 +702,29 @@ export default function CaseStudyPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Key Results */}
-            {capability.results && capability.results.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 pt-8 md:pt-10 border-t border-zinc-200">
+        {/* Added Full-width Image Section (Between Solution & Key Results) */}
+        {capability?.id === "komorebi-editorial" && (
+          <div 
+            className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
+            onClick={() => handleMobileImageClick("/Triply/Triply9.jpg")}
+          >
+            <img 
+              src="/Triply/Triply9.jpg" 
+              alt="Triply Solution Showcase"
+              className="w-full h-auto block select-none" 
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
+
+        {/* Key Results */}
+        {capability.results && capability.results.length > 0 && (
+          <div className="w-full bg-white text-zinc-900 z-50 relative py-8 md:py-10">
+            <div className="w-full px-6 sm:px-12 lg:px-16">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
                 <div className="md:col-span-4">
                    <h3 className="text-2xl sm:text-3xl font-medium tracking-tight text-zinc-900">Key Results</h3>
                 </div>
@@ -723,9 +741,9 @@ export default function CaseStudyPage() {
                   </ul>
                 </div>
               </div>
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Related Capabilities block (Below Sticky Images) */}
         <div id="capabilities-section" className="w-full bg-white relative z-50 py-8 md:py-10 px-6 sm:px-12 lg:px-16">

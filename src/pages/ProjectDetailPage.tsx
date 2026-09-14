@@ -691,10 +691,9 @@ export default function ProjectDetailPage() {
            </div>
         </div>
 
-        {/* Section 7: The Solution & Key Results (After Sticky Images) */}
+        {/* Section 7: The Solution */}
         <div className="w-full bg-white text-zinc-900 z-50 relative py-16 md:py-24 lg:py-32">
-          <div className="w-full px-6 sm:px-12 lg:px-16 space-y-16 md:space-y-24">
-            {/* The Solution */}
+          <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
               <div className="md:col-span-4">
                 <h3 className="text-2xl font-medium tracking-tight text-zinc-900">The Solution</h3>
@@ -705,10 +704,27 @@ export default function ProjectDetailPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Key Results */}
-            {project.results && project.results.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 pt-12 md:pt-16 lg:pt-20">
+        {/* Added Full-width Image Section (Between Solution & Key Results) */}
+        <div 
+          className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
+          onClick={() => handleMobileImageClick((project?.id === "komorebi-editorial") ? "/Triply/Triply9.jpg" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : (project?.imageUrl || "")))}
+        >
+          <img 
+            src={(project?.id === "komorebi-editorial") ? "/Triply/Triply9.jpg" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : (project?.imageUrl || ""))} 
+            alt="Solution Showcase"
+            className="w-full h-auto block select-none" 
+            referrerPolicy="no-referrer"
+          />
+        </div>
+
+        {/* Section: Key Results */}
+        {project.results && project.results.length > 0 && (
+          <div className="w-full bg-white text-zinc-900 z-50 relative py-16 md:py-24 lg:py-32">
+            <div className="w-full px-6 sm:px-12 lg:px-16">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
                 <div className="md:col-span-4">
                   <h3 className="text-2xl font-medium tracking-tight text-zinc-900">Key Results</h3>
                 </div>
@@ -725,9 +741,9 @@ export default function ProjectDetailPage() {
                   </ul>
                 </div>
               </div>
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Section 8: Final Full-width Image */}
         <div 
