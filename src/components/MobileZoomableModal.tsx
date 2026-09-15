@@ -1,6 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { X, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useLenis } from "lenis/react";
 
 interface MobileZoomableModalProps {
   isOpen: boolean;
@@ -15,6 +16,8 @@ export const MobileZoomableModal: React.FC<MobileZoomableModalProps> = ({
 }) => {
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   // Refs for tracking touch gestures
   const touchStartDistRef = useRef<number | null>(null);
@@ -22,6 +25,31 @@ export const MobileZoomableModal: React.FC<MobileZoomableModalProps> = ({
   const touchStartPosRef = useRef<{ x: number; y: number } | null>(null);
   const startPositionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const lastTapRef = useRef<number>(0);
+
+  // Lock behind-screen scroll while floating image modal is open
+  useEffect(() => {
+    if (isOpen) {
+      lenis?.stop();
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.touchAction = "none";
+    } else {
+      lenis?.start();
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.touchAction = "";
+    }
+
+    return () => {
+      lenis?.start();
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.touchAction = "";
+    };
+  }, [isOpen, lenis]);
 
   // Reset zoom and pan on open or close
   const handleReset = () => {
@@ -36,7 +64,7 @@ export const MobileZoomableModal: React.FC<MobileZoomableModalProps> = ({
 
   const handleZoomIn = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setScale((prev) => Math.min(prev + 0.5, 4));
+    setScale((prev) => Math.min(prev + 0.5, 4.5));
   };
 
   const handleZoomOut = (e: React.MouseEvent) => {
@@ -51,78 +79,93 @@ export const MobileZoomableModal: React.FC<MobileZoomableModalProps> = ({
   };
 
   // Helper to get distance between 2 touches
-  const getDistance = (touches: React.TouchList) => {
+  const getDistance = (touches: TouchList | React.TouchList) => {
     const dx = touches[0].clientX - touches[1].clientX;
     const dy = touches[0].clientY - touches[1].clientY;
     return Math.sqrt(dx * dx + dy * dy);
   };
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (e.touches.length === 2) {
-      // Pinch gesture
-      touchStartDistRef.current = getDistance(e.touches);
-      startScaleRef.current = scale;
-    } else if (e.touches.length === 1) {
-      // Double-tap check
-      const now = Date.now();
-      if (now - lastTapRef.current < 300) {
-        // Double tap toggles zoom
-        if (scale > 1.2) {
+  // Attach non-passive touch listener to guarantee smooth pinch zoom without page scroll
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || !isOpen) return;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        // Pinch gesture start
+        touchStartDistRef.current = getDistance(e.touches);
+        startScaleRef.current = scale;
+      } else if (e.touches.length === 1) {
+        // Double-tap check
+        const now = Date.now();
+        if (now - lastTapRef.current < 300) {
+          if (scale > 1.2) {
+            setScale(1);
+            setPosition({ x: 0, y: 0 });
+          } else {
+            setScale(2.5);
+          }
+          lastTapRef.current = 0;
+          return;
+        }
+        lastTapRef.current = now;
+
+        touchStartPosRef.current = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+        };
+        startPositionRef.current = { ...position };
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      // Prevent browser default zoom or background viewport movement
+      e.preventDefault();
+
+      if (e.touches.length === 2 && touchStartDistRef.current !== null) {
+        // Two-finger pinch scaling
+        const currentDist = getDistance(e.touches);
+        const factor = currentDist / touchStartDistRef.current;
+        const newScale = Math.min(Math.max(startScaleRef.current * factor, 0.8), 5);
+        setScale(newScale);
+      } else if (e.touches.length === 1 && touchStartPosRef.current !== null && scale > 1) {
+        // One-finger pan when zoomed in
+        const dx = e.touches[0].clientX - touchStartPosRef.current.x;
+        const dy = e.touches[0].clientY - touchStartPosRef.current.y;
+        
+        const maxPan = (scale - 1) * 180;
+        const newX = Math.max(Math.min(startPositionRef.current.x + dx, maxPan), -maxPan);
+        const newY = Math.max(Math.min(startPositionRef.current.y + dy, maxPan), -maxPan);
+        
+        setPosition({ x: newX, y: newY });
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (e.touches.length < 2) {
+        touchStartDistRef.current = null;
+      }
+      if (e.touches.length === 0) {
+        touchStartPosRef.current = null;
+        if (scale < 1) {
           setScale(1);
           setPosition({ x: 0, y: 0 });
-        } else {
-          setScale(2.5);
         }
-        lastTapRef.current = 0;
-        return;
       }
-      lastTapRef.current = now;
+    };
 
-      // Pan gesture
-      touchStartPosRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-      startPositionRef.current = { ...position };
-    }
-  };
+    el.addEventListener("touchstart", onTouchStart, { passive: false });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: false });
+    el.addEventListener("touchcancel", onTouchEnd, { passive: false });
 
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (e.touches.length === 2 && touchStartDistRef.current !== null) {
-      // Pinch zoom
-      e.preventDefault();
-      const currentDist = getDistance(e.touches);
-      const factor = currentDist / touchStartDistRef.current;
-      const newScale = Math.min(Math.max(startScaleRef.current * factor, 1), 4.5);
-      setScale(newScale);
-    } else if (e.touches.length === 1 && touchStartPosRef.current !== null && scale > 1) {
-      // Pan when zoomed in
-      e.preventDefault();
-      const dx = e.touches[0].clientX - touchStartPosRef.current.x;
-      const dy = e.touches[0].clientY - touchStartPosRef.current.y;
-      
-      // Limit panning bounds proportional to scale
-      const maxPan = (scale - 1) * 150;
-      const newX = Math.max(Math.min(startPositionRef.current.x + dx, maxPan), -maxPan);
-      const newY = Math.max(Math.min(startPositionRef.current.y + dy, maxPan), -maxPan);
-      
-      setPosition({ x: newX, y: newY });
-    }
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (e.touches.length < 2) {
-      touchStartDistRef.current = null;
-    }
-    if (e.touches.length === 0) {
-      touchStartPosRef.current = null;
-      // If scaled down below 1, snap back to 1
-      if (scale < 1) {
-        setScale(1);
-        setPosition({ x: 0, y: 0 });
-      }
-    }
-  };
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [isOpen, scale, position]);
 
   return (
     <AnimatePresence>
@@ -133,6 +176,7 @@ export const MobileZoomableModal: React.FC<MobileZoomableModalProps> = ({
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 p-4 sm:hidden backdrop-blur-md select-none touch-none"
           onClick={handleClose}
+          onTouchMove={(e) => e.preventDefault()}
         >
           {/* 80% screen dimension container */}
           <motion.div
@@ -190,10 +234,8 @@ export const MobileZoomableModal: React.FC<MobileZoomableModalProps> = ({
 
             {/* Floating Image Window with pinch and double-tap zoom */}
             <div
-              className="w-full h-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center bg-black/40 border border-white/10 relative touch-none"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
+              ref={containerRef}
+              className="w-full h-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center bg-white/20 backdrop-blur-2xl border border-white/30 relative touch-none"
             >
               <img
                 src={imageSrc}
@@ -207,11 +249,6 @@ export const MobileZoomableModal: React.FC<MobileZoomableModalProps> = ({
                 referrerPolicy="no-referrer"
                 draggable={false}
               />
-
-              {/* Finger pinch hint badge */}
-              <div className="absolute bottom-2.5 inset-x-0 mx-auto w-fit px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-[10px] font-mono tracking-wide text-white/75 pointer-events-none">
-                {scale > 1.05 ? `${Math.round(scale * 100)}% • Drag to pan` : "Pinch or double-tap to zoom"}
-              </div>
             </div>
           </motion.div>
         </motion.div>
