@@ -271,12 +271,12 @@ export default function TechBanner() {
           </div>
 
           {/* Scroll-Reveal Bold Paragraph aligned left */}
-          <div className="w-full max-w-2xl sm:max-w-3xl text-center sm:text-left mt-2 sm:mt-0 translate-y-10 sm:translate-y-0">
+          <div className="w-full max-w-2xl sm:max-w-3xl text-center sm:text-left mt-3 sm:mt-2 translate-y-12 sm:translate-y-2 md:translate-y-3">
             {/* 
               Desktop: Free-flowing single inline block 
               Mobile: Restricted to ~270px width (or carefully measured) so it perfectly wraps into 4 exact lines when centered 
             */}
-            <p className="font-sans font-medium text-[20px] sm:text-2xl md:text-3xl lg:text-4xl leading-[1.4] sm:leading-snug tracking-tight text-white/20 text-center sm:text-left inline-block max-w-[305px] sm:max-w-none">
+            <p className="font-sans font-medium text-[20px] sm:text-2xl md:text-3xl lg:text-4xl leading-[1.4] sm:leading-snug tracking-tight text-white/20 text-center sm:text-left inline-block max-w-[305px] sm:max-w-none translate-y-1 sm:translate-y-1.5">
               {words.map(({ word, index }) => (
                 <ScrollWord 
                   key={index} 

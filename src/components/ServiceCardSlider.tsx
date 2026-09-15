@@ -181,19 +181,19 @@ export default function ServiceCardSlider({ onSelectService, className }: Servic
         {/* 3D Stack Deck Tab at Top (Furthest layer) */}
         <div 
           id="service-card-deck-tab-far"
-          className="absolute -top-3 left-1/2 -translate-x-1/2 w-[88%] h-4 rounded-t-xl bg-zinc-800/40 border-t border-x border-white/10 backdrop-blur-sm pointer-events-none z-0" 
+          className="absolute -top-3 left-1/2 -translate-x-1/2 w-[88%] h-4 rounded-t-xl bg-white/10 border-t border-x border-white/20 backdrop-blur-sm pointer-events-none z-0" 
         />
 
         {/* 3D Stack Deck Tab at Top (Middle layer) */}
         <div 
           id="service-card-deck-tab-mid"
-          className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-[94%] h-4 rounded-t-xl bg-zinc-800/60 border-t border-x border-white/15 backdrop-blur-md pointer-events-none z-10" 
+          className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-[94%] h-4 rounded-t-xl bg-white/15 border-t border-x border-white/25 backdrop-blur-md pointer-events-none z-10" 
         />
 
         {/* Permanent Underlying Card Deck Backing - clean frame without text bleed-through */}
         <div 
           id="service-card-underlying-layer"
-          className="absolute inset-0 z-10 w-full h-full bg-[#18181b]/70 border border-white/10 rounded-xl sm:rounded-2xl pointer-events-none origin-bottom scale-[0.96] -translate-y-1.5 opacity-90 transition-all duration-200 backdrop-blur-lg"
+          className="absolute inset-0 z-10 w-full h-full bg-white/15 border border-white/20 rounded-xl sm:rounded-2xl pointer-events-none origin-bottom scale-[0.96] -translate-y-1.5 opacity-90 transition-all duration-200 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.12)]"
         />
 
         {/* Active Front Draggable Stack Card */}
@@ -214,12 +214,12 @@ export default function ServiceCardSlider({ onSelectService, className }: Servic
             whileDrag={{ scale: 0.98, cursor: "grabbing" }}
             whileTap={{ cursor: "grabbing" }}
             onClick={handleCardClick}
-            className="relative z-20 w-full bg-[#18181b]/75 hover:bg-[#1c1c20]/80 backdrop-blur-xl border border-white/15 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 md:p-3 cursor-grab active:cursor-grabbing transition-colors duration-200 group touch-none"
+            className="relative z-20 w-full bg-white/20 hover:bg-white/25 backdrop-blur-2xl border border-white/30 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 md:p-3 cursor-grab active:cursor-grabbing transition-colors duration-200 group touch-none shadow-[0_12px_40px_rgba(0,0,0,0.15)]"
           >
             <div id="service-card-main-content" className="flex items-center gap-3 sm:gap-3.5">
               
               {/* Left Side: Thumbnail Image */}
-              <div id="service-card-thumbnail" className="relative w-[90px] h-[90px] sm:w-[105px] sm:h-[105px] md:w-[115px] md:h-[105px] rounded-lg sm:rounded-xl overflow-hidden shrink-0 bg-zinc-800 border border-white/10 shadow-inner">
+              <div id="service-card-thumbnail" className="relative w-[90px] h-[90px] sm:w-[105px] sm:h-[105px] md:w-[115px] md:h-[105px] rounded-lg sm:rounded-xl overflow-hidden shrink-0 bg-white/10 border border-white/20 shadow-inner">
                 <img
                   id="service-card-image"
                   src={currentItem.image}
@@ -230,7 +230,7 @@ export default function ServiceCardSlider({ onSelectService, className }: Servic
                     (e.target as HTMLElement).style.display = "none";
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
               </div>
 
               {/* Right Side: Copy & Read CTA */}
@@ -238,7 +238,7 @@ export default function ServiceCardSlider({ onSelectService, className }: Servic
                 
                 {/* Top Subtitle Hook */}
                 <div id="service-card-header-group" className="space-y-1">
-                  <p id="service-card-subtitle" className="text-[11px] sm:text-[11.5px] text-zinc-400 font-sans line-clamp-2 leading-snug font-normal tracking-tight">
+                  <p id="service-card-subtitle" className="text-[11px] sm:text-[11.5px] text-white/80 font-sans line-clamp-2 leading-snug font-normal tracking-tight">
                     {currentItem.subtitle}
                   </p>
                   

@@ -430,7 +430,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
                 isMobile 
                   ? (isMobileMenuOpen 
-                      ? "bg-white border-b border-zinc-200/80 h-auto shadow-sm" 
+                      ? "bg-white border-b-0 h-auto shadow-none" 
                       : "bg-white border-b border-zinc-200/80 h-14 shadow-sm")
                   : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
               }`}
@@ -638,7 +638,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="md:hidden m-0 mt-0 border-b border-white/50 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-white shadow-xl overflow-hidden"
+                    className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-white shadow-xl overflow-hidden"
                   >
                     <a href="#services-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Services</a>
                     <a href="#integration-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Software & AI Solutions</a>
