@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 export interface ServiceCardItem {
@@ -80,13 +80,16 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
 interface ServiceCardSliderProps {
   onSelectService?: (serviceId: string) => void;
   className?: string;
+  trigger?: boolean;
+  delay?: number;
 }
 
-export default function ServiceCardSlider({ onSelectService, className }: ServiceCardSliderProps) {
+export default function ServiceCardSlider({ onSelectService, className, trigger, delay = 0.5 }: ServiceCardSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const hasRevealedRef = useRef(false);
 
   const total = SERVICES_SLIDES.length;
 
@@ -100,15 +103,32 @@ export default function ServiceCardSlider({ onSelectService, className }: Servic
     setCurrentIndex((prev) => (prev - 1 + total) % total);
   };
 
-  // Auto-advance when not interacting
+  // Auto-advance one by one: waits until the card is fully revealed + 3 seconds before first change
   useEffect(() => {
+    if (trigger === false) return;
     if (isHovered || isDragging) return;
-    const timer = setInterval(() => {
+
+    // If it hasn't revealed yet, calculate the exact duration of the entrance animation + 3000ms
+    const revealAnimationDurationMs = (delay || 0) * 1000 + 850;
+    const initialWait = hasRevealedRef.current ? 3000 : (revealAnimationDurationMs + 3000);
+
+    let intervalTimer: NodeJS.Timeout | null = null;
+    const initialTimeout = setTimeout(() => {
+      hasRevealedRef.current = true;
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % total);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [isHovered, isDragging, total]);
+
+      intervalTimer = setInterval(() => {
+        setDirection(1);
+        setCurrentIndex((prev) => (prev + 1) % total);
+      }, 3000);
+    }, initialWait);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      if (intervalTimer) clearInterval(intervalTimer);
+    };
+  }, [trigger, isHovered, isDragging, total, delay]);
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: { offset: { x: number; y: number }; velocity: { x: number; y: number } }) => {
     setIsDragging(false);
@@ -169,10 +189,32 @@ export default function ServiceCardSlider({ onSelectService, className }: Servic
     }),
   };
 
+  // Entrance reveal animation matching WordsStagger ("Agent Experience...")
+  const revealVariants = {
+    hidden: {
+      opacity: 0,
+      y: 18,
+      filter: "blur(8px)",
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration: 0.85,
+        delay: delay,
+        ease: [0.215, 0.61, 0.355, 1], // Smooth cubic-bezier reveal curve
+      },
+    },
+  };
+
   return (
-    <div 
+    <motion.div 
       id="service-card-slider-container"
       className={className || "relative z-40 pointer-events-auto"}
+      variants={revealVariants}
+      initial="hidden"
+      animate={trigger !== undefined ? (trigger ? "visible" : "hidden") : "visible"}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -264,6 +306,6 @@ export default function ServiceCardSlider({ onSelectService, className }: Servic
         </AnimatePresence>
 
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -60,6 +60,24 @@ interface HomePageProps {
   setIsLoading: (val: boolean) => void;
 }
 
+const headerItemReveal = {
+  hidden: {
+    opacity: 0,
+    y: 16,
+    filter: "blur(6px)",
+  },
+  visible: (customDelay: number) => ({
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.8,
+      delay: customDelay,
+      ease: [0.215, 0.61, 0.355, 1],
+    },
+  }),
+};
+
 export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   const navigate = useNavigate();
   const { hash } = useLocation();
@@ -463,8 +481,24 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               !isHeaderScrolled ? "cursor-default select-none pointer-events-none" : "hover:opacity-85 cursor-pointer"
                             }`}
                           >
-                            <span className="hidden lg:inline">Zulhilmi Nasir</span>
-                            <span className="inline lg:hidden">Zulhilmi</span>
+                            <motion.span 
+                              custom={0.15}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="hidden lg:inline-block"
+                            >
+                              Zulhilmi Nasir
+                            </motion.span>
+                            <motion.span 
+                              custom={0.15}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="inline-block lg:hidden"
+                            >
+                              Zulhilmi
+                            </motion.span>
                           </motion.a>
                         </div>
 
@@ -475,20 +509,68 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1.5 md:space-x-1.5 lg:space-x-2.5 font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
                         >
                           <a href="#services-section" onClick={(e) => handleNavClick(e, '#services-section')} className={`nav-menu-btn ${isServicesSection ? "active" : ""}`}>
-                            <span className="text-[15px] font-medium">Services</span>
+                            <motion.span 
+                              custom={0.22}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="inline-block text-[15px] font-medium"
+                            >
+                              Services
+                            </motion.span>
                           </a>
                           <a href="#integration-section" onClick={(e) => handleNavClick(e, '#integration-section')} className={`nav-menu-btn ${activeSection === "integration-section" ? "active" : ""}`}>
-                            <span className="hidden lg:inline text-[15px] font-medium">Software & AI Solution</span>
-                            <span className="inline lg:hidden text-[15px] font-medium">Software</span>
+                            <motion.span 
+                              custom={0.30}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="hidden lg:inline-block text-[15px] font-medium"
+                            >
+                              Software & AI Solution
+                            </motion.span>
+                            <motion.span 
+                              custom={0.30}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="inline-block lg:hidden text-[15px] font-medium"
+                            >
+                              Software
+                            </motion.span>
                           </a>
                           <a href="#capabilities-section" onClick={(e) => handleNavClick(e, '#capabilities-section')} className={`nav-menu-btn ${isProjectsSection ? "active" : ""}`}>
-                            <span className="text-[15px] font-medium">Projects</span>
+                            <motion.span 
+                              custom={0.38}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="inline-block text-[15px] font-medium"
+                            >
+                              Projects
+                            </motion.span>
                           </a>
                           <a href="#about-section" onClick={(e) => handleNavClick(e, '#about-section')} className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""}`}>
-                            <span className="text-[15px] font-medium">About</span>
+                            <motion.span 
+                              custom={0.46}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="inline-block text-[15px] font-medium"
+                            >
+                              About
+                            </motion.span>
                           </a>
                           <a href="#career-section" onClick={(e) => handleNavClick(e, '#career-section')} className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""}`}>
-                            <span className="text-[15px] font-medium">Career</span>
+                            <motion.span 
+                              custom={0.54}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="inline-block text-[15px] font-medium"
+                            >
+                              Career
+                            </motion.span>
                           </a>
                         </motion.nav>
 
@@ -509,7 +591,15 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               {/* Scanning grid sweep light */}
                               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
                             </div>
-                            <span className="relative z-10 text-[15px] font-medium">Get In Touch</span>
+                            <motion.span 
+                              custom={0.62}
+                              variants={headerItemReveal}
+                              initial="hidden"
+                              animate={!isLoading ? "visible" : "hidden"}
+                              className="relative z-10 inline-block text-[15px] font-medium"
+                            >
+                              Get In Touch
+                            </motion.span>
                           </motion.a>
                         </div>
                       </>
@@ -598,7 +688,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   // 3. MOBILE VIEW: Standard simple 2-column sticky menu with brand on left and hamburger on right
                   <>
                     <div className="flex items-center">
-                      <a
+                      <motion.a
+                        custom={0.15}
+                        variants={headerItemReveal}
+                        initial="hidden"
+                        animate={!isLoading ? "visible" : "hidden"}
                         href="#hero-section"
                         onClick={(e) => {
                           e.preventDefault();
@@ -611,10 +705,16 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                         }`}
                       >
                         Zulhilmi Nasir
-                      </a>
+                      </motion.a>
                     </div>
 
-                    <div className="flex items-center space-x-2">
+                    <motion.div 
+                      custom={0.25}
+                      variants={headerItemReveal}
+                      initial="hidden"
+                      animate={!isLoading ? "visible" : "hidden"}
+                      className="flex items-center space-x-2"
+                    >
                       <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         className="p-1 px-2 -mr-3 translate-x-1 pl-2 text-[#2563EB] hover:text-[#3B82F6] active:text-[#3B82F6] transition-colors cursor-pointer"
@@ -626,7 +726,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           <Menu className="h-5 w-5" />
                         )}
                       </button>
-                    </div>
+                    </motion.div>
                   </>
                 )}
               </div>
@@ -758,22 +858,22 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   <h2 className="font-sans font-medium sm:font-semibold text-[19px] sm:text-2xl md:text-[32px] lg:text-[38px] xl:text-[44px] tracking-tight !text-white leading-[1.25] sm:leading-[1.2] text-center sm:text-left">
                     {/* Mobile: 3 Lines with Satoshi font and Semi-Bold */}
                     <div 
-                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-3 text-[25px]"
-                      style={{ fontSize: "25px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-8px)", transformOrigin: "center" }}
+                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-3 text-[22px] sm:text-[25px]"
+                      style={{ fontSize: "22px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-8px)", transformOrigin: "center" }}
                     >
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[25px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[25px] leading-[1.25] font-semibold">
-                          Agent Experience (AX)
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
+                          Agent Experience(AX) Designer/
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[25px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.32} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[25px] leading-[1.25] font-semibold">
-                          Designer for Humans, AI
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.32} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
+                          Developer for Humans,
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[25px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.44} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[25px] leading-[1.25] font-semibold">
-                          agents & Intelligent Systems
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.44} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
+                          AI Agents & Intelligent Systems
                         </WordsStagger>
                       </span>
                     </div>
@@ -782,12 +882,12 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     <div className="hidden sm:block font-satoshi font-semibold" style={{ fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600 }}>
                       <span className="block whitespace-nowrap overflow-visible">
                         <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap font-semibold">
-                          Agent Experience (AX) Designer for
+                          Agent Experience(AX) Designer/Developer
                         </WordsStagger>
                       </span>
                       <span className="block whitespace-nowrap overflow-visible mt-1 sm:mt-1.5 md:mt-2">
                         <WordsStagger trigger={!isLoading} delay={0.45} className="!text-white flex-nowrap whitespace-nowrap font-semibold">
-                          Humans, AI agents & Intelligent Systems
+                          for Humans, AI Agents & Intelligent Systems
                         </WordsStagger>
                       </span>
                     </div>
@@ -797,7 +897,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
               {/* Interactive 3D Stacked Service Deck Slider Container */}
               <div className="self-center sm:self-start lg:self-end shrink-0 -translate-y-5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
-                <ServiceCardSlider />
+                <ServiceCardSlider trigger={!isLoading} delay={0.5} />
               </div>
             </div>
           </motion.div>
