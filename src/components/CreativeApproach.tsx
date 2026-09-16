@@ -35,39 +35,73 @@ export function CreativeApproach() {
         }
       });
 
-      // Second pass: Apply opacities
-      itemRefs.current.forEach((item, idx) => {
-        if (!item) return;
-        const rect = item.getBoundingClientRect();
-        const itemCenter = rect.top + rect.height / 2;
+      // Second pass: Apply opacities & handle mobile Step 4 scrolling the sticky title upward
+      if (isMobile) {
+        const step4 = itemRefs.current[steps.length - 1];
+        if (step4 && titleRef.current) {
+          const step4Rect = step4.getBoundingClientRect();
+          const step4Center = step4Rect.top + step4Rect.height * 0.5;
 
-        if (isMobile) {
-          // Half-way point of the step div
-          // While itemCenter > titleBottom, more than half of the step is in the active area -> full opacity (1)
-          if (itemCenter >= titleBottom) {
-            // Check if it's below the screen entrance
+          // When step 4 reaches half upward scrolling behind the title (step4Center <= titleBottom),
+          // title scrolls upward naturally
+          if (step4Center < titleBottom) {
+            const upwardOffset = titleBottom - step4Center;
+            titleRef.current.style.transform = `translate3d(0, -${upwardOffset}px, 0)`;
+          } else {
+            titleRef.current.style.transform = "translate3d(0, 0px, 0)";
+          }
+        }
+
+        itemRefs.current.forEach((item, idx) => {
+          if (!item) return;
+          const rect = item.getBoundingClientRect();
+          const itemCenter = rect.top + rect.height / 2;
+
+          // For the final step (Step 4), it stays fully visible as it scrolls upward with the title
+          if (idx === steps.length - 1) {
             if (rect.top > windowHeight * 0.88) {
               const entryFade = Math.max(0.2, (windowHeight - rect.top) / (windowHeight * 0.12));
               item.style.opacity = Math.min(1, entryFade).toFixed(3);
             } else {
-              // Visible as normal color (1.0)
               item.style.opacity = "1";
             }
             item.style.pointerEvents = "auto";
           } else {
-            // Half of the step div has scrolled past the title -> smoothly fade out from 1 down to 0
-            const remainingHalfHeight = Math.max(rect.height * 0.5, 80);
-            const distancePastMidpoint = titleBottom - itemCenter;
-            const progressToExit = Math.min(1, distancePastMidpoint / remainingHalfHeight);
-            const fadeOpacity = Math.max(0, 1 - progressToExit);
+            // Steps 1, 2, 3:
+            // While itemCenter >= titleBottom, full opacity (1)
+            if (itemCenter >= titleBottom) {
+              if (rect.top > windowHeight * 0.88) {
+                const entryFade = Math.max(0.2, (windowHeight - rect.top) / (windowHeight * 0.12));
+                item.style.opacity = Math.min(1, entryFade).toFixed(3);
+              } else {
+                item.style.opacity = "1";
+              }
+              item.style.pointerEvents = "auto";
+            } else {
+              // Half of the step div has scrolled past the title -> smoothly fade out from 1 down to 0
+              const remainingHalfHeight = Math.max(rect.height * 0.5, 80);
+              const distancePastMidpoint = titleBottom - itemCenter;
+              const progressToExit = Math.min(1, distancePastMidpoint / remainingHalfHeight);
+              const fadeOpacity = Math.max(0, 1 - progressToExit);
 
-            item.style.opacity = fadeOpacity.toFixed(3);
-            item.style.pointerEvents = fadeOpacity > 0.1 ? "auto" : "none";
+              item.style.opacity = fadeOpacity.toFixed(3);
+              item.style.pointerEvents = fadeOpacity > 0.1 ? "auto" : "none";
+            }
           }
-        } else {
-          // Desktop standard behavior
-          const viewportCenter = windowHeight / 2;
-          const maxDistance = windowHeight / 2;
+        });
+      } else {
+        // Desktop standard behavior
+        if (titleRef.current) {
+          titleRef.current.style.transform = "";
+        }
+
+        const viewportCenter = windowHeight / 2;
+        const maxDistance = windowHeight / 2;
+
+        itemRefs.current.forEach((item, idx) => {
+          if (!item) return;
+          const rect = item.getBoundingClientRect();
+          const itemCenter = rect.top + rect.height / 2;
           const distanceFromCenter = Math.abs(viewportCenter - itemCenter);
 
           if (idx === closestIdx) {
@@ -78,8 +112,8 @@ export function CreativeApproach() {
             item.style.opacity = opacity.toString();
           }
           item.style.pointerEvents = "auto";
-        }
-      });
+        });
+      }
 
       setActiveIdx(closestIdx);
     };
@@ -185,7 +219,7 @@ export function CreativeApproach() {
 
           {/* Right Column: Scroll Text Fade Items */}
           <div className="md:col-span-7 md:pl-12 lg:pl-20 xl:pl-24">
-            <div className="flex flex-col items-center md:items-start gap-[90px] sm:gap-[130px] md:gap-[200px] pt-12 md:pt-[30vh] pb-[35vh] md:pb-[50vh]">
+            <div className="flex flex-col items-center md:items-start gap-[90px] sm:gap-[130px] md:gap-[200px] pt-12 md:pt-[30vh] pb-20 md:pb-[50vh]">
               {steps.map((step, idx) => {
                 const isActive = activeIdx === idx;
                 return (
