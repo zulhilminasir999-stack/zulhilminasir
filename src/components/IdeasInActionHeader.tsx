@@ -1,14 +1,48 @@
-import React, { useRef, useEffect } from "react";
-import { motion } from "motion/react";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, useScroll, useTransform, useSpring } from "motion/react";
 
 interface IdeasInActionHeaderProps {
   isMobile?: boolean;
 }
 
-export function IdeasInActionHeader({ isMobile }: IdeasInActionHeaderProps) {
+export function IdeasInActionHeader({ isMobile: isMobileProp }: IdeasInActionHeaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const pRef = useRef<HTMLParagraphElement>(null);
+
+  const [isMobileDevice, setIsMobileDevice] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileDevice(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const isMobile = isMobileProp !== undefined ? isMobileProp : isMobileDevice;
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "center 45%"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 26,
+    mass: 0.2,
+    restDelta: 0.001
+  });
+
+  const mobileScale = useTransform(smoothProgress, [0.05, 0.95], [0.15, 1]);
+  const mobileOpacity = useTransform(smoothProgress, [0.05, 0.40], [0, 1]);
+  const mobileY = useTransform(smoothProgress, [0.05, 0.95], [60, 0]);
 
   useEffect(() => {
     const resizeText = () => {
@@ -53,14 +87,19 @@ export function IdeasInActionHeader({ isMobile }: IdeasInActionHeaderProps) {
   }, []);
 
   return (
-    <div className="flex flex-col items-center w-full p-0 m-0">
-      <div ref={containerRef} className="w-full flex justify-center items-center overflow-visible">
-        <motion.h1 
+    <motion.div 
+      ref={containerRef} 
+      style={isMobile ? {
+        scale: mobileScale,
+        opacity: mobileOpacity,
+        y: mobileY,
+        transformOrigin: "center center"
+      } : undefined}
+      className="flex flex-col items-center w-full p-0 m-0 origin-center"
+    >
+      <div className="w-full flex justify-center items-center overflow-visible">
+        <h1 
           ref={h1Ref} 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           style={{ 
             marginLeft: "-0.04em", 
             marginRight: "-0.04em", 
@@ -69,15 +108,11 @@ export function IdeasInActionHeader({ isMobile }: IdeasInActionHeaderProps) {
           className="text-[12vw] sm:text-[14vw] md:text-[clamp(60px,15vw,217.24px)] font-black tracking-tighter text-[#1A4B82] text-center leading-[0.85] whitespace-nowrap p-0 m-0 select-none origin-center"
         >
           Ideas in Action
-        </motion.h1>
+        </h1>
       </div>
-      <motion.p 
+      <p 
         id="ideas-in-action-subtitle"
         ref={pRef}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.15 }}
-        transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
         style={{ 
           margin: isMobile ? "12px 0 0 0" : "20px 0 0 0", 
           padding: "0" 
@@ -85,7 +120,7 @@ export function IdeasInActionHeader({ isMobile }: IdeasInActionHeaderProps) {
         className="text-[#666666] font-medium text-center whitespace-nowrap tracking-tight leading-none select-none block origin-center"
       >
         Perfectly aligned creative and production expertise to increase digital impact
-      </motion.p>
-    </div>
+      </p>
+    </motion.div>
   );
 }

@@ -10,6 +10,7 @@ interface PortfolioItem {
   category: string;
   defaultImage: string;
   mobileImage?: string;
+  mobileObjectPosition?: string;
   url: string;
   client: string;
   year: string;
@@ -33,6 +34,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Mobile UI/UX Design",
     defaultImage: "/Triply/Triply1.jpg",
     mobileImage: "/Triply/Triply_m1.png",
+    mobileObjectPosition: "center 60%",
     url: "/case-study-project/komorebi-editorial",
     client: "Triply App",
     year: "2025"
@@ -136,7 +138,8 @@ export function LatestPortfolio() {
                         target.src = item.defaultImage;
                       }
                     }}
-                    className="block sm:hidden w-full h-full object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0 p-0 m-0"
+                    className="block sm:hidden w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0 p-0 m-0"
+                    style={{ objectPosition: item.mobileObjectPosition || "center top" }}
                     referrerPolicy="no-referrer"
                   />
                   <img 

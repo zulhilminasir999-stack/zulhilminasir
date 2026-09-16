@@ -85,11 +85,11 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   const typewriterScaleDesktop = useTransform(smoothScrollProgress, [0, 0.20], [1, 0.92]);
   const typewriterYDesktop = useTransform(smoothScrollProgress, [0, 0.20], [0, -40]);
 
-  const whiteCircleScaleDesktop = useTransform(smoothScrollProgress, [0.10, 0.65], [0, 22]);
+  const whiteCircleScaleDesktop = useTransform(smoothScrollProgress, [0.08, 0.58], [0, 32]);
 
-  const galleryScaleDesktop = useTransform(smoothScrollProgress, [0.20, 0.58], [0.75, 1]);
-  const galleryOpacityDesktop = useTransform(smoothScrollProgress, [0.20, 0.48], [0, 1]);
-  const galleryYDesktop = useTransform(smoothScrollProgress, [0.20, 0.58], [100, 0]);
+  const galleryScaleDesktop = useTransform(smoothScrollProgress, [0.08, 0.58], [0, 1]);
+  const galleryOpacityDesktop = useTransform(smoothScrollProgress, [0.08, 0.18], [0, 1]);
+  const galleryYDesktop = useTransform(smoothScrollProgress, [0.08, 0.58], [80, 0]);
 
   // Mobile: normal static display without scroll distortion or circle scaling
   const typewriterOpacity = isMobile ? 1 : typewriterOpacityDesktop;
@@ -102,7 +102,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   const galleryY = galleryYDesktop;
 
   // Scroll the content block up naturally as the user scrolls further on desktop
-  const naturalScrollY = useTransform(smoothScrollProgress, [0.65, 1.0], ["0vh", "-10vh"]);
+  const naturalScrollY = useTransform(smoothScrollProgress, [0.58, 1.0], ["0vh", "-10vh"]);
 
   const renderFormattedText = (text: string) => {
     if (!text) {
@@ -324,7 +324,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
             bottom: "-150px",
             willChange: "transform",
           }}
-          className="absolute w-[300px] h-[300px] rounded-full bg-white z-[5] pointer-events-none origin-center transform-gpu shadow-2xl"
+          className="absolute w-[300px] h-[300px] rounded-full bg-white z-[15] pointer-events-none origin-center transform-gpu shadow-2xl"
         />
       )}
 
@@ -334,7 +334,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
           style={{
             y: naturalScrollY,
           }}
-          className="absolute inset-x-0 top-0 bottom-0 flex flex-col items-center justify-end pb-[22vh] md:pb-[28vh] z-20 w-full p-0 m-0 pointer-events-none"
+          className="absolute inset-0 flex flex-col items-center justify-center z-20 w-full p-0 m-0 pointer-events-none"
         >
           <motion.div 
             style={{
@@ -345,7 +345,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
             }}
             className="flex justify-center w-full p-0 m-0 px-0 mx-0"
           >
-            <div className="flex flex-col items-center pointer-events-auto sm:-translate-y-12 w-full p-0 m-0 px-6 sm:px-12 lg:px-16">
+            <div className="flex flex-col items-center pointer-events-auto w-full p-0 m-0 px-6 sm:px-12 lg:px-16">
               <IdeasInActionHeader isMobile={false} />
             </div>
           </motion.div>
