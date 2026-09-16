@@ -81,15 +81,15 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   });
 
   // Desktop scroll transition ranges
-  const typewriterOpacityDesktop = useTransform(smoothScrollProgress, [0, 0.22], [1, 0]);
-  const typewriterScaleDesktop = useTransform(smoothScrollProgress, [0, 0.22], [1, 0.92]);
-  const typewriterYDesktop = useTransform(smoothScrollProgress, [0, 0.22], [0, -40]);
+  const typewriterOpacityDesktop = useTransform(smoothScrollProgress, [0, 0.20], [1, 0]);
+  const typewriterScaleDesktop = useTransform(smoothScrollProgress, [0, 0.20], [1, 0.92]);
+  const typewriterYDesktop = useTransform(smoothScrollProgress, [0, 0.20], [0, -40]);
 
-  const whiteCircleScaleDesktop = useTransform(smoothScrollProgress, [0.12, 0.65], [0, 20]);
+  const whiteCircleScaleDesktop = useTransform(smoothScrollProgress, [0.10, 0.65], [0, 22]);
 
-  const galleryScaleDesktop = useTransform(smoothScrollProgress, [0.22, 0.58], [0.7, 1]);
-  const galleryOpacityDesktop = useTransform(smoothScrollProgress, [0.22, 0.50], [0, 1]);
-  const galleryYDesktop = useTransform(smoothScrollProgress, [0.22, 0.58], [120, 0]);
+  const galleryScaleDesktop = useTransform(smoothScrollProgress, [0.20, 0.58], [0.75, 1]);
+  const galleryOpacityDesktop = useTransform(smoothScrollProgress, [0.20, 0.48], [0, 1]);
+  const galleryYDesktop = useTransform(smoothScrollProgress, [0.20, 0.58], [100, 0]);
 
   // Mobile: normal static display without scroll distortion or circle scaling
   const typewriterOpacity = isMobile ? 1 : typewriterOpacityDesktop;
@@ -102,7 +102,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   const galleryY = galleryYDesktop;
 
   // Scroll the content block up naturally as the user scrolls further on desktop
-  const naturalScrollY = useTransform(smoothScrollProgress, [0.70, 1.0], ["0vh", "-10vh"]);
+  const naturalScrollY = useTransform(smoothScrollProgress, [0.65, 1.0], ["0vh", "-10vh"]);
 
   const renderFormattedText = (text: string) => {
     if (!text) {
@@ -324,7 +324,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
             bottom: "-150px",
             willChange: "transform",
           }}
-          className="absolute w-[300px] h-[300px] rounded-full bg-white z-0 pointer-events-none origin-center transform-gpu"
+          className="absolute w-[300px] h-[300px] rounded-full bg-white z-[5] pointer-events-none origin-center transform-gpu shadow-2xl"
         />
       )}
 

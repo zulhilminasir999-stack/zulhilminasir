@@ -100,7 +100,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     offset: ["start start", "end end"],
   });
 
-  const galleryBgDesktop = useTransform(galleryScrollY, [0.50, 0.70], ["#2563EB", "#ffffff"]);
+  const galleryBgDesktop = useTransform(galleryScrollY, [0.65, 0.80], ["#2563EB", "#ffffff"]);
   const galleryBgMobile = useTransform(galleryScrollY, [0.10, 0.24], ["#2563EB", "#ffffff"]);
   const galleryBg = isMobile ? galleryBgMobile : galleryBgDesktop;
 
@@ -752,27 +752,27 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-end py-6 md:py-10 mt-auto"
           >
             {/* Bottom Row: Crafting Digital Design heading aligned side-by-side with ServiceCardSlider */}
-            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-6 md:pt-0 pointer-events-auto">
+            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-6 md:pt-0 pointer-events-auto -translate-y-3 sm:-translate-y-4 md:-translate-y-5 lg:-translate-y-6">
               <div className="p-0 m-0 text-center sm:text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl w-full">
                 <div className="space-y-4 -translate-y-2.5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
                   <h2 className="font-sans font-medium sm:font-semibold text-[19px] sm:text-2xl md:text-[32px] lg:text-[38px] xl:text-[44px] tracking-tight !text-white leading-[1.25] sm:leading-[1.2] text-center sm:text-left">
                     {/* Mobile: 3 Lines with Satoshi font and Semi-Bold */}
                     <div 
-                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-2.5 text-[23px]"
-                      style={{ fontSize: "23px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-4px)", transformOrigin: "center" }}
+                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-2.5 text-[25px]"
+                      style={{ fontSize: "25px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-4px)", transformOrigin: "center" }}
                     >
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[23px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[23px] leading-[1.25] font-semibold">
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[25px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[25px] leading-[1.25] font-semibold">
                           Agent Experience (AX)
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[23px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.32} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[23px] leading-[1.25] font-semibold">
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[25px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.32} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[25px] leading-[1.25] font-semibold">
                           Designer for Humans, AI
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[23px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.44} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[23px] leading-[1.25] font-semibold">
+                      <span className="block whitespace-nowrap overflow-visible text-center text-[25px] leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.44} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[25px] leading-[1.25] font-semibold">
                           agents & Intelligent Systems
                         </WordsStagger>
                       </span>

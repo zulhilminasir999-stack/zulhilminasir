@@ -121,7 +121,7 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
       {/* Editorial Header Accent - Similar to Latest Portfolio */}
       <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 pb-16 items-start transition-colors duration-300`}>
         <div className="col-span-1 md:col-span-12 lg:col-span-8 text-center md:text-center lg:text-left">
-          <h2 className="text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-center lg:text-left text-[#2563EB]">
+          <h2 className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-center lg:text-left text-[#2563EB]">
             <WordsStagger className="text-[#2563EB]">
               PROFESSIONAL
             </WordsStagger>
