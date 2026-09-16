@@ -607,11 +607,11 @@ export default function ProjectDetailPage() {
             <div className="-mx-6 sm:mx-0 grid grid-cols-1 md:grid-cols-12 gap-0 sm:gap-4 lg:gap-6">
               <div className="md:col-span-6 h-auto sm:h-[600px] lg:h-[800px] cursor-pointer sm:cursor-default">
                 <img 
-                  src={(project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || ""))} 
+                  src={(project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply11.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || ""))} 
                   className="w-full h-auto sm:h-full object-contain sm:object-cover block p-0 m-0" 
                   alt={`${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
-                  onClick={() => handleMobileImageClick((project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || "")))}
+                  onClick={() => handleMobileImageClick((project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply11.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || "")))}
                 />
               </div>
               <div className="md:col-span-6 flex flex-col gap-0 sm:gap-4 lg:gap-6 h-auto sm:h-[600px] lg:h-[800px]">
@@ -719,6 +719,21 @@ export default function ProjectDetailPage() {
             referrerPolicy="no-referrer"
           />
         </div>
+
+        {/* Triply 10 Image Section */}
+        {project?.id === "komorebi-editorial" && (
+          <div 
+            className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
+            onClick={() => handleMobileImageClick("/Triply/Triply10.jpg")}
+          >
+            <img 
+              src="/Triply/Triply10.jpg" 
+              alt="Triply Showcase 10"
+              className="w-full h-auto block select-none" 
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
 
         {/* Section: Key Results */}
         {project.results && project.results.length > 0 && (

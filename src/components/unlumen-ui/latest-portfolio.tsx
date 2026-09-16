@@ -184,7 +184,7 @@ export function LatestPortfolio() {
             </AnimatePresence>
 
             {/* Bottom Info Overlay */}
-            <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col -translate-y-12 sm:translate-y-0">
+            <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col -translate-y-16 sm:translate-y-0">
               {/* Category above the main title (with client appended on mobile) */}
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3 drop-shadow-sm">
                 {item.category} <span className="inline sm:hidden opacity-75">- {item.client}</span>

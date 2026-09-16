@@ -71,7 +71,7 @@ const headerItemReveal = {
     y: 0,
     filter: "blur(0px)",
     transition: {
-      duration: 0.8,
+      duration: customDelay <= 0.05 ? 0.35 : 0.8,
       delay: customDelay,
       ease: [0.215, 0.61, 0.355, 1],
     },
@@ -96,6 +96,27 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   });
   const [isXlScreen, setIsXlScreen] = useState(false);
   const [showSideMenu, setShowSideMenu] = useState(false);
+  const [hasCompletedInitialHeaderReveal, setHasCompletedInitialHeaderReveal] = useState(false);
+
+  // Track completion of the first initial load animation so scroll-up navigation transitions remain fast
+  useEffect(() => {
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        setHasCompletedInitialHeaderReveal(true);
+      }, 2400);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    const handleFirstScroll = () => {
+      if (window.scrollY > 40) {
+        setHasCompletedInitialHeaderReveal(true);
+      }
+    };
+    window.addEventListener("scroll", handleFirstScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleFirstScroll);
+  }, []);
 
   const heroRef = React.useRef<HTMLDivElement>(null);
 
@@ -482,7 +503,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             }`}
                           >
                             <motion.span 
-                              custom={0.15}
+                              custom={!hasCompletedInitialHeaderReveal ? 1.20 : 0}
                               variants={headerItemReveal}
                               initial="hidden"
                               animate={!isLoading ? "visible" : "hidden"}
@@ -491,7 +512,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               Zulhilmi Nasir
                             </motion.span>
                             <motion.span 
-                              custom={0.15}
+                              custom={!hasCompletedInitialHeaderReveal ? 1.20 : 0}
                               variants={headerItemReveal}
                               initial="hidden"
                               animate={!isLoading ? "visible" : "hidden"}
@@ -510,7 +531,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                         >
                           <a href="#services-section" onClick={(e) => handleNavClick(e, '#services-section')} className={`nav-menu-btn ${isServicesSection ? "active" : ""}`}>
                             <motion.span 
-                              custom={0.22}
+                              custom={!hasCompletedInitialHeaderReveal ? 1.28 : 0}
                               variants={headerItemReveal}
                               initial="hidden"
                               animate={!isLoading ? "visible" : "hidden"}
@@ -521,7 +542,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           </a>
                           <a href="#integration-section" onClick={(e) => handleNavClick(e, '#integration-section')} className={`nav-menu-btn ${activeSection === "integration-section" ? "active" : ""}`}>
                             <motion.span 
-                              custom={0.30}
+                              custom={!hasCompletedInitialHeaderReveal ? 1.36 : 0}
                               variants={headerItemReveal}
                               initial="hidden"
                               animate={!isLoading ? "visible" : "hidden"}
@@ -530,7 +551,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               Software & AI Solution
                             </motion.span>
                             <motion.span 
-                              custom={0.30}
+                              custom={!hasCompletedInitialHeaderReveal ? 1.36 : 0}
                               variants={headerItemReveal}
                               initial="hidden"
                               animate={!isLoading ? "visible" : "hidden"}
@@ -541,7 +562,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           </a>
                           <a href="#capabilities-section" onClick={(e) => handleNavClick(e, '#capabilities-section')} className={`nav-menu-btn ${isProjectsSection ? "active" : ""}`}>
                             <motion.span 
-                              custom={0.38}
+                              custom={!hasCompletedInitialHeaderReveal ? 1.44 : 0}
                               variants={headerItemReveal}
                               initial="hidden"
                               animate={!isLoading ? "visible" : "hidden"}
@@ -552,7 +573,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           </a>
                           <a href="#about-section" onClick={(e) => handleNavClick(e, '#about-section')} className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""}`}>
                             <motion.span 
-                              custom={0.46}
+                              custom={!hasCompletedInitialHeaderReveal ? 1.52 : 0}
                               variants={headerItemReveal}
                               initial="hidden"
                               animate={!isLoading ? "visible" : "hidden"}
@@ -563,7 +584,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           </a>
                           <a href="#career-section" onClick={(e) => handleNavClick(e, '#career-section')} className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""}`}>
                             <motion.span 
-                              custom={0.54}
+                              custom={!hasCompletedInitialHeaderReveal ? 1.60 : 0}
                               variants={headerItemReveal}
                               initial="hidden"
                               animate={!isLoading ? "visible" : "hidden"}
@@ -579,6 +600,10 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           <motion.a
                             layoutId="header-contact-btn"
                             transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                            custom={!hasCompletedInitialHeaderReveal ? 1.68 : 0}
+                            variants={headerItemReveal}
+                            initial="hidden"
+                            animate={!isLoading ? "visible" : "hidden"}
                             href="#contact-section"
                             onClick={(e) => handleNavClick(e, '#contact-section')}
                             className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
@@ -591,15 +616,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               {/* Scanning grid sweep light */}
                               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
                             </div>
-                            <motion.span 
-                              custom={0.62}
-                              variants={headerItemReveal}
-                              initial="hidden"
-                              animate={!isLoading ? "visible" : "hidden"}
-                              className="relative z-10 inline-block text-[15px] font-medium"
-                            >
+                            <span className="relative z-10 inline-block text-[15px] font-medium">
                               Get In Touch
-                            </motion.span>
+                            </span>
                           </motion.a>
                         </div>
                       </>
@@ -689,7 +708,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   <>
                     <div className="flex items-center">
                       <motion.a
-                        custom={0.15}
+                        custom={!hasCompletedInitialHeaderReveal ? 1.20 : 0}
                         variants={headerItemReveal}
                         initial="hidden"
                         animate={!isLoading ? "visible" : "hidden"}
@@ -709,7 +728,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     </div>
 
                     <motion.div 
-                      custom={0.25}
+                      custom={!hasCompletedInitialHeaderReveal ? 1.30 : 0}
                       variants={headerItemReveal}
                       initial="hidden"
                       animate={!isLoading ? "visible" : "hidden"}
@@ -828,7 +847,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             className="hidden sm:block absolute inset-0 z-0 overflow-hidden"
           >
             <img 
-              src="/hero-bg.jpg" 
+              src="/hero-bg1.jpg" 
               alt="Hero Background" 
               className="w-full h-full object-cover select-none pointer-events-none hero-bg-responsive" 
               referrerPolicy="no-referrer"
@@ -863,17 +882,17 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     >
                       <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
                         <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
-                          Agent Experience(AX) Designer/
+                          Agent Experience(AX) Developer
                         </WordsStagger>
                       </span>
                       <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
                         <WordsStagger trigger={!isLoading} delay={0.32} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
-                          Developer for Humans,
+                          for Humans, AI Agents
                         </WordsStagger>
                       </span>
                       <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
                         <WordsStagger trigger={!isLoading} delay={0.44} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
-                          AI Agents & Intelligent Systems
+                          & Intelligent Systems
                         </WordsStagger>
                       </span>
                     </div>
@@ -882,12 +901,12 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     <div className="hidden sm:block font-satoshi font-semibold" style={{ fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600 }}>
                       <span className="block whitespace-nowrap overflow-visible">
                         <WordsStagger trigger={!isLoading} delay={0.3} className="!text-white flex-nowrap whitespace-nowrap font-semibold">
-                          Agent Experience(AX) Designer/Developer
+                          Agent Experience(AX) Developer for
                         </WordsStagger>
                       </span>
                       <span className="block whitespace-nowrap overflow-visible mt-1 sm:mt-1.5 md:mt-2">
                         <WordsStagger trigger={!isLoading} delay={0.45} className="!text-white flex-nowrap whitespace-nowrap font-semibold">
-                          for Humans, AI Agents & Intelligent Systems
+                          Humans, AI Agents & Intelligent Systems
                         </WordsStagger>
                       </span>
                     </div>

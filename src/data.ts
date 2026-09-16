@@ -264,10 +264,16 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     ],
     galleryImages: [
       "/Triply/Triply1.jpg",
+      "/Triply/Triply2.jpg",
+      "/Triply/Triply3.jpg",
       "/Triply/Triply4.jpg",
-      "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200"
+      "/Triply/Triply5.jpg",
+      "/Triply/Triply6.png",
+      "/Triply/Triply7.jpg",
+      "/Triply/Triply8.jpg",
+      "/Triply/Triply9.jpg",
+      "/Triply/Triply10.jpg",
+      "/Triply/Triply11.jpg"
     ],
     links: [
       { label: "View Adobe InDesign Layout Board", url: "#" },
