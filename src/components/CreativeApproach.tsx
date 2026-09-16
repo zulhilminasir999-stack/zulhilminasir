@@ -13,63 +13,63 @@ export function CreativeApproach() {
       const windowWidth = window.innerWidth;
       const isMobile = windowWidth < 768;
       
-      // On mobile, active focus center is slightly below the sticky title
-      const viewportCenter = isMobile ? windowHeight * 0.55 : windowHeight / 2;
       const titleBottom = titleRef.current 
         ? titleRef.current.getBoundingClientRect().bottom 
-        : (isMobile ? 130 : 0);
+        : (isMobile ? 65 : 0);
 
+      // On mobile, determine active step based on reading position
       let closestIdx = 0;
       let minDistance = Infinity;
+      const readingTarget = isMobile ? titleBottom + (windowHeight - titleBottom) * 0.35 : windowHeight / 2;
 
-      // First pass: Find the closest item to the active reading zone
+      // First pass: Find the active step currently in primary reading focus
       itemRefs.current.forEach((item, idx) => {
         if (!item) return;
         const rect = item.getBoundingClientRect();
         const itemCenter = rect.top + rect.height / 2;
-        const distanceFromCenter = Math.abs(viewportCenter - itemCenter);
+        const distanceFromTarget = Math.abs(readingTarget - itemCenter);
         
-        if (distanceFromCenter < minDistance) {
-          minDistance = distanceFromCenter;
+        if (distanceFromTarget < minDistance) {
+          minDistance = distanceFromTarget;
           closestIdx = idx;
         }
       });
 
-      // Second pass: Apply opacities based on active state and distance from center & title
+      // Second pass: Apply opacities
       itemRefs.current.forEach((item, idx) => {
         if (!item) return;
         const rect = item.getBoundingClientRect();
         const itemCenter = rect.top + rect.height / 2;
-        const distanceFromCenter = Math.abs(viewportCenter - itemCenter);
-        const maxDistance = windowHeight / 2;
 
         if (isMobile) {
-          // Fade-out threshold: step must become completely invisible before touching sticky title bottom
-          const clashThreshold = titleBottom + 25;
-          const fadeStartThreshold = titleBottom + 100;
-
-          if (rect.top <= clashThreshold) {
-            // Already near or above the title zone -> completely invisible
-            item.style.opacity = "0";
-            item.style.pointerEvents = "none";
-          } else if (rect.top < fadeStartThreshold) {
-            // Smooth rapid fade to 0 before clashing with title
-            const factor = Math.max(0, (rect.top - clashThreshold) / (fadeStartThreshold - clashThreshold));
-            const baseOpacity = idx === closestIdx ? 1 : 0.35;
-            item.style.opacity = (baseOpacity * factor).toFixed(3);
-            item.style.pointerEvents = factor > 0.3 ? "auto" : "none";
-          } else if (idx === closestIdx) {
-            item.style.opacity = "1";
+          // Half-way point of the step div
+          // While itemCenter > titleBottom, more than half of the step is in the active area -> full opacity (1)
+          if (itemCenter >= titleBottom) {
+            // Check if it's below the screen entrance
+            if (rect.top > windowHeight * 0.88) {
+              const entryFade = Math.max(0.2, (windowHeight - rect.top) / (windowHeight * 0.12));
+              item.style.opacity = Math.min(1, entryFade).toFixed(3);
+            } else {
+              // Visible as normal color (1.0)
+              item.style.opacity = "1";
+            }
             item.style.pointerEvents = "auto";
           } else {
-            // Non-active items further down the page
-            let opacity = 1 - (distanceFromCenter / maxDistance);
-            opacity = Math.max(0.15, Math.min(0.35, opacity));
-            item.style.opacity = opacity.toString();
-            item.style.pointerEvents = "auto";
+            // Half of the step div has scrolled past the title -> smoothly fade out from 1 down to 0
+            const remainingHalfHeight = Math.max(rect.height * 0.5, 80);
+            const distancePastMidpoint = titleBottom - itemCenter;
+            const progressToExit = Math.min(1, distancePastMidpoint / remainingHalfHeight);
+            const fadeOpacity = Math.max(0, 1 - progressToExit);
+
+            item.style.opacity = fadeOpacity.toFixed(3);
+            item.style.pointerEvents = fadeOpacity > 0.1 ? "auto" : "none";
           }
         } else {
           // Desktop standard behavior
+          const viewportCenter = windowHeight / 2;
+          const maxDistance = windowHeight / 2;
+          const distanceFromCenter = Math.abs(viewportCenter - itemCenter);
+
           if (idx === closestIdx) {
             item.style.opacity = "1";
           } else {
@@ -87,7 +87,8 @@ export function CreativeApproach() {
     window.addEventListener('scroll', updateOpacity, { passive: true });
     window.addEventListener('resize', updateOpacity, { passive: true });
     
-    setTimeout(updateOpacity, 100);
+    updateOpacity();
+    setTimeout(updateOpacity, 50);
 
     return () => {
       window.removeEventListener('scroll', updateOpacity);
@@ -192,7 +193,7 @@ export function CreativeApproach() {
                     key={idx}
                     ref={(el) => { itemRefs.current[idx] = el; }}
                     className="w-full flex flex-row items-start text-left gap-5 sm:gap-8 lg:gap-10 transition-opacity duration-300 ease-out will-change-opacity"
-                    style={{ opacity: 0.2 }}
+                    style={{ opacity: idx === 0 ? 1 : 0.4 }}
                   >
                     {/* Number in Modern Blue */}
                     <div className="text-[#2563EB] font-sans font-bold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.15] shrink-0 mt-0 pt-0">
