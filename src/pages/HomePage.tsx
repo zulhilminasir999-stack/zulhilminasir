@@ -749,17 +749,17 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
           <motion.div 
             style={{ scale: heroScale, opacity: heroOpacity, y: heroY }}
-            className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-end py-6 md:py-10 mt-auto"
+            className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-end pt-2 pb-8 sm:py-6 md:py-10 mt-auto"
           >
             {/* Bottom Row: Crafting Digital Design heading aligned side-by-side with ServiceCardSlider */}
-            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 w-full mt-auto pt-6 md:pt-0 pointer-events-auto -translate-y-3 sm:-translate-y-4 md:-translate-y-5 lg:-translate-y-6">
+            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-5 sm:gap-6 lg:gap-8 w-full mt-auto pt-0 sm:pt-6 md:pt-0 pointer-events-auto -translate-y-8 sm:-translate-y-4 md:-translate-y-5 lg:-translate-y-6">
               <div className="p-0 m-0 text-center sm:text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl w-full">
-                <div className="space-y-4 -translate-y-2.5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
+                <div className="space-y-4 -translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
                   <h2 className="font-sans font-medium sm:font-semibold text-[19px] sm:text-2xl md:text-[32px] lg:text-[38px] xl:text-[44px] tracking-tight !text-white leading-[1.25] sm:leading-[1.2] text-center sm:text-left">
                     {/* Mobile: 3 Lines with Satoshi font and Semi-Bold */}
                     <div 
-                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-2.5 text-[25px]"
-                      style={{ fontSize: "25px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-4px)", transformOrigin: "center" }}
+                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-3 text-[25px]"
+                      style={{ fontSize: "25px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-8px)", transformOrigin: "center" }}
                     >
                       <span className="block whitespace-nowrap overflow-visible text-center text-[25px] leading-[1.25] font-semibold">
                         <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[25px] leading-[1.25] font-semibold">
@@ -796,7 +796,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               </div>
 
               {/* Interactive 3D Stacked Service Deck Slider Container */}
-              <div className="self-center sm:self-start lg:self-end shrink-0 -translate-y-1.5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
+              <div className="self-center sm:self-start lg:self-end shrink-0 -translate-y-5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
                 <ServiceCardSlider />
               </div>
             </div>
