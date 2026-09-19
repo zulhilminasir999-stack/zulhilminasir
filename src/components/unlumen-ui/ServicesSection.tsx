@@ -140,7 +140,7 @@ export default function ServicesSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className={`text-[11px] md:text-[12px] leading-relaxed font-sans font-normal tracking-[0.05em] max-w-[280px] ${mutedTextColor}`}
+                className={`text-[15px] leading-relaxed font-sans font-normal tracking-normal max-w-[280px] ${mutedTextColor}`}
               >
                 <span style={{ color: activeColor }} className="mr-2 text-base align-text-top leading-none">{"//"}</span>
                 {activeService.description}
@@ -290,7 +290,7 @@ export default function ServicesSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className={`text-[11px] leading-relaxed uppercase tracking-[0.15em] font-semibold max-w-[280px] ${mutedTextColor}`}
+              className={`text-[15px] leading-relaxed tracking-normal font-normal max-w-[280px] ${mutedTextColor}`}
             >
               <span style={{ color: activeColor }} className="mr-2 text-base align-text-top leading-none">{"//"}</span>
               {activeService.description}

@@ -118,20 +118,25 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
     <div className={`w-full font-sans antialiased select-none ${
       isLight ? "text-zinc-900" : "text-zinc-100"
     }`}>
-      {/* Editorial Header Accent - Similar to Latest Portfolio */}
-      <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 pb-16 items-start transition-colors duration-300`}>
-        <div className="col-span-1 md:col-span-12 lg:col-span-8 text-center md:text-center lg:text-left">
-          <h2 className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-center lg:text-left text-[#2563EB]">
-            <WordsStagger className="text-[#2563EB]">
-              PROFESSIONAL
-            </WordsStagger>
-            <br />
-            <WordsStagger className="text-[#2563EB]" delay={0.35}>
-              CHRONOLOGY
-            </WordsStagger>
+      {/* Editorial Header Accent */}
+      <div className="pb-10 sm:pb-16 transition-colors duration-300">
+        <div className="w-full text-center md:text-center lg:text-left">
+          <h2 className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-center lg:text-left text-[#2563EB] !text-[#2563EB]">
+            {/* Mobile: Clean, static fixed title component in modern blue */}
+            <span className="block sm:hidden text-[#2563EB] !text-[#2563EB]">
+              PROFESSIONAL<br />CHRONOLOGY
+            </span>
+            {/* Desktop: Animated staggered words */}
+            <span className="hidden sm:inline text-[#2563EB] !text-[#2563EB]">
+              <WordsStagger className="text-[#2563EB] !text-[#2563EB]">
+                PROFESSIONAL
+              </WordsStagger>
+              <br />
+              <WordsStagger className="text-[#2563EB] !text-[#2563EB]" delay={0.35}>
+                CHRONOLOGY
+              </WordsStagger>
+            </span>
           </h2>
-        </div>
-        <div className="col-span-1 md:col-span-12 lg:col-span-4 pt-4 md:pt-4 lg:pt-4">
         </div>
       </div>
 
