@@ -57,9 +57,10 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     title: "RepX | AI- powered Fitness",
     category: "Mobile UI/UX Design",
     defaultImage: "/RepX/RepX1.jpg",
+    mobileImage: "/RepX/RepX1_.jpg",
     objectFit: "cover",
     objectPosition: "center center",
-    imageClassName: "scale-[1.06] group-hover:scale-110",
+    imageClassName: "scale-[1.06] sm:scale-[1.06] sm:group-hover:scale-110",
     url: "/case-study-project/breeze-cargo",
     client: "RepX App",
     year: "2026"
