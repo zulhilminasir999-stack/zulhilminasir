@@ -122,33 +122,29 @@ export const PORTFOLIO_PROJECTS: Project[] = [
   },
   {
     id: "breeze-cargo",
-    title: "Little Supplications — Du'a Harian App",
-    subtitle: "Interactive Children's Devotional & Playful UI/UX System",
+    title: "RepX | AI- powered Fitness",
+    subtitle: "Mobile UI/UX Design for Fitness & Workout Tracking",
     category: "UI_UX",
-    categoryLabel: "UI/UX & App Strategy",
+    categoryLabel: "Mobile UI/UX Design",
     year: "2026",
-    imageUrl: duaHarianImg,
-    client: "Nour Al-Faith Foundation",
+    imageUrl: "/RepX/RepX1.jpg",
+    client: "RepX App",
     toolsUsed: ["Figma Layout System", "Adobe Illustrator", "Sleek.design UI AI", "Color Psychology Research"],
-    summary: "Designed a highly immersive, kid-friendly daily supplications ('Du'a Harian') mobile application utilizing soft blue-purple gradients, tactile cards, and playful hand-crafted celestial vector icons.",
-    challenge: "Islamic educational apps for children are often visually dense, cluttered with high-contrast text, or fail to engage young users with modern, soothing aesthetic layouts that facilitate daily habit forming.",
-    solution: "Deployed a calming, eye-friendly layout centered on playful soft blue and pastel violet purple clouds, stars, and moon animations. Standardized touch-friendly buttons designed in Adobe Illustrator, using a responsive visual bento-grid in Figma to keep actions clear.",
-    promptExample: "High-fidelity iOS mobile app UI/UX mockup showcasing 3 screens side-by-side, kids Daily Supplication 'Du'a Harian' educational application. Beautiful soft pastel light blue and playful soft violet purple color theme. Friendly cute illustrative stars, clouds and crescent moon elements, clean readable child-friendly typography, rounded card layouts on screens, subtle modern shadows, premium Dribbble UX showcase, clean dark studio presentation --ar 16:9",
+    summary: "Designed a high-performance, intelligent fitness tracking and workout companion application utilizing clean typography, real-time metrics, and dark aesthetic layouts.",
+    challenge: "Fitness apps often suffer from complex visual hierarchy and overwhelming charts that distract athletes during intensive training sessions.",
+    solution: "Structured intuitive workout logging, live progress analytics, and sleek high-contrast components in Figma to deliver frictionless user interactions.",
+    promptExample: "High-fidelity iOS mobile app UI/UX mockup showcasing fitness and workout tracking screens, modern dark aesthetic, vibrant accent highlights, clean typography, rounded card layouts --ar 16:9",
     results: [
-      "User engagement and completion rates spiked by 82% compared to standard layouts.",
-      "Aesthetic soft violet design highly commended by childhood education experts.",
-      "Interactive prayer-duration feedback structures fully compiled as clear design system components."
+      "Streamlined workout logging speed and daily active retention.",
+      "High-contrast dark mode praised for gym and outdoor legibility."
     ],
     galleryImages: [
-      duaHarianImg,
-      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&q=80&w=1200"
+      "/RepX/RepX1.jpg",
+      "/RepX/RepX2.jpg"
     ],
     links: [
       { label: "Interactive Figma Prototypes Segment", url: "#" },
-      { label: "Sticker Pack Illustrator Vectors", url: "#" }
+      { label: "Design System Specs", url: "#" }
     ]
   },
   {

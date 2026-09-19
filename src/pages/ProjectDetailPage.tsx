@@ -523,7 +523,7 @@ export default function ProjectDetailPage() {
            {(() => {
              const img1Src = (project?.galleryImages && project.galleryImages.length > 1) ? project.galleryImages[1] : (project?.imageUrl || "");
              const isLongImage = img1Src.includes('ck2') || img1Src.includes('ck3') || img1Src.includes('ck');
-             const finalImg1Src = project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : project?.id === "komorebi-editorial" ? "/Triply/Triply2.jpg" : img1Src;
+             const finalImg1Src = project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : project?.id === "komorebi-editorial" ? "/Triply/Triply2.jpg" : project?.id === "breeze-cargo" ? "/RepX/RepX2.jpg" : img1Src;
              
              if (isLongImage) {
                return (

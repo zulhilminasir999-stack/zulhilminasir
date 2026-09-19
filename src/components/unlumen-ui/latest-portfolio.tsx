@@ -15,6 +15,8 @@ interface PortfolioItem {
   client: string;
   year: string;
   objectPosition?: string;
+  objectFit?: "cover" | "contain";
+  imageClassName?: string;
 }
 
 const PORTFOLIO_ITEMS: PortfolioItem[] = [
@@ -54,7 +56,10 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: "flakeslake",
     title: "RepX | AI- powered Fitness",
     category: "Mobile UI/UX Design",
-    defaultImage: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=1200",
+    defaultImage: "/RepX/RepX1.jpg",
+    objectFit: "cover",
+    objectPosition: "center center",
+    imageClassName: "scale-[1.06] group-hover:scale-110",
     url: "/case-study-project/breeze-cargo",
     client: "RepX App",
     year: "2026"
@@ -124,7 +129,7 @@ export function LatestPortfolio() {
             className="sticky top-0 h-screen w-full flex flex-col justify-end group overflow-hidden cursor-pointer bg-zinc-950"
           >
             {/* Project Image Background */}
-            <div className="absolute inset-0 w-full h-full overflow-hidden bg-zinc-950">
+            <div className="absolute inset-0 w-full h-full overflow-hidden bg-zinc-950 flex items-center justify-center">
               {item.mobileImage ? (
                 <>
                   <img 
@@ -138,14 +143,14 @@ export function LatestPortfolio() {
                         target.src = item.defaultImage;
                       }
                     }}
-                    className="block sm:hidden w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0 p-0 m-0"
+                    className={`block sm:hidden w-full h-full ${item.objectFit === "contain" ? "object-contain" : "object-cover"} transition-transform duration-1000 ease-out ${item.imageClassName || "group-hover:scale-105"} border-none outline-none ring-0 p-0 m-0`}
                     style={{ objectPosition: item.mobileObjectPosition || "center top" }}
                     referrerPolicy="no-referrer"
                   />
                   <img 
                     src={item.defaultImage}
                     alt={item.title}
-                    className="hidden sm:block w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0"
+                    className={`hidden sm:block w-full h-full ${item.objectFit === "contain" ? "object-contain" : "object-cover"} transition-transform duration-1000 ease-out ${item.imageClassName || "group-hover:scale-105"} border-none outline-none ring-0`}
                     style={{ objectPosition: item.objectPosition || "center center" }}
                     referrerPolicy="no-referrer"
                   />
@@ -154,8 +159,8 @@ export function LatestPortfolio() {
                 <img 
                   src={item.defaultImage}
                   alt={item.title}
-                  className="w-full h-full object-cover object-top sm:object-center transition-transform duration-1000 ease-out group-hover:scale-105 border-none outline-none ring-0 p-0 m-0"
-                  style={{ objectPosition: item.objectPosition || "top center" }}
+                  className={`w-full h-full ${item.objectFit === "contain" ? "object-contain" : "object-cover object-top sm:object-center"} transition-transform duration-1000 ease-out ${item.imageClassName || "group-hover:scale-105"} border-none outline-none ring-0 p-0 m-0`}
+                  style={{ objectPosition: item.objectPosition || (item.objectFit === "contain" ? "center center" : "top center") }}
                   referrerPolicy="no-referrer"
                 />
               )}
@@ -187,7 +192,7 @@ export function LatestPortfolio() {
             </AnimatePresence>
 
             {/* Bottom Info Overlay */}
-            <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col -translate-y-16 sm:translate-y-0">
+            <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col -translate-y-24 sm:translate-y-0">
               {/* Category above the main title (with client appended on mobile) */}
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3 drop-shadow-sm">
                 {item.category} <span className="inline sm:hidden opacity-75">- {item.client}</span>
