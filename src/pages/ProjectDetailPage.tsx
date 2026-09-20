@@ -19,6 +19,7 @@ import {
 import { PORTFOLIO_PROJECTS, CAPABILITIES_DATA } from "../data";
 import { FloatingMenu } from "../components/FloatingMenu";
 import { MobileZoomableModal } from "../components/MobileZoomableModal";
+import RelatedCapabilitiesCarousel from "../components/RelatedCapabilitiesCarousel";
 import { useReveal } from "../context/RevealContext";
 import { useLenis } from "lenis/react";
 
@@ -773,49 +774,8 @@ export default function ProjectDetailPage() {
           />
         </div>
 
-        {/* Related Capabilities block (Below Sticky Images) */}
-        <div id="capabilities-section" className="w-full bg-white relative z-50 py-16 md:py-24 px-6 sm:px-12 lg:px-16">
-          <div className="w-full space-y-6 md:space-y-8">
-            <div className="space-y-2">
-              <h4 className="font-sans font-medium text-2xl tracking-tight text-zinc-900 uppercase">
-                Related Capabilities
-              </h4>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 pt-2">
-              {CAPABILITIES_DATA.slice(0, 2).map((relatedCap) => (
-                <Link
-                  key={relatedCap.id}
-                  to={`/case-study/${relatedCap.id}`}
-                  className="group bg-transparent p-0 transition-all duration-300 h-full flex flex-col justify-between cursor-pointer block"
-                >
-                  <div className="space-y-3">
-                    {/* Photo area */}
-                    <div className="aspect-[16/10] rounded-xl overflow-hidden relative border bg-zinc-100 border-zinc-200">
-                      <img 
-                        src={relatedCap.image} 
-                        alt={relatedCap.title}
-                        className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 transition-all duration-700 pointer-events-none"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                    {/* Title at below left side */}
-                    <div className="text-left pt-1">
-                      <h5 className="font-sans font-medium text-lg sm:text-xl text-zinc-900 group-hover:text-zinc-600 transition-colors">
-                        {relatedCap.title}
-                      </h5>
-                      {relatedCap.subtitle && (
-                        <p className="text-xs text-zinc-500 font-sans mt-0.5 line-clamp-1">
-                          {relatedCap.subtitle}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Related Capabilities Carousel with Scroll-Driven Horizontal Movement */}
+        <RelatedCapabilitiesCarousel currentId={project.id} />
       </main>
 
       {/* Floating back button */}

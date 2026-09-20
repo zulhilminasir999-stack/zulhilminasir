@@ -195,8 +195,8 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
 
             {/* Text and Button located on right of images */}
             <div className="flex flex-col items-start text-left max-w-xl">
-              <span className="text-[#EF4444] font-bold text-xs tracking-tight mb-1 select-none">
-                Afterform®
+              <span className="text-white font-bold text-xs tracking-tight mb-1 select-none">
+                Zulhilmi Nasir's thought
               </span>
               <p className="text-white/80 text-xs leading-relaxed mb-3 font-normal select-none">
                 We work with teams at different stages, helping them define direction, reduce complexity, and build digital experiences that support real goals. From early concepts to mature products, our focus stays on clarity, structure, and long-term value
@@ -291,8 +291,8 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
 
           {/* Text and Button located on right of images */}
           <div className="flex flex-col items-start text-left max-w-xl sm:ml-20 md:ml-[140px] lg:ml-[320px] xl:ml-[420px]">
-            <span className="text-[#EF4444] font-bold text-xs sm:text-sm tracking-tight mb-1 select-none">
-              Afterform®
+            <span className="text-white font-bold text-xs sm:text-sm tracking-tight mb-1 select-none">
+              Zulhilmi Nasir's thought
             </span>
             <p className="text-white/80 text-xs sm:text-sm leading-relaxed mb-3 font-normal select-none">
               We work with teams at different stages, helping them define direction, reduce complexity, and build digital experiences that support real goals. From early concepts to mature products, our focus stays on clarity, structure, and long-term value
