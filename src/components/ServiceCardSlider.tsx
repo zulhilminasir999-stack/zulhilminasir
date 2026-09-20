@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useNavigate } from "react-router-dom";
+import { useReveal } from "../context/RevealContext";
 
 export interface ServiceCardItem {
   id: string;
@@ -8,71 +10,112 @@ export interface ServiceCardItem {
   subtitle: string;
   title: string;
   image: string;
+  url: string;
   actionText: string;
 }
 
 const SERVICES_SLIDES: ServiceCardItem[] = [
+  // First 5 Cards: Featured Projects for Case Study Page
   {
-    id: "web-design",
-    serviceId: "brand",
-    category: "Web Design & Dev",
-    subtitle: "Why aesthetics alone can't solve real product problems",
-    title: "Beyond Visual Appeal",
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=800&auto=format&fit=crop",
+    id: "TGPowerWrap",
+    serviceId: "packaging",
+    category: "Packaging & Web",
+    subtitle: "Ultra-premium packaging architecture & corporate platform",
+    title: "TG PowerWrap Website",
+    image: "/Images/tgpw1.jpg",
+    url: "/case-study-project/TGPowerWrap",
     actionText: "Read",
   },
   {
-    id: "mobile-ux",
+    id: "breeze-cargo",
     serviceId: "product",
     category: "Mobile UI/UX",
-    subtitle: "How structure and hierarchy help users make decisions",
-    title: "Designing for Intent",
-    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=800&auto=format&fit=crop",
+    subtitle: "High-performance intelligent workout tracking system",
+    title: "RepX | AI Fitness",
+    image: "/RepX/RepX1.jpg",
+    url: "/case-study-project/breeze-cargo",
     actionText: "Read",
   },
   {
-    id: "web-system",
+    id: "ck-lighting",
+    serviceId: "brand",
+    category: "Web Dev",
+    subtitle: "Engineered high-speed custom CMS webstore & product catalog",
+    title: "CK Lighting Store",
+    image: "/CK Lighting Web/ck1.jpg",
+    url: "/case-study-project/ck-lighting",
+    actionText: "Read",
+  },
+  {
+    id: "komorebi-editorial",
+    serviceId: "product",
+    category: "Mobile UI/UX",
+    subtitle: "Spatial smart maps and minimalist editorial interface",
+    title: "Triply | AI Companion",
+    image: "/Triply/Triply1.jpg",
+    url: "/case-study-project/komorebi-editorial",
+    actionText: "Read",
+  },
+  {
+    id: "aistudio-brand",
     serviceId: "web",
     category: "Web App & System",
-    subtitle: "Reframing the 'form follows function' idea for digital product",
-    title: "Form With Purpose",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop",
+    subtitle: "Automated student billing engine & management dashboard",
+    title: "Pre-School Fee System",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
+    url: "/case-study-project/aistudio-brand",
+    actionText: "Read",
+  },
+
+  // 5 More Projects from Hoverlist for Project Case Study Page
+  {
+    id: "web-design-cms",
+    serviceId: "brand",
+    category: "Web Dev",
+    subtitle: "Translating bespoke component architectures into blazing-fast front-ends",
+    title: "Web Design & CMS",
+    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200",
+    url: "/case-study/web-design-cms",
     actionText: "Read",
   },
   {
-    id: "ai-native",
+    id: "ui-ux",
+    serviceId: "product",
+    category: "Mobile UI/UX",
+    subtitle: "Cognitive interaction flows and scalable token systems",
+    title: "User Interface & UX",
+    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200",
+    url: "/case-study/ui-ux",
+    actionText: "Read",
+  },
+  {
+    id: "ai-native-development",
     serviceId: "dev",
-    category: "AI-native Dev",
-    subtitle: "Bridging generative intelligence into deterministic user flows",
-    title: "Intelligent Systems",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop",
+    category: "AI-Native Dev",
+    subtitle: "Accelerating full-stack engineering with generative pipelines",
+    title: "AI-Native Dev & Vibe",
+    image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=1200",
+    url: "/case-study/ai-native-development",
     actionText: "Read",
   },
   {
     id: "brand-identity",
     serviceId: "content",
     category: "Brand Identity",
-    subtitle: "Crafting memorable distinctiveness in crowded SaaS markets",
-    title: "Distinctive Presence",
-    image: "/a.jpg",
+    subtitle: "Comprehensive visual identity matrices and timeless vector guidelines",
+    title: "Brand Strategy & Visuals",
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=1200",
+    url: "/case-study/brand-identity",
     actionText: "Read",
   },
   {
     id: "packaging",
     serviceId: "motion",
     category: "Packaging Design",
-    subtitle: "Tactile resonance between physical and digital touchpoints",
-    title: "Tactile Precision",
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop",
-    actionText: "Read",
-  },
-  {
-    id: "marketing-visual",
-    serviceId: "marketing",
-    category: "Marketing Visual Design",
-    subtitle: "High-conversion creative systems that scale brand authority",
-    title: "Impactful Media",
-    image: "https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=800&auto=format&fit=crop",
+    subtitle: "Engineering precision carton flat-patterns and tactile finishes",
+    title: "Structural Packaging Print",
+    image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=1200",
+    url: "/case-study/packaging",
     actionText: "Read",
   },
 ];
@@ -85,6 +128,8 @@ interface ServiceCardSliderProps {
 }
 
 export default function ServiceCardSlider({ onSelectService, className, trigger, delay = 0.5 }: ServiceCardSliderProps) {
+  const navigate = useNavigate();
+  const { triggerReveal } = useReveal();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
@@ -153,6 +198,10 @@ export default function ServiceCardSlider({ onSelectService, className, trigger,
     if (isDragging) return;
     if (onSelectService) {
       onSelectService(currentItem.serviceId);
+    } else if (currentItem.url) {
+      triggerReveal(() => {
+        navigate(currentItem.url);
+      });
     } else {
       const servicesSection = document.getElementById("services-section");
       if (servicesSection) {

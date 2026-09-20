@@ -151,6 +151,17 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     isProject: false,
   },
   {
+    id: "web-app-system",
+    slugTitle: "Aura System - Scalable Web Platform",
+    displayTitle: "Web Applications & Scalable Systems",
+    type: "Web App & System",
+    description: "Enterprise full-stack architecture, real-time database synchronizations, and scalable micro-services engineered for speed.",
+    role: "FULL-STACK LEAD / ARCHITECT",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
+    url: "/case-study/web-app-system",
+    isProject: false,
+  },
+  {
     id: "visual-design",
     slugTitle: "Helios Matrix - Visual Composition",
     displayTitle: "High-Impact Visual Art & Composition",
@@ -162,6 +173,27 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     isProject: false,
   }
 ];
+
+// Similarity mapping for featured projects relative to each capability or project
+const SIMILARITY_MAP: Record<string, string[]> = {
+  // Capability IDs -> Ranked relevant featured projects
+  "web-design-cms": ["ck-lighting", "TGPowerWrap", "aistudio-brand", "breeze-cargo", "komorebi-editorial", "atelier-luxe", "helios-exhibition"],
+  "ui-ux": ["breeze-cargo", "komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
+  "web-app-system": ["aistudio-brand", "ck-lighting", "breeze-cargo", "komorebi-editorial", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
+  "ai-native-development": ["breeze-cargo", "komorebi-editorial", "TGPowerWrap", "aistudio-brand", "ck-lighting", "atelier-luxe", "helios-exhibition"],
+  "brand-identity": ["atelier-luxe", "TGPowerWrap", "helios-exhibition", "ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
+  "packaging": ["TGPowerWrap", "atelier-luxe", "helios-exhibition", "ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
+  "visual-design": ["helios-exhibition", "atelier-luxe", "TGPowerWrap", "komorebi-editorial", "breeze-cargo", "ck-lighting", "aistudio-brand"],
+
+  // Project IDs -> Ranked other featured projects
+  "TGPowerWrap": ["ck-lighting", "atelier-luxe", "helios-exhibition", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
+  "breeze-cargo": ["komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
+  "ck-lighting": ["TGPowerWrap", "aistudio-brand", "breeze-cargo", "komorebi-editorial", "atelier-luxe", "helios-exhibition"],
+  "komorebi-editorial": ["breeze-cargo", "aistudio-brand", "ck-lighting", "atelier-luxe", "helios-exhibition", "TGPowerWrap"],
+  "aistudio-brand": ["breeze-cargo", "ck-lighting", "komorebi-editorial", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
+  "atelier-luxe": ["helios-exhibition", "TGPowerWrap", "breeze-cargo", "komorebi-editorial", "ck-lighting", "aistudio-brand"],
+  "helios-exhibition": ["atelier-luxe", "TGPowerWrap", "breeze-cargo", "komorebi-editorial", "ck-lighting", "aistudio-brand"],
+};
 
 // Seeded PRNG for consistent, unique shuffle per page
 function createSeededRNG(seedStr: string) {
@@ -190,22 +222,39 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
   const navigate = useNavigate();
   const { triggerReveal } = useReveal();
 
-  // Dynamic Case Randomization: Configured randomized case selection per page
+  // 5 Similar Featured Projects followed by 5 Random Hoverlist Projects
   const randomizedCases = useMemo(() => {
-    // Exclude currently active item
-    const filtered = ALL_CAROUSEL_CASES.filter((item) => item.id !== currentId);
-    
-    // Seeded Fisher-Yates shuffle to ensure a unique, distinct order for every single page
     const seed = currentId || "portfolio_default";
     const rng = createSeededRNG(seed);
-    const shuffled = [...filtered];
-    
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(rng() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
 
-    return shuffled;
+    // 1. Featured Projects (isProject: true)
+    const allFeatured = ALL_CAROUSEL_CASES.filter((item) => item.isProject);
+    const preferredOrder = currentId && SIMILARITY_MAP[currentId] ? SIMILARITY_MAP[currentId] : [];
+    
+    // Sort featured projects by similarity, excluding currentId
+    const sortedFeatured = [...allFeatured]
+      .filter((item) => item.id !== currentId)
+      .sort((a, b) => {
+        const indexA = preferredOrder.indexOf(a.id);
+        const indexB = preferredOrder.indexOf(b.id);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        return 0;
+      });
+    const first5Featured = sortedFeatured.slice(0, 5);
+
+    // 2. Hoverlist Capabilities / Projects (isProject: false)
+    const allHoverlist = ALL_CAROUSEL_CASES.filter((item) => !item.isProject && item.id !== currentId);
+    const shuffledHoverlist = [...allHoverlist];
+    for (let i = shuffledHoverlist.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [shuffledHoverlist[i], shuffledHoverlist[j]] = [shuffledHoverlist[j], shuffledHoverlist[i]];
+    }
+    const next5Hoverlist = shuffledHoverlist.slice(0, 5);
+
+    // Combine: 5 featured projects + 5 hoverlist projects
+    return [...first5Featured, ...next5Hoverlist];
   }, [currentId]);
 
   // Measure track width to dynamically calculate exact horizontal scroll distance
@@ -322,7 +371,7 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
                   <img 
                     src={item.image} 
                     alt={item.displayTitle}
-                    className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-700 pointer-events-none"
+                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-all duration-700 pointer-events-none"
                     referrerPolicy="no-referrer"
                   />
                   {/* Subtle top-right hover arrow icon */}
