@@ -559,14 +559,14 @@ export default function ProjectDetailPage() {
            })()}
 
            {/* Image 2 */}
-           {(project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial") && (
+           {(project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") && (
              <div 
                className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-20 bg-zinc-900 cursor-pointer sm:cursor-default"
-               onClick={() => handleMobileImageClick(project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : "/TGPW/6.jpg")}
+               onClick={() => handleMobileImageClick(project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : project.id === "breeze-cargo" ? "/RepX/RepX3.jpg" : "/TGPW/6.jpg")}
              >
                <img 
-                 src={project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : "/TGPW/6.jpg"} 
-                 alt="Gallery 2"
+                 src={project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : project.id === "breeze-cargo" ? "/RepX/RepX3.jpg" : "/TGPW/6.jpg"} 
+                 alt={project?.id === "breeze-cargo" ? "RepX 3" : "Gallery 2"} 
                  className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
                  referrerPolicy="no-referrer"
                />
@@ -574,15 +574,15 @@ export default function ProjectDetailPage() {
            )}
 
            {/* Image 3 */}
-           {project?.id === "komorebi-editorial" && (
+           {(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") && (
              <div 
-               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-30 bg-zinc-900 cursor-pointer sm:cursor-default"
-               onClick={() => handleMobileImageClick("/Triply/Triply7.jpg")}
+               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-30 bg-zinc-900 cursor-pointer sm:cursor-default flex flex-col justify-center items-center"
+               onClick={() => handleMobileImageClick(project.id === "breeze-cargo" ? "/RepX/RepX4.jpg" : "/Triply/Triply7.jpg")}
              >
                <img 
-                 src="/Triply/Triply7.jpg" 
-                 alt="Gallery 3"
-                 className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
+                 src={project.id === "breeze-cargo" ? "/RepX/RepX4.jpg" : "/Triply/Triply7.jpg"} 
+                 alt={project?.id === "breeze-cargo" ? "RepX 4" : "Gallery 3"} 
+                 className={`w-full ${project?.id === "breeze-cargo" ? "h-auto sm:h-full max-h-screen object-contain" : "h-auto sm:h-full object-contain sm:object-cover"} block select-none`} 
                  referrerPolicy="no-referrer"
                />
              </div>
@@ -690,6 +690,21 @@ export default function ProjectDetailPage() {
                referrerPolicy="no-referrer"
              />
            </div>
+
+           {/* Triply 12 (Directly After Triply 8) - Full original dimension, fully display */}
+           {project?.id === "komorebi-editorial" && (
+             <div 
+               className="relative w-full h-auto z-25 overflow-visible flex flex-col justify-center bg-transparent cursor-pointer sm:cursor-default"
+               onClick={() => handleMobileImageClick("/Triply/Triply12.jpg")}
+             >
+               <img 
+                 src="/Triply/Triply12.jpg" 
+                 alt="Triply 12 Showcase"
+                 className="w-full h-auto object-contain block select-none" 
+                 referrerPolicy="no-referrer"
+               />
+             </div>
+           )}
         </div>
 
         {/* Section 7: The Solution */}

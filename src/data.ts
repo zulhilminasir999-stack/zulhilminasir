@@ -140,7 +140,9 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     ],
     galleryImages: [
       "/RepX/RepX1.jpg",
-      "/RepX/RepX2.jpg"
+      "/RepX/RepX2.jpg",
+      "/RepX/RepX3.jpg",
+      "/RepX/RepX4.jpg"
     ],
     links: [
       { label: "Interactive Figma Prototypes Segment", url: "#" },
@@ -269,7 +271,8 @@ export const PORTFOLIO_PROJECTS: Project[] = [
       "/Triply/Triply8.jpg",
       "/Triply/Triply9.jpg",
       "/Triply/Triply10.jpg",
-      "/Triply/Triply11.jpg"
+      "/Triply/Triply11.jpg",
+      "/Triply/Triply12.jpg"
     ],
     links: [
       { label: "View Adobe InDesign Layout Board", url: "#" },
