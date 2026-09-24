@@ -576,13 +576,13 @@ export default function ProjectDetailPage() {
            {/* Image 3 */}
            {(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") && (
              <div 
-               className={`relative sm:sticky sm:top-0 h-screen min-h-screen w-full overflow-hidden z-30 bg-zinc-900 cursor-pointer sm:cursor-default`}
+               className={`relative h-auto sm:h-screen sm:min-h-screen w-full overflow-hidden z-30 bg-[#090c15] sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0`}
                onClick={() => handleMobileImageClick(project.id === "breeze-cargo" ? "/RepX/RepX4.jpg" : "/Triply/Triply7.jpg")}
              >
                <img 
                  src={project.id === "breeze-cargo" ? "/RepX/RepX4.jpg" : "/Triply/Triply7.jpg"} 
                  alt={project?.id === "breeze-cargo" ? "RepX 4" : "Gallery 3"} 
-                 className="w-full h-full min-h-screen object-cover block select-none" 
+                 className="w-full h-auto sm:h-full sm:w-full sm:min-h-full sm:min-w-full object-contain sm:object-cover block select-none p-0 m-0" 
                  referrerPolicy="no-referrer"
                />
              </div>
