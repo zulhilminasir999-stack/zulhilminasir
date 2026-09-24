@@ -576,13 +576,13 @@ export default function ProjectDetailPage() {
            {/* Image 3 */}
            {(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") && (
              <div 
-               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-30 bg-zinc-900 cursor-pointer sm:cursor-default flex flex-col justify-center items-center"
+               className={`relative sm:sticky sm:top-0 h-screen min-h-screen w-full overflow-hidden z-30 bg-zinc-900 cursor-pointer sm:cursor-default`}
                onClick={() => handleMobileImageClick(project.id === "breeze-cargo" ? "/RepX/RepX4.jpg" : "/Triply/Triply7.jpg")}
              >
                <img 
                  src={project.id === "breeze-cargo" ? "/RepX/RepX4.jpg" : "/Triply/Triply7.jpg"} 
                  alt={project?.id === "breeze-cargo" ? "RepX 4" : "Gallery 3"} 
-                 className={`w-full ${project?.id === "breeze-cargo" ? "h-auto sm:h-full max-h-screen object-contain" : "h-auto sm:h-full object-contain sm:object-cover"} block select-none`} 
+                 className="w-full h-full min-h-screen object-cover block select-none" 
                  referrerPolicy="no-referrer"
                />
              </div>
@@ -652,13 +652,21 @@ export default function ProjectDetailPage() {
         <div className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block">
            {/* Image 1 */}
            <div 
-             className={`relative sm:sticky sm:top-0 h-auto sm:h-screen w-full z-10 cursor-pointer sm:cursor-default ${project?.id === "ck-lighting" ? "flex flex-col justify-center bg-zinc-900 overflow-hidden" : "overflow-hidden flex flex-col justify-center"}`}
-             onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg")))}
+             className={`relative sm:sticky sm:top-0 ${project?.id === "breeze-cargo" ? "h-auto" : "h-auto sm:h-screen"} w-full z-10 cursor-pointer sm:cursor-default ${project?.id === "ck-lighting" ? "flex flex-col justify-center bg-zinc-900 overflow-hidden" : project?.id === "breeze-cargo" ? "overflow-visible flex flex-col justify-center bg-zinc-900" : "overflow-hidden flex flex-col justify-center"}`}
+             onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : (project?.id === "breeze-cargo" ? "/RepX/RepX5.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg"))))}
            >
              <img 
-               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg"))} 
-               alt="Gallery Sticky 1"
-               className={`w-full h-auto sm:h-full object-contain sm:object-cover block`}
+               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : (project?.id === "breeze-cargo" ? "/RepX/RepX5.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg")))} 
+               alt={project?.id === "breeze-cargo" ? "RepX 5" : "Gallery Sticky 1"}
+               className={`w-full ${project?.id === "breeze-cargo" ? "h-auto object-contain transform -translate-y-4 sm:-translate-y-10" : "h-auto sm:h-full object-contain sm:object-cover"} block`}
+               onError={(e) => {
+                 if (project?.id === "breeze-cargo") {
+                   const target = e.currentTarget;
+                   if (target.src.endsWith('/RepX/RepX5.jpg')) {
+                     target.src = '/RepX/RepX.jpg';
+                   }
+                 }
+               }}
                referrerPolicy="no-referrer"
              />
            </div>

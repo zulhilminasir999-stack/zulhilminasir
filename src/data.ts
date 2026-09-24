@@ -142,7 +142,8 @@ export const PORTFOLIO_PROJECTS: Project[] = [
       "/RepX/RepX1.jpg",
       "/RepX/RepX2.jpg",
       "/RepX/RepX3.jpg",
-      "/RepX/RepX4.jpg"
+      "/RepX/RepX4.jpg",
+      "/RepX/RepX5.jpg"
     ],
     links: [
       { label: "Interactive Figma Prototypes Segment", url: "#" },
