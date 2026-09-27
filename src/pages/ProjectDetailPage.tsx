@@ -1,8 +1,8 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
-import { 
-  ArrowLeft, 
+import {
+  ArrowLeft,
   ChevronLeft,
   X,
   Menu,
@@ -14,7 +14,7 @@ import {
   Layers,
   Box,
   Sun,
-  Moon
+  Moon,
 } from "lucide-react";
 import { PORTFOLIO_PROJECTS, CAPABILITIES_DATA } from "../data";
 import { FloatingMenu } from "../components/FloatingMenu";
@@ -51,7 +51,9 @@ export default function ProjectDetailPage() {
   const [showSideMenu, setShowSideMenu] = useState(false);
   const [localTime, setLocalTime] = useState("");
   const [currentHeroImage, setCurrentHeroImage] = useState<string>("");
-  const [selectedMobileModalImage, setSelectedMobileModalImage] = useState<string | null>(null);
+  const [selectedMobileModalImage, setSelectedMobileModalImage] = useState<
+    string | null
+  >(null);
   const { triggerReveal } = useReveal();
 
   const handleMobileImageClick = (src: string) => {
@@ -60,25 +62,30 @@ export default function ProjectDetailPage() {
     }
   };
 
-  const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetSectionId: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLElement>,
+    targetSectionId: string,
+  ) => {
     if (e && e.preventDefault) e.preventDefault();
-    
-    const rawId = targetSectionId.replace('#', '');
-    
-    if (rawId === 'capabilities-section' || rawId === 'capabilities') {
+
+    const rawId = targetSectionId.replace("#", "");
+
+    if (rawId === "capabilities-section" || rawId === "capabilities") {
       return;
     }
-    
+
     triggerReveal(() => {
-      if (rawId === 'hero-section' || rawId === 'hero') {
-        navigate('/');
+      if (rawId === "hero-section" || rawId === "hero") {
+        navigate("/");
       } else {
         navigate(`/#${rawId}`);
       }
     });
   };
 
-  const project = PORTFOLIO_PROJECTS.find(p => p.id === id || (id === "zenith-cms" && p.id === "ck-lighting"));
+  const project = PORTFOLIO_PROJECTS.find(
+    (p) => p.id === id || (id === "zenith-cms" && p.id === "ck-lighting"),
+  );
 
   useEffect(() => {
     const updateTime = () => {
@@ -99,12 +106,18 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     if (project) {
-      setCurrentHeroImage((project.galleryImages && project.galleryImages.length > 0) ? project.galleryImages[0] : project.imageUrl);
+      setCurrentHeroImage(
+        project.galleryImages && project.galleryImages.length > 0
+          ? project.galleryImages[0]
+          : project.imageUrl,
+      );
     }
   }, [project]);
 
   const handleRandomizeHeroImage = () => {
-    const available = AI_RELATED_IMAGES.filter(img => img !== currentHeroImage);
+    const available = AI_RELATED_IMAGES.filter(
+      (img) => img !== currentHeroImage,
+    );
     const randomIndex = Math.floor(Math.random() * available.length);
     setCurrentHeroImage(available[randomIndex]);
   };
@@ -119,17 +132,17 @@ export default function ProjectDetailPage() {
 
   useLayoutEffect(() => {
     setIsScrollReset(false);
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
     }
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, [id]);
 
   useEffect(() => {
     const resetToTop = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
       if (lenis) {
@@ -138,13 +151,15 @@ export default function ProjectDetailPage() {
     };
 
     resetToTop();
-    const timers = [0, 20, 50, 100, 200, 400, 800, 1500].map(d => setTimeout(resetToTop, d));
+    const timers = [0, 20, 50, 100, 200, 400, 800, 1500].map((d) =>
+      setTimeout(resetToTop, d),
+    );
 
     let prevY = window.scrollY;
 
     const handleScroll = () => {
       const currentY = window.scrollY;
-      
+
       setShowSideMenu(currentY > 400);
       setIsHeaderScrolled(currentY >= 80);
 
@@ -173,9 +188,9 @@ export default function ProjectDetailPage() {
     const revealTimer = setTimeout(() => {
       setIsScrollReset(true);
     }, 120);
-    
+
     return () => {
-      timers.forEach(t => clearTimeout(t));
+      timers.forEach((t) => clearTimeout(t));
       clearTimeout(revealTimer);
       window.removeEventListener("scroll", handleScroll);
     };
@@ -185,8 +200,10 @@ export default function ProjectDetailPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-zinc-50 font-sans">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-zinc-900 mb-4">Project Not Found</h1>
-          <button 
+          <h1 className="text-4xl font-bold text-zinc-900 mb-4">
+            Project Not Found
+          </h1>
+          <button
             onClick={() => navigate("/")}
             className="text-[#0A2947] font-medium hover:underline flex items-center gap-2 mx-auto"
           >
@@ -199,13 +216,20 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#0A2947] font-sans text-white relative">
-      {!isScrollReset && <div className="fixed inset-0 bg-[#0A2947] z-[9999]" />}
-      
+      {!isScrollReset && (
+        <div className="fixed inset-0 bg-[#0A2947] z-[9999]" />
+      )}
+
       {/* Global grain texture for the whole page */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03] mix-blend-overlay">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <filter id="projectPageNoise">
-            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.8"
+              numOctaves="3"
+              stitchTiles="stitch"
+            />
           </filter>
           <rect width="100%" height="100%" filter="url(#projectPageNoise)" />
         </svg>
@@ -213,16 +237,16 @@ export default function ProjectDetailPage() {
       {/* Navigation Header */}
       <AnimatePresence>
         {headerVisible && (
-          <motion.header 
+          <motion.header
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
-              isMobile 
-                ? (isMobileMenuOpen 
-                    ? "bg-white border-b-0 h-auto shadow-none" 
-                    : "bg-white border-b border-zinc-200/80 h-14 shadow-sm")
+              isMobile
+                ? isMobileMenuOpen
+                  ? "bg-white border-b-0 h-auto shadow-none"
+                  : "bg-white border-b border-zinc-200/80 h-14 shadow-sm"
                 : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
             }`}
           >
@@ -235,34 +259,67 @@ export default function ProjectDetailPage() {
                       <div className="flex items-center">
                         <motion.button
                           layoutId="header-brand-link-proj"
-                          transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 380,
+                            damping: 35,
+                          }}
                           onClick={(e) => handleNavClick(e, "#hero-section")}
                           className="group flex items-center gap-1.5 transition-colors duration-300 hover:opacity-85 text-white cursor-pointer"
                         >
-                          <span className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-white">Zuhilmi Nasir</span>
+                          <span className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-white">
+                            Zuhilmi Nasir
+                          </span>
                         </motion.button>
                       </div>
 
                       {/* Desktop Nav - Capsule */}
-                      <motion.nav 
+                      <motion.nav
                         layoutId="header-nav-capsule-proj"
-                        transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 35,
+                        }}
                         className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1 md:space-x-1 lg:space-x-2 font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
                       >
-                        <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                        <button
+                          onClick={(e) =>
+                            handleNavClick(e, "#services-section")
+                          }
+                          className="nav-menu-btn-dark-theme cursor-pointer"
+                        >
                           <span className="text-[15px]">Services</span>
                         </button>
-                        <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn-dark-theme cursor-pointer">
-                          <span className="hidden lg:inline text-[15px]">Software & AI Solution</span>
-                          <span className="inline lg:hidden text-[15px]">Software</span>
+                        <button
+                          onClick={(e) =>
+                            handleNavClick(e, "#integration-section")
+                          }
+                          className="nav-menu-btn-dark-theme cursor-pointer"
+                        >
+                          <span className="hidden lg:inline text-[15px]">
+                            Software & AI Solution
+                          </span>
+                          <span className="inline lg:hidden text-[15px]">
+                            Software
+                          </span>
                         </button>
-                        <button onClick={(e) => e.preventDefault()} className="nav-menu-btn-dark-theme active cursor-default">
+                        <button
+                          onClick={(e) => e.preventDefault()}
+                          className="nav-menu-btn-dark-theme active cursor-default"
+                        >
                           <span className="text-[15px]">Projects</span>
                         </button>
-                        <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                        <button
+                          onClick={(e) => handleNavClick(e, "#about-section")}
+                          className="nav-menu-btn-dark-theme cursor-pointer"
+                        >
                           <span className="text-[15px]">About</span>
                         </button>
-                        <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                        <button
+                          onClick={(e) => handleNavClick(e, "#career-section")}
+                          className="nav-menu-btn-dark-theme cursor-pointer"
+                        >
                           <span className="text-[15px]">Career</span>
                         </button>
                       </motion.nav>
@@ -271,7 +328,11 @@ export default function ProjectDetailPage() {
                       <div className="flex items-center">
                         <motion.button
                           layoutId="header-contact-btn-proj"
-                          transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 380,
+                            damping: 35,
+                          }}
                           onClick={(e) => handleNavClick(e, "#contact-section")}
                           className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 whitespace-nowrap cursor-pointer"
                         >
@@ -279,25 +340,35 @@ export default function ProjectDetailPage() {
                           <div className="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-0 rounded-[25px] overflow-hidden">
                             {/* Ambient internal cyan glow */}
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.18)_0%,transparent_70%)] animate-[glow-pulse_3s_ease-in-out_infinite]" />
-                            
+
                             {/* Scanning grid sweep light */}
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
                           </div>
-                          <span className="relative z-10 text-[15px]">Get In Touch</span>
+                          <span className="relative z-10 text-[15px]">
+                            Get In Touch
+                          </span>
                         </motion.button>
                       </div>
                     </>
                   ) : (
                     // Scrolled State Capsule
                     <div className="flex items-center justify-center w-full">
-                      <motion.div 
+                      <motion.div
                         layoutId="header-nav-capsule-proj"
-                        transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 35,
+                        }}
                         className="flex items-center bg-white/80 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.12)] rounded-full py-1.5 pl-6 pr-2 md:py-1 md:pl-4 md:pr-1 lg:py-2 lg:pl-7 lg:pr-2.5 font-sans transition-all duration-300"
                       >
                         <motion.button
                           layoutId="header-brand-link-proj"
-                          transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 380,
+                            damping: 35,
+                          }}
                           onClick={(e) => handleNavClick(e, "#hero-section")}
                           className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-[#0A2947] hover:text-[#2563EB] hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
                         >
@@ -305,20 +376,45 @@ export default function ProjectDetailPage() {
                         </motion.button>
 
                         <nav className="flex items-center space-x-1 md:space-x-1 lg:space-x-2 font-normal tracking-normal">
-                          <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                          <button
+                            onClick={(e) =>
+                              handleNavClick(e, "#services-section")
+                            }
+                            className="nav-menu-btn nav-btn-black cursor-pointer"
+                          >
                             <span className="text-[15px]">Services</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
-                            <span className="hidden lg:inline text-[15px]">Software & AI Solution</span>
-                            <span className="inline lg:hidden text-[15px]">Software</span>
+                          <button
+                            onClick={(e) =>
+                              handleNavClick(e, "#integration-section")
+                            }
+                            className="nav-menu-btn nav-btn-black cursor-pointer"
+                          >
+                            <span className="hidden lg:inline text-[15px]">
+                              Software & AI Solution
+                            </span>
+                            <span className="inline lg:hidden text-[15px]">
+                              Software
+                            </span>
                           </button>
-                          <button onClick={(e) => e.preventDefault()} className="nav-menu-btn nav-btn-black active cursor-default">
+                          <button
+                            onClick={(e) => e.preventDefault()}
+                            className="nav-menu-btn nav-btn-black active cursor-default"
+                          >
                             <span className="text-[15px]">Projects</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                          <button
+                            onClick={(e) => handleNavClick(e, "#about-section")}
+                            className="nav-menu-btn nav-btn-black cursor-pointer"
+                          >
                             <span className="text-[15px]">About</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                          <button
+                            onClick={(e) =>
+                              handleNavClick(e, "#career-section")
+                            }
+                            className="nav-menu-btn nav-btn-black cursor-pointer"
+                          >
                             <span className="text-[15px]">Career</span>
                           </button>
                         </nav>
@@ -326,7 +422,11 @@ export default function ProjectDetailPage() {
                         {/* Get In Touch Button inside capsule */}
                         <motion.button
                           layoutId="header-contact-btn-proj"
-                          transition={{ type: "spring", stiffness: 380, damping: 35 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 380,
+                            damping: 35,
+                          }}
                           onClick={(e) => handleNavClick(e, "#contact-section")}
                           className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                         >
@@ -340,7 +440,7 @@ export default function ProjectDetailPage() {
                 /* Mobile Menu View */
                 <>
                   <div className="flex items-center">
-                    <button 
+                    <button
                       onClick={(e) => handleNavClick(e, "#hero-section")}
                       className="font-display font-semibold text-sm tracking-tight text-[#2563EB] hover:text-[#3B82F6] transition-colors cursor-pointer"
                     >
@@ -348,12 +448,16 @@ export default function ProjectDetailPage() {
                     </button>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <button 
+                    <button
                       onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                       className="p-1 px-2 -mr-3 translate-x-1 pl-2 text-[#2563EB] hover:text-[#3B82F6] active:text-[#3B82F6] cursor-pointer rounded-lg focus:outline-none transition-colors"
                       aria-label="Toggle Menu"
                     >
-                      {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                      {isMobileMenuOpen ? (
+                        <X className="w-5 h-5" />
+                      ) : (
+                        <Menu className="w-5 h-5" />
+                      )}
                     </button>
                   </div>
                 </>
@@ -369,12 +473,59 @@ export default function ProjectDetailPage() {
                   exit={{ opacity: 0, height: 0 }}
                   className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-white shadow-xl overflow-hidden"
                 >
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Services</button>
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Software & AI Solutions</button>
-                  <button onClick={(e) => { e.preventDefault(); }} className="font-mono uppercase text-sm tracking-wide text-left text-white/50 pb-2 border-b border-white/50 cursor-default">Projects</button>
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">About</button>
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Career</button>
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors cursor-pointer">Collaborate</button>
+                  <button
+                    onClick={(e) => {
+                      setIsMobileMenuOpen(false);
+                      handleNavClick(e, "#services-section");
+                    }}
+                    className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer"
+                  >
+                    Services
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      setIsMobileMenuOpen(false);
+                      handleNavClick(e, "#integration-section");
+                    }}
+                    className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer"
+                  >
+                    Software & AI Solutions
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                    className="font-mono uppercase text-sm tracking-wide text-left text-white/50 pb-2 border-b border-white/50 cursor-default"
+                  >
+                    Projects
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      setIsMobileMenuOpen(false);
+                      handleNavClick(e, "#about-section");
+                    }}
+                    className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer"
+                  >
+                    About
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      setIsMobileMenuOpen(false);
+                      handleNavClick(e, "#career-section");
+                    }}
+                    className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer"
+                  >
+                    Career
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      setIsMobileMenuOpen(false);
+                      handleNavClick(e, "#contact-section");
+                    }}
+                    className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors cursor-pointer"
+                  >
+                    Collaborate
+                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -384,16 +535,22 @@ export default function ProjectDetailPage() {
 
       {/* Main Content Area */}
       <main className="relative z-10">
-        
         {/* Full-width Hero Header Section with Background Image */}
         <div className="relative w-full h-auto sm:h-screen flex flex-col sm:flex-row sm:items-end overflow-hidden pt-14 sm:pt-0 bg-white sm:bg-transparent">
           {/* Background Image: real size landscape on mobile, full-screen on desktop */}
           <div className="relative sm:absolute sm:inset-0 sm:z-0 w-full overflow-hidden bg-white sm:bg-transparent">
-            <img 
-              src={currentHeroImage || ((project?.galleryImages && project.galleryImages.length > 0) ? project.galleryImages[0] : (project?.imageUrl || ""))} 
+            <img
+              src={
+                currentHeroImage ||
+                (project?.galleryImages && project.galleryImages.length > 0
+                  ? project.galleryImages[0]
+                  : project?.imageUrl || "")
+              }
               alt={`${project?.title || "Project"} background`}
               className="w-full h-auto sm:h-full object-contain sm:object-cover select-none pointer-events-none block"
-              style={{ objectPosition: project?.objectPosition || "center 30%" }}
+              style={{
+                objectPosition: project?.objectPosition || "center 30%",
+              }}
               referrerPolicy="no-referrer"
             />
             {/* Elegant overlay: dark gradients for beautiful visual blending and cinematic feel */}
@@ -403,18 +560,22 @@ export default function ProjectDetailPage() {
 
           {/* Header Content Container: sits cleanly below the image on mobile */}
           <div className="w-full px-6 sm:px-12 lg:px-16 pt-6 sm:pt-0 pb-10 sm:pb-16 md:pb-24 relative z-10 bg-white sm:bg-transparent">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="space-y-4 text-left"
             >
               <h1 className="font-sans font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl !text-[#2563EB] sm:!text-white tracking-tight leading-tight sm:leading-none uppercase flex items-center flex-wrap gap-x-3 gap-y-1">
-                {project.title.split('|').map((part, index, array) => (
+                {project.title.split("|").map((part, index, array) => (
                   <React.Fragment key={index}>
-                    <span className="text-[#2563EB] sm:text-white">{part.trim()}</span>
+                    <span className="text-[#2563EB] sm:text-white">
+                      {part.trim()}
+                    </span>
                     {index < array.length - 1 && (
-                      <span className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#2563EB]/50 sm:text-white/50 pb-1">|</span>
+                      <span className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#2563EB]/50 sm:text-white/50 pb-1">
+                        |
+                      </span>
                     )}
                   </React.Fragment>
                 ))}
@@ -426,24 +587,28 @@ export default function ProjectDetailPage() {
               {/* Combined on mobile: Intro summary text integrated into the same single section */}
               <div className="block sm:hidden pt-4">
                 <p className="text-[20px] font-light leading-snug text-zinc-700">
-                  {project.summary || "A digital ecosystem that transforms how athletes interact with their performance wear, creating a seamless connection between garment and user through innovative technology."}
+                  {project.summary ||
+                    "A digital ecosystem that transforms how athletes interact with their performance wear, creating a seamless connection between garment and user through innovative technology."}
                 </p>
               </div>
             </motion.div>
           </div>
         </div>
         {/* Main Content Area - Light Theme (Replicated from Video) */}
-        
+
         {/* Section 1: Intro (Desktop only, combined into header section on mobile) */}
         <section className="hidden sm:flex w-full bg-white text-zinc-900 z-20 sm:sticky sm:top-0 sm:h-screen flex-col justify-center">
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4">
-                <h2 className="text-2xl font-medium tracking-tight text-zinc-900">{project.title}</h2>
+                <h2 className="text-2xl font-medium tracking-tight text-zinc-900">
+                  {project.title}
+                </h2>
               </div>
               <div className="md:col-span-8">
                 <p className="text-2xl md:text-3xl font-light leading-snug text-zinc-700">
-                  {project.summary || "A digital ecosystem that transforms how athletes interact with their performance wear, creating a seamless connection between garment and user through innovative technology."}
+                  {project.summary ||
+                    "A digital ecosystem that transforms how athletes interact with their performance wear, creating a seamless connection between garment and user through innovative technology."}
                 </p>
               </div>
             </div>
@@ -455,41 +620,77 @@ export default function ProjectDetailPage() {
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4">
-                <a href={project.links?.[0] || "#"} className="text-2xl font-medium text-zinc-900 hover:text-zinc-600 transition-colors">
+                <a
+                  href={project.links?.[0] || "#"}
+                  className="text-2xl font-medium text-zinc-900 hover:text-zinc-600 transition-colors"
+                >
                   Visit Live Site
                 </a>
               </div>
               <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-y-12 gap-x-8">
                 <div>
-                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Client</h4>
-                  <p className="text-zinc-600 text-[16px] sm:text-sm">{project.client || "Stride Athletics"}</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
+                    Client
+                  </h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">
+                    {project.client || "Stride Athletics"}
+                  </p>
                 </div>
                 <div>
-                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Project Type</h4>
-                  <p className="text-zinc-600 text-[16px] sm:text-sm">{project.categoryLabel || "Digital Product Design"}</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
+                    Project Type
+                  </h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">
+                    {project.categoryLabel || "Digital Product Design"}
+                  </p>
                 </div>
                 <div>
-                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Released</h4>
-                  <p className="text-zinc-600 text-[16px] sm:text-sm">{project.year || "October 11, 2024"}</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
+                    Released
+                  </h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">
+                    {project.year || "October 11, 2024"}
+                  </p>
                 </div>
                 <div>
-                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Technology</h4>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
+                    Technology
+                  </h4>
                   <div className="flex flex-col gap-1">
-                    {(project.toolsUsed && project.toolsUsed.length > 0) ? project.toolsUsed.map(tool => (
-                      <span key={tool} className="text-zinc-600 text-[16px] sm:text-sm">{tool}</span>
-                    )) : (
+                    {project.toolsUsed && project.toolsUsed.length > 0 ? (
+                      project.toolsUsed.map((tool) => (
+                        <span
+                          key={tool}
+                          className="text-zinc-600 text-[16px] sm:text-sm"
+                        >
+                          {tool}
+                        </span>
+                      ))
+                    ) : (
                       <>
-                        <span className="text-zinc-600 text-[16px] sm:text-sm">React Native</span>
-                        <span className="text-zinc-600 text-[16px] sm:text-sm">Motion Analysis API</span>
-                        <span className="text-zinc-600 text-[16px] sm:text-sm">Machine Learning</span>
-                        <span className="text-zinc-600 text-[16px] sm:text-sm">Cloud Architecture</span>
+                        <span className="text-zinc-600 text-[16px] sm:text-sm">
+                          React Native
+                        </span>
+                        <span className="text-zinc-600 text-[16px] sm:text-sm">
+                          Motion Analysis API
+                        </span>
+                        <span className="text-zinc-600 text-[16px] sm:text-sm">
+                          Machine Learning
+                        </span>
+                        <span className="text-zinc-600 text-[16px] sm:text-sm">
+                          Cloud Architecture
+                        </span>
                       </>
                     )}
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Timeframe</h4>
-                  <p className="text-zinc-600 text-[16px] sm:text-sm">3 months</p>
+                  <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
+                    Timeframe
+                  </h4>
+                  <p className="text-zinc-600 text-[16px] sm:text-sm">
+                    3 months
+                  </p>
                 </div>
               </div>
             </div>
@@ -502,13 +703,19 @@ export default function ProjectDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4 relative">
                 <div>
-                  <h2 className="text-2xl font-medium tracking-tight text-zinc-900">Overview</h2>
+                  <h2 className="text-2xl font-medium tracking-tight text-zinc-900">
+                    Overview
+                  </h2>
                 </div>
               </div>
               <div className="md:col-span-8 space-y-6 sm:space-y-8 text-[20px] sm:text-2xl md:text-3xl font-light leading-snug text-zinc-700">
-                <p>{project.summary || "Our solution focused on creating an intuitive digital platform that connects with Stride's performance wear, providing real-time insights and personalized recommendations. The challenge was to make complex performance data accessible and actionable for users of all expertise levels."}</p>
                 <p>
-                  {project.challenge || "Stride Athletics had developed cutting-edge performance wear but lacked the digital interface to unlock its full potential. They needed a digital product that would help athletes understand, customize, and maximize the benefits of their smart athletic wear."}
+                  {project.summary ||
+                    "Our solution focused on creating an intuitive digital platform that connects with Stride's performance wear, providing real-time insights and personalized recommendations. The challenge was to make complex performance data accessible and actionable for users of all expertise levels."}
+                </p>
+                <p>
+                  {project.challenge ||
+                    "Stride Athletics had developed cutting-edge performance wear but lacked the digital interface to unlock its full potential. They needed a digital product that would help athletes understand, customize, and maximize the benefits of their smart athletic wear."}
                 </p>
               </div>
             </div>
@@ -516,119 +723,254 @@ export default function ProjectDetailPage() {
         </section>
 
         {/* Section 4: Full-width Images */}
-        <div 
-          className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block" 
+        <div
+          className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block"
           style={{ height: undefined }}
         >
-           {/* Image 1 */}
-           {(() => {
-             const img1Src = (project?.galleryImages && project.galleryImages.length > 1) ? project.galleryImages[1] : (project?.imageUrl || "");
-             const isLongImage = img1Src.includes('ck2') || img1Src.includes('ck3') || img1Src.includes('ck');
-             const finalImg1Src = project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : project?.id === "komorebi-editorial" ? "/Triply/Triply2.jpg" : project?.id === "breeze-cargo" ? "/RepX/RepX2.jpg" : img1Src;
-             
-             if (isLongImage) {
-               return (
-                 <div 
-                   className="z-10 w-full relative sm:sticky cursor-pointer sm:cursor-default"
-                   style={project?.id === "ck-lighting" ? {} : { bottom: 0 }}
-                   onClick={() => handleMobileImageClick(project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : img1Src)}
-                 >
-                   <img 
-                     src={project?.id === "ck-lighting" ? "/CK Lighting Web/ck2.jpg" : img1Src} 
-                     alt="Gallery 1"
-                     className="w-full h-auto block select-none" 
-                     referrerPolicy="no-referrer"
-                   />
-                 </div>
-               );
-             }
-             return (
-               <div 
-                 className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-10 cursor-pointer sm:cursor-default"
-                 onClick={() => handleMobileImageClick(finalImg1Src)}
-               >
-                 <img 
-                   src={finalImg1Src} 
-                   alt="Gallery 1"
-                   className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
-                   style={{ objectPosition: project?.id === "komorebi-editorial" ? "center 30%" : undefined }}
-                   referrerPolicy="no-referrer"
-                 />
-               </div>
-             );
-           })()}
+          {/* Image 1 */}
+          {(() => {
+            const img1Src =
+              project?.galleryImages && project.galleryImages.length > 1
+                ? project.galleryImages[1]
+                : project?.imageUrl || "";
+            const isLongImage =
+              img1Src.includes("ck2") ||
+              img1Src.includes("ck3") ||
+              img1Src.includes("ck");
+            const finalImg1Src =
+              project?.id === "ck-lighting"
+                ? "/CK Lighting Web/ck2.jpg"
+                : project?.id === "komorebi-editorial"
+                  ? "/Triply/Triply2.jpg"
+                  : project?.id === "breeze-cargo"
+                    ? "/RepX/RepX2.jpg"
+                    : img1Src;
 
-           {/* Image 2 */}
-           {(project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") && (
-             <div 
-               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-20 bg-zinc-900 cursor-pointer sm:cursor-default"
-               onClick={() => handleMobileImageClick(project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : project.id === "breeze-cargo" ? "/RepX/RepX3.jpg" : "/TGPW/6.jpg")}
-             >
-               <img 
-                 src={project.id === "komorebi-editorial" ? "/Triply/Triply3.jpg" : project.id === "breeze-cargo" ? "/RepX/RepX3.jpg" : "/TGPW/6.jpg"} 
-                 alt={project?.id === "breeze-cargo" ? "RepX 3" : "Gallery 2"} 
-                 className="w-full h-auto sm:h-full object-contain sm:object-cover block" 
-                 referrerPolicy="no-referrer"
-               />
-             </div>
-           )}
+            if (isLongImage) {
+              return (
+                <div
+                  className="z-10 w-full relative sm:sticky cursor-pointer sm:cursor-default"
+                  style={project?.id === "ck-lighting" ? {} : { bottom: 0 }}
+                  onClick={() =>
+                    handleMobileImageClick(
+                      project?.id === "ck-lighting"
+                        ? "/CK Lighting Web/ck2.jpg"
+                        : img1Src,
+                    )
+                  }
+                >
+                  <img
+                    src={
+                      project?.id === "ck-lighting"
+                        ? "/CK Lighting Web/ck2.jpg"
+                        : img1Src
+                    }
+                    alt="Gallery 1"
+                    className="w-full h-auto block select-none"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              );
+            }
+            return (
+              <div
+                className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-10 cursor-pointer sm:cursor-default"
+                onClick={() => handleMobileImageClick(finalImg1Src)}
+              >
+                <img
+                  src={finalImg1Src}
+                  alt="Gallery 1"
+                  className="w-full h-auto sm:h-full object-contain sm:object-cover block"
+                  style={{
+                    objectPosition:
+                      project?.id === "komorebi-editorial"
+                        ? "center 30%"
+                        : undefined,
+                  }}
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            );
+          })()}
 
-           {/* Image 3 */}
-           {(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") && (
-             <div 
-               className="relative w-full min-h-screen h-auto sm:h-screen sm:min-h-screen overflow-hidden z-30 bg-[#090c15] sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0"
-               onClick={() => handleMobileImageClick(project.id === "breeze-cargo" ? "/RepX/RepX4.jpg" : "/Triply/Triply7.jpg")}
-             >
-               <img 
-                 src={project.id === "breeze-cargo" ? "/RepX/RepX4.jpg" : "/Triply/Triply7.jpg"} 
-                 alt={project?.id === "breeze-cargo" ? "RepX 4" : "Gallery 3"} 
-                 className="w-full h-full min-h-screen object-cover block select-none p-0 m-0" 
-                 referrerPolicy="no-referrer"
-               />
-             </div>
-           )}
+          {/* Image 2 */}
+          {(project?.id === "TGPowerWrap" ||
+            project?.id === "komorebi-editorial" ||
+            project?.id === "breeze-cargo") && (
+            <div
+              className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-20 bg-zinc-900 cursor-pointer sm:cursor-default"
+              onClick={() =>
+                handleMobileImageClick(
+                  project.id === "komorebi-editorial"
+                    ? "/Triply/Triply3.jpg"
+                    : project.id === "breeze-cargo"
+                      ? "/RepX/RepX3.jpg"
+                      : "/TGPW/6.jpg",
+                )
+              }
+            >
+              <img
+                src={
+                  project.id === "komorebi-editorial"
+                    ? "/Triply/Triply3.jpg"
+                    : project.id === "breeze-cargo"
+                      ? "/RepX/RepX3.jpg"
+                      : "/TGPW/6.jpg"
+                }
+                alt={project?.id === "breeze-cargo" ? "RepX 3" : "Gallery 2"}
+                className="w-full h-auto sm:h-full object-contain sm:object-cover block"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          )}
 
+          {/* Image 3 */}
+          {(project?.id === "komorebi-editorial" ||
+            project?.id === "breeze-cargo") && (
+            <div
+              className="relative w-full min-h-screen h-auto sm:h-screen sm:min-h-screen overflow-hidden z-30 bg-[#090c15] sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0"
+              onClick={() =>
+                handleMobileImageClick(
+                  project.id === "breeze-cargo"
+                    ? "/RepX/RepX4.jpg"
+                    : "/Triply/Triply7.jpg",
+                )
+              }
+            >
+              <img
+                src={
+                  project.id === "breeze-cargo"
+                    ? "/RepX/RepX4.jpg"
+                    : "/Triply/Triply7.jpg"
+                }
+                alt={project?.id === "breeze-cargo" ? "RepX 4" : "Gallery 3"}
+                className="w-full h-full min-h-screen object-cover block select-none p-0 m-0"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          )}
         </div>
 
         {/* Section 5: The Challenge (Sticky Left) */}
         <div className="w-full bg-white text-zinc-900 z-50 relative py-16 md:py-24 lg:py-32">
           <div className="w-full px-6 sm:px-12 lg:px-16 space-y-12 md:space-y-20">
-             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 mt-6 mb-16 md:mt-10 md:mb-28">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 mt-6 mb-16 md:mt-10 md:mb-28">
               <div className="md:col-span-4 relative">
                 <div>
-                  <h2 className="text-2xl font-medium tracking-tight text-zinc-900">The Challenge</h2>
+                  <h2 className="text-2xl font-medium tracking-tight text-zinc-900">
+                    The Challenge
+                  </h2>
                 </div>
               </div>
               <div className="md:col-span-8 space-y-6 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
-                <p className="mb-6">{project.challenge || "Athletes struggled to interpret and act on the data their smart clothing collected. Existing apps in the market were either too complex for casual users or too simplified for professional athletes. The gap between advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}</p>
+                <p className="mb-6">
+                  {project.challenge ||
+                    "Athletes struggled to interpret and act on the data their smart clothing collected. Existing apps in the market were either too complex for casual users or too simplified for professional athletes. The gap between advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}
+                </p>
               </div>
             </div>
-            
+
             {/* Gallery Part */}
             <div className="-mx-6 sm:mx-0 grid grid-cols-1 md:grid-cols-12 gap-0 sm:gap-4 lg:gap-6">
-              <div className="md:col-span-6 h-auto sm:h-[600px] lg:h-[800px] cursor-pointer sm:cursor-default">
-                <img 
-                  src={(project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply11.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || ""))} 
-                  className="w-full h-auto sm:h-full object-contain sm:object-cover block p-0 m-0" 
+              <div className="md:col-span-6 h-auto sm:h-[600px] lg:h-[800px] overflow-hidden cursor-pointer sm:cursor-default">
+                <img
+                  src={
+                    project?.id === "TGPowerWrap"
+                      ? "/Images/TGPW Mobile.jpg"
+                      : project?.id === "ck-lighting" ||
+                          project?.id === "zenith-cms"
+                        ? "/CK Lighting Web/ck5.jpg"
+                        : project?.id === "komorebi-editorial"
+                          ? "/Triply/Triply11.jpg"
+                          : project?.galleryImages &&
+                              project.galleryImages.length > 2
+                            ? project.galleryImages[2]
+                            : project?.imageUrl || ""
+                  }
+                  className="w-full h-auto sm:h-full object-contain sm:object-cover block p-0 m-0 transform scale-105 sm:scale-[1.08] -translate-y-2 sm:-translate-y-5"
                   alt={`${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
-                  onClick={() => handleMobileImageClick((project?.id === "TGPowerWrap") ? "/Images/TGPW Mobile.jpg" : (project?.id === "ck-lighting" || project?.id === "zenith-cms") ? "/CK Lighting Web/ck5.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply11.jpg" : ((project?.galleryImages && project.galleryImages.length > 2) ? project.galleryImages[2] : (project?.imageUrl || "")))}
+                  onClick={() =>
+                    handleMobileImageClick(
+                      project?.id === "TGPowerWrap"
+                        ? "/Images/TGPW Mobile.jpg"
+                        : project?.id === "ck-lighting" ||
+                            project?.id === "zenith-cms"
+                          ? "/CK Lighting Web/ck5.jpg"
+                          : project?.id === "komorebi-editorial"
+                            ? "/Triply/Triply11.jpg"
+                            : project?.galleryImages &&
+                                project.galleryImages.length > 2
+                              ? project.galleryImages[2]
+                              : project?.imageUrl || "",
+                    )
+                  }
                 />
               </div>
               <div className="md:col-span-6 flex flex-col gap-0 sm:gap-4 lg:gap-6 h-auto sm:h-[600px] lg:h-[800px]">
-                <img 
-                  src={(project?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply5.jpg" : ((project?.galleryImages && project.galleryImages.length > 3) ? project.galleryImages[3] : (project?.imageUrl || ""))} 
-                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
+                <img
+                  src={
+                    project?.id === "TGPowerWrap"
+                      ? "/Images/Thumbnail Mobile TGPW.jpg"
+                      : project?.id === "komorebi-editorial"
+                        ? "/Triply/Triply5.jpg"
+                        : project?.galleryImages &&
+                            project.galleryImages.length > 3
+                          ? project.galleryImages[3]
+                          : project?.imageUrl || ""
+                  }
+                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default"
                   alt={`${project?.title || "Gallery"} 4`}
                   referrerPolicy="no-referrer"
-                  onClick={() => handleMobileImageClick((project?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply5.jpg" : ((project?.galleryImages && project.galleryImages.length > 3) ? project.galleryImages[3] : (project?.imageUrl || "")))}
+                  onClick={() =>
+                    handleMobileImageClick(
+                      project?.id === "TGPowerWrap"
+                        ? "/Images/Thumbnail Mobile TGPW.jpg"
+                        : project?.id === "komorebi-editorial"
+                          ? "/Triply/Triply5.jpg"
+                          : project?.galleryImages &&
+                              project.galleryImages.length > 3
+                            ? project.galleryImages[3]
+                            : project?.imageUrl || "",
+                    )
+                  }
                 />
-                <img 
-                  src={(project?.id === "TGPowerWrap") ? "/Images/5.jpg" : (project?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply6.png" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || "")))} 
-                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
+                <img
+                  src={
+                    project?.id === "TGPowerWrap"
+                      ? "/Images/5.jpg"
+                      : project?.id === "ck-lighting"
+                        ? "/CK Lighting Web/ck6.jpg"
+                        : project?.id === "komorebi-editorial"
+                          ? "/Triply/Triply6.png"
+                          : project?.galleryImages &&
+                              project.galleryImages.length > 5
+                            ? project.galleryImages[5]
+                            : project?.galleryImages &&
+                                project.galleryImages.length > 4
+                              ? project.galleryImages[4]
+                              : project?.imageUrl || ""
+                  }
+                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default"
                   alt={`${project?.title || "Gallery"} 5`}
                   referrerPolicy="no-referrer"
-                  onClick={() => handleMobileImageClick((project?.id === "TGPowerWrap") ? "/Images/5.jpg" : (project?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply6.png" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : ((project?.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : (project?.imageUrl || ""))))}
+                  onClick={() =>
+                    handleMobileImageClick(
+                      project?.id === "TGPowerWrap"
+                        ? "/Images/5.jpg"
+                        : project?.id === "ck-lighting"
+                          ? "/CK Lighting Web/ck6.jpg"
+                          : project?.id === "komorebi-editorial"
+                            ? "/Triply/Triply6.png"
+                            : project?.galleryImages &&
+                                project.galleryImages.length > 5
+                              ? project.galleryImages[5]
+                              : project?.galleryImages &&
+                                  project.galleryImages.length > 4
+                                ? project.galleryImages[4]
+                                : project?.imageUrl || "",
+                    )
+                  }
                 />
               </div>
             </div>
@@ -636,83 +978,160 @@ export default function ProjectDetailPage() {
             {/* The Solution / User Flow */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 pt-12 md:pt-20 lg:pt-24 pb-6 md:pb-10">
               <div className="md:col-span-4">
-                <h3 className="text-2xl font-medium tracking-tight text-zinc-900">User Flow</h3>
+                <h3 className="text-2xl font-medium tracking-tight text-zinc-900">
+                  User Flow
+                </h3>
               </div>
               <div className="md:col-span-8 space-y-6 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
                 <p>
-                  {project.solution || "The digital product needed to handle complex data streams from advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}
+                  {project.solution ||
+                    "The digital product needed to handle complex data streams from advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}
                 </p>
               </div>
             </div>
-
           </div>
         </div>
 
         {/* Section 6: Additional Sticky Full-width Images */}
         <div className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block">
-           {/* Image 1 */}
-           <div 
-             className={`relative sm:sticky sm:top-0 ${project?.id === "breeze-cargo" ? "h-auto" : "h-auto sm:h-screen"} w-full z-10 cursor-pointer sm:cursor-default ${project?.id === "ck-lighting" ? "flex flex-col justify-center bg-zinc-900 overflow-hidden" : project?.id === "breeze-cargo" ? "overflow-visible flex flex-col justify-center bg-zinc-900" : "overflow-hidden flex flex-col justify-center"}`}
-             onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : (project?.id === "breeze-cargo" ? "/RepX/RepX5.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg"))))}
-           >
-             <img 
-               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (project?.id === "komorebi-editorial" ? "/Triply/Triply4.jpg" : (project?.id === "breeze-cargo" ? "/RepX/RepX5.jpg" : ((project.galleryImages && project.galleryImages.length > 4) ? project.galleryImages[4] : "/Images/TGPW Site Map.jpg")))} 
-               alt={project?.id === "breeze-cargo" ? "RepX 5" : "Gallery Sticky 1"}
-               className={`w-full ${project?.id === "breeze-cargo" ? "h-auto object-contain transform -translate-y-4 sm:-translate-y-10" : "h-auto sm:h-full object-contain sm:object-cover"} block`}
-               onError={(e) => {
-                 if (project?.id === "breeze-cargo") {
-                   const target = e.currentTarget;
-                   if (target.src.endsWith('/RepX/RepX5.jpg')) {
-                     target.src = '/RepX/RepX.jpg';
-                   }
-                 }
-               }}
-               referrerPolicy="no-referrer"
-             />
-           </div>
-           
-           {/* Image 2 (New CK10.jpg for CK Lighting) */}
-           {project?.id === "ck-lighting" && (
-             <div 
-               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full z-20 shadow-none sm:shadow-2xl flex flex-col justify-center bg-zinc-900 overflow-hidden cursor-pointer sm:cursor-default"
-               onClick={() => handleMobileImageClick("/CK Lighting Web/CK10.jpg")}
-             >
-               <img 
-                 src="/CK Lighting Web/CK10.jpg" 
-                 alt="Gallery Sticky CK10"
-                 className="w-full h-auto sm:h-full object-contain sm:object-cover block"
-                 referrerPolicy="no-referrer"
-               />
-             </div>
-           )}
+          {/* Image 1 */}
+          <div
+            className="relative w-full h-auto overflow-visible flex flex-col justify-center items-center bg-zinc-900 z-10 cursor-pointer sm:cursor-default"
+            onClick={() =>
+              handleMobileImageClick(
+                project?.id === "ck-lighting"
+                  ? "/CK Lighting Web/CK9.jpg"
+                  : project?.id === "komorebi-editorial"
+                    ? "/Triply/Triply4.jpg"
+                    : project?.id === "breeze-cargo"
+                      ? "/RepX/RepX5.jpg"
+                      : project.galleryImages &&
+                          project.galleryImages.length > 4
+                        ? project.galleryImages[4]
+                        : "/Images/TGPW Site Map.jpg",
+              )
+            }
+          >
+            <img
+              src={
+                project?.id === "ck-lighting"
+                  ? "/CK Lighting Web/CK9.jpg"
+                  : project?.id === "komorebi-editorial"
+                    ? "/Triply/Triply4.jpg"
+                    : project?.id === "breeze-cargo"
+                      ? "/RepX/RepX5.jpg"
+                      : project.galleryImages &&
+                          project.galleryImages.length > 4
+                        ? project.galleryImages[4]
+                        : "/Images/TGPW Site Map.jpg"
+              }
+              alt={
+                project?.id === "breeze-cargo" ? "RepX 5" : "Gallery Sticky 1"
+              }
+              className="w-full h-auto object-contain block select-none"
+              onError={(e) => {
+                if (project?.id === "breeze-cargo") {
+                  const target = e.currentTarget;
+                  if (target.src.endsWith("/RepX/RepX5.jpg")) {
+                    target.src = "/RepX/RepX.jpg";
+                  }
+                }
+              }}
+              referrerPolicy="no-referrer"
+            />
+          </div>
 
-           {/* Image 3 (Previously Image 2) */}
-           <div 
-             className={`relative w-full ${project?.id === "ck-lighting" ? "sm:sticky sm:top-0 h-auto sm:h-screen z-30 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900" : (project?.id === "komorebi-editorial") ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900"} cursor-pointer sm:cursor-default`}
-             onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply8.jpg" : "/Images/TGPW Visual Guideline.jpg")}
-           >
-             <img 
-               src={(project?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : (project?.id === "komorebi-editorial") ? "/Triply/Triply8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
-               alt={project?.id === "komorebi-editorial" ? "Triply Design" : "TGPW Visual Guideline"}
-               className={`w-full h-auto ${project?.id === "komorebi-editorial" ? "object-contain" : "sm:h-full object-contain sm:object-cover"} block`} 
-               referrerPolicy="no-referrer"
-             />
-           </div>
+          {/* Image 2 (New CK10.jpg for CK Lighting) */}
+          {project?.id === "ck-lighting" && (
+            <div
+              className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full z-20 shadow-none sm:shadow-2xl flex flex-col justify-center bg-zinc-900 overflow-hidden cursor-pointer sm:cursor-default"
+              onClick={() =>
+                handleMobileImageClick("/CK Lighting Web/CK10.jpg")
+              }
+            >
+              <img
+                src="/CK Lighting Web/CK10.jpg"
+                alt="Gallery Sticky CK10"
+                className="w-full h-auto sm:h-full object-contain sm:object-cover block"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          )}
 
-           {/* Triply 12 (Directly After Triply 8) - Full original dimension, fully display */}
-           {project?.id === "komorebi-editorial" && (
-             <div 
-               className="relative w-full h-auto z-25 overflow-visible flex flex-col justify-center bg-transparent cursor-pointer sm:cursor-default"
-               onClick={() => handleMobileImageClick("/Triply/Triply12.jpg")}
-             >
-               <img 
-                 src="/Triply/Triply12.jpg" 
-                 alt="Triply 12 Showcase"
-                 className="w-full h-auto object-contain block select-none" 
-                 referrerPolicy="no-referrer"
-               />
-             </div>
-           )}
+          {/* Image 3 (Previously Image 2) */}
+          <div
+            className={`relative w-full ${project?.id === "ck-lighting" ? "sm:sticky sm:top-0 h-auto sm:h-screen z-30 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900" : (project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-zinc-900"} cursor-pointer sm:cursor-default`}
+            onClick={() =>
+              handleMobileImageClick(
+                project?.id === "ck-lighting"
+                  ? "/CK Lighting Web/CK8.jpg"
+                  : project?.id === "komorebi-editorial"
+                    ? "/Triply/Triply8.jpg"
+                    : project?.id === "breeze-cargo"
+                      ? "/RepX/RepX6.jpg"
+                      : "/Images/TGPW Visual Guideline.jpg",
+              )
+            }
+          >
+            <img
+              src={
+                project?.id === "ck-lighting"
+                  ? "/CK Lighting Web/CK8.jpg"
+                  : project?.id === "komorebi-editorial"
+                    ? "/Triply/Triply8.jpg"
+                    : project?.id === "breeze-cargo"
+                      ? "/RepX/RepX6.jpg"
+                      : "/Images/TGPW Visual Guideline.jpg"
+              }
+              alt={
+                project?.id === "komorebi-editorial"
+                  ? "Triply Design"
+                  : project?.id === "breeze-cargo"
+                    ? "RepX 6"
+                    : "TGPW Visual Guideline"
+              }
+              className={`w-full h-auto ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block`}
+              onError={(e) => {
+                if (project?.id === "breeze-cargo") {
+                  const target = e.currentTarget;
+                  if (target.src.endsWith("/RepX/RepX6.jpg")) {
+                    target.src = "/RepX/RepX.jpg";
+                  }
+                }
+              }}
+              referrerPolicy="no-referrer"
+            />
+          </div>
+
+          {/* Triply 12 (Directly After Triply 8) - Full original dimension, fully display */}
+          {project?.id === "komorebi-editorial" && (
+            <div
+              className="relative w-full h-auto z-25 overflow-visible flex flex-col justify-center bg-transparent cursor-pointer sm:cursor-default"
+              onClick={() => handleMobileImageClick("/Triply/Triply12.jpg")}
+            >
+              <img
+                src="/Triply/Triply12.jpg"
+                alt="Triply 12 Showcase"
+                className="w-full h-auto object-contain block select-none"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          )}
+
+          {/* RepX 7 (Directly After RepX 6) - Full original dimension, fully display */}
+          {project?.id === "breeze-cargo" && (
+            <div
+              className="relative w-full h-auto z-25 overflow-visible flex flex-col justify-center bg-transparent cursor-pointer sm:cursor-default"
+              onClick={() => handleMobileImageClick("/RepX/RepX7.jpg")}
+            >
+              <img
+                src="/RepX/RepX7.jpg"
+                alt="RepX 7 Showcase"
+                className="w-full h-auto object-contain block select-none"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          )}
         </div>
 
         {/* Section 7: The Solution */}
@@ -720,11 +1139,14 @@ export default function ProjectDetailPage() {
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
               <div className="md:col-span-4">
-                <h3 className="text-2xl font-medium tracking-tight text-zinc-900">The Solution</h3>
+                <h3 className="text-2xl font-medium tracking-tight text-zinc-900">
+                  The Solution
+                </h3>
               </div>
               <div className="md:col-span-8 space-y-6 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
                 <p className="mb-4">
-                  {project.solution || "The digital product needed to handle complex data streams from advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}
+                  {project.solution ||
+                    "The digital product needed to handle complex data streams from advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}
                 </p>
               </div>
             </div>
@@ -732,28 +1154,42 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* Added Full-width Image Section (Between Solution & Key Results) */}
-        <div 
+        <div
           className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
-          onClick={() => handleMobileImageClick((project?.id === "komorebi-editorial") ? "/Triply/Triply9.jpg" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : (project?.imageUrl || "")))}
+          onClick={() =>
+            handleMobileImageClick(
+              project?.id === "komorebi-editorial"
+                ? "/Triply/Triply9.jpg"
+                : project?.galleryImages && project.galleryImages.length > 5
+                  ? project.galleryImages[5]
+                  : project?.imageUrl || "",
+            )
+          }
         >
-          <img 
-            src={(project?.id === "komorebi-editorial") ? "/Triply/Triply9.jpg" : ((project?.galleryImages && project.galleryImages.length > 5) ? project.galleryImages[5] : (project?.imageUrl || ""))} 
+          <img
+            src={
+              project?.id === "komorebi-editorial"
+                ? "/Triply/Triply9.jpg"
+                : project?.galleryImages && project.galleryImages.length > 5
+                  ? project.galleryImages[5]
+                  : project?.imageUrl || ""
+            }
             alt="Solution Showcase"
-            className="w-full h-auto block select-none" 
+            className="w-full h-auto block select-none"
             referrerPolicy="no-referrer"
           />
         </div>
 
         {/* Triply 10 Image Section */}
         {project?.id === "komorebi-editorial" && (
-          <div 
+          <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
             onClick={() => handleMobileImageClick("/Triply/Triply10.jpg")}
           >
-            <img 
-              src="/Triply/Triply10.jpg" 
+            <img
+              src="/Triply/Triply10.jpg"
               alt="Triply Showcase 10"
-              className="w-full h-auto block select-none" 
+              className="w-full h-auto block select-none"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -765,12 +1201,17 @@ export default function ProjectDetailPage() {
             <div className="w-full px-6 sm:px-12 lg:px-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12">
                 <div className="md:col-span-4">
-                  <h3 className="text-2xl font-medium tracking-tight text-zinc-900">Key Results</h3>
+                  <h3 className="text-2xl font-medium tracking-tight text-zinc-900">
+                    Key Results
+                  </h3>
                 </div>
                 <div className="md:col-span-8">
                   <ul className="grid grid-cols-1 gap-6">
                     {project.results.map((result, idx) => (
-                      <li key={idx} className="flex items-start gap-4 text-xl font-light text-zinc-700 leading-relaxed">
+                      <li
+                        key={idx}
+                        className="flex items-start gap-4 text-xl font-light text-zinc-700 leading-relaxed"
+                      >
                         <span className="mt-1.5 h-6 w-6 shrink-0 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 flex items-center justify-center text-xs font-mono font-bold">
                           ✓
                         </span>
@@ -785,14 +1226,28 @@ export default function ProjectDetailPage() {
         )}
 
         {/* Section 8: Final Full-width Image */}
-        <div 
+        <div
           className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
-          onClick={() => handleMobileImageClick((project?.id === "ck-lighting") ? "/CK Lighting Web/ck11.jpg" : ((project.galleryImages && project.galleryImages.length > 6) ? project.galleryImages[6] : "/Images/Ipad Pro Mockup On Rock.jpg"))}
+          onClick={() =>
+            handleMobileImageClick(
+              project?.id === "ck-lighting"
+                ? "/CK Lighting Web/ck11.jpg"
+                : project.galleryImages && project.galleryImages.length > 6
+                  ? project.galleryImages[6]
+                  : "/Images/Ipad Pro Mockup On Rock.jpg",
+            )
+          }
         >
-          <img 
-            src={(project?.id === "ck-lighting") ? "/CK Lighting Web/ck11.jpg" : ((project.galleryImages && project.galleryImages.length > 6) ? project.galleryImages[6] : "/Images/Ipad Pro Mockup On Rock.jpg")} 
+          <img
+            src={
+              project?.id === "ck-lighting"
+                ? "/CK Lighting Web/ck11.jpg"
+                : project.galleryImages && project.galleryImages.length > 6
+                  ? project.galleryImages[6]
+                  : "/Images/Ipad Pro Mockup On Rock.jpg"
+            }
             alt="Final Gallery Image"
-            className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-auto sm:h-screen object-contain sm:object-cover block"}`} 
+            className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-auto sm:h-screen object-contain sm:object-cover block"}`}
             referrerPolicy="no-referrer"
           />
         </div>
@@ -802,50 +1257,64 @@ export default function ProjectDetailPage() {
       </main>
 
       {/* Floating back button */}
-      <FloatingMenu visible={showSideMenu} theme="dark" onNavClick={(targetId) => handleNavClick({ preventDefault: () => {} } as any, targetId)} />
+      <FloatingMenu
+        visible={showSideMenu}
+        theme="dark"
+        onNavClick={(targetId) =>
+          handleNavClick({ preventDefault: () => {} } as any, targetId)
+        }
+      />
 
       {/* Pre-Footer Image Section */}
       <section className="w-full relative overflow-hidden bg-[#2563EB] -mb-1">
         <div className="w-full h-[350px] sm:h-[500px] md:h-[650px] lg:h-[800px] relative">
-          <img 
-            src="/hero-bg.jpg" 
-            alt="Hero Background" 
+          <img
+            src="/hero-bg.jpg"
+            alt="Hero Background"
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
           {/* Smooth multi-stop bottom color blend into footer background */}
-          <div 
-            className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none z-10" 
+          <div
+            className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none z-10"
             style={{
-              background: 'linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.1) 20%, rgba(37, 99, 235, 0.35) 40%, rgba(37, 99, 235, 0.7) 65%, rgba(37, 99, 235, 0.95) 82%, rgba(37, 99, 235, 1) 90%, rgba(37, 99, 235, 1) 100%)'
+              background:
+                "linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.1) 20%, rgba(37, 99, 235, 0.35) 40%, rgba(37, 99, 235, 0.7) 65%, rgba(37, 99, 235, 0.95) 82%, rgba(37, 99, 235, 1) 90%, rgba(37, 99, 235, 1) 100%)",
             }}
           />
         </div>
       </section>
 
       {/* Footer Section */}
-      <footer id="contact-section" className="relative overflow-hidden bg-[#2563EB] text-white pt-24 pb-0">
+      <footer
+        id="contact-section"
+        className="relative overflow-hidden bg-[#2563EB] text-white pt-24 pb-0"
+      >
         <div className="relative z-10 w-full mx-auto select-none">
           {/* Top content wrapper with margins */}
           <div className="px-6 sm:px-12 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start mb-24">
-            
             {/* Left part: Time, Title and pill button */}
             <div className="lg:col-span-8 flex flex-col items-start text-left">
               {/* Dynamic local time */}
               <div className="text-xs text-white flex items-center gap-2 mb-8 tracking-wider uppercase font-sans">
-                {localTime && parseInt(localTime.split(":")[0], 10) >= 6 && parseInt(localTime.split(":")[0], 10) < 18 ? (
+                {localTime &&
+                parseInt(localTime.split(":")[0], 10) >= 6 &&
+                parseInt(localTime.split(":")[0], 10) < 18 ? (
                   <Sun className="h-4 w-4 text-white" />
                 ) : (
                   <Moon className="h-4 w-4 text-white" />
                 )}
                 <span>
-                  {localTime ? `${localTime} Kuala Lumpur, MY` : "05:03 PM Kuala Lumpur, MY"}
+                  {localTime
+                    ? `${localTime} Kuala Lumpur, MY`
+                    : "05:03 PM Kuala Lumpur, MY"}
                 </span>
               </div>
 
               {/* Design statement from the image */}
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-sans font-medium tracking-tight text-white !text-[#ffffff] leading-[1.15] max-w-2xl mb-10">
-                Design for those who want to become a better version of themselves.
+                Design for those who want to become a better version of
+                themselves.
               </h2>
 
               {/* Get in touch button from the image */}
@@ -862,33 +1331,35 @@ export default function ProjectDetailPage() {
             <div className="lg:col-span-4 grid grid-cols-2 gap-8 lg:justify-items-end w-full text-left">
               {/* Explore Column */}
               <div className="flex flex-col gap-3 text-sm lg:min-w-[120px]">
-                <span className="text-white font-sans text-xs uppercase tracking-widest mb-2 font-bold">Explore</span>
-                <button 
+                <span className="text-white font-sans text-xs uppercase tracking-widest mb-2 font-bold">
+                  Explore
+                </span>
+                <button
                   onClick={(e) => handleNavClick(e, "#hero-section")}
                   className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   Home
                 </button>
-                <button 
-                  onClick={(e) => handleNavClick(e, "#about-section")} 
+                <button
+                  onClick={(e) => handleNavClick(e, "#about-section")}
                   className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   About
                 </button>
-                <button 
-                  onClick={(e) => handleNavClick(e, "#career-section")} 
+                <button
+                  onClick={(e) => handleNavClick(e, "#career-section")}
                   className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   Career
                 </button>
-                <button 
-                  onClick={(e) => handleNavClick(e, "#services-section")} 
+                <button
+                  onClick={(e) => handleNavClick(e, "#services-section")}
                   className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   Services
                 </button>
-                <button 
-                  onClick={(e) => handleNavClick(e, "#capabilities-section")} 
+                <button
+                  onClick={(e) => handleNavClick(e, "#capabilities-section")}
                   className="text-white hover:text-white/80 text-[15px] text-left cursor-default"
                 >
                   Projects
@@ -897,42 +1368,43 @@ export default function ProjectDetailPage() {
 
               {/* Socials Column */}
               <div className="flex flex-col gap-3 text-sm lg:min-w-[120px]">
-                <span className="text-white font-sans text-xs uppercase tracking-widest mb-2 font-bold">Socials</span>
-                <a 
-                  href="https://linkedin.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <span className="text-white font-sans text-xs uppercase tracking-widest mb-2 font-bold">
+                  Socials
+                </span>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   LinkedIn
                 </a>
-                <a 
-                  href="https://facebook.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Facebook
                 </a>
-                <a 
-                  href="https://x.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href="https://x.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   The X
                 </a>
-                <a 
-                  href="https://t.me" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href="https://t.me"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Telegram
                 </a>
               </div>
             </div>
-
           </div>
 
           {/* Metadata Row */}
@@ -942,28 +1414,48 @@ export default function ProjectDetailPage() {
               <div>ALL RIGHTS RESERVED</div>
             </div>
             <div className="text-right">
-              <a href="#" className="hover:text-white/80 transition-colors block">TERMS</a>
-              <a href="#" className="hover:text-white/80 transition-colors block mt-1">PRIVACY POLICY</a>
+              <a
+                href="#"
+                className="hover:text-white/80 transition-colors block"
+              >
+                TERMS
+              </a>
+              <a
+                href="#"
+                className="hover:text-white/80 transition-colors block mt-1"
+              >
+                PRIVACY POLICY
+              </a>
             </div>
           </div>
 
           {/* Bottom Giant Typographic Name "ZULHILMI" with perfect edge-to-edge SVG */}
           <div className="w-full overflow-hidden m-0 p-0 block leading-none">
-            <svg viewBox="0 0 620 111" className="w-full h-auto m-0 p-0 block select-none translate-y-[2px]" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              viewBox="0 0 620 111"
+              className="w-full h-auto m-0 p-0 block select-none translate-y-[2px]"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient id="zulhilmi-gradient-proj" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient
+                  id="zulhilmi-gradient-proj"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
                   <stop offset="0%" stopColor="#2563EB" />
                   <stop offset="100%" stopColor="#ffffff" />
                 </linearGradient>
               </defs>
-              <text 
-                x="-6" 
-                y="111" 
+              <text
+                x="-6"
+                y="111"
                 textLength="632"
                 lengthAdjust="spacingAndGlyphs"
-                fontFamily="Inter, system-ui, -apple-system, sans-serif" 
-                fontWeight="900" 
-                fontSize="144" 
+                fontFamily="Inter, system-ui, -apple-system, sans-serif"
+                fontWeight="900"
+                fontSize="144"
                 fill="url(#zulhilmi-gradient-proj)"
                 style={{ letterSpacing: "-0.05em" }}
               >
@@ -971,7 +1463,6 @@ export default function ProjectDetailPage() {
               </text>
             </svg>
           </div>
-
         </div>
       </footer>
 

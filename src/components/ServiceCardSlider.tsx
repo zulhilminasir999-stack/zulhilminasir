@@ -15,56 +15,56 @@ export interface ServiceCardItem {
 }
 
 const SERVICES_SLIDES: ServiceCardItem[] = [
-  // First 5 Cards: Featured Projects for Case Study Page
+  // First 5 Cards: 5 Featured Works
   {
     id: "TGPowerWrap",
     serviceId: "packaging",
-    category: "Packaging & Web",
+    category: "Corporate Website",
     subtitle: "Ultra-premium packaging architecture & corporate platform",
     title: "TG PowerWrap Website",
     image: "/Images/tgpw1.jpg",
     url: "/case-study-project/TGPowerWrap",
-    actionText: "Read",
-  },
-  {
-    id: "breeze-cargo",
-    serviceId: "product",
-    category: "Mobile UI/UX",
-    subtitle: "High-performance intelligent workout tracking system",
-    title: "RepX | AI Fitness",
-    image: "/RepX/RepX1.jpg",
-    url: "/case-study-project/breeze-cargo",
-    actionText: "Read",
-  },
-  {
-    id: "ck-lighting",
-    serviceId: "brand",
-    category: "Web Dev",
-    subtitle: "Engineered high-speed custom CMS webstore & product catalog",
-    title: "CK Lighting Store",
-    image: "/CK Lighting Web/ck1.jpg",
-    url: "/case-study-project/ck-lighting",
-    actionText: "Read",
+    actionText: "Explore",
   },
   {
     id: "komorebi-editorial",
     serviceId: "product",
-    category: "Mobile UI/UX",
-    subtitle: "Spatial smart maps and minimalist editorial interface",
+    category: "Mobile UI/UX Design",
+    subtitle: "Spatial smart maps and minimalist editorial travel interface",
     title: "Triply | AI Companion",
     image: "/Triply/Triply1.jpg",
     url: "/case-study-project/komorebi-editorial",
-    actionText: "Read",
+    actionText: "Explore",
+  },
+  {
+    id: "ck-lighting",
+    serviceId: "brand",
+    category: "E-Commerce Webstore",
+    subtitle: "Engineered high-speed custom CMS webstore & product catalog",
+    title: "CK Lighting Store",
+    image: "/CK Lighting Web/ck1.jpg",
+    url: "/case-study-project/ck-lighting",
+    actionText: "Explore",
+  },
+  {
+    id: "breeze-cargo",
+    serviceId: "product",
+    category: "Mobile UI/UX Design",
+    subtitle: "High-performance intelligent workout tracking system",
+    title: "RepX | AI Fitness",
+    image: "/RepX/RepX1.jpg",
+    url: "/case-study-project/breeze-cargo",
+    actionText: "Explore",
   },
   {
     id: "aistudio-brand",
     serviceId: "web",
     category: "Web App & System",
     subtitle: "Automated student billing engine & management dashboard",
-    title: "Pre-School Fee System",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
+    title: "Pre-school Fee Management",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study-project/aistudio-brand",
-    actionText: "Read",
+    actionText: "Explore",
   },
 
   // 5 More Projects from Hoverlist for Project Case Study Page
@@ -76,7 +76,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     title: "Web Design & CMS",
     image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study/web-design-cms",
-    actionText: "Read",
+    actionText: "Explore",
   },
   {
     id: "ui-ux",
@@ -86,7 +86,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     title: "User Interface & UX",
     image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study/ui-ux",
-    actionText: "Read",
+    actionText: "Explore",
   },
   {
     id: "ai-native-development",
@@ -96,7 +96,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     title: "AI-Native Dev & Vibe",
     image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study/ai-native-development",
-    actionText: "Read",
+    actionText: "Explore",
   },
   {
     id: "brand-identity",
@@ -106,7 +106,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     title: "Brand Strategy & Visuals",
     image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study/brand-identity",
-    actionText: "Read",
+    actionText: "Explore",
   },
   {
     id: "packaging",
@@ -116,7 +116,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     title: "Structural Packaging Print",
     image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study/packaging",
-    actionText: "Read",
+    actionText: "Explore",
   },
 ];
 
@@ -327,16 +327,17 @@ export default function ServiceCardSlider({ onSelectService, className, trigger,
               {/* Right Side: Copy & Read CTA */}
               <div id="service-card-info" className="flex flex-col justify-between flex-1 min-w-0 h-[90px] sm:h-[105px] md:h-[105px] py-0.5">
                 
-                {/* Top Subtitle Hook */}
-                <div id="service-card-header-group" className="space-y-1">
-                  <p id="service-card-subtitle" className="text-[11px] sm:text-[11.5px] text-white/80 font-sans line-clamp-2 leading-snug font-normal tracking-tight">
-                    {currentItem.subtitle}
-                  </p>
-                  
+                {/* Header Group: Title on top of Description */}
+                <div id="service-card-header-group" className="space-y-0.5 sm:space-y-1">
                   {/* Main Title */}
                   <h4 id="service-card-title" className="text-[14px] sm:text-[16px] md:text-[17px] font-sans font-semibold !text-white tracking-tight leading-tight line-clamp-1">
                     {currentItem.title}
                   </h4>
+
+                  {/* Subtitle / Description */}
+                  <p id="service-card-subtitle" className="text-[11px] sm:text-[11.5px] text-white/80 font-sans line-clamp-2 leading-snug font-normal tracking-tight">
+                    {currentItem.subtitle}
+                  </p>
                 </div>
 
                 {/* Bottom Row: ↳ Read action link & Slide cue */}
