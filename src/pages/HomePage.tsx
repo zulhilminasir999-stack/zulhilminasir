@@ -321,7 +321,27 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
   const isWhiteTextSection = (isDarkBackgroundSection && !isLightBackgroundSection) || 
     ((activeSection === "capabilities-section" || activeSection === "hover-list-section") && capabilitiesExpandedIndex !== null && !isScrollingUp);
-  const { triggerReveal } = useReveal();
+  const { triggerReveal, triggerFullLoading } = useReveal();
+
+  const handleBrandHomeClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e && e.preventDefault) e.preventDefault();
+    triggerFullLoading(() => {
+      if (lenis) {
+        lenis.stop();
+      }
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      if (lenis) {
+        lenis.start();
+        lenis.scrollTo(0, { immediate: true });
+      }
+      setActiveSection("hero-section");
+      setIsHeaderScrolled(false);
+      setHeaderVisible(true);
+      window.history.replaceState(null, "", "/");
+    });
+  };
 
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetId: string) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -489,19 +509,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                       <>
                         {/* Brand Mark */}
                         <div className="flex items-center">
-                          <motion.a
+                          <motion.button
                             layoutId="header-brand-link"
                             transition={{ type: "spring", stiffness: 320, damping: 30 }}
-                            href="#hero-section"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (window.scrollY >= 80) {
-                                handleNavClick(e, '#hero-section');
-                              }
-                            }}
-                            className={`font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight flex items-center gap-1.5 transition-colors duration-300 text-white ${
-                              !isHeaderScrolled ? "cursor-default select-none pointer-events-none" : "hover:opacity-85 cursor-pointer"
-                            }`}
+                            onClick={handleBrandHomeClick}
+                            className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight flex items-center gap-1.5 transition-colors duration-300 text-white cursor-pointer hover:opacity-85 bg-transparent border-none p-0 outline-none"
                           >
                             <motion.span 
                               custom={!hasCompletedInitialHeaderReveal ? 1.20 : 0}
@@ -521,7 +533,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             >
                               Zulhilmi
                             </motion.span>
-                          </motion.a>
+                          </motion.button>
                         </div>
 
                         {/* Desktop Nav - Beautiful Floating Capsule */}
@@ -636,19 +648,18 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           }`}
                         >
                           {/* ZN Button / Logo inside capsule */}
-                          <motion.a
+                          <motion.button
                             layoutId="header-brand-link"
                             transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                            href="#hero-section"
-                            onClick={(e) => handleNavClick(e, '#hero-section')}
-                            className={`font-display font-semibold text-base tracking-tight transition-all mr-10 md:mr-5 lg:mr-10 flex items-center h-6 cursor-pointer ${
+                            onClick={handleBrandHomeClick}
+                            className={`font-display font-semibold text-base tracking-tight transition-all mr-10 md:mr-5 lg:mr-10 flex items-center h-6 cursor-pointer bg-transparent border-none p-0 outline-none ${
                               isWhiteTextSection 
                                 ? "text-white hover:text-cyan-300" 
                                 : "text-zinc-950 hover:text-[#2563EB]"
                             }`}
                           >
                             ZN
-                          </motion.a>
+                          </motion.button>
 
                           {/* Navigation Links inside capsule */}
                           <nav className="flex items-center space-x-2.5 md:space-x-1.5 lg:space-x-2.5 text-[15px] md:text-[13px] lg:text-[15px] font-medium tracking-normal">
@@ -708,24 +719,16 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   // 3. MOBILE VIEW: Standard simple 2-column sticky menu with brand on left and hamburger on right
                   <>
                     <div className="flex items-center">
-                      <motion.a
+                      <motion.button
                         custom={!hasCompletedInitialHeaderReveal ? 1.20 : 0}
                         variants={headerItemReveal}
                         initial="hidden"
                         animate={!isLoading ? "visible" : "hidden"}
-                        href="#hero-section"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (window.scrollY >= 80) {
-                            handleNavClick(e, '#hero-section');
-                          }
-                        }}
-                        className={`font-display font-semibold text-sm tracking-tight text-[#2563EB] transition-colors ${
-                          !isHeaderScrolled ? "cursor-default select-none pointer-events-none" : "hover:opacity-85 cursor-pointer"
-                        }`}
+                        onClick={handleBrandHomeClick}
+                        className="font-display font-semibold text-sm tracking-tight text-[#2563EB] transition-colors cursor-pointer hover:opacity-85 bg-transparent border-none p-0 outline-none"
                       >
                         Zulhilmi Nasir
-                      </motion.a>
+                      </motion.button>
                     </div>
 
                     <motion.div 

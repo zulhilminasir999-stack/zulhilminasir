@@ -2,11 +2,17 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 
-export const LoadingScreen = () => {
+interface LoadingScreenProps {
+  showPercentage?: boolean;
+}
+
+export const LoadingScreen: React.FC<LoadingScreenProps> = ({ showPercentage = true }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Match the ~2s loading duration from App.tsx
+    if (!showPercentage) return;
+
+    // Match the ~2s loading duration
     const duration = 2000;
     const intervalTime = 30;
     const steps = duration / intervalTime;
@@ -24,7 +30,7 @@ export const LoadingScreen = () => {
     }, intervalTime);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [showPercentage]);
 
   const columns = [0, 1, 2, 3, 4];
 
@@ -58,26 +64,30 @@ export const LoadingScreen = () => {
           <div className="loader"></div>
         </div>
 
-        {/* Percentage Counter Animation */}
-        <div className="relative w-full h-24 sm:h-28 md:h-36">
-          <motion.div
-            initial={{ left: "0%", x: "0%", opacity: 0 }}
-            animate={{ left: "100%", x: "-100%", opacity: 1 }}
-            transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute bottom-0 flex items-center justify-start w-fit whitespace-nowrap"
-          >
-            <span 
-              className="text-6xl sm:text-7xl md:text-9xl font-normal italic tracking-tight select-none font-serif"
-              style={{ 
-                fontFamily: '"Cormorant Garamond", Georgia, serif',
-                color: '#ffffff',
-                filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))'
-              }}
+        {/* Percentage Counter Animation (shown only on full page reload & ZN brand click) */}
+        {showPercentage ? (
+          <div className="relative w-full h-24 sm:h-28 md:h-36">
+            <motion.div
+              initial={{ left: "0%", x: "0%", opacity: 0 }}
+              animate={{ left: "100%", x: "-100%", opacity: 1 }}
+              transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute bottom-0 flex items-center justify-start w-fit whitespace-nowrap"
             >
-              {Math.round(progress)}%
-            </span>
-          </motion.div>
-        </div>
+              <span 
+                className="text-6xl sm:text-7xl md:text-9xl font-normal italic tracking-tight select-none font-serif"
+                style={{ 
+                  fontFamily: '"Cormorant Garamond", Georgia, serif',
+                  color: '#ffffff',
+                  filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))'
+                }}
+              >
+                {Math.round(progress)}%
+              </span>
+            </motion.div>
+          </div>
+        ) : (
+          <div className="relative w-full h-24 sm:h-28 md:h-36" />
+        )}
       </motion.div>
     </div>
   );

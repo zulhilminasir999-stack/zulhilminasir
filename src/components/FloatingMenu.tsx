@@ -129,7 +129,7 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [currentMenuItems, location.pathname]);
 
-  const { triggerReveal } = useReveal();
+  const { triggerReveal, triggerFullLoading } = useReveal();
 
   const scrollToSection = (id: string) => {
     // If already in project page, clicking the projects/capabilities tab is disabled
@@ -137,7 +137,20 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
       return;
     }
 
-    const targetSectionId = id === "hero" ? "#hero-section" : `#${id}-section`;
+    if (id === "hero") {
+      triggerFullLoading(() => {
+        if (location.pathname !== "/") {
+          navigate("/");
+        }
+        window.scrollTo({ top: 0, behavior: "instant" });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        setActiveTab("hero");
+      });
+      return;
+    }
+
+    const targetSectionId = `#${id}-section`;
     if (onNavClick) {
       onNavClick(targetSectionId);
       setActiveTab(id);

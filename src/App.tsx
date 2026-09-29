@@ -20,13 +20,8 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
 function AppContent() {
   const location = useLocation();
   
-  // Show intro loading screen only on homepage on first mount
-  const [isLoading, setIsLoading] = useState(() => {
-    if (typeof window !== "undefined" && window.location.pathname !== "/") {
-      return false;
-    }
-    return true;
-  });
+  // Show intro loading screen with percentage indicator on full browser reload / initial mount
+  const [isLoading, setIsLoading] = useState(true);
   
   const lenis = useLenis();
 
@@ -84,7 +79,7 @@ function AppContent() {
       <ScrollToTop />
       <BackToTopButton />
       <AnimatePresence>
-        {isLoading && <LoadingScreen key="loader" />}
+        {isLoading && <LoadingScreen key="loader" showPercentage={true} />}
       </AnimatePresence>
       <Routes>
         <Route 

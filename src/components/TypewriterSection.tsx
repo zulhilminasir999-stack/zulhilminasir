@@ -145,16 +145,6 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   if (isMobile) {
     return (
       <>
-        {/* Grain texture in the background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay">
-          <svg viewBox="0 0 250 250" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            <filter id="typewriterNoiseFilter">
-              <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-            </filter>
-            <rect width="100%" height="100%" filter="url(#typewriterNoiseFilter)" />
-          </svg>
-        </div>
-
         {/* 1. Typewriter content directly inside the single gallery-section container */}
         <div className="relative pt-16 pb-14 flex flex-col justify-center z-10 px-6 select-none w-full">
           {/* Top Headline: Typewriter sentence aligned like photo with stable height */}
@@ -231,16 +221,6 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden" style={{ paddingBottom: 0 }}>
-      {/* Grain texture in the background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.12] mix-blend-overlay">
-        <svg viewBox="0 0 250 250" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-          <filter id="typewriterNoiseFilter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#typewriterNoiseFilter)" />
-        </svg>
-      </div>
-
       {/* 1. Typewriter content without bounding container */}
       <motion.div
         style={{

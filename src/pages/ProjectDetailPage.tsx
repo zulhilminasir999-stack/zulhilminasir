@@ -54,12 +54,25 @@ export default function ProjectDetailPage() {
   const [selectedMobileModalImage, setSelectedMobileModalImage] = useState<
     string | null
   >(null);
-  const { triggerReveal } = useReveal();
+  const { triggerReveal, triggerFullLoading } = useReveal();
 
   const handleMobileImageClick = (src: string) => {
     if (window.innerWidth < 640 && src) {
       setSelectedMobileModalImage(src);
     }
+  };
+
+  const handleBrandHomeClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e && e.preventDefault) e.preventDefault();
+    triggerFullLoading(() => {
+      navigate("/");
+      window.scrollTo({ top: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true });
+      }
+    });
   };
 
   const handleNavClick = (
@@ -290,11 +303,11 @@ export default function ProjectDetailPage() {
                             stiffness: 380,
                             damping: 35,
                           }}
-                          onClick={(e) => handleNavClick(e, "#hero-section")}
+                          onClick={handleBrandHomeClick}
                           className="group flex items-center gap-1.5 transition-colors duration-300 hover:opacity-85 text-white cursor-pointer"
                         >
                           <span className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-white">
-                            Zuhilmi Nasir
+                            Zulhilmi Nasir
                           </span>
                         </motion.button>
                       </div>
@@ -395,7 +408,7 @@ export default function ProjectDetailPage() {
                             stiffness: 380,
                             damping: 35,
                           }}
-                          onClick={(e) => handleNavClick(e, "#hero-section")}
+                          onClick={handleBrandHomeClick}
                           className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-[#0A2947] hover:text-[#2563EB] hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
                         >
                           ZN
@@ -467,7 +480,7 @@ export default function ProjectDetailPage() {
                 <>
                   <div className="flex items-center">
                     <button
-                      onClick={(e) => handleNavClick(e, "#hero-section")}
+                      onClick={handleBrandHomeClick}
                       className="font-display font-semibold text-sm tracking-tight text-[#2563EB] hover:text-[#3B82F6] transition-colors cursor-pointer"
                     >
                       Zulhilmi Nasir

@@ -89,12 +89,25 @@ export default function CaseStudyPage() {
   const [randomImage, setRandomImage] = useState<string>("");
   const [localTime, setLocalTime] = useState("");
   const [selectedMobileModalImage, setSelectedMobileModalImage] = useState<string | null>(null);
-  const { triggerReveal } = useReveal();
+  const { triggerReveal, triggerFullLoading } = useReveal();
 
   const handleMobileImageClick = (src: string) => {
     if (window.innerWidth < 640 && src) {
       setSelectedMobileModalImage(src);
     }
+  };
+
+  const handleBrandHomeClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e && e.preventDefault) e.preventDefault();
+    triggerFullLoading(() => {
+      navigate("/");
+      window.scrollTo({ top: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true });
+      }
+    });
   };
 
   const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetSectionId: string) => {
@@ -325,10 +338,10 @@ export default function CaseStudyPage() {
                         <motion.button
                           layoutId="header-brand-link"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                          onClick={(e) => handleNavClick(e, "#hero-section")}
+                          onClick={handleBrandHomeClick}
                           className="group flex items-center gap-1.5 transition-colors duration-300 hover:opacity-85 text-white cursor-pointer"
                         >
-                          <span className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-white">Zuhilmi Nasir</span>
+                          <span className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-white">Zulhilmi Nasir</span>
                         </motion.button>
                       </div>
 
@@ -387,7 +400,7 @@ export default function CaseStudyPage() {
                         <motion.button
                           layoutId="header-brand-link"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                          onClick={(e) => handleNavClick(e, "#hero-section")}
+                          onClick={handleBrandHomeClick}
                           className="font-display font-semibold text-xs md:text-sm lg:text-base tracking-tight text-[#0A2947] hover:text-[#2563EB] hover:scale-105 transition-all mr-4 md:mr-6 lg:mr-12 flex items-center h-6 cursor-pointer"
                         >
                           ZN
@@ -430,7 +443,7 @@ export default function CaseStudyPage() {
                 <>
                   <div className="flex items-center">
                     <button
-                      onClick={(e) => handleNavClick(e, "#hero-section")}
+                      onClick={handleBrandHomeClick}
                       className="font-display font-semibold text-sm tracking-tight text-[#2563EB] hover:text-[#3B82F6] transition-colors flex items-center h-6 cursor-pointer"
                     >
                       Zulhilmi Nasir
