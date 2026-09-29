@@ -158,7 +158,7 @@ export function CreativeApproach() {
   ];
 
   return (
-    <section id="creative-approach" className="w-full bg-white relative z-40 pt-4 sm:pt-8 md:pt-[32vh] pb-16">
+    <section id="creative-approach" className="w-full bg-white relative z-40 pt-16 sm:pt-24 md:pt-[42vh] pb-16">
       <div className="w-full px-6 sm:px-12 lg:px-16">
         
         {/* Mobile Sticky Header pinned at top for the entire section */}

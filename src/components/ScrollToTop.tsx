@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import { useLenis } from "lenis/react";
 
@@ -6,48 +6,97 @@ export default function ScrollToTop() {
   const { pathname, hash } = useLocation();
   const navType = useNavigationType();
   const lenis = useLenis();
+  const prevPathRef = useRef<string | null>(null);
+  const isFirstMountRef = useRef(true);
+
+  // Keep sessionStorage in sync with the current route
+  useEffect(() => {
+    sessionStorage.setItem("last_active_route", pathname);
+  }, [pathname]);
+
+  // Continuously record scroll position per route for desktop views
+  useEffect(() => {
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+    const handleScroll = () => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        // Mobile does not persist scroll position across refreshes
+        return;
+      }
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        sessionStorage.setItem(`scroll_pos_${pathname}`, window.scrollY.toString());
+      }, 50);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, [pathname]);
 
   useEffect(() => {
-    // If there is a hash, skip scroll-to-top to maintain position or use hash navigation
-    if (hash) return;
+    const isMobile = window.innerWidth < 768;
+    const isPageReload = isFirstMountRef.current;
+    isFirstMountRef.current = false;
+    const isSamePath = prevPathRef.current === pathname;
+    prevPathRef.current = pathname;
 
-    // If we are returning to "/" via a POP (back/forward) navigation, do not scroll to top.
-    // The HomePage will handle restoring the exact scroll position.
-    if (pathname === "/" && navType === "POP") {
-      return;
-    }
+    if (isMobile) {
+      // MOBILE: On refresh or route change, always reset position to the top of the page
+      const scrollToTop = () => {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        if (lenis) {
+          lenis.scrollTo(0, { immediate: true });
+        }
+      };
 
-    // Disable browser default scroll restoration to prevent jumping
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
-    }
+      scrollToTop();
+      const timers = [0, 50, 100, 200, 400, 700].map((d) => setTimeout(scrollToTop, d));
+      return () => timers.forEach((id) => clearTimeout(id));
+    } else {
+      // DESKTOP:
+      // On page refresh / reload: restore previous scroll position on that exact route
+      if (isPageReload) {
+        const savedPos = sessionStorage.getItem(`scroll_pos_${pathname}`);
+        if (savedPos) {
+          const targetY = parseInt(savedPos, 10);
+          if (!isNaN(targetY) && targetY > 0) {
+            const restoreScroll = () => {
+              window.scrollTo({ top: targetY, left: 0, behavior: "instant" });
+              document.documentElement.scrollTop = targetY;
+              document.body.scrollTop = targetY;
+              if (lenis) {
+                lenis.scrollTo(targetY, { immediate: true });
+              }
+            };
 
-    // Force scroll to top immediately on path change
-    const handleScroll = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      if (lenis) {
-        lenis.scrollTo(0, { immediate: true });
+            restoreScroll();
+            const timers = [0, 50, 100, 200, 400, 700, 1200].map((d) => setTimeout(restoreScroll, d));
+            return () => timers.forEach((id) => clearTimeout(id));
+          }
+        }
       }
-      
-      // Also try to find any scrollable containers that might be stuck
-      const scrollables = document.querySelectorAll('.overflow-y-auto, .overflow-auto');
-      scrollables.forEach(el => {
-        el.scrollTop = 0;
-      });
-    };
 
-    handleScroll();
-    
-    // Multiple attempts to ensure we override any late-initializing scroll libraries or browser behavior
-    const timeoutIds = [0, 50, 100, 200, 500].map(delay => 
-      setTimeout(handleScroll, delay)
-    );
+      // If user navigated to a different page via link (not a page refresh) and there's no hash:
+      if (!isPageReload && !isSamePath && !hash) {
+        const scrollToTop = () => {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          if (lenis) {
+            lenis.scrollTo(0, { immediate: true });
+          }
+        };
 
-    return () => {
-      timeoutIds.forEach(id => clearTimeout(id));
-    };
+        scrollToTop();
+        const timers = [0, 50, 100, 200].map((d) => setTimeout(scrollToTop, d));
+        return () => timers.forEach((id) => clearTimeout(id));
+      }
+    }
   }, [pathname, hash, navType, lenis]);
 
   return null;

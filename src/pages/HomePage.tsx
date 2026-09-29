@@ -203,10 +203,12 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         const timers = [10, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(scrollToHash, delay));
         return () => timers.forEach(id => clearTimeout(id));
       } else {
-        // If we have a saved scroll position and we navigated back (POP), restore it
-        if (savedScrollPosition && navType === "POP") {
+        const isMobileScreenSize = window.innerWidth < 768;
+
+        // If we have a saved scroll position on Desktop (both back navigation and reload), restore it
+        if (!isMobileScreenSize && savedScrollPosition) {
           const targetY = parseInt(savedScrollPosition, 10);
-          if (!isNaN(targetY)) {
+          if (!isNaN(targetY) && targetY > 0) {
             const restoreScroll = () => {
               window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
               document.documentElement.scrollTop = targetY;
@@ -222,9 +224,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           }
         }
 
-        // Initial app load or no hash -> force scroll to top
+        // On Mobile or if no saved position on Desktop -> force scroll to top
         if (isInitialAppLoad && targetHash) {
-          // Clean up hash from URL visually if we are forcing to top on load
           window.history.replaceState(null, "", window.location.pathname);
         }
 

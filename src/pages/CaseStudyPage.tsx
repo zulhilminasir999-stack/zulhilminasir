@@ -157,29 +157,50 @@ export default function CaseStudyPage() {
 
   useLayoutEffect(() => {
     setIsScrollReset(false);
-    // Immediate and aggressive scroll reset before paint
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    const isMobileDevice = window.innerWidth < 768;
+    if (isMobileDevice) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
   }, [id]);
 
   useEffect(() => {
-    // Persistent scroll reset to handle late-loading content or Lenis initialization
-    const resetToTop = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      if (lenis) {
-        lenis.scrollTo(0, { immediate: true });
-      }
-    };
+    const isMobileDevice = window.innerWidth < 768;
+    let timers: ReturnType<typeof setTimeout>[] = [];
 
-    resetToTop();
-    // Exponentially spaced attempts to catch any race conditions
-    const timers = [0, 20, 50, 100, 200, 400, 800, 1500].map(d => setTimeout(resetToTop, d));
+    if (isMobileDevice) {
+      // On mobile, position at top on reload and navigation
+      const resetToTop = () => {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        if (lenis) {
+          lenis.scrollTo(0, { immediate: true });
+        }
+      };
+
+      resetToTop();
+      timers = [0, 20, 50, 100, 200, 400].map((d) => setTimeout(resetToTop, d));
+    } else {
+      // On desktop, restore position if present on reload
+      const savedPos = sessionStorage.getItem(`scroll_pos_${window.location.pathname}`);
+      if (savedPos) {
+        const targetY = parseInt(savedPos, 10);
+        if (!isNaN(targetY) && targetY > 0) {
+          const restore = () => {
+            window.scrollTo({ top: targetY, left: 0, behavior: "instant" });
+            document.documentElement.scrollTop = targetY;
+            document.body.scrollTop = targetY;
+            if (lenis) {
+              lenis.scrollTo(targetY, { immediate: true });
+            }
+          };
+          restore();
+          timers = [0, 50, 100, 200, 400, 800].map((d) => setTimeout(restore, d));
+        }
+      }
+    }
 
     let prevY = window.scrollY;
 

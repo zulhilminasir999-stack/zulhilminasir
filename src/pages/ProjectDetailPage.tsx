@@ -132,28 +132,54 @@ export default function ProjectDetailPage() {
 
   useLayoutEffect(() => {
     setIsScrollReset(false);
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, [id]);
-
-  useEffect(() => {
-    const resetToTop = () => {
+    const isMobileDevice = window.innerWidth < 768;
+    if (isMobileDevice) {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      if (lenis) {
-        lenis.scrollTo(0, { immediate: true });
-      }
-    };
+    }
+  }, [id]);
 
-    resetToTop();
-    const timers = [0, 20, 50, 100, 200, 400, 800, 1500].map((d) =>
-      setTimeout(resetToTop, d),
-    );
+  useEffect(() => {
+    const isMobileDevice = window.innerWidth < 768;
+    let timers: ReturnType<typeof setTimeout>[] = [];
+
+    if (isMobileDevice) {
+      // On mobile, position at top on reload and navigation
+      const resetToTop = () => {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        if (lenis) {
+          lenis.scrollTo(0, { immediate: true });
+        }
+      };
+
+      resetToTop();
+      timers = [0, 20, 50, 100, 200, 400].map((d) =>
+        setTimeout(resetToTop, d),
+      );
+    } else {
+      // On desktop, restore position if present on reload
+      const savedPos = sessionStorage.getItem(`scroll_pos_${window.location.pathname}`);
+      if (savedPos) {
+        const targetY = parseInt(savedPos, 10);
+        if (!isNaN(targetY) && targetY > 0) {
+          const restore = () => {
+            window.scrollTo({ top: targetY, left: 0, behavior: "instant" });
+            document.documentElement.scrollTop = targetY;
+            document.body.scrollTop = targetY;
+            if (lenis) {
+              lenis.scrollTo(targetY, { immediate: true });
+            }
+          };
+          restore();
+          timers = [0, 50, 100, 200, 400, 800].map((d) =>
+            setTimeout(restore, d),
+          );
+        }
+      }
+    }
 
     let prevY = window.scrollY;
 
@@ -828,7 +854,7 @@ export default function ProjectDetailPage() {
           {(project?.id === "komorebi-editorial" ||
             project?.id === "breeze-cargo") && (
             <div
-              className="relative w-full min-h-screen h-auto sm:h-screen sm:min-h-screen overflow-hidden z-30 bg-[#090c15] sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0"
+              className="relative w-full h-auto sm:h-screen sm:min-h-screen overflow-hidden z-30 bg-[#090c15] sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0"
               onClick={() =>
                 handleMobileImageClick(
                   project.id === "breeze-cargo"
@@ -844,7 +870,7 @@ export default function ProjectDetailPage() {
                     : "/Triply/Triply7.jpg"
                 }
                 alt={project?.id === "breeze-cargo" ? "RepX 4" : "Gallery 3"}
-                className="w-full h-full min-h-screen object-cover block select-none p-0 m-0"
+                className="w-full h-auto sm:h-full sm:min-h-screen object-contain sm:object-cover block select-none p-0 m-0"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -1158,23 +1184,33 @@ export default function ProjectDetailPage() {
           className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
           onClick={() =>
             handleMobileImageClick(
-              project?.id === "komorebi-editorial"
-                ? "/Triply/Triply9.jpg"
-                : project?.galleryImages && project.galleryImages.length > 5
-                  ? project.galleryImages[5]
-                  : project?.imageUrl || "",
+              project?.id === "breeze-cargo"
+                ? "/RepX/RepX8.jpg"
+                : project?.id === "komorebi-editorial"
+                  ? "/Triply/Triply9.jpg"
+                  : project?.galleryImages && project.galleryImages.length > 5
+                    ? project.galleryImages[5]
+                    : project?.imageUrl || "",
             )
           }
         >
           <img
             src={
-              project?.id === "komorebi-editorial"
-                ? "/Triply/Triply9.jpg"
-                : project?.galleryImages && project.galleryImages.length > 5
-                  ? project.galleryImages[5]
-                  : project?.imageUrl || ""
+              project?.id === "breeze-cargo"
+                ? "/RepX/RepX8.jpg"
+                : project?.id === "komorebi-editorial"
+                  ? "/Triply/Triply9.jpg"
+                  : project?.galleryImages && project.galleryImages.length > 5
+                    ? project.galleryImages[5]
+                    : project?.imageUrl || ""
             }
-            alt="Solution Showcase"
+            alt={
+              project?.id === "breeze-cargo"
+                ? "RepX 8 Showcase"
+                : project?.id === "komorebi-editorial"
+                  ? "Triply 9 Showcase"
+                  : "Solution Showcase"
+            }
             className="w-full h-auto block select-none"
             referrerPolicy="no-referrer"
           />
