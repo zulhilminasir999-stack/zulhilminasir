@@ -31,7 +31,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     serviceId: "product",
     category: "Mobile UI/UX Design",
     subtitle: "Spatial smart maps and minimalist editorial travel interface",
-    title: "Triply | AI Companion",
+    title: "Triply",
     image: "/Triply/Triply1.jpg",
     url: "/case-study-project/komorebi-editorial",
     actionText: "Explore",
