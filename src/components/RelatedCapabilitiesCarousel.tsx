@@ -325,14 +325,14 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     <div 
       id="capabilities-section"
       ref={containerRef}
-      className="relative w-full bg-white z-50 select-none"
+      className="relative w-full bg-white z-50 select-none -mt-10 sm:-mt-16 md:-mt-24"
       style={{
         // Height calculated to provide 1:1 fluid feel matching horizontal track width
         height: scrollRange > 0 ? `${Math.round(window.innerHeight + scrollRange * 1.08)}px` : "260vh",
       }}
     >
       {/* Sticky Pinned Viewport Container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-10 sm:py-14 md:py-16 bg-white z-10">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-start gap-4 sm:gap-6 md:gap-7 pt-3 sm:pt-5 md:pt-6 pb-4 bg-white z-10">
         
         {/* Header Bar: Exact Preserved Typography + Dynamic Counter */}
         <div className="w-full px-6 sm:px-12 lg:px-16 flex items-center justify-between">
@@ -351,7 +351,7 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
         </div>
 
         {/* Horizontal Track Area */}
-        <div className="w-full overflow-visible my-auto py-4">
+        <div className="w-full overflow-visible py-2">
           <motion.div 
             ref={trackRef}
             style={{ 
