@@ -359,9 +359,12 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
                   referrerPolicy="no-referrer"
                   draggable={false}
                 />
-                {/* Subtle top-right hover arrow icon */}
-                <div className="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
-                  <ArrowUpRight className="w-4 h-4 text-zinc-900" />
+                {/* Modern Blue Rounded Rectangle "View Case Study" Badge on Hover */}
+                <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                  <div className="bg-[#2563EB] text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-sans font-medium tracking-normal flex items-center gap-2 shadow-[0_8px_24px_rgba(37,99,235,0.45)] transform scale-90 group-hover:scale-100 transition-all duration-300">
+                    <span>View Case Study</span>
+                    <ArrowUpRight className="w-4 h-4" />
+                  </div>
                 </div>
               </div>
 

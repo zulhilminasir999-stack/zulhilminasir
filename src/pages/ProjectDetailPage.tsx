@@ -1202,7 +1202,7 @@ export default function ProjectDetailPage() {
           onClick={() =>
             handleMobileImageClick(
               project?.id === "breeze-cargo"
-                ? "/RepX/RepX8.jpg"
+                ? "/RepX/RepX10.jpg"
                 : project?.id === "komorebi-editorial"
                   ? "/Triply/Triply9.jpg"
                   : project?.galleryImages && project.galleryImages.length > 5
@@ -1214,7 +1214,7 @@ export default function ProjectDetailPage() {
           <img
             src={
               project?.id === "breeze-cargo"
-                ? "/RepX/RepX8.jpg"
+                ? "/RepX/RepX10.jpg"
                 : project?.id === "komorebi-editorial"
                   ? "/Triply/Triply9.jpg"
                   : project?.galleryImages && project.galleryImages.length > 5
@@ -1223,7 +1223,7 @@ export default function ProjectDetailPage() {
             }
             alt={
               project?.id === "breeze-cargo"
-                ? "RepX 8 Showcase"
+                ? "RepX 10 Showcase"
                 : project?.id === "komorebi-editorial"
                   ? "Triply 9 Showcase"
                   : "Solution Showcase"
@@ -1242,6 +1242,21 @@ export default function ProjectDetailPage() {
             <img
               src="/Triply/Triply10.jpg"
               alt="Triply Showcase 10"
+              className="w-full h-auto block select-none"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
+
+        {/* RepX 8 Image Section (Directly after RepX 10) */}
+        {project?.id === "breeze-cargo" && (
+          <div
+            className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
+            onClick={() => handleMobileImageClick("/RepX/RepX8.jpg")}
+          >
+            <img
+              src="/RepX/RepX8.jpg"
+              alt="RepX 8 Showcase"
               className="w-full h-auto block select-none"
               referrerPolicy="no-referrer"
             />
@@ -1278,32 +1293,49 @@ export default function ProjectDetailPage() {
           </div>
         )}
 
+        {/* RepX 4 Image Section (After Key Results) */}
+        {project?.id === "breeze-cargo" && (
+          <div
+            className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
+            onClick={() => handleMobileImageClick("/RepX/RepX4.jpg")}
+          >
+            <img
+              src="/RepX/RepX4.jpg"
+              alt="RepX 4 Showcase"
+              className="w-full h-auto block select-none"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
+
         {/* Section 8: Final Full-width Image */}
-        <div
-          className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
-          onClick={() =>
-            handleMobileImageClick(
-              project?.id === "ck-lighting"
-                ? "/CK Lighting Web/ck11.jpg"
-                : project.galleryImages && project.galleryImages.length > 6
-                  ? project.galleryImages[6]
-                  : "/Images/Ipad Pro Mockup On Rock.jpg",
-            )
-          }
-        >
-          <img
-            src={
-              project?.id === "ck-lighting"
-                ? "/CK Lighting Web/ck11.jpg"
-                : project.galleryImages && project.galleryImages.length > 6
-                  ? project.galleryImages[6]
-                  : "/Images/Ipad Pro Mockup On Rock.jpg"
+        {project?.id !== "breeze-cargo" && (
+          <div
+            className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
+            onClick={() =>
+              handleMobileImageClick(
+                project?.id === "ck-lighting"
+                  ? "/CK Lighting Web/ck11.jpg"
+                  : project.galleryImages && project.galleryImages.length > 6
+                    ? project.galleryImages[6]
+                    : "/Images/Ipad Pro Mockup On Rock.jpg",
+              )
             }
-            alt="Final Gallery Image"
-            className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-auto sm:h-screen object-contain sm:object-cover block"}`}
-            referrerPolicy="no-referrer"
-          />
-        </div>
+          >
+            <img
+              src={
+                project?.id === "ck-lighting"
+                  ? "/CK Lighting Web/ck11.jpg"
+                  : project.galleryImages && project.galleryImages.length > 6
+                    ? project.galleryImages[6]
+                    : "/Images/Ipad Pro Mockup On Rock.jpg"
+              }
+              alt="Final Gallery Image"
+              className={`w-full ${project?.id === "ck-lighting" ? "h-auto block" : "h-auto sm:h-screen object-contain sm:object-cover block"}`}
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
 
         {/* Related Capabilities Carousel with Scroll-Driven Horizontal Movement */}
         <RelatedCapabilitiesCarousel currentId={project.id} />
