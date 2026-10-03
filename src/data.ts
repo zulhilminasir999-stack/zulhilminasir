@@ -95,7 +95,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     category: "PACKAGING",
     categoryLabel: "Corporate Website",
     year: "2026",
-    imageUrl: "/Images/tgpw1.jpg",
+    imageUrl: "/TGPW/tgpw1.jpg",
     client: "TG PowerWrap Sdn Bhd",
     toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Google Gemini Prompting", "Midjourney"],
     summary: "Created the complete brand design, structural carton box vectors, and 3D mockups for an ultra-premium organic wild forest honey brand, showcasing a fusion of delicate line art and AI-synthesized botanical details.",
@@ -108,12 +108,14 @@ export const PORTFOLIO_PROJECTS: Project[] = [
       "Achieved a 100% sustainable paperboard specification on cutting matrices."
     ],
     galleryImages: [
-      "/Images/tgpw1.jpg",
-      "/Images/3.jpg",
-      "/Images/TGPW Visual Guideline.jpg",
-      "/Images/Thumbnail Mobile TGPW.jpg",
-      "/Images/TGPW Site Map.jpg",
-      "/Images/5.jpg"
+      "/TGPW/tgpw1.jpg",
+      "/TGPW/3.jpg",
+      "/TGPW/TGPW Visual Guideline.jpg",
+      "/TGPW/Thumbnail Mobile TGPW.jpg",
+      "/TGPW/TGPW Site Map.jpg",
+      "/TGPW/5.jpg",
+      "/TGPW/TGPW7.jpg",
+      "/TGPW/TGPW8.jpg"
     ],
     links: [
       { label: "View Adobe Illustrator Cutter-Guides", url: "#" },

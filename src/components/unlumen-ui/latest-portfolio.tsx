@@ -24,7 +24,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: "seventy-seven",
     title: "TG PowerWrap Website",
     category: "Corporate Website",
-    defaultImage: "/Images/tgpw1.jpg",
+    defaultImage: "/TGPW/tgpw1.jpg",
     mobileImage: "/TGPW/tgpw_m1.png",
     url: "/case-study-project/TGPowerWrap",
     client: "TG PowerWrap Sdn Bhd",

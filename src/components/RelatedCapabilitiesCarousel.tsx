@@ -24,7 +24,7 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     type: "Packaging & Web",
     description: "Ultra-premium packaging architecture and responsive corporate web platform engineered with AI-assisted 3D mockups and precision vector blueprints.",
     role: "CREATOR / LEAD DESIGNER / VIBE-CODER",
-    image: "/Images/tgpw1.jpg",
+    image: "/TGPW/tgpw1.jpg",
     url: "/case-study-project/TGPowerWrap",
     isProject: true,
   },
