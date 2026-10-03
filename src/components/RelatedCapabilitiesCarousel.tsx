@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect, useMemo, useCallback } from "react";
-import { motion, useMotionValue } from "motion/react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
+import { motion, useMotionValue, useAnimationFrame } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import { useLenis } from "lenis/react";
 import { useReveal } from "../context/RevealContext";
 
 export interface CarouselCaseItem {
@@ -176,7 +175,6 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
 
 // Similarity mapping for featured projects relative to each capability or project
 const SIMILARITY_MAP: Record<string, string[]> = {
-  // Capability IDs -> Ranked relevant featured projects
   "web-design-cms": ["ck-lighting", "TGPowerWrap", "aistudio-brand", "breeze-cargo", "komorebi-editorial", "atelier-luxe", "helios-exhibition"],
   "ui-ux": ["breeze-cargo", "komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
   "web-app-system": ["aistudio-brand", "ck-lighting", "breeze-cargo", "komorebi-editorial", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
@@ -185,7 +183,6 @@ const SIMILARITY_MAP: Record<string, string[]> = {
   "packaging": ["TGPowerWrap", "atelier-luxe", "helios-exhibition", "ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
   "visual-design": ["helios-exhibition", "atelier-luxe", "TGPowerWrap", "komorebi-editorial", "breeze-cargo", "ck-lighting", "aistudio-brand"],
 
-  // Project IDs -> Ranked other featured projects
   "TGPowerWrap": ["ck-lighting", "atelier-luxe", "helios-exhibition", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
   "breeze-cargo": ["komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
   "ck-lighting": ["TGPowerWrap", "aistudio-brand", "breeze-cargo", "komorebi-editorial", "atelier-luxe", "helios-exhibition"],
@@ -214,13 +211,14 @@ interface RelatedCapabilitiesCarouselProps {
 }
 
 export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabilitiesCarouselProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [scrollRange, setScrollRange] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const xMotionValue = useMotionValue(0);
   const navigate = useNavigate();
   const { triggerReveal } = useReveal();
+  const trackRef = useRef<HTMLDivElement>(null);
+  const singleWidthRef = useRef<number>(0);
+  const isDraggingRef = useRef<boolean>(false);
+  const hasDraggedRef = useRef<boolean>(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const x = useMotionValue(0);
 
   // 5 Similar Featured Projects followed by 5 Random Hoverlist Projects
   const randomizedCases = useMemo(() => {
@@ -257,65 +255,51 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     return [...first5Featured, ...next5Hoverlist];
   }, [currentId]);
 
-  // Measure track width to dynamically calculate exact horizontal scroll distance
-  useEffect(() => {
-    const calculateScrollRange = () => {
-      if (trackRef.current) {
-        const trackWidth = trackRef.current.scrollWidth;
-        const windowWidth = window.innerWidth;
-        // Total distance track needs to move so last card is fully visible with right padding
-        const paddingRight = windowWidth < 640 ? 32 : windowWidth < 1024 ? 64 : 96;
-        const distance = Math.max(0, trackWidth - windowWidth + paddingRight);
-        setScrollRange(distance);
-      }
-    };
-
-    calculateScrollRange();
-    window.addEventListener("resize", calculateScrollRange);
-    const timer = setTimeout(calculateScrollRange, 200);
-
-    return () => {
-      window.removeEventListener("resize", calculateScrollRange);
-      clearTimeout(timer);
-    };
+  // Repeated 3 times for a continuous seamless loop
+  const duplicatedCases = useMemo(() => {
+    return [...randomizedCases, ...randomizedCases, ...randomizedCases];
   }, [randomizedCases]);
 
-  // Direct sync function that recalculates translation based on current scroll position
-  const updateScrollProgress = useCallback(() => {
-    if (!containerRef.current) return;
-    const container = containerRef.current;
-    const rect = container.getBoundingClientRect();
-    const totalScroll = container.offsetHeight - window.innerHeight;
-
-    if (totalScroll <= 0) return;
-
-    const currentScrolled = -rect.top;
-    const progress = Math.max(0, Math.min(1, currentScrolled / totalScroll));
-
-    // Smooth horizontal translation directly locked to Lenis interpolated coordinates
-    const targetX = -progress * scrollRange;
-    xMotionValue.set(targetX);
-
-    // Update index counter
-    const total = randomizedCases.length;
-    const calculated = Math.min(total, Math.max(1, Math.round(progress * (total - 1)) + 1));
-    setCurrentIndex(calculated);
-  }, [scrollRange, randomizedCases.length, xMotionValue]);
-
-  // Hook directly into Lenis's high-precision render loop
-  useLenis(updateScrollProgress);
-
-  // Standard scroll listener fallback for immediate sync during page load/anchor jumps
+  // Measure single track width
   useEffect(() => {
-    updateScrollProgress();
-    window.addEventListener("scroll", updateScrollProgress, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", updateScrollProgress);
+    const measure = () => {
+      if (trackRef.current) {
+        singleWidthRef.current = trackRef.current.scrollWidth / 3;
+      }
     };
-  }, [updateScrollProgress]);
+    measure();
+    window.addEventListener("resize", measure);
+    const timer = setTimeout(measure, 300);
+    return () => {
+      window.removeEventListener("resize", measure);
+      clearTimeout(timer);
+    };
+  }, [duplicatedCases]);
+
+  // Auto-scroll loop with smooth wrap
+  useAnimationFrame((_, delta) => {
+    if (isDraggingRef.current) {
+      return;
+    }
+
+    const speed = isHovered ? 15 : 36; // px per second
+    const moveBy = (speed * delta) / 1000;
+    const currentX = x.get();
+    let nextX = currentX - moveBy;
+
+    if (singleWidthRef.current > 0) {
+      const width = singleWidthRef.current;
+      // Seamless wrap in both directions
+      nextX = ((((nextX) % width) - width) % width);
+    }
+
+    x.set(nextX);
+  });
 
   const handleCardClick = (e: React.MouseEvent, url: string) => {
     e.preventDefault();
+    // Do not trigger click if user dragged the track
+    if (hasDraggedRef.current) return;
     triggerReveal(() => {
       navigate(url);
     });
@@ -324,95 +308,93 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
   return (
     <div 
       id="capabilities-section"
-      ref={containerRef}
-      className="relative w-full bg-white z-50 select-none -mt-10 sm:-mt-16 md:-mt-24"
-      style={{
-        // Height calculated to provide 1:1 fluid feel matching horizontal track width
-        height: scrollRange > 0 ? `${Math.round(window.innerHeight + scrollRange * 1.08)}px` : "260vh",
-      }}
+      className="relative w-full bg-white z-50 select-none py-12 sm:py-16 md:py-20 overflow-hidden"
     >
-      {/* Sticky Pinned Viewport Container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-start gap-4 sm:gap-6 md:gap-7 pt-3 sm:pt-5 md:pt-6 pb-4 bg-white z-10">
-        
-        {/* Header Bar: Exact Preserved Typography + Dynamic Counter */}
-        <div className="w-full px-6 sm:px-12 lg:px-16 flex items-center justify-between">
-          <div className="space-y-1">
-            <h4 className="font-sans font-medium text-2xl sm:text-3xl tracking-tight text-zinc-900 uppercase">
-              Related Capabilities
-            </h4>
-          </div>
-
-          {/* Video-inspired progress counter (e.g. 3 / 11) */}
-          <div className="font-mono text-xs sm:text-sm tracking-wider text-zinc-400 font-medium">
-            <span className="text-zinc-900">{currentIndex}</span>
-            <span className="mx-1 text-zinc-300">/</span>
-            <span>{randomizedCases.length}</span>
-          </div>
+      {/* Header Bar */}
+      <div className="w-full px-6 sm:px-12 lg:px-16 flex items-center justify-between mb-8 sm:mb-10 md:mb-12">
+        <div className="space-y-1">
+          <h4 className="font-sans font-medium text-2xl sm:text-3xl tracking-tight text-zinc-900 uppercase">
+            Related Capabilities
+          </h4>
         </div>
+      </div>
 
-        {/* Horizontal Track Area */}
-        <div className="w-full overflow-visible py-2">
-          <motion.div 
-            ref={trackRef}
-            style={{ 
-              x: xMotionValue,
-              willChange: "transform",
-            }}
-            className="flex items-stretch gap-6 sm:gap-8 md:gap-10 pl-6 sm:pl-12 lg:pl-16 pr-12 w-max"
-          >
-            {randomizedCases.map((item) => (
-              <div
-                key={item.id}
-                onClick={(e) => handleCardClick(e, item.url)}
-                className="group w-[300px] sm:w-[380px] md:w-[440px] lg:w-[480px] shrink-0 bg-white rounded-2xl border border-zinc-200/90 hover:border-zinc-400/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer flex flex-col overflow-hidden"
-              >
-                {/* Media Thumbnail Container with subtle hover zoom */}
-                <div className="aspect-[16/10] w-full overflow-hidden bg-zinc-100 border-b border-zinc-100 relative">
-                  <img 
-                    src={item.image} 
-                    alt={item.displayTitle}
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-all duration-700 pointer-events-none"
-                    referrerPolicy="no-referrer"
-                  />
-                  {/* Subtle top-right hover arrow icon */}
-                  <div className="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
-                    <ArrowUpRight className="w-4 h-4 text-zinc-900" />
-                  </div>
-                </div>
-
-                {/* Card Content Anatomy */}
-                <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between gap-5">
-                  <div className="space-y-1.5">
-                    {/* Case Study Title in Satoshi font */}
-                    <h5 
-                      className="font-satoshi text-sm sm:text-base font-semibold text-zinc-900 tracking-tight leading-snug group-hover:text-[#2563EB] transition-colors"
-                      style={{ fontFamily: "var(--font-satoshi), 'Satoshi', system-ui, sans-serif" }}
-                    >
-                      {item.slugTitle}
-                    </h5>
-
-                    {/* Case Study Type: Clean grey wording in Title Case with Satoshi font */}
-                    <div 
-                      className="font-satoshi text-xs sm:text-sm font-medium text-zinc-400 capitalize tracking-normal"
-                      style={{ fontFamily: "var(--font-satoshi), 'Satoshi', system-ui, sans-serif" }}
-                    >
-                      {item.type}
-                    </div>
-                  </div>
-
-                  {/* Role attribution tags along the bottom border */}
-                  <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-[11px] sm:text-xs font-mono text-zinc-400 tracking-wider uppercase">
-                    <span className="truncate pr-2">{item.role}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-300 group-hover:text-zinc-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-                  </div>
+      {/* Auto-moving + Freely Draggable continuous smooth marquee */}
+      <div 
+        className="w-full overflow-hidden relative cursor-grab active:cursor-grabbing touch-pan-y"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <motion.div 
+          ref={trackRef}
+          style={{ x }}
+          drag="x"
+          dragConstraints={{ left: -100000, right: 100000 }}
+          dragElastic={0}
+          onDragStart={() => {
+            isDraggingRef.current = true;
+            hasDraggedRef.current = true;
+          }}
+          onDragEnd={() => {
+            isDraggingRef.current = false;
+            // Delay resetting drag flag slightly to prevent click triggering
+            setTimeout(() => {
+              hasDraggedRef.current = false;
+            }, 120);
+          }}
+          className="flex items-stretch gap-6 sm:gap-8 md:gap-10 w-max pl-6 sm:pl-12 lg:pl-16"
+        >
+          {duplicatedCases.map((item, index) => (
+            <div
+              key={`${item.id}-${index}`}
+              onClick={(e) => handleCardClick(e, item.url)}
+              className="group w-[300px] sm:w-[380px] md:w-[440px] lg:w-[480px] shrink-0 bg-white rounded-2xl border border-zinc-200/90 hover:border-zinc-400/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer flex flex-col overflow-hidden select-none"
+            >
+              {/* Media Thumbnail Container with subtle hover zoom */}
+              <div className="aspect-[16/10] w-full overflow-hidden bg-zinc-100 border-b border-zinc-100 relative">
+                <img 
+                  src={item.image} 
+                  alt={item.displayTitle}
+                  className="w-full h-full object-cover group-hover:scale-[1.03] transition-all duration-700 pointer-events-none"
+                  referrerPolicy="no-referrer"
+                  draggable={false}
+                />
+                {/* Subtle top-right hover arrow icon */}
+                <div className="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm">
+                  <ArrowUpRight className="w-4 h-4 text-zinc-900" />
                 </div>
               </div>
-            ))}
-          </motion.div>
-        </div>
 
+              {/* Card Content Anatomy */}
+              <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between gap-5">
+                <div className="space-y-1.5">
+                  {/* Case Study Title in Satoshi font */}
+                  <h5 
+                    className="font-satoshi text-sm sm:text-base font-semibold text-zinc-900 tracking-tight leading-snug group-hover:text-[#2563EB] transition-colors"
+                    style={{ fontFamily: "var(--font-satoshi), 'Satoshi', system-ui, sans-serif" }}
+                  >
+                    {item.slugTitle}
+                  </h5>
+
+                  {/* Case Study Type: Clean grey wording in Title Case with Satoshi font */}
+                  <div 
+                    className="font-satoshi text-xs sm:text-sm font-medium text-zinc-400 capitalize tracking-normal"
+                    style={{ fontFamily: "var(--font-satoshi), 'Satoshi', system-ui, sans-serif" }}
+                  >
+                    {item.type}
+                  </div>
+                </div>
+
+                {/* Role attribution tags along the bottom border */}
+                <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-[11px] sm:text-xs font-mono text-zinc-400 tracking-wider uppercase">
+                  <span className="truncate pr-2">{item.role}</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-300 group-hover:text-zinc-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </div>
   );
 }
-
