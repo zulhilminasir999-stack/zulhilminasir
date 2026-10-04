@@ -161,7 +161,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     category: "AI_PROMPT",
     categoryLabel: "Web App & System",
     year: "2025",
-    imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
+    imageUrl: "/PFM/PFM1.jpg",
     client: "Tadika Mesra, Sungai Petani",
     toolsUsed: ["ChatGPT Extra Prompts", "Google Gemini", "Adobe Photoshop Touchups", "Figma Design Specs"],
     summary: "A world-class, custom-curated, interactive creative toolkit of premium styling prompt recipes designed for digital marketers, mockup artists, and prompt engineers.",
@@ -173,7 +173,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
       "Ensures instant, visually cohesive collateral assets for corporate pitch decks in 30 seconds."
     ],
     galleryImages: [
-      "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=1200",
+      "/PFM/PFM1.jpg",
       "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1200",
       "https://images.unsplash.com/photo-1544256718-3bcf237f3974?auto=format&fit=crop&q=80&w=1200",
       "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=1200",

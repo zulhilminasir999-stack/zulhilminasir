@@ -69,7 +69,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: "rural-arena",
     title: "Pre-school Fee Management",
     category: "Web App & System",
-    defaultImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200",
+    defaultImage: "/PFM/PFM1.jpg",
     url: "/case-study-project/aistudio-brand",
     client: "Tadika Mesra, Sungai Petani",
     year: "2025"
