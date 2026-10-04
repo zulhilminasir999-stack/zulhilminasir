@@ -52,21 +52,6 @@ function AppContent() {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
       lenis?.start();
-      
-      if (isMobile) {
-        lenis?.scrollTo(0, { immediate: true });
-        window.scrollTo(0, 0);
-      } else {
-        // Desktop: Restore saved position on reload if present
-        const savedPos = sessionStorage.getItem(`scroll_pos_${window.location.pathname}`);
-        if (savedPos) {
-          const targetY = parseInt(savedPos, 10);
-          if (!isNaN(targetY) && targetY > 0) {
-            lenis?.scrollTo(targetY, { immediate: true });
-            window.scrollTo(0, targetY);
-          }
-        }
-      }
     }
     return () => {
       document.body.style.overflow = "";

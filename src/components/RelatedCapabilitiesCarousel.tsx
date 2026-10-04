@@ -302,6 +302,9 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     if (hasDraggedRef.current) return;
     triggerReveal(() => {
       navigate(url);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     });
   };
 

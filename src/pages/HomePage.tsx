@@ -156,13 +156,29 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
   const mountedWithLoading = React.useRef(isLoading);
 
+  // Synchronously restore scroll before paint if saved scroll position exists
+  React.useLayoutEffect(() => {
+    const savedPos = sessionStorage.getItem("home_scroll_position");
+    const targetHash = window.location.hash;
+    if (!targetHash && savedPos) {
+      const targetY = parseInt(savedPos, 10);
+      if (!isNaN(targetY) && targetY > 0) {
+        window.scrollTo({ top: targetY, behavior: "instant" });
+        document.documentElement.scrollTop = targetY;
+        document.body.scrollTop = targetY;
+      }
+    }
+  }, []);
+
   // Continuously track scroll position in sessionStorage so back navigation always restores perfectly
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout;
     const trackScroll = () => {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
+        if (window.scrollY > 20) {
+          sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
+        }
       }, 50); // Small debounce
     };
     
@@ -202,29 +218,26 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         scrollToHash();
         const timers = [10, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(scrollToHash, delay));
         return () => timers.forEach(id => clearTimeout(id));
-      } else {
-        const isMobileScreenSize = window.innerWidth < 768;
-
-        // If we have a saved scroll position on Desktop (both back navigation and reload), restore it
-        if (!isMobileScreenSize && savedScrollPosition) {
-          const targetY = parseInt(savedScrollPosition, 10);
-          if (!isNaN(targetY) && targetY > 0) {
-            const restoreScroll = () => {
-              window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
-              document.documentElement.scrollTop = targetY;
-              document.body.scrollTop = targetY;
-              if (lenis) {
-                lenis.scrollTo(targetY, { immediate: true });
-              }
-            };
-            
-            restoreScroll();
-            const timers = [10, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(restoreScroll, delay));
-            return () => timers.forEach(id => clearTimeout(id));
-          }
+      } else if (savedScrollPosition) {
+        // If we have a saved scroll position (back navigation or reload), restore it smoothly
+        const targetY = parseInt(savedScrollPosition, 10);
+        if (!isNaN(targetY) && targetY > 0) {
+          const restoreScroll = () => {
+            window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
+            document.documentElement.scrollTop = targetY;
+            document.body.scrollTop = targetY;
+            if (lenis) {
+              lenis.scrollTo(targetY, { immediate: true });
+            }
+            setIsHeaderScrolled(targetY > 80);
+          };
+          
+          restoreScroll();
+          const timers = [0, 20, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(restoreScroll, delay));
+          return () => timers.forEach(id => clearTimeout(id));
         }
-
-        // On Mobile or if no saved position on Desktop -> force scroll to top
+      } else {
+        // If no saved position -> start cleanly at top
         if (isInitialAppLoad && targetHash) {
           window.history.replaceState(null, "", window.location.pathname);
         }

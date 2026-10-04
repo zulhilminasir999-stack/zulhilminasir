@@ -122,6 +122,9 @@ export function LatestPortfolio() {
               sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
               triggerReveal(() => {
                 navigate(item.url);
+                window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
               });
             }}
             onMouseEnter={() => setHoveredCardId(item.id)}

@@ -66,12 +66,6 @@ export default function ProjectDetailPage() {
     if (e && e.preventDefault) e.preventDefault();
     triggerFullLoading(() => {
       navigate("/");
-      window.scrollTo({ top: 0, behavior: "instant" });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      if (lenis) {
-        lenis.scrollTo(0, { immediate: true });
-      }
     });
   };
 
@@ -145,54 +139,26 @@ export default function ProjectDetailPage() {
 
   useLayoutEffect(() => {
     setIsScrollReset(false);
-    const isMobileDevice = window.innerWidth < 768;
-    if (isMobileDevice) {
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [id]);
 
   useEffect(() => {
-    const isMobileDevice = window.innerWidth < 768;
-    let timers: ReturnType<typeof setTimeout>[] = [];
-
-    if (isMobileDevice) {
-      // On mobile, position at top on reload and navigation
-      const resetToTop = () => {
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        if (lenis) {
-          lenis.scrollTo(0, { immediate: true });
-        }
-      };
-
-      resetToTop();
-      timers = [0, 20, 50, 100, 200, 400].map((d) =>
-        setTimeout(resetToTop, d),
-      );
-    } else {
-      // On desktop, restore position if present on reload
-      const savedPos = sessionStorage.getItem(`scroll_pos_${window.location.pathname}`);
-      if (savedPos) {
-        const targetY = parseInt(savedPos, 10);
-        if (!isNaN(targetY) && targetY > 0) {
-          const restore = () => {
-            window.scrollTo({ top: targetY, left: 0, behavior: "instant" });
-            document.documentElement.scrollTop = targetY;
-            document.body.scrollTop = targetY;
-            if (lenis) {
-              lenis.scrollTo(targetY, { immediate: true });
-            }
-          };
-          restore();
-          timers = [0, 50, 100, 200, 400, 800].map((d) =>
-            setTimeout(restore, d),
-          );
-        }
+    // When entering a case study project page, always ensure the page starts at the top
+    const resetToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true });
       }
-    }
+    };
+
+    resetToTop();
+    const timers = [0, 20, 50, 100, 200, 400, 700].map((d) =>
+      setTimeout(resetToTop, d),
+    );
 
     let prevY = window.scrollY;
 
@@ -223,7 +189,7 @@ export default function ProjectDetailPage() {
 
     window.addEventListener("scroll", handleScroll);
 
-    // Give a small timed delay of 120ms behind the white cover to guarantee completely flash-free transition at top
+    // Give a small timed delay of 120ms behind the cover to guarantee completely flash-free transition at top
     const revealTimer = setTimeout(() => {
       setIsScrollReset(true);
     }, 120);
@@ -1254,6 +1220,21 @@ export default function ProjectDetailPage() {
           </div>
         )}
 
+        {/* Triply 13 Image Section (Directly after Triply 10) */}
+        {project?.id === "komorebi-editorial" && (
+          <div
+            className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
+            onClick={() => handleMobileImageClick("/Triply/Triply13.jpg")}
+          >
+            <img
+              src="/Triply/Triply13.jpg"
+              alt="Triply Showcase 13"
+              className="w-full h-auto block select-none"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
+
         {/* RepX 8 Image Section (Directly after RepX 10) */}
         {project?.id === "breeze-cargo" && (
           <div
@@ -1320,28 +1301,32 @@ export default function ProjectDetailPage() {
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
             onClick={() =>
               handleMobileImageClick(
-                project?.id === "TGPowerWrap"
-                  ? "/TGPW/TGPW8.jpg"
-                  : project?.id === "ck-lighting"
-                    ? "/CK Lighting Web/ck11.jpg"
-                    : project.galleryImages && project.galleryImages.length > 6
-                      ? project.galleryImages[6]
-                      : "/TGPW/TGPW8.jpg",
+                project?.id === "komorebi-editorial"
+                  ? "/Triply/Triply14.jpg"
+                  : project?.id === "TGPowerWrap"
+                    ? "/TGPW/TGPW8.jpg"
+                    : project?.id === "ck-lighting"
+                      ? "/CK Lighting Web/ck11.jpg"
+                      : project.galleryImages && project.galleryImages.length > 6
+                        ? project.galleryImages[6]
+                        : "/TGPW/TGPW8.jpg",
               )
             }
           >
             <img
               src={
-                project?.id === "TGPowerWrap"
-                  ? "/TGPW/TGPW8.jpg"
-                  : project?.id === "ck-lighting"
-                    ? "/CK Lighting Web/ck11.jpg"
-                    : project.galleryImages && project.galleryImages.length > 6
-                      ? project.galleryImages[6]
-                      : "/TGPW/TGPW8.jpg"
+                project?.id === "komorebi-editorial"
+                  ? "/Triply/Triply14.jpg"
+                  : project?.id === "TGPowerWrap"
+                    ? "/TGPW/TGPW8.jpg"
+                    : project?.id === "ck-lighting"
+                      ? "/CK Lighting Web/ck11.jpg"
+                      : project.galleryImages && project.galleryImages.length > 6
+                        ? project.galleryImages[6]
+                        : "/TGPW/TGPW8.jpg"
               }
               alt="Final Gallery Image"
-              className={`w-full ${project?.id === "ck-lighting" || project?.id === "TGPowerWrap" ? "h-auto block" : "h-auto sm:h-screen object-contain sm:object-cover block"}`}
+              className={`w-full ${project?.id === "ck-lighting" || project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial" ? "h-auto block" : "h-auto sm:h-screen object-contain sm:object-cover block"}`}
               referrerPolicy="no-referrer"
             />
           </div>
