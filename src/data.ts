@@ -542,9 +542,9 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Google Gemini API", "React & Vite", "TypeScript", "Tailwind CSS", "Node.js"],
     showcases: [
-      { title: "FinSight | AI Financial Intelligence Platform", image: "/DemoPic/Demo4.png" },
-      { title: "Smart Copilot Assistant", image: "/DemoPic/Demo3.png" },
-      { title: "GenAI Workflow Orchestrator", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800" }
+      { title: "FinSight | AI Financial Intelligence Platform", image: "/DemoPic/Demo4.png", isComingSoon: true },
+      { title: "Smart Copilot Assistant", image: "/DemoPic/Demo3.png", isComingSoon: true },
+      { title: "GenAI Workflow Orchestrator", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800", isComingSoon: true }
     ],
     gallery: [
       "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=800",

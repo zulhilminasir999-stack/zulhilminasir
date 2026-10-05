@@ -14,6 +14,7 @@ export interface CarouselCaseItem {
   image: string;
   url: string;
   isProject?: boolean;
+  isComingSoon?: boolean;
 }
 
 const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
@@ -68,9 +69,93 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     type: "Web App & System",
     description: "Enterprise management dashboard and automated student billing engine structured to clarify dense information hierarchies for non-technical teams.",
     role: "FULL-STACK ARCHITECT / LEAD DESIGNER",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
+    image: "/PFM/PFM1.jpg",
     url: "/case-study-project/aistudio-brand",
     isProject: true,
+  },
+  {
+    id: "finsight-ai",
+    slugTitle: "FinSight - Financial Intelligence",
+    displayTitle: "FinSight | AI Financial Intelligence Platform",
+    type: "AI-Native Dev",
+    description: "High-throughput predictive fiscal analytics engine utilizing Gemini models for real-time market sentiment synthesis.",
+    role: "CREATOR / AI ENGINEER",
+    image: "/DemoPic/Demo4.png",
+    url: "#",
+    isProject: true,
+    isComingSoon: true,
+  },
+  {
+    id: "smart-copilot",
+    slugTitle: "Smart Copilot - Agentic Assistant",
+    displayTitle: "Smart Copilot Assistant",
+    type: "AI-Native Dev",
+    description: "Autonomous reasoning assistant automating complex multi-step user workflows through responsive client-side tooling.",
+    role: "AI ARCHITECT / VIBE-CODER",
+    image: "/DemoPic/Demo3.png",
+    url: "#",
+    isProject: true,
+    isComingSoon: true,
+  },
+  {
+    id: "genai-orchestrator",
+    slugTitle: "GenAI Orchestrator - Workflow Pipeline",
+    displayTitle: "GenAI Workflow Orchestrator",
+    type: "AI-Native Dev",
+    description: "Composable multi-agent pipeline orchestrating automated design iterations and data transformations.",
+    role: "AI SYSTEM ARCHITECT",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800",
+    url: "#",
+    isProject: true,
+    isComingSoon: true,
+  },
+  {
+    id: "solareco-website",
+    slugTitle: "SolarEco - Renewable Energy Web",
+    displayTitle: "SolarEco Website Project",
+    type: "Web Dev",
+    description: "Sustainable solar portal featuring responsive dynamic product selectors and carbon offset calculators.",
+    role: "LEAD DESIGNER / FRONT-END",
+    image: "/DemoPic/Demo1.png",
+    url: "#",
+    isProject: true,
+    isComingSoon: true,
+  },
+  {
+    id: "ai-workspace-apps",
+    slugTitle: "AI Workspace - Productivity Suite",
+    displayTitle: "AI Workspace Apps",
+    type: "UI/UX",
+    description: "Contextual productivity canvas integrating real-time intelligence feeds, smart prompt cards, and fluid workspace switching.",
+    role: "PRODUCT DESIGNER / UI-UX LEAD",
+    image: "/DemoPic/Demo2.png",
+    url: "#",
+    isProject: true,
+    isComingSoon: true,
+  },
+  {
+    id: "travel-claim-system",
+    slugTitle: "Travel Claim - Expense Management",
+    displayTitle: "Travel Claim Management System",
+    type: "Web App & System",
+    description: "Automated mileage receipt scanning, enterprise budget approval matrix, and multi-currency employee reimbursement.",
+    role: "FULL-STACK LEAD / ARCHITECT",
+    image: "/DemoPic/Demo6.png",
+    url: "#",
+    isProject: true,
+    isComingSoon: true,
+  },
+  {
+    id: "analytics-hub",
+    slugTitle: "Analytics Hub - Realtime Reporting",
+    displayTitle: "Analytics Management Hub",
+    type: "Web App & System",
+    description: "Live multi-tenant telemetry reporting engine with interactive chart matrices and high-velocity database streams.",
+    role: "FULL-STACK ARCHITECT",
+    image: "/DemoPic/Demo3.png",
+    url: "#",
+    isProject: true,
+    isComingSoon: true,
   },
   {
     id: "atelier-luxe",
@@ -80,8 +165,9 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     description: "Designed a complete custom-illustrated visual monogram logo, letterpress stationery matrices, and tactile layout system for eco-boutique skin care.",
     role: "LEAD DESIGNER / ART DIRECTOR",
     image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study-project/atelier-luxe",
+    url: "#",
     isProject: true,
+    isComingSoon: true,
   },
   {
     id: "helios-exhibition",
@@ -91,41 +177,9 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     description: "Collection of high-concept graphic posters displaying striking monochromatic chiaroscuro geometry and safety-orange typographical layers.",
     role: "ART DIRECTOR / VISUAL DESIGNER",
     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study-project/helios-exhibition",
+    url: "#",
     isProject: true,
-  },
-  {
-    id: "web-design-cms",
-    slugTitle: "Zenith CMS - Front-End Architecture",
-    displayTitle: "Web Design & CMS Systems",
-    type: "Web Dev",
-    description: "Translating bespoke component architectures into blazing-fast production front-ends with sub-second page loads and seamless editor accessibility.",
-    role: "VIBE-CODER / LEAD DESIGNER",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/web-design-cms",
-    isProject: false,
-  },
-  {
-    id: "ui-ux",
-    slugTitle: "Vortex UI - Design Systems",
-    displayTitle: "User Interface & Experience",
-    type: "Mobile UI/UX",
-    description: "Cognitive interaction flows, scalable token systems, and interactive prototypes built to minimize friction and elevate product usability.",
-    role: "LEAD DESIGNER",
-    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/ui-ux",
-    isProject: false,
-  },
-  {
-    id: "ai-native-development",
-    slugTitle: "Product Lens - AI Rich Generator",
-    displayTitle: "AI-Native Development & Vibe Coding",
-    type: "AI-Native Dev",
-    description: "Accelerating full-stack engineering with generative pipelines, Gemini API integrations, and smart agentic prototyping workflows.",
-    role: "CREATOR / LEAD DESIGNER / VIBE-CODER",
-    image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/ai-native-development",
-    isProject: false,
+    isComingSoon: true,
   },
   {
     id: "brand-identity",
@@ -137,6 +191,7 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study/brand-identity",
     isProject: false,
+    isComingSoon: true,
   },
   {
     id: "packaging",
@@ -148,17 +203,7 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study/packaging",
     isProject: false,
-  },
-  {
-    id: "web-app-system",
-    slugTitle: "Aura System - Scalable Web Platform",
-    displayTitle: "Web Applications & Scalable Systems",
-    type: "Web App & System",
-    description: "Enterprise full-stack architecture, real-time database synchronizations, and scalable micro-services engineered for speed.",
-    role: "FULL-STACK LEAD / ARCHITECT",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/web-app-system",
-    isProject: false,
+    isComingSoon: true,
   },
   {
     id: "visual-design",
@@ -170,26 +215,27 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200",
     url: "/case-study/visual-design",
     isProject: false,
+    isComingSoon: true,
   }
 ];
 
 // Similarity mapping for featured projects relative to each capability or project
 const SIMILARITY_MAP: Record<string, string[]> = {
-  "web-design-cms": ["ck-lighting", "TGPowerWrap", "aistudio-brand", "breeze-cargo", "komorebi-editorial", "atelier-luxe", "helios-exhibition"],
-  "ui-ux": ["breeze-cargo", "komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
-  "web-app-system": ["aistudio-brand", "ck-lighting", "breeze-cargo", "komorebi-editorial", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
-  "ai-native-development": ["breeze-cargo", "komorebi-editorial", "TGPowerWrap", "aistudio-brand", "ck-lighting", "atelier-luxe", "helios-exhibition"],
-  "brand-identity": ["atelier-luxe", "TGPowerWrap", "helios-exhibition", "ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
-  "packaging": ["TGPowerWrap", "atelier-luxe", "helios-exhibition", "ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
-  "visual-design": ["helios-exhibition", "atelier-luxe", "TGPowerWrap", "komorebi-editorial", "breeze-cargo", "ck-lighting", "aistudio-brand"],
+  "web-design-cms": ["ck-lighting", "solareco-website", "TGPowerWrap", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "aistudio-brand", "breeze-cargo"],
+  "ui-ux": ["breeze-cargo", "komorebi-editorial", "ai-workspace-apps", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "aistudio-brand", "ck-lighting"],
+  "web-app-system": ["aistudio-brand", "travel-claim-system", "analytics-hub", "ck-lighting", "finsight-ai", "smart-copilot", "breeze-cargo", "komorebi-editorial", "TGPowerWrap"],
+  "ai-native-development": ["finsight-ai", "smart-copilot", "genai-orchestrator", "travel-claim-system", "analytics-hub", "breeze-cargo", "komorebi-editorial", "TGPowerWrap", "aistudio-brand"],
+  "brand-identity": ["atelier-luxe", "finsight-ai", "travel-claim-system", "analytics-hub", "TGPowerWrap", "smart-copilot", "ck-lighting", "breeze-cargo", "komorebi-editorial"],
+  "packaging": ["TGPowerWrap", "atelier-luxe", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "ck-lighting", "breeze-cargo", "komorebi-editorial"],
+  "visual-design": ["helios-exhibition", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot", "TGPowerWrap", "komorebi-editorial", "breeze-cargo", "ck-lighting"],
 
-  "TGPowerWrap": ["ck-lighting", "atelier-luxe", "helios-exhibition", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
-  "breeze-cargo": ["komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
-  "ck-lighting": ["TGPowerWrap", "aistudio-brand", "breeze-cargo", "komorebi-editorial", "atelier-luxe", "helios-exhibition"],
-  "komorebi-editorial": ["breeze-cargo", "aistudio-brand", "ck-lighting", "atelier-luxe", "helios-exhibition", "TGPowerWrap"],
-  "aistudio-brand": ["breeze-cargo", "ck-lighting", "komorebi-editorial", "TGPowerWrap", "atelier-luxe", "helios-exhibition"],
-  "atelier-luxe": ["helios-exhibition", "TGPowerWrap", "breeze-cargo", "komorebi-editorial", "ck-lighting", "aistudio-brand"],
-  "helios-exhibition": ["atelier-luxe", "TGPowerWrap", "breeze-cargo", "komorebi-editorial", "ck-lighting", "aistudio-brand"],
+  "TGPowerWrap": ["ck-lighting", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
+  "breeze-cargo": ["komorebi-editorial", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator", "aistudio-brand", "ck-lighting", "TGPowerWrap"],
+  "ck-lighting": ["TGPowerWrap", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator", "aistudio-brand", "breeze-cargo", "komorebi-editorial"],
+  "komorebi-editorial": ["breeze-cargo", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator", "aistudio-brand", "ck-lighting", "TGPowerWrap"],
+  "aistudio-brand": ["travel-claim-system", "analytics-hub", "breeze-cargo", "finsight-ai", "smart-copilot", "genai-orchestrator", "ck-lighting", "komorebi-editorial", "TGPowerWrap"],
+  "atelier-luxe": ["finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator", "TGPowerWrap", "breeze-cargo", "komorebi-editorial", "ck-lighting", "aistudio-brand"],
+  "helios-exhibition": ["finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator", "TGPowerWrap", "breeze-cargo", "komorebi-editorial", "ck-lighting", "aistudio-brand"],
 };
 
 // Seeded PRNG for consistent, unique shuffle per page
@@ -296,12 +342,13 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     x.set(nextX);
   });
 
-  const handleCardClick = (e: React.MouseEvent, url: string) => {
+  const handleCardClick = (e: React.MouseEvent, item: CarouselCaseItem) => {
     e.preventDefault();
+    if (item.isComingSoon) return;
     // Do not trigger click if user dragged the track
     if (hasDraggedRef.current) return;
     triggerReveal(() => {
-      navigate(url);
+      navigate(item.url);
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
@@ -350,25 +397,41 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
           {duplicatedCases.map((item, index) => (
             <div
               key={`${item.id}-${index}`}
-              onClick={(e) => handleCardClick(e, item.url)}
-              className="group w-[300px] sm:w-[380px] md:w-[440px] lg:w-[480px] shrink-0 bg-white rounded-2xl border border-zinc-200/90 hover:border-zinc-400/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer flex flex-col overflow-hidden select-none"
+              onClick={(e) => handleCardClick(e, item)}
+              className={`group w-[300px] sm:w-[380px] md:w-[440px] lg:w-[480px] shrink-0 bg-white rounded-2xl border border-zinc-200/90 hover:border-zinc-400/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col overflow-hidden select-none ${
+                item.isComingSoon ? "cursor-default" : "cursor-pointer"
+              }`}
             >
               {/* Media Thumbnail Container with subtle hover zoom */}
               <div className="aspect-[16/10] w-full overflow-hidden bg-zinc-100 border-b border-zinc-100 relative">
                 <img 
                   src={item.image} 
                   alt={item.displayTitle}
-                  className="w-full h-full object-cover group-hover:scale-[1.03] transition-all duration-700 pointer-events-none"
+                  className={`w-full h-full object-cover transition-all duration-700 pointer-events-none ${
+                    item.isComingSoon 
+                      ? "blur-[6px] brightness-75 scale-105 group-hover:scale-110" 
+                      : "group-hover:scale-[1.03]"
+                  }`}
                   referrerPolicy="no-referrer"
                   draggable={false}
                 />
-                {/* Modern Blue Rounded Rectangle "View Case Study" Badge on Hover */}
-                <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none">
-                  <div className="bg-[#2563EB] text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-sans font-medium tracking-normal flex items-center gap-2 shadow-[0_8px_24px_rgba(37,99,235,0.45)] transform scale-90 group-hover:scale-100 transition-all duration-300">
-                    <span>View Case Study</span>
-                    <ArrowUpRight className="w-4 h-4" />
+                
+                {/* If Coming Soon: Animated Coming Soon... Center Overlay */}
+                {item.isComingSoon ? (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/25">
+                    <span className="font-sans text-sm sm:text-base font-semibold tracking-wider text-white drop-shadow-lg transition-transform duration-300 ease-out scale-100 group-hover:scale-75 select-none text-center px-2">
+                      Coming Soon...
+                    </span>
                   </div>
-                </div>
+                ) : (
+                  /* Modern Blue Rounded Rectangle "View Case Study" Badge on Hover */
+                  <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                    <div className="bg-[#2563EB] text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-sans font-medium tracking-normal flex items-center gap-2 shadow-[0_8px_24px_rgba(37,99,235,0.45)] transform scale-90 group-hover:scale-100 transition-all duration-300">
+                      <span>View Case Study</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Card Content Anatomy */}
