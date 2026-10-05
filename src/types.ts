@@ -74,6 +74,7 @@ export interface CapabilityDetail {
     image: string;
     projectId?: string;
     url?: string;
+    isComingSoon?: boolean;
   }[];
   gallery?: string[];
 }

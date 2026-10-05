@@ -461,9 +461,9 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["WordPress Elementor", "Figma", "Tailwind CSS", "Vite", "HTML5 & CSS3"],
     showcases: [
-      { title: "Quantum Tech Portfolio", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" },
-      { title: "Nexus E-Commerce", image: "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=800" },
-      { title: "Altos Marketing Hub", image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80&w=800" }
+      { title: "TG PowerWrap Website", image: "/TGPW/tgpw1.jpg", projectId: "TGPowerWrap", url: "/case-study-project/TGPowerWrap" },
+      { title: "CK Lighting Online Store", image: "/CK Lighting Web/ck1.jpg", projectId: "ck-lighting", url: "/case-study-project/ck-lighting" },
+      { title: "SolarEco Website Project", image: "/DemoPic/Demo1.png", isComingSoon: true }
     ],
     gallery: [
       "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=800",
@@ -476,7 +476,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     title: "User Interface & Experience Design",
     subtitle: "Cognitive Interaction Flows, Component Libraries & Design Systems",
     category: "PRODUCT & INTERACTION",
-    categoryLabel: "User Experience (UX)",
+    categoryLabel: "User Interface & User Experience",
     image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200",
     summary: "Designing intuitive, beautiful digital products with clean interaction hierarchies. Every component is crafted to minimize cognitive load, utilizing rigorous typography rules, grid alignment, and motion feedback to guide the user naturally.",
     challenge: "Modern web applications often suffer from cluttered dashboard configurations, inconsistent styling tokens, and confusing multi-step flows that increase friction and lead to massive user dropoffs.",
@@ -488,9 +488,9 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Figma", "Sleek.design", "Adobe Photoshop", "Framer", "Tailwind CSS"],
     showcases: [
-      { title: "Vortex SaaS Dashboard", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" },
-      { title: "FinFlow Mobile App", image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800" },
-      { title: "Healio Patient Portal", image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800" }
+      { title: "Triply | AI-powered Travel Companion", image: "/Triply/Triply1.jpg", projectId: "komorebi-editorial", url: "/case-study-project/komorebi-editorial" },
+      { title: "RepX | AI-powered Fitness", image: "/RepX/RepX1.jpg", projectId: "breeze-cargo", url: "/case-study-project/breeze-cargo" },
+      { title: "AI Workspace Apps", image: "/DemoPic/Demo2.png", isComingSoon: true }
     ],
     gallery: [
       "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800",
@@ -515,9 +515,9 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["React & Vite", "Node.js & Express", "TypeScript", "Tailwind CSS", "PostgreSQL / Firestore"],
     showcases: [
-      { title: "Pre-school Fee Management", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800", projectId: "aistudio-brand", url: "/case-study-project/aistudio-brand" },
-      { title: "Cloud Portal System", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" },
-      { title: "Analytics Management Hub", image: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=800" }
+      { title: "Pre-school Fee Management System", image: "/PFM/PFM1.jpg", projectId: "aistudio-brand", url: "/case-study-project/aistudio-brand" },
+      { title: "Travel Claim Management System", image: "/DemoPic/Demo6.png", isComingSoon: true },
+      { title: "Analytics Management Hub", image: "/DemoPic/Demo3.png", isComingSoon: true }
     ],
     gallery: [
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
@@ -542,8 +542,8 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Google Gemini API", "React & Vite", "TypeScript", "Tailwind CSS", "Node.js"],
     showcases: [
-      { title: "AI Prompt Studio Platform", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800" },
-      { title: "Smart Copilot Assistant", image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=800" },
+      { title: "FinSight | AI Financial Intelligence Platform", image: "/DemoPic/Demo4.png" },
+      { title: "Smart Copilot Assistant", image: "/DemoPic/Demo3.png" },
       { title: "GenAI Workflow Orchestrator", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800" }
     ],
     gallery: [

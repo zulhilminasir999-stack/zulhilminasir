@@ -8,6 +8,7 @@ interface HoverImageShowcase {
   image: string;
   projectId?: string;
   url?: string;
+  isComingSoon?: boolean;
 }
 
 interface HoverImageItem {
@@ -240,11 +241,12 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
                       transition={{ delay: isRestoredFromPop ? 0 : 0.1 + sIdx * 0.1, duration: isRestoredFromPop ? 0 : 0.4 }}
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (showcase.isComingSoon) return;
                         onItemClick?.(item, idx, showcase);
                       }}
-                      className="group/card cursor-pointer"
+                      className={`group/card ${showcase.isComingSoon ? "cursor-default select-none" : "cursor-pointer"}`}
                     >
-                      <div className={`aspect-[16/10] overflow-hidden rounded-lg transition-colors duration-500 border mb-4 ${
+                      <div className={`aspect-[16/10] overflow-hidden rounded-lg transition-colors duration-500 border mb-4 relative ${
                         isExpanded 
                           ? "bg-white/5 border-white/10" 
                           : "bg-zinc-100 border-zinc-200"
@@ -252,8 +254,19 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
                         <img 
                           src={showcase.image} 
                           alt={showcase.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+                          className={`w-full h-full object-cover transition-all duration-700 ${
+                            showcase.isComingSoon 
+                              ? "blur-[6px] brightness-75 scale-105 group-hover/card:scale-110" 
+                              : "group-hover/card:scale-110"
+                          }`}
                         />
+                        {showcase.isComingSoon && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/25">
+                            <span className="font-sans text-sm sm:text-base font-semibold tracking-wider text-white drop-shadow-lg transition-transform duration-300 ease-out scale-100 group-hover/card:scale-75 select-none text-center px-2">
+                              Coming Soon...
+                            </span>
+                          </div>
+                        )}
                       </div>
                       <h4 className="text-[13px] font-sans font-medium transition-colors duration-300 !text-white">
                         {showcase.title}
