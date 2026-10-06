@@ -5,10 +5,10 @@ import { WordsStagger } from "../../registry/spell-ui/words-stagger";
 const SERVICES_DATA = [
   {
     id: "brand",
-    title: "Web Design & Dev",
-    shortTitle: "Web Design\n& Dev",
-    description: "Comprehensive Brand Strategy, Visual Direction, Custom Typography Pairings, And Structured Guidelines To Elevate Market Positioning.",
-    tags: ["Logo Design", "Visual Systems", "Brand Guidelines", "Rebranding", "Typography", "Asset Libraries"],
+    title: "Web Development & Design",
+    shortTitle: "Web Development\n& Design",
+    description: "Building scalable digital experiences, from thoughtful interfaces to high-performance websites and web solutions.",
+    tags: ["Interactive Web Experiences", "Responsive Interfaces", "Design Systems", "Front-End Implementation", "CMS & AI Integration", "SEO Optimization"],
     image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=2071&auto=format&fit=crop",
     overlayColor: "#FFFFFF",
   },
@@ -16,8 +16,8 @@ const SERVICES_DATA = [
     id: "product",
     title: "Mobile UI/UX",
     shortTitle: "Mobile UI/UX",
-    description: "User-Centric Interface Architecture, Complex System Workflows, And Scalable Design Systems For Modern Web And Native Platforms.",
-    tags: ["UI/UX Design", "Wireframing", "Prototyping", "Design Systems", "User Testing", "App Design"],
+    description: "Designing intuitive mobile experiences, where user needs, clear interactions, and visual systems work as one.",
+    tags: ["Mobile Design Systems", "Wireframing & Prototyping", "Design Systems & Guidelines", "Interactive Prototyping", "User Research & Persona", "User Journey Mapping", "Usability Testing"],
     image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=2070&auto=format&fit=crop",
     overlayColor: "#38BDF8", // Electric cyan/sky
   },
@@ -25,8 +25,8 @@ const SERVICES_DATA = [
     id: "web",
     title: "Web App & System",
     shortTitle: "Web App\n& System",
-    description: "High-Performance Digital Experiences, Marketing Sites, And E-Commerce Platforms Engineered For Conversion And Speed.",
-    tags: ["Web Design", "E-Commerce", "Landing Pages", "CMS Integration", "Webflow", "SEO Architecture"],
+    description: "Turning complex workflows into intuitive digital systems that simplify everyday operations and decision-making.",
+    tags: ["Enterprise Dashboard Design", "Complex Workflow Mapping", "SaaS Product Architecture", "API & Data Visualization", "Admin Panels & Control Hubs", "Legacy System Modernization"],
     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop",
     overlayColor: "#FCD34D", // Radiant gold
   },
@@ -34,8 +34,8 @@ const SERVICES_DATA = [
     id: "dev",
     title: "AI-native Dev",
     shortTitle: "AI-native Dev",
-    description: "Robust Full-Stack Implementation Utilizing Modern Frameworks, Serverless Architectures, And Pristine Code Quality.",
-    tags: ["Frontend", "Backend", "React / Next.js", "API Development", "Database Architecture", "Cloud Hosting"],
+    description: "Building intelligent digital solutions with AI at the core of development, automation, and problem-solving.",
+    tags: ["LLM Interface Design", "Conversational UI & Chatbots", "AI Prompt Experience Design", "Generative UI Components", "Model Training Interfaces", "Predictive Analytics Dashboards"],
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
     overlayColor: "#4ADE80", // Vibrant neon mint
   },
@@ -43,8 +43,8 @@ const SERVICES_DATA = [
     id: "content",
     title: "Brand Identity",
     shortTitle: "Brand\nIdentity",
-    description: "Strategic Copywriting, Tone Of Voice Development, And Narrative Structuring That Aligns Perfectly With Business Objectives.",
-    tags: ["Copywriting", "Content Strategy", "Microcopy", "Tone of Voice", "Narrative Design", "SEO Writing"],
+    description: "Creating distinctive brand systems that turn ideas into consistent, memorable visual identities.",
+    tags: ["Logo Design & Visual System", "Typography & Color Palettes", "Brand Guidelines & Strategy", "Marketing Collateral", "Iconography & Custom Graphics", "Digital Brand Assets"],
     image: "/a.jpg",
     overlayColor: "#FFFFFF", // Crisp white
   },
@@ -52,17 +52,17 @@ const SERVICES_DATA = [
     id: "motion",
     title: "Packaging Design",
     shortTitle: "Packaging Design",
-    description: "Purposeful Animation And Micro-Interactions That Guide User Focus, Enhance Usability, And Bring Interfaces To Life.",
-    tags: ["Micro-interactions", "UI Animation", "Lottie", "Transitions", "3D Elements", "Video Editing"],
+    description: "Designing packaging that connects product, function, and visual impact from shelf to customer experience.",
+    tags: ["Structural & Box Design", "Label & Graphic Design", "Print-Ready Artwork", "3D Product Mockups", "Sustainable Packaging Solutions", "Unboxing Experience Design"],
     image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
     overlayColor: "#C084FC", // Luminous violet
   },
   {
     id: "marketing",
-    title: "Marketing Visual Design",
-    shortTitle: "Marketing\nVisual\nDesign",
-    description: "Creating High-Impact Visual Assets And Marketing Materials That Drive Engagement And Brand Recognition.",
-    tags: ["Social Media Graphics", "Ad Creatives", "Email Design", "Presentation Decks", "Print Collateral"],
+    title: "Marketing Digital Design",
+    shortTitle: "Marketing\nDigital\nDesign",
+    description: "Transforming ideas into visual content designed to capture attention, communicate clearly, and drive engagement.",
+    tags: ["Social Media Campaign Assets", "Digital Ad Banners & Creatives", "Presentation Design", "Motion Graphics & Animations", "Print & Event Media"],
     image: "https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop",
     overlayColor: "#FB7185", // Radiant coral rose
   },
@@ -103,7 +103,7 @@ export default function ServicesSection() {
         </div>
         <div className="col-span-1 md:col-span-12 lg:col-span-4 flex items-center justify-center md:justify-end">
           <p className="text-zinc-500 text-[14px] leading-relaxed font-sans max-w-sm mx-auto md:ml-auto md:mr-0 md:max-w-xl lg:max-w-sm text-center md:text-right">
-            My creative spirit comes alive in the digital realm. Discover high-fidelity works engineered with precision, detail, and seamless interactivity.
+            I leverage AI, technology, and design to solve problems, simplify complexity, and create smarter digital experiences.
           </p>
         </div>
       </div>
