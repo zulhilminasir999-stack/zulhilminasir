@@ -9,7 +9,7 @@ const SERVICES_DATA = [
     shortTitle: "Web Development\n& Design",
     description: "Building scalable digital experiences, from thoughtful interfaces to high-performance websites and web solutions.",
     tags: ["Interactive Web Experiences", "Responsive Interfaces", "Design Systems", "Front-End Implementation", "CMS & AI Integration", "SEO Optimization"],
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=2071&auto=format&fit=crop",
+    image: "/Services/Web Development & Design.png",
     overlayColor: "#FFFFFF",
   },
   {
@@ -18,7 +18,7 @@ const SERVICES_DATA = [
     shortTitle: "Mobile UI/UX",
     description: "Designing intuitive mobile experiences, where user needs, clear interactions, and visual systems work as one.",
     tags: ["Mobile Design Systems", "Wireframing & Prototyping", "Design Systems & Guidelines", "Interactive Prototyping", "User Research & Persona", "User Journey Mapping", "Usability Testing"],
-    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=2070&auto=format&fit=crop",
+    image: "/Services/Mobile UIUX.png",
     overlayColor: "#38BDF8", // Electric cyan/sky
   },
   {
@@ -27,7 +27,7 @@ const SERVICES_DATA = [
     shortTitle: "Web App\n& System",
     description: "Turning complex workflows into intuitive digital systems that simplify everyday operations and decision-making.",
     tags: ["Enterprise Dashboard Design", "Complex Workflow Mapping", "SaaS Product Architecture", "API & Data Visualization", "Admin Panels & Control Hubs", "Legacy System Modernization"],
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop",
+    image: "/Services/Web App & System.png",
     overlayColor: "#FCD34D", // Radiant gold
   },
   {
