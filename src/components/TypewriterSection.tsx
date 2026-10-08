@@ -199,7 +199,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
                     contactSection.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="inline-flex items-center gap-2 bg-black hover:bg-zinc-900 active:scale-[0.98] text-white text-xs font-medium px-3.5 py-2 rounded-md shadow-lg transition-all duration-200 border border-white/10 select-none cursor-pointer"
+                className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/25 backdrop-blur-2xl active:scale-[0.98] text-white text-xs font-medium px-4 py-2 rounded-xl shadow-lg transition-all duration-200 border border-white/35 select-none cursor-pointer"
               >
                 <span>Let's Create</span>
                 <span className="inline-block w-1.5 h-1.5 bg-white rounded-[1px]" />
@@ -285,7 +285,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
                   contactSection.scrollIntoView({ behavior: "smooth" });
                 }
               }}
-              className="inline-flex items-center gap-2 bg-black hover:bg-zinc-900 active:scale-[0.98] text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-md shadow-lg transition-all duration-200 border border-white/10 select-none cursor-pointer"
+              className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/25 backdrop-blur-2xl active:scale-[0.98] text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-xl shadow-lg transition-all duration-200 border border-white/35 select-none cursor-pointer"
             >
               <span>Let's Create</span>
               <span className="inline-block w-1.5 h-1.5 bg-white rounded-[1px]" />

@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
-import { motion, useMotionValue, useAnimationFrame } from "motion/react";
+import { motion, useMotionValue, useAnimationFrame, useInView } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useReveal } from "../context/RevealContext";
@@ -259,6 +259,8 @@ interface RelatedCapabilitiesCarouselProps {
 export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabilitiesCarouselProps) {
   const navigate = useNavigate();
   const { triggerReveal } = useReveal();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.1 });
   const trackRef = useRef<HTMLDivElement>(null);
   const singleWidthRef = useRef<number>(0);
   const isDraggingRef = useRef<boolean>(false);
@@ -322,9 +324,9 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     };
   }, [duplicatedCases]);
 
-  // Auto-scroll loop with smooth wrap
+  // Auto-scroll loop with smooth wrap - only active once user reaches this section during scrolling
   useAnimationFrame((_, delta) => {
-    if (isDraggingRef.current) {
+    if (!isInView || isDraggingRef.current) {
       return;
     }
 
@@ -357,6 +359,7 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
 
   return (
     <div 
+      ref={containerRef}
       id="capabilities-section"
       className="relative w-full bg-white z-50 select-none py-12 sm:py-16 md:py-20 overflow-hidden"
     >

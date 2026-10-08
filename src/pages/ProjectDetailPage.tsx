@@ -887,13 +887,19 @@ export default function ProjectDetailPage() {
                         ? "/CK Lighting Web/ck5.jpg"
                         : project?.id === "komorebi-editorial"
                           ? "/Triply/Triply11.jpg"
-                          : project?.galleryImages &&
-                              project.galleryImages.length > 2
-                            ? project.galleryImages[2]
-                            : project?.imageUrl || ""
+                          : project?.id === "breeze-cargo"
+                            ? "/RepX/RepX12.jpg"
+                            : project?.galleryImages &&
+                                project.galleryImages.length > 2
+                              ? project.galleryImages[2]
+                              : project?.imageUrl || ""
                   }
-                  className="w-full h-auto sm:h-full object-contain sm:object-cover block p-0 m-0 transform scale-105 sm:scale-[1.08] -translate-y-2 sm:-translate-y-5"
-                  alt={`${project?.title || "Gallery"} 3`}
+                  className={`w-full h-auto sm:h-full object-contain sm:object-cover block p-0 m-0 ${
+                    project?.id === "breeze-cargo"
+                      ? "object-top origin-top translate-y-0"
+                      : "transform scale-105 sm:scale-[1.08] -translate-y-2 sm:-translate-y-5"
+                  }`}
+                  alt={project?.id === "breeze-cargo" ? "RepX 12" : `${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
                   onClick={() =>
                     handleMobileImageClick(
@@ -904,10 +910,12 @@ export default function ProjectDetailPage() {
                           ? "/CK Lighting Web/ck5.jpg"
                           : project?.id === "komorebi-editorial"
                             ? "/Triply/Triply11.jpg"
-                            : project?.galleryImages &&
-                                project.galleryImages.length > 2
-                              ? project.galleryImages[2]
-                              : project?.imageUrl || "",
+                            : project?.id === "breeze-cargo"
+                              ? "/RepX/RepX12.jpg"
+                              : project?.galleryImages &&
+                                  project.galleryImages.length > 2
+                                ? project.galleryImages[2]
+                                : project?.imageUrl || "",
                     )
                   }
                 />
@@ -919,13 +927,15 @@ export default function ProjectDetailPage() {
                       ? "/TGPW/Thumbnail Mobile TGPW.jpg"
                       : project?.id === "komorebi-editorial"
                         ? "/Triply/Triply5.jpg"
-                        : project?.galleryImages &&
-                            project.galleryImages.length > 3
-                          ? project.galleryImages[3]
-                          : project?.imageUrl || ""
+                        : project?.id === "breeze-cargo"
+                          ? "/RepX/RepX11.png"
+                          : project?.galleryImages &&
+                              project.galleryImages.length > 3
+                            ? project.galleryImages[3]
+                            : project?.imageUrl || ""
                   }
                   className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default"
-                  alt={`${project?.title || "Gallery"} 4`}
+                  alt={project?.id === "breeze-cargo" ? "RepX 11" : `${project?.title || "Gallery"} 4`}
                   referrerPolicy="no-referrer"
                   onClick={() =>
                     handleMobileImageClick(
@@ -933,10 +943,12 @@ export default function ProjectDetailPage() {
                         ? "/TGPW/Thumbnail Mobile TGPW.jpg"
                         : project?.id === "komorebi-editorial"
                           ? "/Triply/Triply5.jpg"
-                          : project?.galleryImages &&
-                              project.galleryImages.length > 3
-                            ? project.galleryImages[3]
-                            : project?.imageUrl || "",
+                          : project?.id === "breeze-cargo"
+                            ? "/RepX/RepX11.png"
+                            : project?.galleryImages &&
+                                project.galleryImages.length > 3
+                              ? project.galleryImages[3]
+                              : project?.imageUrl || "",
                     )
                   }
                 />

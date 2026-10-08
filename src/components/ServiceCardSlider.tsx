@@ -333,7 +333,7 @@ export default function ServiceCardSlider({ onSelectService, className, trigger,
 
                   {/* Subtitle / Description */}
                   <p id="service-card-subtitle" className="text-[11px] sm:text-[11.5px] text-white/80 font-sans line-clamp-2 leading-snug font-normal tracking-tight">
-                    {currentItem.subtitle}
+                    {currentItem.category}
                   </p>
                 </div>
 

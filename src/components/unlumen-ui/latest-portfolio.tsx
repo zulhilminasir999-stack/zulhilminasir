@@ -70,6 +70,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     title: "Pre-school Fee Management",
     category: "Web App & System",
     defaultImage: "/PFM/PFM1.jpg",
+    mobileImage: "/PFM/PFM1_M.png",
     url: "/case-study-project/aistudio-brand",
     client: "Tadika Mesra, Sungai Petani",
     year: "2025"
