@@ -257,7 +257,7 @@ export default function TechBanner() {
           {/* Section Title: SOFTWARE & AI INTEGRATION */}
           <div className="w-full text-center sm:text-left -translate-y-7 sm:-translate-y-0">
             <h2 
-              className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[1.05] sm:leading-[0.85] select-none !text-white text-center sm:text-left -translate-y-2 sm:translate-y-0"
+              className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[72px] font-sans font-bold tracking-tighter uppercase leading-[1.05] sm:leading-[70px] select-none !text-white text-center sm:text-left -translate-y-2 sm:translate-y-0"
               style={{ color: "#ffffff" }}
             >
               <WordsStagger className="text-inherit">

@@ -112,15 +112,15 @@ export default function ServicesSection() {
         
         <div
           id="services-nav-container"
-          className="flex flex-col justify-between items-start z-20 pointer-events-auto min-w-[200px] sm:min-w-[240px] md:min-w-[280px] lg:min-w-[320px] mb-8 md:mb-0"
+          className="flex flex-col justify-between items-center md:items-start z-20 pointer-events-auto w-full md:w-auto min-w-[200px] sm:min-w-[240px] md:min-w-[280px] lg:min-w-[320px] mb-8 md:mb-0 text-center md:text-left"
         >
-          <div className="flex flex-col space-y-3 sm:space-y-4 lg:space-y-6 pt-4">
+          <div className="flex flex-col items-center md:items-start space-y-3 sm:space-y-4 lg:space-y-6 pt-4 w-full md:w-auto">
             {SERVICES_DATA.map((service, index) => (
               <button
                 key={service.id}
                 onClick={() => setActiveIndex(index)}
                 onMouseEnter={() => setActiveIndex(index)}
-                className={`text-left text-sm md:text-base lg:text-lg font-sans transition-all duration-300 w-fit cursor-pointer ${
+                className={`text-center md:text-left text-sm md:text-base lg:text-lg font-sans transition-all duration-300 w-fit cursor-pointer mx-auto md:mx-0 ${
                   activeIndex === index
                     ? "font-medium"
                     : `${mutedTextColor} hover:${textColor}`

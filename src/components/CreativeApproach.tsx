@@ -166,7 +166,7 @@ export function CreativeApproach() {
           ref={titleRef}
           className="sticky top-0 z-30 block md:hidden bg-white pt-5 pb-3.5 -mx-6 px-6"
         >
-          <h2 className="font-sans font-bold text-[40px] sm:text-5xl tracking-tighter text-[#2563EB] uppercase leading-[0.9] select-none text-center">
+          <h2 className="font-sans font-bold text-[40px] sm:text-5xl tracking-tighter text-[#2563EB] uppercase leading-[42px] select-none text-center">
             <WordsStagger className="text-[#2563EB]">
               WORKFLOW
             </WordsStagger>{" "}
@@ -181,7 +181,7 @@ export function CreativeApproach() {
           {/* Desktop Left Column: Sticky Title & Image */}
           <div className="hidden md:block md:col-span-5 relative h-full pb-0">
             <div className="sticky top-[50vh] -translate-y-1/2 flex flex-col items-start text-left z-10 space-y-8 lg:space-y-12">
-              <h2 className="font-sans font-bold text-[50px] lg:text-[70px] tracking-tighter text-[#2563EB] uppercase leading-[0.9] select-none text-left">
+              <h2 className="font-sans font-bold text-[50px] lg:text-[70px] tracking-tighter text-[#2563EB] uppercase leading-[0.9] md:leading-[70px] select-none text-left">
                 <WordsStagger className="text-[#2563EB]">
                   WORKFLOW
                 </WordsStagger>

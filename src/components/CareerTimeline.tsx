@@ -121,9 +121,12 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
       {/* Editorial Header Accent */}
       <div className="pb-10 sm:pb-16 transition-colors duration-300">
         <div className="w-full text-center md:text-center lg:text-left">
-          <h2 className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] select-none text-center md:text-center lg:text-left text-[#2563EB] !text-[#2563EB]">
+          <h2 className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] sm:leading-[70px] select-none text-center md:text-center lg:text-left text-[#2563EB] !text-[#2563EB]">
             {/* Mobile: Clean, static fixed title component in modern blue */}
-            <span className="block sm:hidden text-[#2563EB] !text-[#2563EB]">
+            <span 
+              className="block sm:hidden text-[#2563EB] !text-[#2563EB] leading-[42px]"
+              style={{ lineHeight: "42px" }}
+            >
               PROFESSIONAL<br />CHRONOLOGY
             </span>
             {/* Desktop: Animated staggered words */}

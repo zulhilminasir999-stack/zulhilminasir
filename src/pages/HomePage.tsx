@@ -894,8 +894,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   <h2 className="font-sans font-medium sm:font-semibold text-[19px] sm:text-2xl md:text-[32px] lg:text-[38px] xl:text-[44px] tracking-tight !text-white leading-[1.25] sm:leading-[1.2] text-center sm:text-left">
                     {/* Mobile: 3 Lines with Satoshi font and Semi-Bold */}
                     <div 
-                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-3 text-[20px] min-[380px]:text-[22px] min-[420px]:text-[24px]"
-                      style={{ fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-12px)", transformOrigin: "center" }}
+                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-3 text-[23px]"
+                      style={{ fontSize: "23px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-12px)", transformOrigin: "center" }}
                     >
                       <span className="block whitespace-nowrap overflow-visible text-center leading-[1.25] font-semibold">
                         <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center leading-[1.25] font-semibold">

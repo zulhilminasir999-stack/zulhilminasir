@@ -96,7 +96,9 @@ export function LatestPortfolio() {
       {/* Main Header Row */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 px-6 sm:px-12 lg:px-16 pt-16 sm:pt-20 md:pt-24 pb-10 sm:pb-14 items-start border-b border-white/5">
         <div className="col-span-1 md:col-span-12 lg:col-span-8 text-center md:text-center lg:text-left">
-          <h2 className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter text-white uppercase leading-[0.85] select-none text-center md:text-center lg:text-left">
+          <h2 
+            className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter text-white uppercase leading-[42px] sm:leading-[70px] select-none text-center md:text-center lg:text-left"
+          >
             <WordsStagger className="text-white">
               FEATURED
             </WordsStagger>
