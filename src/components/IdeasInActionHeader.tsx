@@ -103,9 +103,10 @@ export function IdeasInActionHeader({ isMobile: isMobileProp }: IdeasInActionHea
           style={{ 
             marginLeft: "-0.04em", 
             marginRight: "-0.04em", 
-            fontFamily: "'Satoshi', system-ui, -apple-system, sans-serif" 
+            fontFamily: "'Satoshi', system-ui, -apple-system, sans-serif",
+            fontWeight: 600
           }} 
-          className="text-[12vw] sm:text-[14vw] md:text-[clamp(60px,15vw,217.24px)] font-black font-satoshi tracking-tighter text-[#1A4B82] text-center leading-[0.85] whitespace-nowrap p-0 m-0 select-none origin-center"
+          className="text-[12vw] sm:text-[14vw] md:text-[clamp(60px,15vw,217.24px)] font-semibold font-satoshi tracking-tighter text-[#1A4B82] text-center leading-[0.85] whitespace-nowrap p-0 m-0 select-none origin-center"
         >
           Ideas in Action
         </h1>
