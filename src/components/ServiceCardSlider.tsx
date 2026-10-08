@@ -12,17 +12,18 @@ export interface ServiceCardItem {
   image: string;
   url: string;
   actionText: string;
+  isComingSoon?: boolean;
 }
 
 const SERVICES_SLIDES: ServiceCardItem[] = [
-  // First 5 Cards: 5 Featured Works
+  // 5 Active Case Study Projects
   {
     id: "TGPowerWrap",
     serviceId: "packaging",
     category: "Corporate Website",
     subtitle: "Ultra-premium packaging architecture & corporate platform",
     title: "TG PowerWrap Website",
-    image: "/Images/tgpw1.jpg",
+    image: "/TGPW/tgpw1.jpg",
     url: "/case-study-project/TGPowerWrap",
     actionText: "Explore",
   },
@@ -31,7 +32,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     serviceId: "product",
     category: "Mobile UI/UX Design",
     subtitle: "Spatial smart maps and minimalist editorial travel interface",
-    title: "Triply",
+    title: "Triply | AI-powered\nTravel Companion",
     image: "/Triply/Triply1.jpg",
     url: "/case-study-project/komorebi-editorial",
     actionText: "Explore",
@@ -41,7 +42,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     serviceId: "brand",
     category: "E-Commerce Webstore",
     subtitle: "Engineered high-speed custom CMS webstore & product catalog",
-    title: "CK Lighting Store",
+    title: "CK Lighting Online Store",
     image: "/CK Lighting Web/ck1.jpg",
     url: "/case-study-project/ck-lighting",
     actionText: "Explore",
@@ -51,7 +52,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     serviceId: "product",
     category: "Mobile UI/UX Design",
     subtitle: "High-performance intelligent workout tracking system",
-    title: "RepX | AI Fitness",
+    title: "RepX | AI-powered Fitness",
     image: "/RepX/RepX1.jpg",
     url: "/case-study-project/breeze-cargo",
     actionText: "Explore",
@@ -60,63 +61,46 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     id: "aistudio-brand",
     serviceId: "web",
     category: "Web App & System",
-    subtitle: "Automated student billing engine & management dashboard",
-    title: "Pre-school Fee Management",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200",
+    subtitle: "Enterprise management dashboard and automated student billing engine",
+    title: "Pre-School Fee\nManagement",
+    image: "/PFM/PFM1.jpg",
     url: "/case-study-project/aistudio-brand",
     actionText: "Explore",
   },
 
-  // 5 More Projects from Hoverlist for Project Case Study Page
+  // Coming Soon Case Study Projects (No link, purely showcase)
   {
-    id: "web-design-cms",
+    id: "travel-claim-system",
+    serviceId: "web",
+    category: "Web App & System",
+    subtitle: "Automated mileage receipt scanning & expense reimbursement",
+    title: "Travel Claim Management\nSystem",
+    image: "/DemoPic/Demo6.png",
+    url: "",
+    actionText: "Coming Soon",
+    isComingSoon: true,
+  },
+  {
+    id: "solareco-website",
     serviceId: "brand",
     category: "Web Dev",
-    subtitle: "Translating bespoke component architectures into blazing-fast front-ends",
-    title: "Web Design & CMS",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/web-design-cms",
-    actionText: "Explore",
+    subtitle: "Sustainable solar portal with dynamic product selectors & savings calculators",
+    title: "SolarEco Website Project",
+    image: "/DemoPic/Demo1.png",
+    url: "",
+    actionText: "Coming Soon",
+    isComingSoon: true,
   },
   {
-    id: "ui-ux",
-    serviceId: "product",
-    category: "Mobile UI/UX",
-    subtitle: "Cognitive interaction flows and scalable token systems",
-    title: "User Interface & UX",
-    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/ui-ux",
-    actionText: "Explore",
-  },
-  {
-    id: "ai-native-development",
+    id: "finsight-ai",
     serviceId: "dev",
     category: "AI-Native Dev",
-    subtitle: "Accelerating full-stack engineering with generative pipelines",
-    title: "AI-Native Dev & Vibe",
-    image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/ai-native-development",
-    actionText: "Explore",
-  },
-  {
-    id: "brand-identity",
-    serviceId: "content",
-    category: "Brand Identity",
-    subtitle: "Comprehensive visual identity matrices and timeless vector guidelines",
-    title: "Brand Strategy & Visuals",
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/brand-identity",
-    actionText: "Explore",
-  },
-  {
-    id: "packaging",
-    serviceId: "motion",
-    category: "Packaging Design",
-    subtitle: "Engineering precision carton flat-patterns and tactile finishes",
-    title: "Structural Packaging Print",
-    image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=1200",
-    url: "/case-study/packaging",
-    actionText: "Explore",
+    subtitle: "High-throughput predictive fiscal analytics engine utilizing Gemini models",
+    title: "FinSight | AI Financial\nIntelligence",
+    image: "/DemoPic/Demo4.png",
+    url: "",
+    actionText: "Coming Soon",
+    isComingSoon: true,
   },
 ];
 
@@ -196,17 +180,17 @@ export default function ServiceCardSlider({ onSelectService, className, trigger,
 
   const handleCardClick = (e: React.MouseEvent) => {
     if (isDragging) return;
+    if (currentItem.isComingSoon || !currentItem.url) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     if (onSelectService) {
       onSelectService(currentItem.serviceId);
     } else if (currentItem.url) {
       triggerReveal(() => {
         navigate(currentItem.url);
       });
-    } else {
-      const servicesSection = document.getElementById("services-section");
-      if (servicesSection) {
-        servicesSection.scrollIntoView({ behavior: "smooth" });
-      }
     }
   };
 
@@ -305,7 +289,9 @@ export default function ServiceCardSlider({ onSelectService, className, trigger,
             whileDrag={{ scale: 0.98, cursor: "grabbing" }}
             whileTap={{ cursor: "grabbing" }}
             onClick={handleCardClick}
-            className="relative z-20 w-full bg-white/20 hover:bg-white/25 backdrop-blur-2xl border border-white/30 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 md:p-3 cursor-grab active:cursor-grabbing transition-colors duration-200 group touch-none shadow-[0_12px_40px_rgba(0,0,0,0.15)]"
+            className={`relative z-20 w-full bg-white/20 hover:bg-white/25 backdrop-blur-2xl border border-white/30 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 md:p-3 transition-colors duration-200 group touch-none shadow-[0_12px_40px_rgba(0,0,0,0.15)] ${
+              currentItem.isComingSoon ? "cursor-grab active:cursor-grabbing" : "cursor-pointer active:cursor-grabbing"
+            }`}
           >
             <div id="service-card-main-content" className="flex items-center gap-3 sm:gap-3.5">
               
@@ -315,13 +301,24 @@ export default function ServiceCardSlider({ onSelectService, className, trigger,
                   id="service-card-image"
                   src={currentItem.image}
                   alt={currentItem.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+                    currentItem.isComingSoon ? "blur-[4px] brightness-75 scale-105" : ""
+                  }`}
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = "none";
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                {currentItem.isComingSoon ? (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/35">
+                    <div className="flex flex-col items-center justify-center font-sans font-bold text-white text-[13px] sm:text-[14px] leading-tight tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] select-none text-center">
+                      <span>Coming</span>
+                      <span>Soon..</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                )}
               </div>
 
               {/* Right Side: Copy & Read CTA */}
@@ -330,7 +327,7 @@ export default function ServiceCardSlider({ onSelectService, className, trigger,
                 {/* Header Group: Title on top of Description */}
                 <div id="service-card-header-group" className="space-y-0.5 sm:space-y-1">
                   {/* Main Title */}
-                  <h4 id="service-card-title" className="text-[14px] sm:text-[16px] md:text-[17px] font-sans font-semibold !text-white tracking-tight leading-tight line-clamp-1">
+                  <h4 id="service-card-title" className="text-[13px] sm:text-[15px] md:text-[16px] font-sans font-semibold !text-white tracking-tight leading-tight line-clamp-2 whitespace-pre-line">
                     {currentItem.title}
                   </h4>
 
@@ -343,8 +340,14 @@ export default function ServiceCardSlider({ onSelectService, className, trigger,
                 {/* Bottom Row: ↳ Read action link & Slide cue */}
                 <div id="service-card-actions-row" className="flex items-center justify-between pt-1">
                   <div id="service-card-read-action" className="flex items-center gap-1.5 !text-white font-medium text-xs sm:text-[13px]">
-                    <span className="text-sm leading-none !text-white">↳</span>
-                    <span className="tracking-tight !text-white">{currentItem.actionText}</span>
+                    {currentItem.isComingSoon ? (
+                      <span className="text-[11px] sm:text-xs text-white/70 italic select-none">Coming Soon</span>
+                    ) : (
+                      <>
+                        <span className="text-sm leading-none !text-white">↳</span>
+                        <span className="tracking-tight !text-white">{currentItem.actionText}</span>
+                      </>
+                    )}
                   </div>
                 </div>
 

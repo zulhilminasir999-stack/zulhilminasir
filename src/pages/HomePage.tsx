@@ -888,28 +888,28 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             className="w-full px-6 sm:px-12 lg:px-16 relative z-10 flex flex-col justify-end pt-2 pb-8 sm:py-6 md:py-10 mt-auto"
           >
             {/* Bottom Row: Crafting Digital Design heading aligned side-by-side with ServiceCardSlider */}
-            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-5 sm:gap-6 lg:gap-8 w-full mt-auto pt-0 sm:pt-6 md:pt-0 pointer-events-auto -translate-y-8 sm:-translate-y-4 md:-translate-y-5 lg:-translate-y-6">
+            <div className="flex flex-col items-center sm:items-start lg:flex-row lg:items-end justify-between gap-5 sm:gap-6 lg:gap-8 w-full mt-auto pt-0 sm:pt-6 md:pt-0 pointer-events-auto -translate-y-11 sm:-translate-y-4 md:-translate-y-5 lg:-translate-y-6">
               <div className="p-0 m-0 text-center sm:text-left max-w-2xl lg:max-w-3xl xl:max-w-4xl w-full">
-                <div className="space-y-4 -translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
+                <div className="space-y-4 -translate-y-6 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 flex flex-col items-center sm:items-start w-full">
                   <h2 className="font-sans font-medium sm:font-semibold text-[19px] sm:text-2xl md:text-[32px] lg:text-[38px] xl:text-[44px] tracking-tight !text-white leading-[1.25] sm:leading-[1.2] text-center sm:text-left">
                     {/* Mobile: 3 Lines with Satoshi font and Semi-Bold */}
                     <div 
-                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-3 text-[22px] sm:text-[25px]"
-                      style={{ fontSize: "22px", fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-8px)", transformOrigin: "center" }}
+                      className="block sm:hidden flex flex-col items-center justify-center space-y-1 font-semibold font-satoshi origin-center my-0.5 -translate-y-3 text-[20px] min-[380px]:text-[22px] min-[420px]:text-[24px]"
+                      style={{ fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 600, transform: "translateY(-12px)", transformOrigin: "center" }}
                     >
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
-                          Agent Experience(AX) Developer
+                      <span className="block whitespace-nowrap overflow-visible text-center leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.2} className="!text-white flex-nowrap whitespace-nowrap justify-center leading-[1.25] font-semibold">
+                          Agent Experience(AX)
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.32} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
-                          for Humans, AI Agents
+                      <span className="block whitespace-nowrap overflow-visible text-center leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.32} className="!text-white flex-nowrap whitespace-nowrap justify-center leading-[1.25] font-semibold">
+                          Developer for Humans,
                         </WordsStagger>
                       </span>
-                      <span className="block whitespace-nowrap overflow-visible text-center text-[22px] leading-[1.25] font-semibold">
-                        <WordsStagger trigger={!isLoading} delay={0.44} className="!text-white flex-nowrap whitespace-nowrap justify-center text-[22px] leading-[1.25] font-semibold">
-                          & Intelligent Systems
+                      <span className="block whitespace-nowrap overflow-visible text-center leading-[1.25] font-semibold">
+                        <WordsStagger trigger={!isLoading} delay={0.44} className="!text-white flex-nowrap whitespace-nowrap justify-center leading-[1.25] font-semibold">
+                          AI Agents & Intelligent Systems
                         </WordsStagger>
                       </span>
                     </div>
@@ -932,7 +932,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               </div>
 
               {/* Interactive 3D Stacked Service Deck Slider Container */}
-              <div className="self-center sm:self-start lg:self-end shrink-0 -translate-y-5 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
+              <div className="self-center sm:self-start lg:self-end shrink-0 -translate-y-8 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 pb-1">
                 <ServiceCardSlider trigger={!isLoading} delay={0.5} />
               </div>
             </div>
