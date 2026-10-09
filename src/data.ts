@@ -281,7 +281,8 @@ export const PORTFOLIO_PROJECTS: Project[] = [
       "/Triply/Triply11.jpg",
       "/Triply/Triply12.jpg",
       "/Triply/Triply13.jpg",
-      "/Triply/Triply14.jpg"
+      "/Triply/Triply14.jpg",
+      "/Triply/Triply15.jpg"
     ],
     links: [
       { label: "View Adobe InDesign Layout Board", url: "#" },

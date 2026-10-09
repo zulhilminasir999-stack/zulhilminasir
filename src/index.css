@@ -981,6 +981,14 @@ html.lenis, html.lenis body {
   .loader {
     font-weight: 600 !important;
   }
+
+  #canvas-image-3 {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-bottom: 20px !important;
+    background: transparent !important;
+    background-color: transparent !important;
+  }
 }
 
 

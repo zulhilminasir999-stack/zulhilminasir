@@ -469,9 +469,9 @@ export default function CaseStudyPage() {
               style={{ objectPosition: "center 30%" }}
               referrerPolicy="no-referrer"
             />
-            {/* Elegant overlay: dark gradients for beautiful visual blending and high legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A2947] via-[#0A2947]/50 to-black/35 pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent pointer-events-none" />
+            {/* Elegant overlay: dark gradients for beautiful visual blending and high legibility (desktop only, removed on mobile) */}
+            <div className="hidden sm:block absolute inset-0 bg-gradient-to-t from-[#0A2947] via-[#0A2947]/50 to-black/35 pointer-events-none" />
+            <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent pointer-events-none" />
           </div>
 
           {/* Header Content Container: sits cleanly below the image on mobile */}
