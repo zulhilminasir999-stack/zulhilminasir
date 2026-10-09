@@ -212,7 +212,8 @@ export const PORTFOLIO_PROJECTS: Project[] = [
       "/CK Lighting Web/CK8.jpg",
       "/CK Lighting Web/CK9.jpg",
       "/CK Lighting Web/CK10.jpg",
-      "/CK Lighting Web/ck11.jpg"
+      "/CK Lighting Web/ck11.jpg",
+      "/CK Lighting Web/CK12.jpg"
     ],
     links: [
       { label: "Launch Live CK Lighting Portal", url: "#" }

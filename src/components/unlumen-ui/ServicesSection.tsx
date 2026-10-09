@@ -36,7 +36,7 @@ const SERVICES_DATA = [
     shortTitle: "AI-native Dev",
     description: "Building intelligent digital solutions with AI at the core of development, automation, and problem-solving.",
     tags: ["LLM Interface Design", "Conversational UI & Chatbots", "AI Prompt Experience Design", "Generative UI Components", "Model Training Interfaces", "Predictive Analytics Dashboards"],
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
+    image: "/Services/AI-native dev.png",
     overlayColor: "#4ADE80", // Vibrant neon mint
   },
   {
@@ -45,7 +45,7 @@ const SERVICES_DATA = [
     shortTitle: "Brand\nIdentity",
     description: "Creating distinctive brand systems that turn ideas into consistent, memorable visual identities.",
     tags: ["Logo Design & Visual System", "Typography & Color Palettes", "Brand Guidelines & Strategy", "Marketing Collateral", "Iconography & Custom Graphics", "Digital Brand Assets"],
-    image: "/a.jpg",
+    image: "/Services/Brand Identity.png",
     overlayColor: "#FFFFFF", // Crisp white
   },
   {

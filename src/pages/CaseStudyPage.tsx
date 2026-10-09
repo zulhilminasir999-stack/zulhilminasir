@@ -668,30 +668,47 @@ export default function CaseStudyPage() {
 
         {/* Section 6: Additional 2 Sticky Full-width Images */}
         <div className="relative bg-zinc-900 z-50 w-full flex flex-col sm:block">
+           {/* Image 0 (CK8 for CK Lighting) */}
+           {capability?.id === "ck-lighting" && (
+             <div 
+               className="w-full mx-auto cursor-pointer sm:cursor-default relative h-auto max-w-[1525px]"
+               onClick={() => handleMobileImageClick("/CK Lighting Web/CK8.jpg")}
+             >
+               <img 
+                 src="/CK Lighting Web/CK8.jpg" 
+                 alt="CK Lighting Web CK8"
+                 className="w-full h-auto sm:h-full object-contain sm:object-cover block"
+                 referrerPolicy="no-referrer"
+               />
+             </div>
+           )}
+
            {/* Image 1 */}
            <div 
              className={`w-full mx-auto cursor-pointer sm:cursor-default ${capability?.id === "ck-lighting" ? "relative h-auto max-w-[1525px]" : "relative sm:sticky sm:top-0 h-auto sm:h-screen overflow-hidden"}`}
-             onClick={() => handleMobileImageClick((capability?.id === "ck-lighting") ? "/CK Lighting Web/ck9.jpg" : (galleryImages[4] || "/Images/TGPW Site Map.jpg"))}
+             onClick={() => handleMobileImageClick((capability?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (galleryImages[4] || "/Images/TGPW Site Map.jpg"))}
            >
              <img 
-               src={(capability?.id === "ck-lighting") ? "/CK Lighting Web/ck9.jpg" : (galleryImages[4] || "/Images/TGPW Site Map.jpg")} 
+               src={(capability?.id === "ck-lighting") ? "/CK Lighting Web/CK9.jpg" : (galleryImages[4] || "/Images/TGPW Site Map.jpg")} 
                alt="Gallery Sticky 1"
                className={`w-full h-auto sm:h-full object-contain sm:object-cover block`}
                referrerPolicy="no-referrer"
              />
            </div>
            {/* Image 2 */}
-           <div 
-             className={`w-full mx-auto cursor-pointer sm:cursor-default ${capability?.id === "ck-lighting" ? "relative h-auto max-w-[1525px]" : "relative sm:sticky sm:top-0 h-auto sm:h-screen overflow-hidden"}`}
-             onClick={() => handleMobileImageClick((capability?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg")}
-           >
-             <img 
-               src={(capability?.id === "ck-lighting") ? "/CK Lighting Web/CK8.jpg" : "/Images/TGPW Visual Guideline.jpg"} 
-               alt="TGPW Visual Guideline"
-               className={`w-full h-auto sm:h-full object-contain sm:object-cover block`} 
-               referrerPolicy="no-referrer"
-             />
-           </div>
+           {capability?.id !== "ck-lighting" && (
+             <div 
+               className="w-full mx-auto cursor-pointer sm:cursor-default relative sm:sticky sm:top-0 h-auto sm:h-screen overflow-hidden"
+               onClick={() => handleMobileImageClick(galleryImages[5] || "/Images/TGPW Visual Guideline.jpg")}
+             >
+               <img 
+                 src={galleryImages[5] || "/Images/TGPW Visual Guideline.jpg"} 
+                 alt="TGPW Visual Guideline"
+                 className={`w-full h-auto sm:h-full object-contain sm:object-cover block`} 
+                 referrerPolicy="no-referrer"
+               />
+             </div>
+           )}
         </div>
 
         {/* Section 7: The Solution */}
@@ -711,14 +728,14 @@ export default function CaseStudyPage() {
         </div>
 
         {/* Added Full-width Image Section (Between Solution & Key Results) */}
-        {capability?.id === "komorebi-editorial" && (
+        {(capability?.id === "komorebi-editorial" || capability?.id === "ck-lighting") && (
           <div 
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
-            onClick={() => handleMobileImageClick("/Triply/Triply9.jpg")}
+            onClick={() => handleMobileImageClick(capability?.id === "ck-lighting" ? "/CK Lighting Web/CK12.jpg" : "/Triply/Triply9.jpg")}
           >
             <img 
-              src="/Triply/Triply9.jpg" 
-              alt="Triply Solution Showcase"
+              src={capability?.id === "ck-lighting" ? "/CK Lighting Web/CK12.jpg" : "/Triply/Triply9.jpg"} 
+              alt={capability?.id === "ck-lighting" ? "CK Lighting 12 Showcase" : "Triply Solution Showcase"}
               className="w-full h-auto block select-none" 
               referrerPolicy="no-referrer"
             />
