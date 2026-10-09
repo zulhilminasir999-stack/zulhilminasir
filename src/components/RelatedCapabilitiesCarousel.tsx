@@ -221,36 +221,22 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
 
 // Similarity mapping for featured projects relative to each capability or project
 const SIMILARITY_MAP: Record<string, string[]> = {
-  "web-design-cms": ["ck-lighting", "solareco-website", "TGPowerWrap", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "aistudio-brand", "breeze-cargo"],
-  "ui-ux": ["breeze-cargo", "komorebi-editorial", "ai-workspace-apps", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "aistudio-brand", "ck-lighting"],
-  "web-app-system": ["aistudio-brand", "travel-claim-system", "analytics-hub", "ck-lighting", "finsight-ai", "smart-copilot", "breeze-cargo", "komorebi-editorial", "TGPowerWrap"],
-  "ai-native-development": ["finsight-ai", "smart-copilot", "genai-orchestrator", "travel-claim-system", "analytics-hub", "breeze-cargo", "komorebi-editorial", "TGPowerWrap", "aistudio-brand"],
-  "brand-identity": ["atelier-luxe", "finsight-ai", "travel-claim-system", "analytics-hub", "TGPowerWrap", "smart-copilot", "ck-lighting", "breeze-cargo", "komorebi-editorial"],
-  "packaging": ["TGPowerWrap", "atelier-luxe", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "ck-lighting", "breeze-cargo", "komorebi-editorial"],
-  "visual-design": ["helios-exhibition", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot", "TGPowerWrap", "komorebi-editorial", "breeze-cargo", "ck-lighting"],
+  "web-design-cms": ["ck-lighting", "TGPowerWrap", "aistudio-brand", "breeze-cargo", "komorebi-editorial", "solareco-website", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot"],
+  "ui-ux": ["breeze-cargo", "komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "ai-workspace-apps", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot"],
+  "web-app-system": ["aistudio-brand", "ck-lighting", "breeze-cargo", "komorebi-editorial", "TGPowerWrap", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot"],
+  "ai-native-development": ["breeze-cargo", "komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "finsight-ai", "smart-copilot", "genai-orchestrator", "travel-claim-system", "analytics-hub"],
+  "brand-identity": ["TGPowerWrap", "ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand", "atelier-luxe", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot"],
+  "packaging": ["TGPowerWrap", "ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand", "atelier-luxe", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot"],
+  "visual-design": ["TGPowerWrap", "komorebi-editorial", "breeze-cargo", "ck-lighting", "aistudio-brand", "helios-exhibition", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot"],
 
-  "TGPowerWrap": ["ck-lighting", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator", "breeze-cargo", "komorebi-editorial", "aistudio-brand"],
-  "breeze-cargo": ["komorebi-editorial", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator", "aistudio-brand", "ck-lighting", "TGPowerWrap"],
-  "ck-lighting": ["TGPowerWrap", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator", "aistudio-brand", "breeze-cargo", "komorebi-editorial"],
-  "komorebi-editorial": ["breeze-cargo", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator", "aistudio-brand", "ck-lighting", "TGPowerWrap"],
-  "aistudio-brand": ["travel-claim-system", "analytics-hub", "breeze-cargo", "finsight-ai", "smart-copilot", "genai-orchestrator", "ck-lighting", "komorebi-editorial", "TGPowerWrap"],
-  "atelier-luxe": ["finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator", "TGPowerWrap", "breeze-cargo", "komorebi-editorial", "ck-lighting", "aistudio-brand"],
-  "helios-exhibition": ["finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator", "TGPowerWrap", "breeze-cargo", "komorebi-editorial", "ck-lighting", "aistudio-brand"],
+  "TGPowerWrap": ["ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand", "solareco-website", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
+  "breeze-cargo": ["komorebi-editorial", "aistudio-brand", "ck-lighting", "TGPowerWrap", "ai-workspace-apps", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
+  "ck-lighting": ["TGPowerWrap", "aistudio-brand", "breeze-cargo", "komorebi-editorial", "solareco-website", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
+  "komorebi-editorial": ["breeze-cargo", "aistudio-brand", "ck-lighting", "TGPowerWrap", "ai-workspace-apps", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
+  "aistudio-brand": ["ck-lighting", "breeze-cargo", "komorebi-editorial", "TGPowerWrap", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
+  "atelier-luxe": ["TGPowerWrap", "ck-lighting", "breeze-cargo", "komorebi-editorial", "aistudio-brand", "finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator"],
+  "helios-exhibition": ["TGPowerWrap", "komorebi-editorial", "breeze-cargo", "ck-lighting", "aistudio-brand", "finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator"],
 };
-
-// Seeded PRNG for consistent, unique shuffle per page
-function createSeededRNG(seedStr: string) {
-  let h = 1779033703 ^ seedStr.length;
-  for (let i = 0; i < seedStr.length; i++) {
-    h = Math.imul(h ^ seedStr.charCodeAt(i), 3432918353);
-    h = (h << 13) | (h >>> 19);
-  }
-  return function () {
-    h = Math.imul(h ^ (h >>> 16), 2246822507);
-    h = Math.imul(h ^ (h >>> 13), 3266489909);
-    return ((h ^= h >>> 16) >>> 0) / 4294967296;
-  };
-}
 
 interface RelatedCapabilitiesCarouselProps {
   currentId?: string;
@@ -268,45 +254,36 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
   const [isHovered, setIsHovered] = useState(false);
   const x = useMotionValue(0);
 
-  // 5 Similar Featured Projects followed by 5 Random Hoverlist Projects
-  const randomizedCases = useMemo(() => {
-    const seed = currentId || "portfolio_default";
-    const rng = createSeededRNG(seed);
-
-    // 1. Featured Projects (isProject: true)
-    const allFeatured = ALL_CAROUSEL_CASES.filter((item) => item.isProject);
+  // Featured works that already exist arranged earlier, followed by coming soon projects
+  const orderedCases = useMemo(() => {
     const preferredOrder = currentId && SIMILARITY_MAP[currentId] ? SIMILARITY_MAP[currentId] : [];
-    
-    // Sort featured projects by similarity, excluding currentId
-    const sortedFeatured = [...allFeatured]
-      .filter((item) => item.id !== currentId)
-      .sort((a, b) => {
-        const indexA = preferredOrder.indexOf(a.id);
-        const indexB = preferredOrder.indexOf(b.id);
-        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-        if (indexA !== -1) return -1;
-        if (indexB !== -1) return 1;
-        return 0;
-      });
-    const first5Featured = sortedFeatured.slice(0, 5);
 
-    // 2. Hoverlist Capabilities / Projects (isProject: false)
-    const allHoverlist = ALL_CAROUSEL_CASES.filter((item) => !item.isProject && item.id !== currentId);
-    const shuffledHoverlist = [...allHoverlist];
-    for (let i = shuffledHoverlist.length - 1; i > 0; i--) {
-      const j = Math.floor(rng() * (i + 1));
-      [shuffledHoverlist[i], shuffledHoverlist[j]] = [shuffledHoverlist[j], shuffledHoverlist[i]];
-    }
-    const next5Hoverlist = shuffledHoverlist.slice(0, 5);
+    const sortByPreferred = (a: CarouselCaseItem, b: CarouselCaseItem) => {
+      const indexA = preferredOrder.indexOf(a.id);
+      const indexB = preferredOrder.indexOf(b.id);
+      if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+      if (indexA !== -1) return -1;
+      if (indexB !== -1) return 1;
+      return 0;
+    };
 
-    // Combine: 5 featured projects + 5 hoverlist projects
-    return [...first5Featured, ...next5Hoverlist];
+    // 1. Featured works that already exist (not coming soon)
+    const existingWorks = ALL_CAROUSEL_CASES
+      .filter((item) => !item.isComingSoon && item.id !== currentId)
+      .sort(sortByPreferred);
+
+    // 2. Coming soon projects continuing after the existing works
+    const comingSoonWorks = ALL_CAROUSEL_CASES
+      .filter((item) => item.isComingSoon && item.id !== currentId)
+      .sort(sortByPreferred);
+
+    return [...existingWorks, ...comingSoonWorks];
   }, [currentId]);
 
   // Repeated 3 times for a continuous seamless loop
   const duplicatedCases = useMemo(() => {
-    return [...randomizedCases, ...randomizedCases, ...randomizedCases];
-  }, [randomizedCases]);
+    return [...orderedCases, ...orderedCases, ...orderedCases];
+  }, [orderedCases]);
 
   // Measure single track width
   useEffect(() => {
