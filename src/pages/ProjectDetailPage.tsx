@@ -897,9 +897,12 @@ export default function ProjectDetailPage() {
                   }
                   className={`w-full h-auto sm:h-full object-contain sm:object-cover block m-0 rounded-none px-5 sm:px-0 box-border ${
                     project?.id === "TGPowerWrap"
-                      ? "transform scale-100 sm:scale-[1.08] translate-y-0 sm:-translate-y-5"
-                      : "object-top origin-top translate-y-0"
+                      ? "object-top"
+                      : "object-top"
                   }`}
+                  style={{
+                    objectPosition: "center top",
+                  }}
                   alt={project?.id === "breeze-cargo" ? "RepX 12" : `${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
                   onClick={() =>
@@ -922,7 +925,7 @@ export default function ProjectDetailPage() {
                 />
               </div>
               <div className="md:col-span-6 flex flex-col justify-between gap-0 sm:gap-4 lg:gap-6 h-auto sm:h-[600px] lg:h-[800px]">
-                <div className="w-full sm:flex-1 px-5 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-start overflow-hidden">
+                <div className="w-full sm:flex-1 px-5 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-center items-center overflow-hidden">
                   <img
                     src={
                       project?.id === "TGPowerWrap"
@@ -936,7 +939,7 @@ export default function ProjectDetailPage() {
                               ? project.galleryImages[3]
                               : project?.imageUrl || ""
                     }
-                    className="w-full h-auto sm:h-full object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default rounded-none object-top"
+                    className="w-full h-auto sm:h-full object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default rounded-none object-center"
                     alt={project?.id === "breeze-cargo" ? "RepX 11" : `${project?.title || "Gallery"} 4`}
                     referrerPolicy="no-referrer"
                     onClick={() =>
@@ -1104,7 +1107,7 @@ export default function ProjectDetailPage() {
           {/* Image 3 (Previously Image 2) */}
           {project?.id !== "ck-lighting" && (
             <div
-              className={`relative w-full ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-transparent sm:bg-zinc-900"} cursor-pointer sm:cursor-default pb-5 sm:pb-0`}
+              className={`relative w-full ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo" || project?.id === "TGPowerWrap") ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-transparent sm:bg-zinc-900"} cursor-pointer sm:cursor-default pb-5 sm:pb-0`}
               onClick={() =>
                 handleMobileImageClick(
                   project?.id === "komorebi-editorial"
@@ -1130,7 +1133,7 @@ export default function ProjectDetailPage() {
                     ? "RepX 6"
                     : "TGPW Visual Guideline"
               }
-              className={`w-full h-auto ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo") ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
+              className={`w-full h-auto ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo" || project?.id === "TGPowerWrap") ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
               onError={(e) => {
                 if (project?.id === "breeze-cargo") {
                   const target = e.currentTarget;
