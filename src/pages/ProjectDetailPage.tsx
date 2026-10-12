@@ -834,7 +834,7 @@ export default function ProjectDetailPage() {
             project?.id === "breeze-cargo") && (
             <div
               id="canvas-image-3"
-              className="relative w-full h-auto overflow-visible z-30 bg-transparent sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0 px-5 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-center items-center"
+              className="relative w-full h-auto overflow-visible z-30 bg-transparent sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0 px-0 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-center items-center"
               onClick={() =>
                 handleMobileImageClick(
                   project.id === "breeze-cargo"
@@ -850,7 +850,7 @@ export default function ProjectDetailPage() {
                     : "/Triply/Triply15.jpg"
                 }
                 alt={project?.id === "breeze-cargo" ? "RepX 4" : "Gallery 3"}
-                className="w-full h-auto object-contain block select-none p-0 m-0 rounded-none"
+                className="w-full h-auto object-contain block select-none p-0 m-0 rounded-none px-0 sm:px-0 box-border"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -901,7 +901,7 @@ export default function ProjectDetailPage() {
                       : "object-top"
                   }`}
                   style={{
-                    objectPosition: "center top",
+                    objectPosition: "center -60px",
                   }}
                   alt={project?.id === "breeze-cargo" ? "RepX 12" : `${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"

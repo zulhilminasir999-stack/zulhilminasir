@@ -301,25 +301,7 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     };
   }, [duplicatedCases]);
 
-  // Auto-scroll loop with smooth wrap - only active once user reaches this section during scrolling
-  useAnimationFrame((_, delta) => {
-    if (!isInView || isDraggingRef.current) {
-      return;
-    }
-
-    const speed = isHovered ? 15 : 36; // px per second
-    const moveBy = (speed * delta) / 1000;
-    const currentX = x.get();
-    let nextX = currentX - moveBy;
-
-    if (singleWidthRef.current > 0) {
-      const width = singleWidthRef.current;
-      // Seamless wrap in both directions
-      nextX = ((((nextX) % width) - width) % width);
-    }
-
-    x.set(nextX);
-  });
+  // Auto-scroll animation removed as requested; users can slide/drag manually.
 
   const handleCardClick = (e: React.MouseEvent, item: CarouselCaseItem) => {
     e.preventDefault();
