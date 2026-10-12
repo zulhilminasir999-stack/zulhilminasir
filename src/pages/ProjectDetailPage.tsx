@@ -895,13 +895,9 @@ export default function ProjectDetailPage() {
                               ? project.galleryImages[2]
                               : project?.imageUrl || ""
                   }
-                  className={`w-full h-auto sm:h-full object-contain sm:object-cover block m-0 rounded-none px-5 sm:px-0 box-border ${
-                    project?.id === "TGPowerWrap"
-                      ? "object-top"
-                      : "object-top"
-                  }`}
+                  className={`w-full h-auto sm:h-full object-contain sm:object-cover block m-0 rounded-none px-5 sm:px-0 box-border object-center`}
                   style={{
-                    objectPosition: "center -60px",
+                    objectPosition: "center center",
                   }}
                   alt={project?.id === "breeze-cargo" ? "RepX 12" : `${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
@@ -977,7 +973,7 @@ export default function ProjectDetailPage() {
                                   ? project.galleryImages[4]
                                   : project?.imageUrl || ""
                     }
-                    className="w-full h-auto sm:h-full object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default rounded-none object-bottom"
+                    className="w-full h-auto sm:h-full object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default rounded-none object-center"
                     alt={`${project?.title || "Gallery"} 5`}
                     referrerPolicy="no-referrer"
                     onClick={() =>
