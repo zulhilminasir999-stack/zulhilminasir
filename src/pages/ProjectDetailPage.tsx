@@ -741,7 +741,8 @@ export default function ProjectDetailPage() {
             const isLongImage =
               img1Src.includes("ck2") ||
               img1Src.includes("ck3") ||
-              img1Src.includes("ck");
+              img1Src.includes("ck") ||
+              project?.id === "aistudio-brand";
             const finalImg1Src =
               project?.id === "ck-lighting"
                 ? "/CK Lighting Web/ck2.jpg"
@@ -749,18 +750,22 @@ export default function ProjectDetailPage() {
                   ? "/Triply/Triply2.jpg"
                   : project?.id === "breeze-cargo"
                     ? "/RepX/RepX2.jpg"
-                    : img1Src;
+                    : project?.id === "aistudio-brand"
+                      ? "/PFM/PFM6.jpg"
+                      : img1Src;
 
             if (isLongImage) {
               return (
                 <div
                   className="z-10 w-full relative sm:sticky cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
-                  style={project?.id === "ck-lighting" ? {} : { bottom: 0 }}
+                  style={project?.id === "ck-lighting" || project?.id === "aistudio-brand" ? {} : { bottom: 0 }}
                   onClick={() =>
                     handleMobileImageClick(
                       project?.id === "ck-lighting"
                         ? "/CK Lighting Web/ck2.jpg"
-                        : img1Src,
+                        : project?.id === "aistudio-brand"
+                          ? "/PFM/PFM6.jpg"
+                          : img1Src,
                     )
                   }
                 >
@@ -768,7 +773,9 @@ export default function ProjectDetailPage() {
                     src={
                       project?.id === "ck-lighting"
                         ? "/CK Lighting Web/ck2.jpg"
-                        : img1Src
+                        : project?.id === "aistudio-brand"
+                          ? "/PFM/PFM6.jpg"
+                          : img1Src
                     }
                     alt="Gallery 1"
                     className="w-full h-auto block select-none rounded-none"
@@ -798,7 +805,6 @@ export default function ProjectDetailPage() {
             );
           })()}
 
-          {/* Image 2 */}
           {(project?.id === "TGPowerWrap" ||
             project?.id === "komorebi-editorial" ||
             project?.id === "breeze-cargo") && (
@@ -808,9 +814,7 @@ export default function ProjectDetailPage() {
                 handleMobileImageClick(
                   project.id === "komorebi-editorial"
                     ? "/Triply/Triply3.jpg"
-                    : project.id === "breeze-cargo"
-                      ? "/RepX/RepX3.jpg"
-                      : "/TGPW/6.jpg",
+                    : "/RepX/RepX3.jpg",
                 )
               }
             >
@@ -818,9 +822,7 @@ export default function ProjectDetailPage() {
                 src={
                   project.id === "komorebi-editorial"
                     ? "/Triply/Triply3.jpg"
-                    : project.id === "breeze-cargo"
-                      ? "/RepX/RepX3.jpg"
-                      : "/TGPW/6.jpg"
+                    : "/RepX/RepX3.jpg"
                 }
                 alt={project?.id === "breeze-cargo" ? "RepX 3" : "Gallery 2"}
                 className="w-full h-auto sm:h-full object-contain sm:object-cover block rounded-none"
@@ -1017,6 +1019,7 @@ export default function ProjectDetailPage() {
           </div>
         </div>
 
+
         {/* Section 6: Additional Sticky Full-width Images */}
         <div className="relative bg-transparent sm:bg-zinc-900 z-50 w-full flex flex-col sm:block">
           {/* Image 0 (CK8.jpg for CK Lighting above CK9) */}
@@ -1041,34 +1044,42 @@ export default function ProjectDetailPage() {
             className="relative w-full h-auto overflow-visible flex flex-col justify-center items-center bg-transparent sm:bg-zinc-900 z-10 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() =>
               handleMobileImageClick(
-                project?.id === "ck-lighting"
-                  ? "/CK Lighting Web/CK9.jpg"
-                  : project?.id === "komorebi-editorial"
-                    ? "/Triply/Triply4.jpg"
-                    : project?.id === "breeze-cargo"
-                      ? "/RepX/RepX5.jpg"
-                      : project.galleryImages &&
-                          project.galleryImages.length > 4
-                        ? project.galleryImages[4]
-                        : "/TGPW/TGPW Site Map.jpg",
+                project?.id === "aistudio-brand"
+                  ? "/PFM/PFM2.jpg"
+                  : project?.id === "ck-lighting"
+                    ? "/CK Lighting Web/CK9.jpg"
+                    : project?.id === "komorebi-editorial"
+                      ? "/Triply/Triply4.jpg"
+                      : project?.id === "breeze-cargo"
+                        ? "/RepX/RepX5.jpg"
+                        : project.galleryImages &&
+                            project.galleryImages.length > 4
+                          ? project.galleryImages[4]
+                          : "/TGPW/TGPW Site Map.jpg",
               )
             }
           >
             <img
               src={
-                project?.id === "ck-lighting"
-                  ? "/CK Lighting Web/CK9.jpg"
-                  : project?.id === "komorebi-editorial"
-                    ? "/Triply/Triply4.jpg"
-                    : project?.id === "breeze-cargo"
-                      ? "/RepX/RepX5.jpg"
-                      : project.galleryImages &&
-                          project.galleryImages.length > 4
-                        ? project.galleryImages[4]
-                        : "/TGPW/TGPW Site Map.jpg"
+                project?.id === "aistudio-brand"
+                  ? "/PFM/PFM2.jpg"
+                  : project?.id === "ck-lighting"
+                    ? "/CK Lighting Web/CK9.jpg"
+                    : project?.id === "komorebi-editorial"
+                      ? "/Triply/Triply4.jpg"
+                      : project?.id === "breeze-cargo"
+                        ? "/RepX/RepX5.jpg"
+                        : project.galleryImages &&
+                            project.galleryImages.length > 4
+                          ? project.galleryImages[4]
+                          : "/TGPW/TGPW Site Map.jpg"
               }
               alt={
-                project?.id === "breeze-cargo" ? "RepX 5" : "Gallery Sticky 1"
+                project?.id === "aistudio-brand"
+                  ? "PFM 2 Showcase"
+                  : project?.id === "breeze-cargo"
+                    ? "RepX 5"
+                    : "Gallery Sticky 1"
               }
               className="w-full h-auto object-contain block select-none rounded-none"
               onError={(e) => {
@@ -1103,33 +1114,39 @@ export default function ProjectDetailPage() {
           {/* Image 3 (Previously Image 2) */}
           {project?.id !== "ck-lighting" && (
             <div
-              className={`relative w-full ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo" || project?.id === "TGPowerWrap") ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-transparent sm:bg-zinc-900"} cursor-pointer sm:cursor-default pb-5 sm:pb-0`}
+              className={`relative w-full ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo" || project?.id === "TGPowerWrap" || project?.id === "aistudio-brand") ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-transparent sm:bg-zinc-900"} cursor-pointer sm:cursor-default pb-5 sm:pb-0`}
               onClick={() =>
                 handleMobileImageClick(
-                  project?.id === "komorebi-editorial"
-                    ? "/Triply/Triply8.jpg"
-                    : project?.id === "breeze-cargo"
-                      ? "/RepX/RepX6.jpg"
-                      : "/TGPW/TGPW Visual Guideline.jpg",
+                  project?.id === "aistudio-brand"
+                    ? "/PFM/PFM9.jpg"
+                    : project?.id === "komorebi-editorial"
+                      ? "/Triply/Triply8.jpg"
+                      : project?.id === "breeze-cargo"
+                        ? "/RepX/RepX6.jpg"
+                        : "/TGPW/TGPW Visual Guideline.jpg",
                 )
               }
             >
               <img
                 src={
-                  project?.id === "komorebi-editorial"
-                    ? "/Triply/Triply8.jpg"
-                    : project?.id === "breeze-cargo"
-                      ? "/RepX/RepX6.jpg"
-                      : "/TGPW/TGPW Visual Guideline.jpg"
+                  project?.id === "aistudio-brand"
+                    ? "/PFM/PFM9.jpg"
+                    : project?.id === "komorebi-editorial"
+                      ? "/Triply/Triply8.jpg"
+                      : project?.id === "breeze-cargo"
+                        ? "/RepX/RepX6.jpg"
+                        : "/TGPW/TGPW Visual Guideline.jpg"
                 }
               alt={
-                project?.id === "komorebi-editorial"
-                  ? "Triply Design"
-                  : project?.id === "breeze-cargo"
-                    ? "RepX 6"
-                    : "TGPW Visual Guideline"
+                project?.id === "aistudio-brand"
+                  ? "PFM 9 Showcase"
+                  : project?.id === "komorebi-editorial"
+                    ? "Triply Design"
+                    : project?.id === "breeze-cargo"
+                      ? "RepX 6"
+                      : "TGPW Visual Guideline"
               }
-              className={`w-full h-auto ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo" || project?.id === "TGPowerWrap") ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
+              className={`w-full h-auto ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo" || project?.id === "TGPowerWrap" || project?.id === "aistudio-brand") ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
               onError={(e) => {
                 if (project?.id === "breeze-cargo") {
                   const target = e.currentTarget;
@@ -1213,49 +1230,70 @@ export default function ProjectDetailPage() {
           className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
           onClick={() =>
             handleMobileImageClick(
-              project?.id === "ck-lighting"
-                ? "/CK Lighting Web/CK12.jpg"
-                : project?.id === "TGPowerWrap"
-                  ? "/TGPW/TGPW7.jpg"
-                  : project?.id === "breeze-cargo"
-                    ? "/RepX/RepX10.jpg"
-                    : project?.id === "komorebi-editorial"
-                      ? "/Triply/Triply9.jpg"
-                      : project?.galleryImages && project.galleryImages.length > 5
-                        ? project.galleryImages[5]
-                        : project?.imageUrl || "",
+              project?.id === "aistudio-brand"
+                ? "/PFM/PFM7.jpg"
+                : project?.id === "ck-lighting"
+                  ? "/CK Lighting Web/CK12.jpg"
+                  : project?.id === "TGPowerWrap"
+                    ? "/TGPW/TGPW7.jpg"
+                    : project?.id === "breeze-cargo"
+                      ? "/RepX/RepX10.jpg"
+                      : project?.id === "komorebi-editorial"
+                        ? "/Triply/Triply9.jpg"
+                        : project?.galleryImages && project.galleryImages.length > 5
+                          ? project.galleryImages[5]
+                          : project?.imageUrl || "",
             )
           }
         >
           <img
             src={
-              project?.id === "ck-lighting"
-                ? "/CK Lighting Web/CK12.jpg"
-                : project?.id === "TGPowerWrap"
-                  ? "/TGPW/TGPW7.jpg"
-                  : project?.id === "breeze-cargo"
-                    ? "/RepX/RepX10.jpg"
-                    : project?.id === "komorebi-editorial"
-                      ? "/Triply/Triply9.jpg"
-                      : project?.galleryImages && project.galleryImages.length > 5
-                        ? project.galleryImages[5]
-                        : project?.imageUrl || ""
+              project?.id === "aistudio-brand"
+                ? "/PFM/PFM7.jpg"
+                : project?.id === "ck-lighting"
+                  ? "/CK Lighting Web/CK12.jpg"
+                  : project?.id === "TGPowerWrap"
+                    ? "/TGPW/TGPW7.jpg"
+                    : project?.id === "breeze-cargo"
+                      ? "/RepX/RepX10.jpg"
+                      : project?.id === "komorebi-editorial"
+                        ? "/Triply/Triply9.jpg"
+                        : project?.galleryImages && project.galleryImages.length > 5
+                          ? project.galleryImages[5]
+                          : project?.imageUrl || ""
             }
             alt={
-              project?.id === "ck-lighting"
-                ? "CK Lighting 12 Showcase"
-                : project?.id === "TGPowerWrap"
-                  ? "TG PowerWrap 7 Showcase"
-                  : project?.id === "breeze-cargo"
-                    ? "RepX 10 Showcase"
-                    : project?.id === "komorebi-editorial"
-                      ? "Triply 9 Showcase"
-                      : "Solution Showcase"
+              project?.id === "aistudio-brand"
+                ? "PFM 7 Showcase"
+                : project?.id === "ck-lighting"
+                  ? "CK Lighting 12 Showcase"
+                  : project?.id === "TGPowerWrap"
+                    ? "TG PowerWrap 7 Showcase"
+                    : project?.id === "breeze-cargo"
+                      ? "RepX 10 Showcase"
+                      : project?.id === "komorebi-editorial"
+                        ? "Triply 9 Showcase"
+                        : "Solution Showcase"
             }
             className="w-full h-auto block select-none rounded-none"
             referrerPolicy="no-referrer"
           />
         </div>
+
+        {/* PFM 8 Image Section (Directly after PFM 7) */}
+        {project?.id === "aistudio-brand" && (
+          <div
+            className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
+            onClick={() => handleMobileImageClick("/PFM/PFM8.jpg")}
+          >
+            <img
+              src="/PFM/PFM8.jpg"
+              alt="PFM 8 Showcase"
+              className="w-full h-auto block select-none rounded-none"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
 
         {/* Triply 10 Image Section */}
         {project?.id === "komorebi-editorial" && (

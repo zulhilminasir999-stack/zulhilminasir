@@ -50,11 +50,11 @@ const SERVICES_DATA = [
   },
   {
     id: "motion",
-    title: "Packaging Design",
-    shortTitle: "Packaging Design",
+    title: "Brand Packaging",
+    shortTitle: "Brand Packaging",
     description: "Designing packaging that connects product, function, and visual impact from shelf to customer experience.",
     tags: ["Structural & Box Design", "Label & Graphic Design", "Print-Ready Artwork", "3D Product Mockups", "Sustainable Packaging Solutions", "Unboxing Experience Design"],
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
+    image: "/Services/Brand Packaging.png",
     overlayColor: "#C084FC", // Luminous violet
   },
   {
