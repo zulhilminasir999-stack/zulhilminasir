@@ -454,7 +454,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     subtitle: "High-Performance Responsive Front-Ends & Component Architectures",
     category: "DEVELOPMENT & SYSTEMS",
     categoryLabel: "Engineering & Architecture",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1200",
+    image: "/Services/Web Development & Design.png",
     summary: "Engineering fast, scalable, and responsive custom websites. Seamlessly bridging the gap between bespoke modular layout code and flexible, client-friendly CMS platforms like WordPress (Elementor) and modern headless frameworks.",
     challenge: "Clients require the pixel-perfect translation of rich Figma files into production websites that remain blazing fast, SEO-optimized, and extremely easy for internal non-technical teams to update and manage without developer bottlenecking.",
     solution: "Developed a clean design-to-code layout blueprint standard combining highly optimized custom styling structures with clean modular blocks. Leveraged local asset optimization, smart caching, and fluid layout transitions to maintain ultra-fast performance.",

@@ -54,7 +54,7 @@ const SERVICES_DATA = [
     shortTitle: "Brand Packaging",
     description: "Designing packaging that connects product, function, and visual impact from shelf to customer experience.",
     tags: ["Structural & Box Design", "Label & Graphic Design", "Print-Ready Artwork", "3D Product Mockups", "Sustainable Packaging Solutions", "Unboxing Experience Design"],
-    image: "/Services/Brand Packaging.png",
+    image: "/Services/Brand Packaging.jpg",
     overlayColor: "#C084FC", // Luminous violet
   },
   {
@@ -63,7 +63,7 @@ const SERVICES_DATA = [
     shortTitle: "Marketing\nDigital\nDesign",
     description: "Transforming ideas into visual content designed to capture attention, communicate clearly, and drive engagement.",
     tags: ["Social Media Campaign Assets", "Digital Ad Banners & Creatives", "Presentation Design", "Motion Graphics & Animations", "Print & Event Media"],
-    image: "https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop",
+    image: "/Services/Marketing Digital Design.jpg",
     overlayColor: "#FB7185", // Radiant coral rose
   },
 ];
