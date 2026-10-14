@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
-import { motion, useMotionValue, useAnimationFrame, useInView } from "motion/react";
+import { motion, useMotionValue, animate } from "motion/react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { useReveal } from "../context/RevealContext";
 
 export interface CarouselCaseItem {
@@ -246,11 +246,16 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
   const navigate = useNavigate();
   const { triggerReveal } = useReveal();
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { amount: 0.1 });
   const trackRef = useRef<HTMLDivElement>(null);
   const singleWidthRef = useRef<number>(0);
   const isDraggingRef = useRef<boolean>(false);
   const hasDraggedRef = useRef<boolean>(false);
+  const startXRef = useRef<number>(0);
+  const startMotionXRef = useRef<number>(0);
+  const lastXRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
+  const velocityRef = useRef<number>(0);
+  const activeAnimationRef = useRef<{ stop: () => void } | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const x = useMotionValue(0);
 
@@ -285,23 +290,142 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     return [...orderedCases, ...orderedCases, ...orderedCases];
   }, [orderedCases]);
 
-  // Measure single track width
+  // Measure single track width and initialize x to the middle set for seamless bidirectional infinite scrolling
   useEffect(() => {
     const measure = () => {
       if (trackRef.current) {
-        singleWidthRef.current = trackRef.current.scrollWidth / 3;
+        const fullW = trackRef.current.scrollWidth;
+        const singleW = fullW / 3;
+        singleWidthRef.current = singleW;
+        if (x.get() === 0 && singleW > 0) {
+          x.set(-singleW);
+        }
       }
     };
     measure();
     window.addEventListener("resize", measure);
-    const timer = setTimeout(measure, 300);
+    const timer1 = setTimeout(measure, 150);
+    const timer2 = setTimeout(measure, 500);
     return () => {
       window.removeEventListener("resize", measure);
-      clearTimeout(timer);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
     };
-  }, [duplicatedCases]);
+  }, [duplicatedCases, x]);
 
-  // Auto-scroll animation removed as requested; users can slide/drag manually.
+  // Helper to wrap x position seamlessly inside the middle duplicated segment
+  const wrapPosition = (pos: number) => {
+    const width = singleWidthRef.current;
+    if (width <= 0) return pos;
+    let next = pos;
+    while (next <= -2 * width) next += width;
+    while (next > -width) next -= width;
+    return next;
+  };
+
+  // Button slide controls: slides card-by-card in an endless repeatable loop
+  const handleSlide = (direction: "left" | "right") => {
+    if (activeAnimationRef.current) {
+      activeAnimationRef.current.stop();
+    }
+    const width = singleWidthRef.current;
+    if (width <= 0) return;
+    const cardEl = trackRef.current?.children[0] as HTMLElement | undefined;
+    const cardWidthWithGap = cardEl ? cardEl.offsetWidth + 32 : 460;
+    const delta = direction === "right" ? -cardWidthWithGap : cardWidthWithGap;
+    const targetX = x.get() + delta;
+
+    activeAnimationRef.current = animate(x, targetX, {
+      duration: 0.65,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (latest) => {
+        if (width > 0) {
+          if (latest <= -2 * width) {
+            x.set(latest + width);
+          } else if (latest > -width) {
+            x.set(latest - width);
+          }
+        }
+      },
+    });
+  };
+
+  // Pointer drag controls: supports smooth infinite repeatable sliding via mouse or touch
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0) return;
+    if (activeAnimationRef.current) {
+      activeAnimationRef.current.stop();
+    }
+    isDraggingRef.current = true;
+    hasDraggedRef.current = false;
+    startXRef.current = e.clientX;
+    startMotionXRef.current = x.get();
+    lastXRef.current = e.clientX;
+    lastTimeRef.current = performance.now();
+    velocityRef.current = 0;
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {}
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const now = performance.now();
+    const dt = now - lastTimeRef.current;
+    if (dt > 0) {
+      velocityRef.current = (e.clientX - lastXRef.current) / dt;
+      lastXRef.current = e.clientX;
+      lastTimeRef.current = now;
+    }
+
+    const delta = e.clientX - startXRef.current;
+    if (Math.abs(delta) > 5) {
+      hasDraggedRef.current = true;
+    }
+    const nextX = wrapPosition(startMotionXRef.current + delta);
+    x.set(nextX);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {}
+
+    setTimeout(() => {
+      hasDraggedRef.current = false;
+    }, 120);
+
+    const width = singleWidthRef.current;
+    const v = velocityRef.current;
+    if (Math.abs(v) > 0.15 && width > 0) {
+      const momentumDistance = v * 280;
+      const targetX = x.get() + momentumDistance;
+      activeAnimationRef.current = animate(x, targetX, {
+        duration: Math.min(1.2, Math.max(0.4, Math.abs(momentumDistance) / 600)),
+        ease: [0.16, 1, 0.3, 1],
+        onUpdate: (latest) => {
+          if (width > 0) {
+            if (latest <= -2 * width) {
+              x.set(latest + width);
+            } else if (latest > -width) {
+              x.set(latest - width);
+            }
+          }
+        },
+      });
+    }
+  };
+
+  // Trackpad / Horizontal wheel support
+  const handleWheel = (e: React.WheelEvent) => {
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+    if (Math.abs(delta) > 2) {
+      const nextX = wrapPosition(x.get() - delta);
+      x.set(nextX);
+    }
+  };
 
   const handleCardClick = (e: React.MouseEvent, item: CarouselCaseItem) => {
     e.preventDefault();
@@ -322,39 +446,48 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
       id="capabilities-section"
       className="relative w-full bg-white z-50 select-none py-12 sm:py-16 md:py-20 overflow-hidden"
     >
-      {/* Header Bar */}
+      {/* Header Bar with Slide Navigation Buttons */}
       <div className="w-full px-6 sm:px-12 lg:px-16 flex items-center justify-between mb-8 sm:mb-10 md:mb-12">
         <div className="space-y-1">
           <h4 className="font-sans font-medium text-2xl sm:text-3xl tracking-tight text-zinc-900 uppercase">
             Related Capabilities
           </h4>
         </div>
+
+        {/* Slide Controls (Prev / Next) - Hidden on mobile device, visible on desktop */}
+        <div className="hidden sm:flex items-center gap-2 sm:gap-3">
+          <button
+            onClick={() => handleSlide("left")}
+            aria-label="Previous capability"
+            className="hidden sm:flex w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-zinc-200 hover:border-zinc-900 bg-white hover:bg-zinc-900 text-zinc-700 hover:text-white transition-all duration-300 items-center justify-center cursor-pointer shadow-sm active:scale-95"
+          >
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+          <button
+            onClick={() => handleSlide("right")}
+            aria-label="Next capability"
+            className="hidden sm:flex w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-zinc-200 hover:border-zinc-900 bg-white hover:bg-zinc-900 text-zinc-700 hover:text-white transition-all duration-300 items-center justify-center cursor-pointer shadow-sm active:scale-95"
+          >
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        </div>
       </div>
 
-      {/* Auto-moving + Freely Draggable continuous smooth marquee */}
+      {/* Freely Draggable & Repeatedly Slideable Carousel Track */}
       <div 
         className="w-full overflow-hidden relative cursor-grab active:cursor-grabbing touch-pan-y"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onWheel={handleWheel}
       >
         <motion.div 
           ref={trackRef}
           style={{ x }}
-          drag="x"
-          dragConstraints={{ left: -100000, right: 100000 }}
-          dragElastic={0}
-          onDragStart={() => {
-            isDraggingRef.current = true;
-            hasDraggedRef.current = true;
-          }}
-          onDragEnd={() => {
-            isDraggingRef.current = false;
-            // Delay resetting drag flag slightly to prevent click triggering
-            setTimeout(() => {
-              hasDraggedRef.current = false;
-            }, 120);
-          }}
-          className="flex items-stretch gap-6 sm:gap-8 md:gap-10 w-max pl-6 sm:pl-12 lg:pl-16"
+          className="flex items-stretch gap-6 sm:gap-8 md:gap-10 w-max pl-6 sm:pl-12 lg:pl-16 select-none"
         >
           {duplicatedCases.map((item, index) => (
             <div
