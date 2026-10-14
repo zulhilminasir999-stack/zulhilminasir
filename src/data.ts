@@ -476,7 +476,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
   },
   {
     id: "ui-ux",
-    label: "UI/UX",
+    label: "MOBILE UI/UX",
     title: "User Interface & Experience Design",
     subtitle: "Cognitive Interaction Flows, Component Libraries & Design Systems",
     category: "PRODUCT & INTERACTION",
@@ -584,7 +584,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
   },
   {
     id: "packaging",
-    label: "Packaging",
+    label: "BRAND PACKAGING",
     title: "Structural Packaging & Print Craft",
     subtitle: "3D Renderings, Carton Cutter-Guides & Tactile Material Finishes",
     category: "PHYSICAL CRAFT",
