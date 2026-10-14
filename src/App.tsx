@@ -83,7 +83,16 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ReactLenis root options={{ lerp: 0.05, duration: 1.2, smoothWheel: true }}>
+    <ReactLenis
+      root
+      options={{
+        lerp: 0.08,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.5,
+        smoothWheel: true,
+        syncTouch: false,
+      }}
+    >
       <RevealProvider>
         <AppContent />
       </RevealProvider>

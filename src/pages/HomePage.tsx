@@ -367,41 +367,31 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       return;
     }
 
-    triggerReveal(() => {
-      const rawId = targetId.replace('#', '');
-      const isHero = rawId === "hero-section" || rawId === "hero";
-      const el = document.getElementById(rawId);
-      
-      if (el || isHero) {
-        // Calculate exact absolute top position on the document
-        const targetY = (el && !isHero) ? el.getBoundingClientRect().top + window.scrollY : 0;
+    const el = document.getElementById(rawId);
+    
+    if (el || isHero) {
+      // Calculate exact absolute top position on the document
+      const targetY = (el && !isHero) ? el.getBoundingClientRect().top + window.scrollY : 0;
 
-        // Ensure header state is updated
-        setHeaderVisible(true);
-        setIsHeaderScrolled(targetY > 80);
-        setIsScrollingUp(true);
-        setActiveSection(isHero ? "hero-section" : rawId);
+      // Ensure header state is updated
+      setHeaderVisible(true);
+      setIsHeaderScrolled(targetY > 80);
+      setIsScrollingUp(true);
+      setActiveSection(isHero ? "hero-section" : rawId);
 
-        // Disable lenis smooth scroll temporarily to jump instantly
-        if (lenis) {
-          lenis.stop();
-        }
-        
-        // Jump directly to top/target section without any smooth scrolling
-        window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
-        document.documentElement.scrollTop = targetY;
-        document.body.scrollTop = targetY;
-        
-        // Restart lenis and sync its position instantly
-        if (lenis) {
-          lenis.start();
-          lenis.scrollTo(targetY, { immediate: true });
-        }
-
-        // Clean URL hash so refreshing the browser starts cleanly at top section
-        window.history.replaceState(null, "", window.location.pathname);
+      // Smooth scroll via Lenis or native smooth scroll
+      if (lenis) {
+        lenis.scrollTo(targetY, {
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        });
+      } else {
+        window.scrollTo({ top: targetY, behavior: "smooth" });
       }
-    });
+
+      // Clean URL hash so refreshing the browser starts cleanly at top section
+      window.history.replaceState(null, "", window.location.pathname);
+    }
   };
 
   useEffect(() => {

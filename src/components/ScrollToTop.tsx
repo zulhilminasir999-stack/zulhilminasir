@@ -79,7 +79,7 @@ export default function ScrollToTop() {
       }
     }
 
-    // Case 3: Other routes
+    // Case 3: Other routes without hash
     if (!isSamePath && !hash) {
       const scrollToTop = () => {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -92,6 +92,27 @@ export default function ScrollToTop() {
 
       scrollToTop();
       const timers = [0, 50, 100, 200].map((d) => setTimeout(scrollToTop, d));
+      return () => timers.forEach((id) => clearTimeout(id));
+    }
+
+    // Case 4: Navigation with a hash (#services-section, #about-section, etc.)
+    if (hash) {
+      const targetId = hash.replace("#", "");
+      const scrollToHash = () => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          const targetY = el.getBoundingClientRect().top + window.scrollY;
+          if (lenis) {
+            lenis.scrollTo(targetY, {
+              duration: 1.2,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            });
+          } else {
+            window.scrollTo({ top: targetY, behavior: "smooth" });
+          }
+        }
+      };
+      const timers = [150, 350].map((d) => setTimeout(scrollToHash, d));
       return () => timers.forEach((id) => clearTimeout(id));
     }
   }, [pathname, hash, navType, lenis]);

@@ -83,7 +83,10 @@ export default function BackToTopButton() {
 
   const scrollToTop = () => {
     if (lenis) {
-      lenis.scrollTo(0, { duration: 1.3 });
+      lenis.scrollTo(0, {
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
