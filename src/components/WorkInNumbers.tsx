@@ -96,25 +96,25 @@ export default function WorkInNumbers({ theme = "light" }: WorkInNumbersProps) {
       value: 5, 
       label: "Years Experience", 
       suffix: "+",
-      description: "Building digital excellence since 2020, focusing on high-impact solutions and brand growth."
+      description: "Growing experience in web design & development, and digital solutions since 2020."
     },
     { 
       value: 9, 
       label: "Completed Projects", 
       suffix: "+",
-      description: "Successfully delivered diverse projects ranging from complex e-commerce platforms to bespoke corporate identities."
+      description: "Projects spanning website design, e-commerce, digital interfaces, and branding."
     },
     { 
       value: 4, 
-      label: "UI Screen Designed", 
+      label: "Digital Interfaces Developed", 
       suffix: "+",
-      description: "Crafting intuitive, user-centric interfaces that balance aesthetic beauty with functional precision."
+      description: "Developing intuitive web and mobile interfaces that combine usability, responsive layouts, and functional user experiences."
     },
     { 
       value: 6, 
       label: "Website Managed End-to-end", 
       suffix: "+",
-      description: "End-to-end management of digital storefronts, ensuring peak performance and cross-channel consistency."
+      description: "Managing website content, e-commerce platforms, and CMS workflows to maintain performance, consistency, and reliable digital operations."
     },
   ];
 
@@ -136,12 +136,11 @@ export default function WorkInNumbers({ theme = "light" }: WorkInNumbersProps) {
             className="space-y-4 text-left"
           >
             <h2 className={`font-sans font-medium text-3xl sm:text-4xl tracking-tight leading-[1.1] ${isLight ? "text-zinc-900" : "text-white"}`}>
-              We take on fewer projects.<br />
+              I take on fewer projects.<br />
               <span className={isLight ? "text-zinc-400" : "text-zinc-500"}>Each one gets full attention.</span>
             </h2>
             <p className={`text-sm sm:text-base leading-relaxed pt-2 ${isLight ? "text-zinc-600" : "text-zinc-400"}`}>
-              Fewer projects means more attention. Every brief is a commitment to the thinking behind it, not just the outcome. 
-              We work with a fixed number of partners at a time to protect the quality of the work.
+              I focus on creating purposeful digital experiences that bring together design, usability, and technology. From responsive websites to intuitive interfaces and functional web solutions, every project is an opportunity to solve problems and create meaningful value.
             </p>
           </motion.div>
         </div>

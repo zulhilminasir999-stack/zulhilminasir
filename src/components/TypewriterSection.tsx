@@ -167,16 +167,16 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
             <div className="flex items-center gap-2.5 shrink-0">
               <div className="relative w-16 h-16 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
                 <img 
-                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400" 
-                  alt="Creative Mineral Art Concept" 
+                  src="/DemoPic/AI.jpg" 
+                  alt="AI Concept" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                 />
               </div>
               <div className="relative w-16 h-16 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
                 <img 
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400" 
-                  alt="Creative Portrait" 
+                  src="/DemoPic/Zul.jpg" 
+                  alt="Zulhilmi Nasir Portrait" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                 />
@@ -189,7 +189,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
                 Zulhilmi Nasir's thought
               </span>
               <p className="text-white/80 text-xs leading-relaxed mb-3 font-normal select-none">
-                We work with teams at different stages, helping them define direction, reduce complexity, and build digital experiences that support real goals. From early concepts to mature products, our focus stays on clarity, structure, and long-term value
+                I collaborate with teams and founders to turn complex AI technologies and product ideas into intuitive, human-centered digital experiences. From early concept to launch, my focus is on building clean, purposeful software that creates real long-term value.
               </p>
               <button
                 id="typewriter-create-btn"
@@ -253,16 +253,16 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
               <img 
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400" 
-                alt="Creative Mineral Art Concept" 
+                src="/DemoPic/AI.jpg" 
+                alt="AI Concept" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
             </div>
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
               <img 
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400" 
-                alt="Creative Portrait" 
+                src="/DemoPic/Zul.jpg" 
+                alt="Zulhilmi Nasir Portrait" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
@@ -275,7 +275,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
               Zulhilmi Nasir's thought
             </span>
             <p className="text-white/80 text-xs sm:text-sm leading-relaxed mb-3 font-normal select-none">
-              We work with teams at different stages, helping them define direction, reduce complexity, and build digital experiences that support real goals. From early concepts to mature products, our focus stays on clarity, structure, and long-term value
+              I collaborate with teams and founders to turn complex AI technologies and product ideas into intuitive, human-centered digital experiences. From early concept to launch, my focus is on building clean, purposeful software that creates real long-term value.
             </p>
             <button
               id="typewriter-create-btn"

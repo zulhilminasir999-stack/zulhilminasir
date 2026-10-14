@@ -367,30 +367,70 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       return;
     }
 
-    const el = document.getElementById(rawId);
-    
-    if (el || isHero) {
-      // Calculate exact absolute top position on the document
-      const targetY = (el && !isHero) ? el.getBoundingClientRect().top + window.scrollY : 0;
+    const menuTargets = [
+      "services-section",
+      "services",
+      "integration-section",
+      "integration",
+      "capabilities-section",
+      "capabilities",
+      "about-section",
+      "about",
+      "career-section",
+      "career",
+      "contact-section",
+      "contact",
+    ];
 
-      // Ensure header state is updated
-      setHeaderVisible(true);
-      setIsHeaderScrolled(targetY > 80);
-      setIsScrollingUp(true);
-      setActiveSection(isHero ? "hero-section" : rawId);
+    const isMenuBarTarget = menuTargets.includes(rawId);
+    const isDesktopOrTablet = typeof window !== "undefined" && window.innerWidth >= 640;
 
-      // Smooth scroll via Lenis or native smooth scroll
-      if (lenis) {
-        lenis.scrollTo(targetY, {
-          duration: 1.2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        });
-      } else {
-        window.scrollTo({ top: targetY, behavior: "smooth" });
+    const navigateToSection = (useLoadingScreen: boolean) => {
+      const el = document.getElementById(rawId);
+      if (el || isHero) {
+        const targetY = (el && !isHero) ? el.getBoundingClientRect().top + window.scrollY : 0;
+
+        setHeaderVisible(true);
+        setIsHeaderScrolled(targetY > 80);
+        setIsScrollingUp(true);
+        setActiveSection(isHero ? "hero-section" : rawId);
+
+        if (useLoadingScreen) {
+          // Instant jump at the midpoint while the Zulhilmi Nasir curtain covers viewport
+          if (lenis) {
+            lenis.stop();
+          }
+          window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
+          document.documentElement.scrollTop = targetY;
+          document.body.scrollTop = targetY;
+          if (lenis) {
+            lenis.start();
+            lenis.scrollTo(targetY, { immediate: true });
+          }
+        } else {
+          // Mobile device: smooth scroll without loading screen
+          if (lenis) {
+            lenis.scrollTo(targetY, {
+              duration: 1.2,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            });
+          } else {
+            window.scrollTo({ top: targetY, behavior: "smooth" });
+          }
+        }
+
+        window.history.replaceState(null, "", window.location.pathname);
       }
+    };
 
-      // Clean URL hash so refreshing the browser starts cleanly at top section
-      window.history.replaceState(null, "", window.location.pathname);
+    if (isDesktopOrTablet && isMenuBarTarget) {
+      // Return to display loading screen of Zulhilmi Nasir on desktop and tab devices
+      triggerReveal(() => {
+        navigateToSection(true);
+      });
+    } else {
+      // Mobile device: direct smooth scroll without loading screen
+      navigateToSection(false);
     }
   };
 

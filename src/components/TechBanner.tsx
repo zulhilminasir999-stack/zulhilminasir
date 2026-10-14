@@ -61,8 +61,7 @@ export default function TechBanner() {
     offset: ["start start", "end end"],
   });
 
-  // Sentence data: kept as a single continuous string to allow natural reflowing, but we'll use CSS to force the desired layout bounds.
-  const fullSentence = "Passionate UI/UX designer focused on creating intuitive, visually compelling digital experiences that combine creativity with user-centered design.";
+  const fullSentence = "Developing intelligent software solutions that combine powerful AI models, scalable web architecture, and sleek digital experiences.";
   
   // Split into words for the scroll effect
   const words = fullSentence.split(" ").map((word, index) => ({ word, index }));

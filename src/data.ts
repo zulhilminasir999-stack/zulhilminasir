@@ -573,7 +573,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Adobe Firefly", "Google Gemini Prompting"],
     showcases: [
-      { title: "Lumina Solar Branding", image: "https://images.unsplash.com/photo-1599305090598-fe179d501c27?auto=format&fit=crop&q=80&w=800" },
+      { title: "Warisan Ayah 3Q Catering", image: "https://images.unsplash.com/photo-1599305090598-fe179d501c27?auto=format&fit=crop&q=80&w=800" },
       { title: "Kryptos Security Logo", image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=800" },
       { title: "Verdant Organic Identity", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" }
     ],
@@ -627,9 +627,9 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Adobe Photoshop", "Adobe Illustrator", "Adobe Firefly", "Midjourney"],
     showcases: [
-      { title: "Metropolis Digital Art", image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=800" },
+      { title: "Interpack Processing & Packaging Event (Germany)", image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=800" },
       { title: "Neo-Swiss Poster Series", image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=800" },
-      { title: "Cosmic Editorial Layout", image: "https://images.unsplash.com/photo-1541462608141-ad437433b0c7?auto=format&fit=crop&q=80&w=800" }
+      { title: "Money Pocket (CK Lighting X Black Hanifah)", image: "https://images.unsplash.com/photo-1541462608141-ad437433b0c7?auto=format&fit=crop&q=80&w=800" }
     ],
     gallery: [
       "https://images.unsplash.com/photo-1550684847-75bdda21cc95?auto=format&fit=crop&q=80&w=800",
