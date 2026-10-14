@@ -34,7 +34,7 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       "Enhanced digital visibility for branch services by incorporating basic SEO, GEO, and AEO best practices during the redesign and structuring of WordPress landing pages.",
       "Utilized Adobe Illustrator and Photoshop for vector graphics, packaging mockups, UI designs, and digital content creation, and leveraged AI-assisted tools to enhance design efficiency, ideation, and visual development."
     ],
-    image: "/Images/tgpw1.jpg"
+    image: "/TGPW/TGPW1.png"
   },
   {
     id: "ecraft",
@@ -49,7 +49,7 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       "Developed responsive web designs optimized for desktop and mobile, ensuring cross-browser compatibility and seamless user experience using SiteGiant.",
       "Managed product listings and visual assets via SiteGiant CMS while collaborating with marketing teams to produce compelling campaign materials."
     ],
-    image: "/Images/ck1.jpg"
+    image: "/CK Lighting Web/ck7.png"
   },
   {
     id: "marketing",
@@ -64,7 +64,7 @@ const EXPERIENCE_DATA: ExperienceItem[] = [
       "Managed social media content creation for six businesses, including promotional visuals, copywriting, and content writing to strengthen brand presence.",
       "Produced 10–13 content pieces monthly and supported video recording sessions for business-focused graphic and social media content."
     ],
-    image: "/Images/3.jpg"
+    image: "/DemoPic/DME.png"
   }
 ];
 
@@ -214,12 +214,20 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
                         {/* Summary Column */}
                         <div className="lg:col-span-5 flex flex-col gap-6">
-                          {/* Monochrome rectangle preview image that restores full color on hover */}
-                          <div className="relative w-full aspect-[16/10] overflow-hidden rounded-xl group/img">
+                          {/* Monochrome preview image that restores full color on hover */}
+                          <div className={`relative overflow-hidden rounded-xl group/img ${
+                            item.id === "marketing"
+                              ? "w-full max-w-[260px] sm:max-w-[300px] aspect-square"
+                              : "w-full aspect-[16/10]"
+                          }`}>
                             <img 
                               src={item.image} 
                               alt={`${item.company} preview`}
-                              className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700 ease-in-out cursor-pointer hover:scale-[1.03]"
+                              className={`filter grayscale hover:grayscale-0 transition-all duration-700 ease-in-out cursor-pointer hover:scale-[1.03] ${
+                                item.id === "marketing"
+                                  ? "w-full h-full object-contain"
+                                  : "w-full h-full object-cover"
+                              }`}
                               referrerPolicy="no-referrer"
                             />
                           </div>
