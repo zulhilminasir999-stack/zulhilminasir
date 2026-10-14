@@ -812,19 +812,29 @@ export default function ProjectDetailPage() {
               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-20 bg-transparent sm:bg-zinc-900 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
               onClick={() =>
                 handleMobileImageClick(
-                  project.id === "komorebi-editorial"
-                    ? "/Triply/Triply3.jpg"
-                    : "/RepX/RepX3.jpg",
+                  project.id === "TGPowerWrap"
+                    ? "/TGPW/6.jpg"
+                    : project.id === "komorebi-editorial"
+                      ? "/Triply/Triply3.jpg"
+                      : "/RepX/RepX3.jpg",
                 )
               }
             >
               <img
                 src={
-                  project.id === "komorebi-editorial"
-                    ? "/Triply/Triply3.jpg"
-                    : "/RepX/RepX3.jpg"
+                  project.id === "TGPowerWrap"
+                    ? "/TGPW/6.jpg"
+                    : project.id === "komorebi-editorial"
+                      ? "/Triply/Triply3.jpg"
+                      : "/RepX/RepX3.jpg"
                 }
-                alt={project?.id === "breeze-cargo" ? "RepX 3" : "Gallery 2"}
+                alt={
+                  project?.id === "TGPowerWrap"
+                    ? "TGPowerWrap 6 Showcase"
+                    : project?.id === "breeze-cargo"
+                      ? "RepX 3"
+                      : "Gallery 2"
+                }
                 className="w-full h-auto sm:h-full object-contain sm:object-cover block rounded-none"
                 referrerPolicy="no-referrer"
               />
