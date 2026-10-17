@@ -647,18 +647,18 @@ export default function CaseStudyPage() {
               </div>
               <div className="md:col-span-6 flex flex-col gap-0 sm:gap-4 lg:gap-6 h-auto sm:h-[600px] lg:h-[800px]">
                 <img 
-                  src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (galleryImages[3] || galleryImages[0] || capability?.image)} 
-                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
-                  alt="Gallery 4"
-                  referrerPolicy="no-referrer"
-                  onClick={() => handleMobileImageClick((capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (galleryImages[3] || galleryImages[0] || capability?.image))}
-                />
-                <img 
                   src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/5.jpg" : (capability?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (galleryImages[5] || galleryImages[4] || galleryImages[1] || capability?.image)} 
                   className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
                   alt="Gallery 5"
                   referrerPolicy="no-referrer"
                   onClick={() => handleMobileImageClick((capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/5.jpg" : (capability?.id === "ck-lighting") ? "/CK Lighting Web/ck6.jpg" : (galleryImages[5] || galleryImages[4] || galleryImages[1] || capability?.image))}
+                />
+                <img 
+                  src={(capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (galleryImages[3] || galleryImages[0] || capability?.image)} 
+                  className="w-full h-auto sm:flex-1 sm:h-auto object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default" 
+                  alt="Gallery 4"
+                  referrerPolicy="no-referrer"
+                  onClick={() => handleMobileImageClick((capability?.id === "packaging" || capability?.id === "TGPowerWrap") ? "/Images/Thumbnail Mobile TGPW.jpg" : (galleryImages[3] || galleryImages[0] || capability?.image))}
                 />
               </div>
             </div>

@@ -223,10 +223,12 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                             <img 
                               src={item.image} 
                               alt={`${item.company} preview`}
-                              className={`filter grayscale hover:grayscale-0 transition-all duration-700 ease-in-out cursor-pointer hover:scale-[1.03] ${
+                              className={`filter grayscale hover:grayscale-0 transition-all duration-700 ease-in-out cursor-pointer ${
                                 item.id === "marketing"
-                                  ? "w-full h-full object-contain"
-                                  : "w-full h-full object-cover"
+                                  ? "w-full h-full object-contain hover:scale-[1.03]"
+                                  : item.id === "ecraft"
+                                    ? "w-full h-full object-cover scale-[1.08] hover:scale-[1.14]"
+                                    : "w-full h-full object-cover hover:scale-[1.03]"
                               }`}
                               referrerPolicy="no-referrer"
                             />

@@ -937,39 +937,6 @@ export default function ProjectDetailPage() {
                   <img
                     src={
                       project?.id === "TGPowerWrap"
-                        ? "/TGPW/Thumbnail Mobile TGPW.jpg"
-                        : project?.id === "komorebi-editorial"
-                          ? "/Triply/Triply5.jpg"
-                          : project?.id === "breeze-cargo"
-                            ? "/RepX/RepX11.png"
-                            : project?.galleryImages &&
-                                project.galleryImages.length > 3
-                              ? project.galleryImages[3]
-                              : project?.imageUrl || ""
-                    }
-                    className="w-full h-auto sm:h-full object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default rounded-none object-center"
-                    alt={project?.id === "breeze-cargo" ? "RepX 11" : `${project?.title || "Gallery"} 4`}
-                    referrerPolicy="no-referrer"
-                    onClick={() =>
-                      handleMobileImageClick(
-                        project?.id === "TGPowerWrap"
-                          ? "/TGPW/Thumbnail Mobile TGPW.jpg"
-                          : project?.id === "komorebi-editorial"
-                            ? "/Triply/Triply5.jpg"
-                            : project?.id === "breeze-cargo"
-                              ? "/RepX/RepX11.png"
-                              : project?.galleryImages &&
-                                  project.galleryImages.length > 3
-                                ? project.galleryImages[3]
-                                : project?.imageUrl || "",
-                      )
-                    }
-                  />
-                </div>
-                <div className="w-full sm:flex-1 px-5 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-end overflow-hidden">
-                  <img
-                    src={
-                      project?.id === "TGPowerWrap"
                         ? "/TGPW/5.jpg"
                         : project?.id === "ck-lighting"
                           ? "/CK Lighting Web/ck6.jpg"
@@ -1005,6 +972,39 @@ export default function ProjectDetailPage() {
                                       project.galleryImages.length > 4
                                     ? project.galleryImages[4]
                                     : project?.imageUrl || "",
+                      )
+                    }
+                  />
+                </div>
+                <div className="w-full sm:flex-1 px-5 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-end overflow-hidden">
+                  <img
+                    src={
+                      project?.id === "TGPowerWrap"
+                        ? "/TGPW/Thumbnail Mobile TGPW.jpg"
+                        : project?.id === "komorebi-editorial"
+                          ? "/Triply/Triply5.jpg"
+                          : project?.id === "breeze-cargo"
+                            ? "/RepX/RepX11.png"
+                            : project?.galleryImages &&
+                                project.galleryImages.length > 3
+                              ? project.galleryImages[3]
+                              : project?.imageUrl || ""
+                    }
+                    className="w-full h-auto sm:h-full object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default rounded-none object-center"
+                    alt={project?.id === "breeze-cargo" ? "RepX 11" : `${project?.title || "Gallery"} 4`}
+                    referrerPolicy="no-referrer"
+                    onClick={() =>
+                      handleMobileImageClick(
+                        project?.id === "TGPowerWrap"
+                          ? "/TGPW/Thumbnail Mobile TGPW.jpg"
+                          : project?.id === "komorebi-editorial"
+                            ? "/Triply/Triply5.jpg"
+                            : project?.id === "breeze-cargo"
+                              ? "/RepX/RepX11.png"
+                              : project?.galleryImages &&
+                                  project.galleryImages.length > 3
+                                ? project.galleryImages[3]
+                                : project?.imageUrl || "",
                       )
                     }
                   />

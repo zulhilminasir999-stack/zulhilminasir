@@ -202,8 +202,9 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
         {/* Author details with circular profile image matching the Stephen McShannock style of reference image */}
         <div className="flex items-center gap-4 pt-8 mt-4">
           <img 
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80" 
+            src="/DemoPic/Zulhilmi_Nasir_Passport.png" 
             alt="Zulhilmi Nasir" 
+            style={{ objectPosition: "50% 20%" }}
             className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500 ease-out border border-zinc-200"
             referrerPolicy="no-referrer"
           />
