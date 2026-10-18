@@ -157,22 +157,20 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
       return;
     }
 
-    triggerReveal(() => {
-      if (location.pathname !== "/") {
-        navigate(`/${targetSectionId}`);
-        return;
-      }
+    if (location.pathname !== "/") {
+      navigate(`/${targetSectionId}`);
+      return;
+    }
 
-      const element = document.getElementById(targetSectionId.replace('#', ''));
-      if (element) {
-        const targetY = element.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({
-          top: targetY,
-          behavior: "instant" as ScrollBehavior
-        });
-        setActiveTab(id);
-      }
-    });
+    const element = document.getElementById(targetSectionId.replace('#', ''));
+    if (element) {
+      const targetY = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: targetY,
+        behavior: "smooth"
+      });
+      setActiveTab(id);
+    }
   };
 
   return (

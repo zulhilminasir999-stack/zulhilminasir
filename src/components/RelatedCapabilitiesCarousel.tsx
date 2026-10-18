@@ -64,8 +64,8 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
   },
   {
     id: "aistudio-brand",
-    slugTitle: "Tadika Mesra - School Fee System",
-    displayTitle: "Pre-School Fee Management",
+    slugTitle: "Pre-school Fee Management System",
+    displayTitle: "Pre-school Fee Management System",
     type: "Web App & System",
     description: "Enterprise management dashboard and automated student billing engine structured to clarify dense information hierarchies for non-technical teams.",
     role: "FULL-STACK ARCHITECT / LEAD DESIGNER",
@@ -350,26 +350,28 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     });
   };
 
+  const isPointerDownRef = useRef<boolean>(false);
+  const dragDistanceRef = useRef<number>(0);
+
   // Pointer drag controls: supports smooth infinite repeatable sliding via mouse or touch
   const handlePointerDown = (e: React.PointerEvent) => {
     if (e.button !== 0) return;
     if (activeAnimationRef.current) {
       activeAnimationRef.current.stop();
     }
-    isDraggingRef.current = true;
+    isPointerDownRef.current = true;
+    isDraggingRef.current = false;
     hasDraggedRef.current = false;
+    dragDistanceRef.current = 0;
     startXRef.current = e.clientX;
     startMotionXRef.current = x.get();
     lastXRef.current = e.clientX;
     lastTimeRef.current = performance.now();
     velocityRef.current = 0;
-    try {
-      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    } catch {}
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDraggingRef.current) return;
+    if (!isPointerDownRef.current) return;
     const now = performance.now();
     const dt = now - lastTimeRef.current;
     if (dt > 0) {
@@ -379,42 +381,55 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
     }
 
     const delta = e.clientX - startXRef.current;
-    if (Math.abs(delta) > 5) {
-      hasDraggedRef.current = true;
+    dragDistanceRef.current = Math.abs(delta);
+
+    // Only engage drag mode if moved more than 8 pixels
+    if (Math.abs(delta) > 8) {
+      if (!isDraggingRef.current) {
+        isDraggingRef.current = true;
+        hasDraggedRef.current = true;
+        try {
+          (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        } catch {}
+      }
+      const nextX = wrapPosition(startMotionXRef.current + delta);
+      x.set(nextX);
     }
-    const nextX = wrapPosition(startMotionXRef.current + delta);
-    x.set(nextX);
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
-    if (!isDraggingRef.current) return;
-    isDraggingRef.current = false;
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {}
+    isPointerDownRef.current = false;
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {}
 
-    setTimeout(() => {
-      hasDraggedRef.current = false;
-    }, 120);
+      setTimeout(() => {
+        hasDraggedRef.current = false;
+      }, 80);
 
-    const width = singleWidthRef.current;
-    const v = velocityRef.current;
-    if (Math.abs(v) > 0.15 && width > 0) {
-      const momentumDistance = v * 280;
-      const targetX = x.get() + momentumDistance;
-      activeAnimationRef.current = animate(x, targetX, {
-        duration: Math.min(1.2, Math.max(0.4, Math.abs(momentumDistance) / 600)),
-        ease: [0.16, 1, 0.3, 1],
-        onUpdate: (latest) => {
-          if (width > 0) {
-            if (latest <= -2 * width) {
-              x.set(latest + width);
-            } else if (latest > -width) {
-              x.set(latest - width);
+      const width = singleWidthRef.current;
+      const v = velocityRef.current;
+      if (Math.abs(v) > 0.15 && width > 0) {
+        const momentumDistance = v * 280;
+        const targetX = x.get() + momentumDistance;
+        activeAnimationRef.current = animate(x, targetX, {
+          duration: Math.min(1.2, Math.max(0.4, Math.abs(momentumDistance) / 600)),
+          ease: [0.16, 1, 0.3, 1],
+          onUpdate: (latest) => {
+            if (width > 0) {
+              if (latest <= -2 * width) {
+                x.set(latest + width);
+              } else if (latest > -width) {
+                x.set(latest - width);
+              }
             }
-          }
-        },
-      });
+          },
+        });
+      }
+    } else {
+      hasDraggedRef.current = false;
     }
   };
 
@@ -428,10 +443,16 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
   };
 
   const handleCardClick = (e: React.MouseEvent, item: CarouselCaseItem) => {
-    e.preventDefault();
-    if (item.isComingSoon) return;
+    if (item.isComingSoon || !item.url || item.url === "#") {
+      e.preventDefault();
+      return;
+    }
     // Do not trigger click if user dragged the track
-    if (hasDraggedRef.current) return;
+    if (hasDraggedRef.current || dragDistanceRef.current > 8) {
+      e.preventDefault();
+      return;
+    }
+    e.preventDefault();
     triggerReveal(() => {
       navigate(item.url);
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -489,74 +510,79 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
           style={{ x }}
           className="flex items-stretch gap-6 sm:gap-8 md:gap-10 w-max pl-6 sm:pl-12 lg:pl-16 select-none"
         >
-          {duplicatedCases.map((item, index) => (
-            <div
-              key={`${item.id}-${index}`}
-              onClick={(e) => handleCardClick(e, item)}
-              className={`group w-[300px] sm:w-[380px] md:w-[440px] lg:w-[480px] shrink-0 bg-white rounded-2xl border border-zinc-200/90 hover:border-zinc-400/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col overflow-hidden select-none ${
-                item.isComingSoon ? "cursor-default" : "cursor-pointer"
-              }`}
-            >
-              {/* Media Thumbnail Container with subtle hover zoom */}
-              <div className="aspect-[16/10] w-full overflow-hidden bg-zinc-100 border-b border-zinc-100 relative">
-                <img 
-                  src={item.image} 
-                  alt={item.displayTitle}
-                  className={`w-full h-full object-cover transition-all duration-700 pointer-events-none ${
-                    item.isComingSoon 
-                      ? "blur-[6px] brightness-75 scale-105 group-hover:scale-110" 
-                      : "group-hover:scale-[1.03]"
-                  }`}
-                  referrerPolicy="no-referrer"
-                  draggable={false}
-                />
-                
-                {/* If Coming Soon: Animated Coming Soon... Center Overlay */}
-                {item.isComingSoon ? (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/25">
-                    <span className="font-sans text-sm sm:text-base font-semibold tracking-wider text-white drop-shadow-lg transition-transform duration-300 ease-out scale-100 group-hover:scale-75 select-none text-center px-2">
-                      Coming Soon...
-                    </span>
-                  </div>
-                ) : (
-                  /* Modern Blue Rounded Rectangle "View Case Study" Badge on Hover */
-                  <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none">
-                    <div className="bg-[#2563EB] text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-sans font-medium tracking-normal flex items-center gap-2 shadow-[0_8px_24px_rgba(37,99,235,0.45)] transform scale-90 group-hover:scale-100 transition-all duration-300">
-                      <span>View Case Study</span>
-                      <ArrowUpRight className="w-4 h-4" />
+          {duplicatedCases.map((item, index) => {
+            const isClickable = !item.isComingSoon && Boolean(item.url && item.url !== "#");
+            const Component = isClickable ? "a" : "div";
+            return (
+              <Component
+                key={`${item.id}-${index}`}
+                href={isClickable ? item.url : undefined}
+                onClick={(e: React.MouseEvent) => handleCardClick(e, item)}
+                className={`group block w-[300px] sm:w-[380px] md:w-[440px] lg:w-[480px] shrink-0 bg-white rounded-2xl border border-zinc-200/90 hover:border-zinc-400/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col overflow-hidden select-none no-underline ${
+                  item.isComingSoon ? "cursor-default" : "cursor-pointer"
+                }`}
+              >
+                {/* Media Thumbnail Container with subtle hover zoom */}
+                <div className="aspect-[16/10] w-full overflow-hidden bg-zinc-100 border-b border-zinc-100 relative">
+                  <img 
+                    src={item.image} 
+                    alt={item.displayTitle}
+                    className={`w-full h-full object-cover transition-all duration-700 pointer-events-none ${
+                      item.isComingSoon 
+                        ? "blur-[6px] brightness-75 scale-105 group-hover:scale-110" 
+                        : "group-hover:scale-[1.03]"
+                    }`}
+                    referrerPolicy="no-referrer"
+                    draggable={false}
+                  />
+                  
+                  {/* If Coming Soon: Animated Coming Soon... Center Overlay */}
+                  {item.isComingSoon ? (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/25">
+                      <span className="font-sans text-sm sm:text-base font-semibold tracking-wider text-white drop-shadow-lg transition-transform duration-300 ease-out scale-100 group-hover:scale-75 select-none text-center px-2">
+                        Coming Soon...
+                      </span>
+                    </div>
+                  ) : (
+                    /* Modern Blue Rounded Rectangle "View Case Study" Badge on Hover */
+                    <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                      <div className="bg-[#2563EB] text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-sans font-medium tracking-normal flex items-center gap-2 shadow-[0_8px_24px_rgba(37,99,235,0.45)] transform scale-90 group-hover:scale-100 transition-all duration-300">
+                        <span>View Case Study</span>
+                        <ArrowUpRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Card Content Anatomy */}
+                <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between gap-5">
+                  <div className="space-y-1.5">
+                    {/* Case Study Title in Satoshi font */}
+                    <h5 
+                      className="font-satoshi text-sm sm:text-base font-semibold text-zinc-900 tracking-tight leading-snug group-hover:text-[#2563EB] transition-colors"
+                      style={{ fontFamily: "var(--font-satoshi), 'Satoshi', system-ui, sans-serif" }}
+                    >
+                      {item.slugTitle}
+                    </h5>
+
+                    {/* Case Study Type: Clean grey wording in Title Case with Satoshi font */}
+                    <div 
+                      className="font-satoshi text-xs sm:text-sm font-medium text-zinc-400 capitalize tracking-normal"
+                      style={{ fontFamily: "var(--font-satoshi), 'Satoshi', system-ui, sans-serif" }}
+                    >
+                      {item.type}
                     </div>
                   </div>
-                )}
-              </div>
 
-              {/* Card Content Anatomy */}
-              <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between gap-5">
-                <div className="space-y-1.5">
-                  {/* Case Study Title in Satoshi font */}
-                  <h5 
-                    className="font-satoshi text-sm sm:text-base font-semibold text-zinc-900 tracking-tight leading-snug group-hover:text-[#2563EB] transition-colors"
-                    style={{ fontFamily: "var(--font-satoshi), 'Satoshi', system-ui, sans-serif" }}
-                  >
-                    {item.slugTitle}
-                  </h5>
-
-                  {/* Case Study Type: Clean grey wording in Title Case with Satoshi font */}
-                  <div 
-                    className="font-satoshi text-xs sm:text-sm font-medium text-zinc-400 capitalize tracking-normal"
-                    style={{ fontFamily: "var(--font-satoshi), 'Satoshi', system-ui, sans-serif" }}
-                  >
-                    {item.type}
+                  {/* Role attribution tags along the bottom border */}
+                  <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-[11px] sm:text-xs font-mono text-zinc-400 tracking-wider uppercase">
+                    <span className="truncate pr-2">{item.role}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-300 group-hover:text-zinc-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                   </div>
                 </div>
-
-                {/* Role attribution tags along the bottom border */}
-                <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-[11px] sm:text-xs font-mono text-zinc-400 tracking-wider uppercase">
-                  <span className="truncate pr-2">{item.role}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-300 group-hover:text-zinc-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-                </div>
-              </div>
-            </div>
-          ))}
+              </Component>
+            );
+          })}
         </motion.div>
       </div>
     </div>

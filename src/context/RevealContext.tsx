@@ -25,11 +25,14 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isFullLoading, setIsFullLoading] = useState(false);
   const lenis = useLenis();
 
-  // Page-to-page transition (displays Zulhilmi Nasir animation WITHOUT percentage)
+  // Page-to-page / section transition (displays Zulhilmi Nasir animation WITHOUT percentage)
   const triggerReveal = useCallback((onMidpoint?: () => void) => {
     setIsRevealing(true);
+    lenis?.stop();
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
-    // Midpoint: when 5 curtain columns completely cover viewport (~800ms)
+    // Midpoint: when 5 curtain columns completely cover viewport (~850ms)
     setTimeout(() => {
       if (onMidpoint) {
         onMidpoint();
@@ -38,9 +41,12 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // Delay before curtains slide up out of view
       setTimeout(() => {
         setIsRevealing(false);
-      }, 300);
-    }, 800);
-  }, []);
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+        lenis?.start();
+      }, 350);
+    }, 850);
+  }, [lenis]);
 
   // Full loading with percentage (triggered on top-left Zulhilmi Nasir / ZN logo click)
   const triggerFullLoading = useCallback((onMidpoint?: () => void) => {

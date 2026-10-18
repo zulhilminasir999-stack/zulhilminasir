@@ -199,8 +199,8 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                   >
                     <div className="pb-16 pt-2">
                       {/* Meta Row */}
-                      <div className="flex justify-end items-end gap-4 mb-12">
-                        <div className="text-right font-sans">
+                      <div className="flex justify-start sm:justify-end items-start sm:items-end gap-4 mb-8 sm:mb-12">
+                        <div className="text-left sm:text-right font-sans">
                           <span className="block text-xs font-bold uppercase tracking-[0.1em] text-zinc-500">
                             {item.location}
                           </span>
@@ -213,11 +213,11 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                       {/* Content Grid */}
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
                         {/* Summary Column */}
-                        <div className="lg:col-span-5 flex flex-col gap-6">
+                        <div className={`lg:col-span-5 flex flex-col gap-6 ${item.id === "marketing" ? "items-center justify-center" : ""}`}>
                           {/* Monochrome preview image that restores full color on hover */}
                           <div className={`relative overflow-hidden rounded-xl group/img ${
                             item.id === "marketing"
-                              ? "w-full max-w-[260px] sm:max-w-[300px] aspect-square"
+                              ? "w-full max-w-[210px] sm:max-w-[240px] aspect-square mx-auto flex items-center justify-center"
                               : "w-full aspect-[16/10]"
                           }`}>
                             <img 
@@ -225,7 +225,7 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                               alt={`${item.company} preview`}
                               className={`filter grayscale hover:grayscale-0 transition-all duration-700 ease-in-out cursor-pointer ${
                                 item.id === "marketing"
-                                  ? "w-full h-full object-contain hover:scale-[1.03]"
+                                  ? "w-full h-full object-contain hover:scale-[1.03] mx-auto"
                                   : item.id === "ecraft"
                                     ? "w-full h-full object-cover scale-[1.08] hover:scale-[1.14]"
                                     : "w-full h-full object-cover hover:scale-[1.03]"

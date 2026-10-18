@@ -72,22 +72,49 @@ export default function ProjectDetailPage() {
   const handleNavClick = (
     e: React.MouseEvent<HTMLElement>,
     targetSectionId: string,
+    isFromMenuBar: boolean = false,
   ) => {
     if (e && e.preventDefault) e.preventDefault();
 
     const rawId = targetSectionId.replace("#", "");
 
-    if (rawId === "capabilities-section" || rawId === "capabilities") {
-      return;
-    }
+    const isDesktopOrTablet = typeof window !== "undefined" && window.innerWidth >= 768;
+    const menuTargets = [
+      "services-section",
+      "services",
+      "integration-section",
+      "integration",
+      "software",
+      "capabilities-section",
+      "capabilities",
+      "projects",
+      "project",
+      "about-section",
+      "about",
+      "career-section",
+      "career",
+      "contact-section",
+      "contact",
+    ];
 
-    triggerReveal(() => {
+    const isMenuBarTarget = menuTargets.includes(rawId);
+    const shouldShowLoadingScreen = isDesktopOrTablet && isFromMenuBar && isMenuBarTarget;
+
+    const navigateToHome = () => {
       if (rawId === "hero-section" || rawId === "hero") {
         navigate("/");
       } else {
         navigate(`/#${rawId}`);
       }
-    });
+    };
+
+    if (shouldShowLoadingScreen) {
+      triggerReveal(() => {
+        navigateToHome();
+      });
+    } else {
+      navigateToHome();
+    }
   };
 
   const project = PORTFOLIO_PROJECTS.find(
@@ -290,7 +317,7 @@ export default function ProjectDetailPage() {
                       >
                         <button
                           onClick={(e) =>
-                            handleNavClick(e, "#services-section")
+                            handleNavClick(e, "#services-section", true)
                           }
                           className="nav-menu-btn-dark-theme cursor-pointer"
                         >
@@ -298,7 +325,7 @@ export default function ProjectDetailPage() {
                         </button>
                         <button
                           onClick={(e) =>
-                            handleNavClick(e, "#integration-section")
+                            handleNavClick(e, "#integration-section", true)
                           }
                           className="nav-menu-btn-dark-theme cursor-pointer"
                         >
@@ -310,19 +337,19 @@ export default function ProjectDetailPage() {
                           </span>
                         </button>
                         <button
-                          onClick={(e) => e.preventDefault()}
-                          className="nav-menu-btn-dark-theme active cursor-default"
+                          onClick={(e) => handleNavClick(e, "#capabilities-section", true)}
+                          className="nav-menu-btn-dark-theme active cursor-pointer"
                         >
                           <span className="text-[15px]">Projects</span>
                         </button>
                         <button
-                          onClick={(e) => handleNavClick(e, "#about-section")}
+                          onClick={(e) => handleNavClick(e, "#about-section", true)}
                           className="nav-menu-btn-dark-theme cursor-pointer"
                         >
                           <span className="text-[15px]">About</span>
                         </button>
                         <button
-                          onClick={(e) => handleNavClick(e, "#career-section")}
+                          onClick={(e) => handleNavClick(e, "#career-section", true)}
                           className="nav-menu-btn-dark-theme cursor-pointer"
                         >
                           <span className="text-[15px]">Career</span>
@@ -338,7 +365,7 @@ export default function ProjectDetailPage() {
                             stiffness: 380,
                             damping: 35,
                           }}
-                          onClick={(e) => handleNavClick(e, "#contact-section")}
+                          onClick={(e) => handleNavClick(e, "#contact-section", true)}
                           className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 whitespace-nowrap cursor-pointer"
                         >
                           {/* Shimmer Effect Wrapper */}
@@ -383,7 +410,7 @@ export default function ProjectDetailPage() {
                         <nav className="flex items-center space-x-1 md:space-x-1 lg:space-x-2 font-normal tracking-normal">
                           <button
                             onClick={(e) =>
-                              handleNavClick(e, "#services-section")
+                              handleNavClick(e, "#services-section", true)
                             }
                             className="nav-menu-btn nav-btn-black cursor-pointer"
                           >
@@ -391,7 +418,7 @@ export default function ProjectDetailPage() {
                           </button>
                           <button
                             onClick={(e) =>
-                              handleNavClick(e, "#integration-section")
+                              handleNavClick(e, "#integration-section", true)
                             }
                             className="nav-menu-btn nav-btn-black cursor-pointer"
                           >
@@ -403,20 +430,20 @@ export default function ProjectDetailPage() {
                             </span>
                           </button>
                           <button
-                            onClick={(e) => e.preventDefault()}
-                            className="nav-menu-btn nav-btn-black active cursor-default"
+                            onClick={(e) => handleNavClick(e, "#capabilities-section", true)}
+                            className="nav-menu-btn nav-btn-black active cursor-pointer"
                           >
                             <span className="text-[15px]">Projects</span>
                           </button>
                           <button
-                            onClick={(e) => handleNavClick(e, "#about-section")}
+                            onClick={(e) => handleNavClick(e, "#about-section", true)}
                             className="nav-menu-btn nav-btn-black cursor-pointer"
                           >
                             <span className="text-[15px]">About</span>
                           </button>
                           <button
                             onClick={(e) =>
-                              handleNavClick(e, "#career-section")
+                              handleNavClick(e, "#career-section", true)
                             }
                             className="nav-menu-btn nav-btn-black cursor-pointer"
                           >
@@ -432,7 +459,7 @@ export default function ProjectDetailPage() {
                             stiffness: 380,
                             damping: 35,
                           }}
-                          onClick={(e) => handleNavClick(e, "#contact-section")}
+                          onClick={(e) => handleNavClick(e, "#contact-section", true)}
                           className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                         >
                           <span className="text-[15px]">Get In Touch</span>
@@ -1422,9 +1449,11 @@ export default function ProjectDetailPage() {
                     ? "/TGPW/TGPW8.jpg"
                     : project?.id === "ck-lighting"
                       ? "/CK Lighting Web/ck11.jpg"
-                      : project.galleryImages && project.galleryImages.length > 6
-                        ? project.galleryImages[6]
-                        : "/TGPW/TGPW8.jpg",
+                      : project?.id === "aistudio-brand"
+                        ? "/PFM/PFM10.jpg"
+                        : project.galleryImages && project.galleryImages.length > 6
+                          ? project.galleryImages[6]
+                          : "/TGPW/TGPW8.jpg",
               )
             }
           >
@@ -1436,12 +1465,14 @@ export default function ProjectDetailPage() {
                     ? "/TGPW/TGPW8.jpg"
                     : project?.id === "ck-lighting"
                       ? "/CK Lighting Web/ck11.jpg"
-                      : project.galleryImages && project.galleryImages.length > 6
-                        ? project.galleryImages[6]
-                        : "/TGPW/TGPW8.jpg"
+                      : project?.id === "aistudio-brand"
+                        ? "/PFM/PFM10.jpg"
+                        : project.galleryImages && project.galleryImages.length > 6
+                          ? project.galleryImages[6]
+                          : "/TGPW/TGPW8.jpg"
               }
-              alt="Final Gallery Image"
-              className={`w-full ${project?.id === "ck-lighting" || project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial" ? "h-auto block rounded-none" : "h-auto sm:h-screen object-contain sm:object-cover block rounded-none"}`}
+              alt={project?.id === "aistudio-brand" ? "PFM 10 Showcase" : "Final Gallery Image"}
+              className={`w-full ${project?.id === "ck-lighting" || project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial" || project?.id === "aistudio-brand" ? "h-auto block rounded-none" : "h-auto sm:h-screen object-contain sm:object-cover block rounded-none"}`}
               referrerPolicy="no-referrer"
             />
           </div>

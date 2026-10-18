@@ -104,22 +104,51 @@ export default function CaseStudyPage() {
     });
   };
 
-  const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetSectionId: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLElement>,
+    targetSectionId: string,
+    isFromMenuBar: boolean = false
+  ) => {
     if (e && e.preventDefault) e.preventDefault();
     
     const rawId = targetSectionId.replace('#', '');
-    
-    if (rawId === 'capabilities-section' || rawId === 'capabilities') {
-      return;
-    }
-    
-    triggerReveal(() => {
+    const isDesktopOrTablet = typeof window !== "undefined" && window.innerWidth >= 768;
+    const menuTargets = [
+      "services-section",
+      "services",
+      "integration-section",
+      "integration",
+      "software",
+      "capabilities-section",
+      "capabilities",
+      "projects",
+      "project",
+      "about-section",
+      "about",
+      "career-section",
+      "career",
+      "contact-section",
+      "contact",
+    ];
+
+    const isMenuBarTarget = menuTargets.includes(rawId);
+    const shouldShowLoadingScreen = isDesktopOrTablet && isFromMenuBar && isMenuBarTarget;
+
+    const navigateToHome = () => {
       if (rawId === 'hero-section' || rawId === 'hero') {
         navigate('/');
       } else {
         navigate(`/#${rawId}`);
       }
-    });
+    };
+    
+    if (shouldShowLoadingScreen) {
+      triggerReveal(() => {
+        navigateToHome();
+      });
+    } else {
+      navigateToHome();
+    }
   };
 
   useEffect(() => {
@@ -321,20 +350,20 @@ export default function CaseStudyPage() {
                         transition={{ type: "spring", stiffness: 380, damping: 35 }}
                         className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1 md:space-x-1 lg:space-x-2 font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
                       >
-                        <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                        <button onClick={(e) => handleNavClick(e, "#services-section", true)} className="nav-menu-btn-dark-theme cursor-pointer">
                           <span className="text-[15px]">Services</span>
                         </button>
-                        <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                        <button onClick={(e) => handleNavClick(e, "#integration-section", true)} className="nav-menu-btn-dark-theme cursor-pointer">
                           <span className="hidden lg:inline text-[15px]">Software & AI Solution</span>
                           <span className="inline lg:hidden text-[15px]">Software</span>
                         </button>
-                        <button onClick={(e) => e.preventDefault()} className="nav-menu-btn-dark-theme active cursor-default">
+                        <button onClick={(e) => handleNavClick(e, "#capabilities-section", true)} className="nav-menu-btn-dark-theme active cursor-pointer">
                           <span className="text-[15px]">Projects</span>
                         </button>
-                        <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                        <button onClick={(e) => handleNavClick(e, "#about-section", true)} className="nav-menu-btn-dark-theme cursor-pointer">
                           <span className="text-[15px]">About</span>
                         </button>
-                        <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn-dark-theme cursor-pointer">
+                        <button onClick={(e) => handleNavClick(e, "#career-section", true)} className="nav-menu-btn-dark-theme cursor-pointer">
                           <span className="text-[15px]">Career</span>
                         </button>
                       </motion.nav>
@@ -344,7 +373,7 @@ export default function CaseStudyPage() {
                         <motion.button
                           layoutId="header-contact-btn"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                          onClick={(e) => handleNavClick(e, "#contact-section")}
+                          onClick={(e) => handleNavClick(e, "#contact-section", true)}
                           className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 whitespace-nowrap cursor-pointer"
                         >
                           {/* Shimmer Effect Wrapper */}
@@ -377,20 +406,20 @@ export default function CaseStudyPage() {
                         </motion.button>
 
                         <nav className="flex items-center space-x-1 md:space-x-1 lg:space-x-2 text-[11px] md:text-[10.5px] lg:text-[13px] font-normal tracking-normal">
-                          <button onClick={(e) => handleNavClick(e, "#services-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                          <button onClick={(e) => handleNavClick(e, "#services-section", true)} className="nav-menu-btn nav-btn-black cursor-pointer">
                             <span className="text-[15px]">Services</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#integration-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                          <button onClick={(e) => handleNavClick(e, "#integration-section", true)} className="nav-menu-btn nav-btn-black cursor-pointer">
                             <span className="hidden lg:inline text-[15px]">Software & AI Solution</span>
                             <span className="inline lg:hidden text-[15px]">Software</span>
                           </button>
-                          <button onClick={(e) => e.preventDefault()} className="nav-menu-btn nav-btn-black active cursor-default">
+                          <button onClick={(e) => handleNavClick(e, "#capabilities-section", true)} className="nav-menu-btn nav-btn-black active cursor-pointer">
                             <span className="text-[15px]">Projects</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#about-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                          <button onClick={(e) => handleNavClick(e, "#about-section", true)} className="nav-menu-btn nav-btn-black cursor-pointer">
                             <span className="text-[15px]">About</span>
                           </button>
-                          <button onClick={(e) => handleNavClick(e, "#career-section")} className="nav-menu-btn nav-btn-black cursor-pointer">
+                          <button onClick={(e) => handleNavClick(e, "#career-section", true)} className="nav-menu-btn nav-btn-black cursor-pointer">
                             <span className="text-[15px]">Career</span>
                           </button>
                         </nav>
@@ -399,7 +428,7 @@ export default function CaseStudyPage() {
                         <motion.button
                           layoutId="header-contact-btn"
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                          onClick={(e) => handleNavClick(e, "#contact-section")}
+                          onClick={(e) => handleNavClick(e, "#contact-section", true)}
                           className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                         >
                           <span className="text-[15px]">Get In Touch</span>

@@ -356,7 +356,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     });
   };
 
-  const handleNavClick = (e: React.MouseEvent<HTMLElement>, targetId: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLElement>,
+    targetId: string,
+    isFromMenuBar: boolean = false
+  ) => {
     if (e && e.preventDefault) e.preventDefault();
     
     const rawId = targetId.replace('#', '');
@@ -372,8 +376,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       "services",
       "integration-section",
       "integration",
+      "software",
       "capabilities-section",
       "capabilities",
+      "projects",
+      "project",
       "about-section",
       "about",
       "career-section",
@@ -383,7 +390,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     ];
 
     const isMenuBarTarget = menuTargets.includes(rawId);
-    const isDesktopOrTablet = typeof window !== "undefined" && window.innerWidth >= 640;
+    const isDesktopOrTablet = typeof window !== "undefined" && window.innerWidth >= 768;
+    const shouldShowLoadingScreen = isDesktopOrTablet && isFromMenuBar && isMenuBarTarget;
 
     const navigateToSection = (useLoadingScreen: boolean) => {
       const el = document.getElementById(rawId);
@@ -408,7 +416,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             lenis.scrollTo(targetY, { immediate: true });
           }
         } else {
-          // Mobile device: smooth scroll without loading screen
+          // Mobile device or non-menu bar click: smooth scroll without loading screen
           if (lenis) {
             lenis.scrollTo(targetY, {
               duration: 1.2,
@@ -423,13 +431,13 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       }
     };
 
-    if (isDesktopOrTablet && isMenuBarTarget) {
+    if (shouldShowLoadingScreen) {
       // Return to display loading screen of Zulhilmi Nasir on desktop and tab devices
       triggerReveal(() => {
         navigateToSection(true);
       });
     } else {
-      // Mobile device: direct smooth scroll without loading screen
+      // Mobile device or non-menu bar click: direct smooth scroll without loading screen
       navigateToSection(false);
     }
   };
@@ -585,7 +593,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           transition={{ type: "spring", stiffness: 380, damping: 35 }}
                           className="flex items-center bg-transparent border border-transparent rounded-full py-1.5 px-3 md:py-1.5 md:px-2 lg:py-2 lg:px-4 space-x-1.5 md:space-x-1.5 lg:space-x-2.5 font-normal tracking-normal font-sans text-white transition-all duration-300 shadow-none"
                         >
-                          <a href="#services-section" onClick={(e) => handleNavClick(e, '#services-section')} className={`nav-menu-btn ${isServicesSection ? "active" : ""}`}>
+                          <a href="#services-section" onClick={(e) => handleNavClick(e, '#services-section', true)} className={`nav-menu-btn ${isServicesSection ? "active" : ""}`}>
                             <motion.span 
                               custom={!hasCompletedInitialHeaderReveal ? 1.28 : 0}
                               variants={headerItemReveal}
@@ -596,7 +604,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               Services
                             </motion.span>
                           </a>
-                          <a href="#integration-section" onClick={(e) => handleNavClick(e, '#integration-section')} className={`nav-menu-btn ${activeSection === "integration-section" ? "active" : ""}`}>
+                          <a href="#integration-section" onClick={(e) => handleNavClick(e, '#integration-section', true)} className={`nav-menu-btn ${activeSection === "integration-section" ? "active" : ""}`}>
                             <motion.span 
                               custom={!hasCompletedInitialHeaderReveal ? 1.36 : 0}
                               variants={headerItemReveal}
@@ -616,7 +624,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               Software
                             </motion.span>
                           </a>
-                          <a href="#capabilities-section" onClick={(e) => handleNavClick(e, '#capabilities-section')} className={`nav-menu-btn ${isProjectsSection ? "active" : ""}`}>
+                          <a href="#capabilities-section" onClick={(e) => handleNavClick(e, '#capabilities-section', true)} className={`nav-menu-btn ${isProjectsSection ? "active" : ""}`}>
                             <motion.span 
                               custom={!hasCompletedInitialHeaderReveal ? 1.44 : 0}
                               variants={headerItemReveal}
@@ -627,7 +635,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               Projects
                             </motion.span>
                           </a>
-                          <a href="#about-section" onClick={(e) => handleNavClick(e, '#about-section')} className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""}`}>
+                          <a href="#about-section" onClick={(e) => handleNavClick(e, '#about-section', true)} className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""}`}>
                             <motion.span 
                               custom={!hasCompletedInitialHeaderReveal ? 1.52 : 0}
                               variants={headerItemReveal}
@@ -638,7 +646,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               About
                             </motion.span>
                           </a>
-                          <a href="#career-section" onClick={(e) => handleNavClick(e, '#career-section')} className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""}`}>
+                          <a href="#career-section" onClick={(e) => handleNavClick(e, '#career-section', true)} className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""}`}>
                             <motion.span 
                               custom={!hasCompletedInitialHeaderReveal ? 1.60 : 0}
                               variants={headerItemReveal}
@@ -661,7 +669,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             initial="hidden"
                             animate={!isLoading ? "visible" : "hidden"}
                             href="#contact-section"
-                            onClick={(e) => handleNavClick(e, '#contact-section')}
+                            onClick={(e) => handleNavClick(e, '#contact-section', true)}
                             className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                           >
                             {/* Shimmer Effect Wrapper */}
@@ -708,14 +716,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           <nav className="flex items-center space-x-2.5 md:space-x-1.5 lg:space-x-2.5 text-[15px] md:text-[13px] lg:text-[15px] font-medium tracking-normal">
                             <a 
                               href="#services-section" 
-                              onClick={(e) => handleNavClick(e, '#services-section')} 
+                              onClick={(e) => handleNavClick(e, '#services-section', true)} 
                               className={`nav-menu-btn ${isServicesSection ? "active" : ""} ${isWhiteTextSection && !isServicesSection ? "nav-btn-white" : "nav-btn-black"}`}
                             >
                               <span>Services</span>
                             </a>
                             <a 
                               href="#integration-section" 
-                              onClick={(e) => handleNavClick(e, '#integration-section')} 
+                              onClick={(e) => handleNavClick(e, '#integration-section', true)} 
                               className={`nav-menu-btn ${isSoftwareSection ? "active" : ""} ${isWhiteTextSection && !isSoftwareSection ? "nav-btn-white" : "nav-btn-black"}`}
                             >
                               <span className="hidden lg:inline">Software & AI Solution</span>
@@ -723,21 +731,21 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             </a>
                             <a 
                               href="#capabilities-section" 
-                              onClick={(e) => handleNavClick(e, '#capabilities-section')} 
+                              onClick={(e) => handleNavClick(e, '#capabilities-section', true)} 
                               className={`nav-menu-btn ${isProjectsSection ? "active" : ""} ${isWhiteTextSection && !isProjectsSection ? "nav-btn-white" : "nav-btn-black"}`}
                             >
                               <span>Projects</span>
                             </a>
                             <a 
                               href="#about-section" 
-                              onClick={(e) => handleNavClick(e, '#about-section')} 
+                              onClick={(e) => handleNavClick(e, '#about-section', true)} 
                               className={`nav-menu-btn ${activeSection === "about-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "about-section" ? "nav-btn-white" : "nav-btn-black"}`}
                             >
                               <span>About</span>
                             </a>
                             <a 
                               href="#career-section" 
-                              onClick={(e) => handleNavClick(e, '#career-section')} 
+                              onClick={(e) => handleNavClick(e, '#career-section', true)} 
                               className={`nav-menu-btn ${activeSection === "career-section" ? "active" : ""} ${isWhiteTextSection && activeSection !== "career-section" ? "nav-btn-white" : "nav-btn-black"}`}
                             >
                               <span>Career</span>
@@ -749,7 +757,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             layoutId="header-contact-btn"
                             transition={{ type: "spring", stiffness: 380, damping: 35 }}
                             href="#contact-section"
-                            onClick={(e) => handleNavClick(e, '#contact-section')}
+                            onClick={(e) => handleNavClick(e, '#contact-section', true)}
                             className={`ml-6 md:ml-3 lg:ml-6 ${isWhiteTextSection ? "get-in-touch-btn-dark" : "get-in-touch-btn"} whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer`}
                           >
                             <span className="text-[15px]">Get In Touch</span>
