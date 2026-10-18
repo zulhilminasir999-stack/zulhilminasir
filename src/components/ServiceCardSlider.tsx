@@ -96,7 +96,7 @@ const SERVICES_SLIDES: ServiceCardItem[] = [
     serviceId: "dev",
     category: "AI-Native Dev",
     subtitle: "High-throughput predictive fiscal analytics engine utilizing Gemini models",
-    title: "FinSight | AI Financial\nIntelligence",
+    title: "KertasDagang | Intelligent\nFinance for Everyone",
     image: "/DemoPic/Demo4.png",
     url: "",
     actionText: "Coming Soon",

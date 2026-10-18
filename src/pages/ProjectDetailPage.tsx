@@ -1203,13 +1203,13 @@ export default function ProjectDetailPage() {
           {/* RepX 7 (Directly After RepX 6) - Full original dimension, fully display */}
           {project?.id === "breeze-cargo" && (
             <div
-              className="relative w-full h-auto z-25 overflow-visible flex flex-col justify-center bg-transparent cursor-pointer sm:cursor-default"
+              className="relative w-full h-auto z-25 overflow-visible flex flex-col justify-center bg-transparent cursor-pointer sm:cursor-default pb-5 sm:pb-0"
               onClick={() => handleMobileImageClick("/RepX/RepX7.jpg")}
             >
               <img
                 src="/RepX/RepX7.jpg"
                 alt="RepX 7 Showcase"
-                className="w-full h-auto object-contain block select-none"
+                className="w-full h-auto object-contain block select-none rounded-none px-5 sm:px-0 box-border"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -1380,15 +1380,30 @@ export default function ProjectDetailPage() {
           </div>
         )}
 
-        {/* RepX 4 Image Section (After Key Results) */}
+        {/* RepX 13 Image Section (After Key Results) */}
         {project?.id === "breeze-cargo" && (
           <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
-            onClick={() => handleMobileImageClick("/RepX/RepX4.jpg")}
+            onClick={() => handleMobileImageClick("/RepX/RepX13.jpg")}
           >
             <img
-              src="/RepX/RepX4.jpg"
-              alt="RepX 4 Showcase"
+              src="/RepX/RepX13.jpg"
+              alt="RepX 13 Showcase"
+              className="w-full h-auto block select-none rounded-none"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
+
+        {/* RepX 14 Image Section (Directly after RepX 13) */}
+        {project?.id === "breeze-cargo" && (
+          <div
+            className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
+            onClick={() => handleMobileImageClick("/RepX/RepX14.jpg")}
+          >
+            <img
+              src="/RepX/RepX14.jpg"
+              alt="RepX 14 Showcase"
               className="w-full h-auto block select-none rounded-none"
               referrerPolicy="no-referrer"
             />

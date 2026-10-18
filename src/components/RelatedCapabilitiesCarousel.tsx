@@ -75,8 +75,8 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
   },
   {
     id: "finsight-ai",
-    slugTitle: "FinSight - Financial Intelligence",
-    displayTitle: "FinSight | AI Financial Intelligence Platform",
+    slugTitle: "KertasDagang - Intelligent Finance",
+    displayTitle: "KertasDagang | Intelligent Finance for Everyone",
     type: "AI-Native Dev",
     description: "High-throughput predictive fiscal analytics engine utilizing Gemini models for real-time market sentiment synthesis.",
     role: "CREATOR / AI ENGINEER",
