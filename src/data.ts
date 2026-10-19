@@ -573,8 +573,8 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Adobe Firefly", "Google Gemini Prompting"],
     showcases: [
-      { title: "Warisan Ayah 3Q Catering", image: "https://images.unsplash.com/photo-1599305090598-fe179d501c27?auto=format&fit=crop&q=80&w=800" },
-      { title: "Kryptos Security Logo", image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=800" },
+      { title: "Warisan Ayah 3Q Catering", image: "/DemoPic/WA.jpg" },
+      { title: "NBZ Pest Control & Cleaning Service", image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=800" },
       { title: "Verdant Organic Identity", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" }
     ],
     gallery: [
@@ -600,9 +600,9 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Midjourney", "Google Gemini Prompting"],
     showcases: [
-      { title: "Aura Premium Gin", image: "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&q=80&w=800" },
-      { title: "BoltDuo", image: "https://images.unsplash.com/photo-1601049541289-9b1b7abcfe19?auto=format&fit=crop&q=80&w=800" },
-      { title: "Zen Tea Collection", image: "https://images.unsplash.com/photo-1594631252845-29fc4586c55c?auto=format&fit=crop&q=80&w=800" }
+      { title: "Buff Packaging", image: "/DemoPic/BP.jpg", isComingSoon: true },
+      { title: "BoltDuo", image: "/DemoPic/Front BoltDuo Picture.jpg", isComingSoon: true },
+      { title: "DailyWhite by Dollykish", image: "/DemoPic/Dollykish.jpg", isComingSoon: true }
     ],
     gallery: [
       "https://images.unsplash.com/photo-1559163263-e3c11f45c55d?auto=format&fit=crop&q=80&w=800",
@@ -627,9 +627,9 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Adobe Photoshop", "Adobe Illustrator", "Adobe Firefly", "Midjourney"],
     showcases: [
-      { title: "Interpack Processing & Packaging Event (Germany)", image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=800" },
-      { title: "Neo-Swiss Poster Series", image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=800" },
-      { title: "Money Pocket (CK Lighting X Black Hanifah)", image: "https://images.unsplash.com/photo-1541462608141-ad437433b0c7?auto=format&fit=crop&q=80&w=800" }
+      { title: "Interpack Processing & Packaging Event (Germany)", image: "/DemoPic/IP.jpg", isComingSoon: true },
+      { title: "Newton R&D Centre | Corporate Social Media Design", image: "/DemoPic/NT.jpg", isComingSoon: true },
+      { title: "Money Pocket (CK Lighting X Black Hanifah)", image: "/DemoPic/MP.jpg", isComingSoon: true }
     ],
     gallery: [
       "https://images.unsplash.com/photo-1550684847-75bdda21cc95?auto=format&fit=crop&q=80&w=800",

@@ -217,7 +217,7 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                           {/* Monochrome preview image that restores full color on hover */}
                           <div className={`relative overflow-hidden rounded-xl group/img ${
                             item.id === "marketing"
-                              ? "w-full max-w-[210px] sm:max-w-[240px] aspect-square mx-auto flex items-center justify-center"
+                              ? "w-full max-w-[210px] sm:max-w-[280px] lg:max-w-[320px] aspect-square mx-auto flex items-center justify-center"
                               : "w-full aspect-[16/10]"
                           }`}>
                             <img 
