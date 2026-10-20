@@ -136,6 +136,7 @@ export function CreativeApproach() {
     description: string;
     image: string;
     isComingSoon?: boolean;
+    objectPosition?: string;
   }
 
   const steps: StepItem[] = [
@@ -149,13 +150,13 @@ export function CreativeApproach() {
       number: "02",
       title: "Define & Ideation",
       description: "We mix research insights, user personas, and pain points to cook up a clear plan. Stirring creativity into the pot, we simmer ideas that serve up solutions beyond the ordinary.",
-      image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800&auto=format&fit=crop"
+      image: "/DemoPic/D&I.png"
     },
     {
       number: "03",
       title: "Execution & Deliver",
       description: "In this phase, we act like artists in a vibrant studio, sketching, molding, and refining ideas. With each stroke and feedback loop, we sculpt solutions that break the mold.",
-      image: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop"
+      image: "/DemoPic/E&D.png"
     },
     {
       number: "04",
@@ -213,11 +214,14 @@ export function CreativeApproach() {
                     <img
                       src={steps[activeIdx].image}
                       alt={steps[activeIdx].title}
-                      className={`w-full h-full object-cover transition-all duration-700 ${
+                      className={`w-full h-full object-cover object-[35%_center] transition-all duration-700 ${
                         steps[activeIdx].isComingSoon 
                           ? "blur-[6px] brightness-75 scale-105" 
                           : ""
                       }`}
+                      style={{
+                        objectPosition: steps[activeIdx].objectPosition || "35% center"
+                      }}
                       loading="eager"
                     />
                     {steps[activeIdx].isComingSoon && (
@@ -276,11 +280,14 @@ export function CreativeApproach() {
                           <img
                             src={step.image}
                             alt={step.title}
-                            className={`w-full h-full object-cover transition-all duration-700 ${
+                            className={`w-full h-full object-cover object-[35%_center] transition-all duration-700 ${
                               step.isComingSoon 
                                 ? "blur-[6px] brightness-75 scale-105" 
                                 : ""
                             }`}
+                            style={{
+                              objectPosition: step.objectPosition || "35% center"
+                            }}
                             loading="lazy"
                           />
                           {step.isComingSoon && (
