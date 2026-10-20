@@ -573,7 +573,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Adobe Firefly", "Google Gemini Prompting"],
     showcases: [
-      { title: "Warisan Ayah 3Q Catering", image: "/DemoPic/WA.jpg" },
+      { title: "Warisan Ayah 3Q Catering", image: "/DemoPic/WA.jpg", isComingSoon: true },
       { title: "NBZ Pest Control & Cleaning Service", image: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=800" },
       { title: "Verdant Organic Identity", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" }
     ],

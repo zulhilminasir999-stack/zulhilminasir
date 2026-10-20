@@ -130,12 +130,20 @@ export function CreativeApproach() {
     };
   }, []);
 
-  const steps = [
+  interface StepItem {
+    number: string;
+    title: string;
+    description: string;
+    image: string;
+    isComingSoon?: boolean;
+  }
+
+  const steps: StepItem[] = [
     {
       number: "01",
       title: "Research & Analysis",
       description: "We're like detectives, sleuthing through data to unearth golden insights about your project's audience, industry, and rivals.",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop"
+      image: "/Steps/R&A.jpg"
     },
     {
       number: "02",
@@ -205,9 +213,20 @@ export function CreativeApproach() {
                     <img
                       src={steps[activeIdx].image}
                       alt={steps[activeIdx].title}
-                      className="w-full h-full object-cover"
+                      className={`w-full h-full object-cover transition-all duration-700 ${
+                        steps[activeIdx].isComingSoon 
+                          ? "blur-[6px] brightness-75 scale-105" 
+                          : ""
+                      }`}
                       loading="eager"
                     />
+                    {steps[activeIdx].isComingSoon && (
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/25">
+                        <span className="font-sans text-base sm:text-lg font-semibold tracking-wider text-white drop-shadow-lg select-none text-center px-4">
+                          Coming Soon...
+                        </span>
+                      </div>
+                    )}
                   </motion.div>
                 </AnimatePresence>
                 
@@ -257,9 +276,20 @@ export function CreativeApproach() {
                           <img
                             src={step.image}
                             alt={step.title}
-                            className="w-full h-full object-cover"
+                            className={`w-full h-full object-cover transition-all duration-700 ${
+                              step.isComingSoon 
+                                ? "blur-[6px] brightness-75 scale-105" 
+                                : ""
+                            }`}
                             loading="lazy"
                           />
+                          {step.isComingSoon && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/25">
+                              <span className="font-sans text-sm sm:text-base font-semibold tracking-wider text-white drop-shadow-lg select-none text-center px-2">
+                                Coming Soon...
+                              </span>
+                            </div>
+                          )}
                           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/15 to-transparent pointer-events-none" />
                         </div>
                       </div>
