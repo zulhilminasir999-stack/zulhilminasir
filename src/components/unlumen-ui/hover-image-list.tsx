@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring, AnimatePresence } from "motion/react";
+import { motion, useMotionValue, useSpring, useScroll, useTransform, AnimatePresence } from "motion/react";
 import { useEffect, useState, useRef, MouseEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useNavigationType } from "react-router-dom";
@@ -23,6 +23,222 @@ interface HoverImageListProps {
   items: HoverImageItem[];
   onItemClick?: (item: HoverImageItem, index: number, showcase?: HoverImageShowcase) => void;
   onExpandedChange?: (index: number | null) => void;
+}
+
+interface HoverImageListItemProps {
+  key?: string | number;
+  item: HoverImageItem;
+  idx: number;
+  isMobile: boolean;
+  hoveredIndex: number | null;
+  expandedIndex: number | null;
+  setHoveredIndex: (idx: number | null) => void;
+  setExpandedIndex: (idx: number | null) => void;
+  onItemClick?: (item: HoverImageItem, index: number, showcase?: HoverImageShowcase) => void;
+  navType: string;
+}
+
+function HoverImageListItem({
+  item,
+  idx,
+  isMobile,
+  hoveredIndex,
+  expandedIndex,
+  setHoveredIndex,
+  setExpandedIndex,
+  onItemClick,
+  navType
+}: HoverImageListItemProps) {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const isHovered = !isMobile && hoveredIndex === idx;
+  const isExpanded = expandedIndex === idx;
+
+  // Reveal animation similar and aligned to "Ideas In Action" for mobile device only whenever scrolling
+  const { scrollYProgress } = useScroll({
+    target: rowRef,
+    offset: ["start end", "center 45%"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 26,
+    mass: 0.2,
+    restDelta: 0.001
+  });
+
+  const mobileScale = useTransform(smoothProgress, [0.05, 0.95], [0.8, 1]);
+  const mobileOpacity = useTransform(smoothProgress, [0.05, 0.40], [0, 1]);
+  const mobileY = useTransform(smoothProgress, [0.05, 0.95], [60, 0]);
+
+  return (
+    <motion.div 
+      ref={rowRef}
+      className="border-b border-zinc-200"
+      initial={!isMobile ? { opacity: 0, y: 40 } : undefined}
+      whileInView={!isMobile ? { opacity: 1, y: 0 } : undefined}
+      viewport={!isMobile ? { once: true } : undefined}
+      transition={!isMobile ? { duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] } : undefined}
+      style={isMobile ? {
+        scale: mobileScale,
+        opacity: mobileOpacity,
+        y: mobileY,
+        transformOrigin: "center center"
+      } : undefined}
+    >
+      <div
+        onMouseEnter={() => {
+          if (!isMobile) {
+            setHoveredIndex(idx);
+          }
+        }}
+        onClick={() => {
+          const nextExpanded = isExpanded ? null : idx;
+          setExpandedIndex(nextExpanded);
+          if (isMobile) {
+            setHoveredIndex(null);
+          }
+        }}
+        className={`group relative w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer transition-all duration-500 px-6 sm:px-12 lg:px-16 ${
+          (isHovered || isExpanded) ? "bg-[#2563EB]" : "sm:hover:bg-[#2563EB]"
+        }`}
+      >
+        {/* SVG Noise Overlay */}
+        {(isHovered || isExpanded) && (
+          <div className="absolute inset-0 opacity-25 pointer-events-none mix-blend-overlay overflow-hidden">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <filter id={`noiseFilterRow-${idx}`}>
+                <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+              </filter>
+              <rect width="100%" height="100%" filter={`url(#noiseFilterRow-${idx})`} />
+            </svg>
+          </div>
+        )}
+
+        {/* Left side: Wording */}
+        <div className="relative z-10 flex items-center flex-1 min-w-0">
+          {/* Text and category */}
+          <div className="flex flex-col items-start text-left gap-1 sm:gap-2">
+            <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-semibold tracking-tighter transition-colors duration-500 uppercase ${
+              (isHovered || isExpanded) ? "text-white" : "text-zinc-700"
+            }`}>
+              {item.label}
+            </div>
+            {item.category && (
+              <span 
+                className={`text-[12px] font-sans tracking-wider uppercase transition-all duration-500 transform translate-y-1 group-hover:translate-y-0 font-medium ${
+                  (isHovered || isExpanded) ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }`}
+                style={{ color: (isHovered || isExpanded) ? "rgba(255, 255, 255, 0.8)" : "rgb(113, 113, 122)" }}
+              >
+                {item.category}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Right side: Curly-braced number or arrow icon */}
+        <div className="relative z-10 flex items-center justify-end shrink-0 pl-4 select-none min-w-[70px] sm:min-w-[96px]">
+          <AnimatePresence mode="wait">
+            {isExpanded ? (
+              <motion.div
+                key="arrow"
+                initial={{ opacity: 0, scale: 0.6, rotate: 0 }}
+                animate={{ opacity: 1, scale: 1, rotate: -45 }}
+                exit={{ opacity: 0, scale: 0.6, rotate: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border border-white bg-white flex items-center justify-center text-[#2563EB]"
+              >
+                <ArrowUpRight className="w-6 h-6 sm:w-8 sm:h-8" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="arrow-idle"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className={`flex items-center justify-center transition-colors duration-500 ${
+                  isHovered ? "text-white" : "text-[#2563EB]"
+                }`}
+              >
+                <ArrowUpRight className="w-8 h-8 sm:w-10 sm:h-10 rotate-90" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Showcase Dropdown */}
+      <motion.div
+        initial={false}
+        animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
+        transition={{ duration: (navType === "POP" && expandedIndex === idx) ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className={`overflow-hidden transition-colors duration-500 relative ${
+          isExpanded ? "bg-[#2563EB]" : "bg-zinc-50/30"
+        }`}
+      >
+        {/* SVG Noise Overlay for expanded state */}
+        {isExpanded && (
+          <div className="absolute inset-0 opacity-25 pointer-events-none mix-blend-overlay overflow-hidden">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <filter id={`noiseFilterExpanded-${idx}`}>
+                <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+              </filter>
+              <rect width="100%" height="100%" filter={`url(#noiseFilterExpanded-${idx})`} />
+            </svg>
+          </div>
+        )}
+
+        <div className="px-6 sm:px-12 lg:px-16 pb-12 sm:pb-16 pt-2 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {item.showcases?.map((showcase, sIdx) => {
+              const isRestoredFromPop = navType === "POP" && expandedIndex === idx;
+              return (
+              <motion.div
+                key={sIdx}
+                initial={isRestoredFromPop ? false : { opacity: 0, y: 20 }}
+                animate={isExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: isRestoredFromPop ? 0 : 0.1 + sIdx * 0.1, duration: isRestoredFromPop ? 0 : 0.4 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (showcase.isComingSoon) return;
+                  onItemClick?.(item, idx, showcase);
+                }}
+                className={`group/card ${showcase.isComingSoon ? "cursor-default select-none" : "cursor-pointer"}`}
+              >
+                <div className={`aspect-[16/10] overflow-hidden rounded-lg transition-colors duration-500 border mb-4 relative ${
+                  isExpanded 
+                    ? "bg-white/5 border-white/10" 
+                    : "bg-zinc-100 border-zinc-200"
+                }`}>
+                  <img 
+                    src={showcase.image} 
+                    alt={showcase.title}
+                    className={`w-full h-full object-cover transition-all duration-700 ${
+                      showcase.isComingSoon 
+                        ? "blur-[6px] brightness-75 scale-105 group-hover/card:scale-110" 
+                        : "group-hover/card:scale-110"
+                    }`}
+                  />
+                  {showcase.isComingSoon && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/25">
+                      <span className="font-sans text-sm sm:text-base font-semibold tracking-wider text-white drop-shadow-lg transition-transform duration-300 ease-out scale-100 group-hover/card:scale-75 select-none text-center px-2">
+                        Coming Soon...
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <h4 className="text-[13px] font-sans font-medium transition-colors duration-300 !text-white">
+                  {showcase.title}
+                </h4>
+              </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
 }
 
 export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverImageListProps) {
@@ -112,174 +328,20 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
           <rect width="100%" height="100%" filter="url(#globalNoiseFilter)" />
         </svg>
       </div>
-      {items.map((item, idx) => {
-        const isHovered = !isMobile && hoveredIndex === idx;
-        const isExpanded = expandedIndex === idx;
-
-        return (
-          <motion.div 
-            key={item.label} 
-            className="border-b border-zinc-200"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div
-              onMouseEnter={() => {
-                if (!isMobile) {
-                  setHoveredIndex(idx);
-                }
-              }}
-              onClick={() => {
-                const nextExpanded = isExpanded ? null : idx;
-                setExpandedIndex(nextExpanded);
-                if (isMobile) {
-                  setHoveredIndex(null);
-                }
-              }}
-              className={`group relative w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer transition-all duration-500 px-6 sm:px-12 lg:px-16 ${
-                (isHovered || isExpanded) ? "bg-[#2563EB]" : "sm:hover:bg-[#2563EB]"
-              }`}
-            >
-              {/* SVG Noise Overlay */}
-              {(isHovered || isExpanded) && (
-                <div className="absolute inset-0 opacity-25 pointer-events-none mix-blend-overlay overflow-hidden">
-                  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <filter id={`noiseFilterRow-${idx}`}>
-                      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-                    </filter>
-                    <rect width="100%" height="100%" filter={`url(#noiseFilterRow-${idx})`} />
-                  </svg>
-                </div>
-              )}
-
-              {/* Left side: Wording */}
-              <div className="relative z-10 flex items-center flex-1 min-w-0">
-                {/* Text and category */}
-                <div className="flex flex-col items-start text-left gap-1 sm:gap-2">
-                  <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-semibold tracking-tighter transition-colors duration-500 uppercase ${
-                    (isHovered || isExpanded) ? "text-white" : "text-[#09090b]"
-                  }`}>
-                    {item.label}
-                  </div>
-                  {item.category && (
-                    <span 
-                      className={`text-[12px] font-sans tracking-wider uppercase transition-all duration-500 transform translate-y-1 group-hover:translate-y-0 font-medium ${
-                        (isHovered || isExpanded) ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                      }`}
-                      style={{ color: (isHovered || isExpanded) ? "rgba(255, 255, 255, 0.8)" : "rgb(113, 113, 122)" }}
-                    >
-                      {item.category}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Right side: Curly-braced number or arrow icon */}
-              <div className="relative z-10 flex items-center justify-end shrink-0 pl-4 select-none min-w-[70px] sm:min-w-[96px]">
-                <AnimatePresence mode="wait">
-                  {isExpanded ? (
-                    <motion.div
-                      key="arrow"
-                      initial={{ opacity: 0, scale: 0.6, rotate: 0 }}
-                      animate={{ opacity: 1, scale: 1, rotate: -45 }}
-                      exit={{ opacity: 0, scale: 0.6, rotate: 0 }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                      className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border border-white bg-white flex items-center justify-center text-[#2563EB]"
-                    >
-                      <ArrowUpRight className="w-6 h-6 sm:w-8 sm:h-8" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="arrow-idle"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                      className={`flex items-center justify-center transition-colors duration-500 ${
-                        isHovered ? "text-white" : "text-[#2563EB]"
-                      }`}
-                    >
-                      <ArrowUpRight className="w-8 h-8 sm:w-10 sm:h-10 rotate-90" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
- 
-            {/* Showcase Dropdown */}
-            <motion.div
-              initial={false}
-              animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
-              transition={{ duration: (navType === "POP" && expandedIndex === idx) ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className={`overflow-hidden transition-colors duration-500 relative ${
-                isExpanded ? "bg-[#2563EB]" : "bg-zinc-50/30"
-              }`}
-            >
-              {/* SVG Noise Overlay for expanded state */}
-              {isExpanded && (
-                <div className="absolute inset-0 opacity-25 pointer-events-none mix-blend-overlay overflow-hidden">
-                  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <filter id={`noiseFilterExpanded-${idx}`}>
-                      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-                    </filter>
-                    <rect width="100%" height="100%" filter={`url(#noiseFilterExpanded-${idx})`} />
-                  </svg>
-                </div>
-              )}
-
-              <div className="px-6 sm:px-12 lg:px-16 pb-12 sm:pb-16 pt-2 relative z-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {item.showcases?.map((showcase, sIdx) => {
-                    const isRestoredFromPop = navType === "POP" && expandedIndex === idx;
-                    return (
-                    <motion.div
-                      key={sIdx}
-                      initial={isRestoredFromPop ? false : { opacity: 0, y: 20 }}
-                      animate={isExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                      transition={{ delay: isRestoredFromPop ? 0 : 0.1 + sIdx * 0.1, duration: isRestoredFromPop ? 0 : 0.4 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (showcase.isComingSoon) return;
-                        onItemClick?.(item, idx, showcase);
-                      }}
-                      className={`group/card ${showcase.isComingSoon ? "cursor-default select-none" : "cursor-pointer"}`}
-                    >
-                      <div className={`aspect-[16/10] overflow-hidden rounded-lg transition-colors duration-500 border mb-4 relative ${
-                        isExpanded 
-                          ? "bg-white/5 border-white/10" 
-                          : "bg-zinc-100 border-zinc-200"
-                      }`}>
-                        <img 
-                          src={showcase.image} 
-                          alt={showcase.title}
-                          className={`w-full h-full object-cover transition-all duration-700 ${
-                            showcase.isComingSoon 
-                              ? "blur-[6px] brightness-75 scale-105 group-hover/card:scale-110" 
-                              : "group-hover/card:scale-110"
-                          }`}
-                        />
-                        {showcase.isComingSoon && (
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 bg-black/25">
-                            <span className="font-sans text-sm sm:text-base font-semibold tracking-wider text-white drop-shadow-lg transition-transform duration-300 ease-out scale-100 group-hover/card:scale-75 select-none text-center px-2">
-                              Coming Soon...
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <h4 className="text-[13px] font-sans font-medium transition-colors duration-300 !text-white">
-                        {showcase.title}
-                      </h4>
-                    </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        );
-      })}
+      {items.map((item, idx) => (
+        <HoverImageListItem
+          key={item.label}
+          item={item}
+          idx={idx}
+          isMobile={isMobile}
+          hoveredIndex={hoveredIndex}
+          expandedIndex={expandedIndex}
+          setHoveredIndex={setHoveredIndex}
+          setExpandedIndex={setExpandedIndex}
+          onItemClick={onItemClick}
+          navType={navType}
+        />
+      ))}
 
       {/* Floating preview element (Desktop only - disabled on mobile) */}
       {!isMobile && (

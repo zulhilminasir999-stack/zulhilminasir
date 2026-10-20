@@ -156,11 +156,11 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
               {/* Trigger Row */}
               <button
                 onClick={() => toggleAccordion(item.id)}
-                className="w-full flex items-center justify-between py-10 sm:py-12 text-left group focus:outline-none"
+                className={`w-full flex items-center justify-between py-10 sm:py-12 text-left group focus:outline-none ${isOpen ? "is-open" : ""}`}
               >
                 <div className="flex items-baseline gap-4">
-                  <h3 className={`text-xl sm:text-2xl md:text-3xl font-medium tracking-tight transition-all duration-500 group-hover:!text-[#2563EB] ${
-                    isOpen ? "opacity-100 !text-[#2563EB]" : "opacity-40 group-hover:opacity-100"
+                  <h3 className={`text-xl sm:text-2xl md:text-3xl font-medium tracking-tight transition-all duration-500 ${
+                    isOpen ? "opacity-100 !text-[#2563EB]" : "opacity-100 text-zinc-700 !text-zinc-700 group-hover:!text-[#2563EB]"
                   }`}>
                     {item.company}
                   </h3>
@@ -223,7 +223,7 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                             <img 
                               src={item.image} 
                               alt={`${item.company} preview`}
-                              className={`filter grayscale hover:grayscale-0 transition-all duration-700 ease-in-out cursor-pointer ${
+                              className={`filter grayscale-0 md:grayscale md:hover:grayscale-0 transition-all duration-700 ease-in-out cursor-pointer ${
                                 item.id === "marketing"
                                   ? "w-full h-full object-contain hover:scale-[1.03] mx-auto"
                                   : item.id === "ecraft"
