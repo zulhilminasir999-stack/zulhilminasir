@@ -143,25 +143,25 @@ export function CreativeApproach() {
     {
       number: "01",
       title: "Research & Analysis",
-      description: "We're like detectives, sleuthing through data to unearth golden insights about your project's audience, industry, and rivals.",
+      description: "Understand your goals, audience, and requirements to define project direction and create a strong foundation.",
       image: "/DemoPic/R&A.png"
     },
     {
       number: "02",
-      title: "Define & Ideation",
-      description: "We mix research insights, user personas, and pain points to cook up a clear plan. Stirring creativity into the pot, we simmer ideas that serve up solutions beyond the ordinary.",
+      title: "Development & Design",
+      description: "Craft visually engaging, brand-aligned interfaces and transform approved designs into intuitive, responsive, high-performance digital products.",
       image: "/DemoPic/D&I.png"
     },
     {
       number: "03",
       title: "Execution & Deliver",
-      description: "In this phase, we act like artists in a vibrant studio, sketching, molding, and refining ideas. With each stroke and feedback loop, we sculpt solutions that break the mold.",
+      description: "Engineer and deploy intelligent digital products by integrating modern technologies, AI capabilities, and scalable solutions into real-world applications.",
       image: "/DemoPic/E&D.png"
     },
     {
       number: "04",
       title: "Evaluation & Testing",
-      description: "In this last phase, we infuse ideas with design magic, ensuring seamless integration into development. With precision and collaboration, our goal is to craft visually stunning designs that translate seamlessly into reality.",
+      description: "Test, optimize, and launch digital products to ensure seamless performance, reliability, and a polished user experience across all platforms.",
       image: "/DemoPic/E&T.png"
     }
   ];
@@ -233,9 +233,6 @@ export function CreativeApproach() {
                     )}
                   </motion.div>
                 </AnimatePresence>
-                
-                {/* Subtle Overlay for aesthetic */}
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/10 to-transparent pointer-events-none z-10" />
               </div>
             </div>
           </div>
@@ -297,7 +294,6 @@ export function CreativeApproach() {
                               </span>
                             </div>
                           )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/15 to-transparent pointer-events-none" />
                         </div>
                       </div>
                     </div>
