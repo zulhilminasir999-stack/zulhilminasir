@@ -144,7 +144,7 @@ export function CreativeApproach() {
       number: "01",
       title: "Research & Analysis",
       description: "We're like detectives, sleuthing through data to unearth golden insights about your project's audience, industry, and rivals.",
-      image: "/Steps/R&A.jpg"
+      image: "/DemoPic/R&A.png"
     },
     {
       number: "02",
@@ -162,7 +162,7 @@ export function CreativeApproach() {
       number: "04",
       title: "Evaluation & Testing",
       description: "In this last phase, we infuse ideas with design magic, ensuring seamless integration into development. With precision and collaboration, our goal is to craft visually stunning designs that translate seamlessly into reality.",
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop"
+      image: "/DemoPic/E&T.png"
     }
   ];
 
