@@ -1116,6 +1116,16 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
+          {/* Left-aligned Display Statement with equal top and bottom margin */}
+          <div className="absolute inset-0 z-20 flex items-center justify-start px-6 sm:px-12 lg:px-16 pointer-events-none select-none">
+            <h2 
+              className="font-satoshi font-sans font-medium text-[32px] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.08] !text-white !text-[#ffffff] text-left"
+              style={{ fontFamily: "'Satoshi', var(--font-sans), system-ui, sans-serif", fontWeight: 500 }}
+            >
+              <span className="block !text-white font-medium">Turn Ideas</span>
+              <span className="block !text-white font-medium">Into AI Solution</span>
+            </h2>
+          </div>
           {/* Smooth multi-stop bottom color blend into footer background */}
           <div 
             className="absolute inset-x-0 bottom-0 h-3/4 pointer-events-none z-10" 

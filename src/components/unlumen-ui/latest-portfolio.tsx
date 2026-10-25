@@ -17,6 +17,8 @@ interface PortfolioItem {
   objectPosition?: string;
   objectFit?: "cover" | "contain";
   imageClassName?: string;
+  mobileImageClassName?: string;
+  overlayClassName?: string;
 }
 
 const PORTFOLIO_ITEMS: PortfolioItem[] = [
@@ -37,6 +39,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     defaultImage: "/Triply/Triply1.jpg",
     mobileImage: "/Triply/Triply_m1.png",
     mobileObjectPosition: "center 60%",
+    mobileImageClassName: "scale-[1.10] -translate-y-6",
     url: "/case-study-project/komorebi-editorial",
     client: "Triply App",
     year: "2025"
@@ -47,7 +50,9 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "E-commerce Website",
     defaultImage: "/CK Lighting Web/ck1.jpg",
     mobileImage: "/CK Lighting Web/CK_m1.png",
+    mobileImageClassName: "scale-[1.10] -translate-y-6",
     objectPosition: "center 30%",
+    overlayClassName: "bottom-12 sm:bottom-16 lg:bottom-20 -translate-y-28 sm:translate-y-0",
     url: "/case-study-project/ck-lighting",
     client: "CK Lighting Sdn Bhd",
     year: "2026"
@@ -61,6 +66,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     objectFit: "cover",
     objectPosition: "center center",
     imageClassName: "scale-[1.06] sm:scale-[1.06] sm:group-hover:scale-110",
+    mobileImageClassName: "scale-[1.10] -translate-y-6",
     url: "/case-study-project/breeze-cargo",
     client: "RepX App",
     year: "2026"
@@ -150,7 +156,7 @@ export function LatestPortfolio() {
                         target.src = item.defaultImage;
                       }
                     }}
-                    className={`block sm:hidden w-full h-full ${item.objectFit === "contain" ? "object-contain" : "object-cover"} transition-transform duration-1000 ease-out ${item.imageClassName || "group-hover:scale-105"} border-none outline-none ring-0 p-0 m-0`}
+                    className={`block sm:hidden w-full h-full ${item.objectFit === "contain" ? "object-contain" : "object-cover"} transition-transform duration-1000 ease-out ${item.mobileImageClassName || item.imageClassName || "group-hover:scale-105"} border-none outline-none ring-0 p-0 m-0`}
                     style={{ objectPosition: item.mobileObjectPosition || "center top" }}
                     referrerPolicy="no-referrer"
                   />
@@ -199,7 +205,7 @@ export function LatestPortfolio() {
             </AnimatePresence>
 
             {/* Bottom Info Overlay */}
-            <div className="absolute bottom-8 sm:bottom-12 lg:bottom-14 left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col -translate-y-24 sm:translate-y-0">
+            <div className={`absolute left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col ${item.overlayClassName || "bottom-8 sm:bottom-12 lg:bottom-14 -translate-y-24 sm:translate-y-0"}`}>
               {/* Category above the main title (with client appended on mobile) */}
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3 drop-shadow-sm">
                 {item.category} <span className="inline sm:hidden opacity-75">- {item.client}</span>
