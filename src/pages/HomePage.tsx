@@ -1146,9 +1146,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                 </span>
               </div>
 
-              {/* Design statement from the image */}
-              <h2 className="text-2xl sm:text-4xl md:text-5xl font-sans font-medium tracking-tight text-white !text-[#ffffff] leading-[1.15] max-w-2xl mb-10">
-                Design for those who want to become a better version of themselves.
+              {/* Contact email */}
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-sans font-medium tracking-tight text-white !text-[#ffffff] leading-[1.15] max-w-full mb-10">
+                zulhilminasir999@gmail.com
               </h2>
 
               {/* Get in touch button from the image */}

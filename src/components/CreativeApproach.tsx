@@ -201,7 +201,7 @@ export function CreativeApproach() {
               </h2>
 
               {/* Dynamic Image Card (Desktop Only) */}
-              <div className="relative w-full max-w-[400px] aspect-square rounded-2xl overflow-hidden bg-white shadow-2xl shadow-zinc-200/50 border border-zinc-100">
+              <div className="relative w-full max-w-[400px] aspect-square rounded-2xl overflow-hidden bg-white shadow-none border-0 outline-none ring-0">
                 <AnimatePresence mode="popLayout">
                   <motion.div
                     key={activeIdx}
@@ -214,7 +214,7 @@ export function CreativeApproach() {
                     <img
                       src={steps[activeIdx].image}
                       alt={steps[activeIdx].title}
-                      className={`w-full h-full object-cover object-[35%_center] transition-all duration-700 ${
+                      className={`w-full h-full object-cover object-[35%_center] border-0 outline-none transition-all duration-700 ${
                         steps[activeIdx].isComingSoon 
                           ? "blur-[6px] brightness-75 scale-105" 
                           : ""
@@ -268,16 +268,16 @@ export function CreativeApproach() {
                       {/* Mobile Only: Inline Image directly underneath description synchronized with active scroll */}
                       <div className="block md:hidden w-full pt-3">
                         <div 
-                          className={`relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-xl border border-zinc-200/80 transition-all duration-500 ease-out ${
+                          className={`relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-none border-0 outline-none ring-0 transition-all duration-500 ease-out ${
                             isActive 
-                              ? "opacity-100 translate-y-0 scale-100 shadow-zinc-300/50" 
+                              ? "opacity-100 translate-y-0 scale-100" 
                               : "opacity-0 -translate-y-2 scale-[0.96] pointer-events-none"
                           }`}
                         >
                           <img
                             src={step.image}
                             alt={step.title}
-                            className={`w-full h-full object-cover object-[35%_center] transition-all duration-700 ${
+                            className={`w-full h-full object-cover object-[35%_center] border-0 outline-none transition-all duration-700 ${
                               step.isComingSoon 
                                 ? "blur-[6px] brightness-75 scale-105" 
                                 : ""

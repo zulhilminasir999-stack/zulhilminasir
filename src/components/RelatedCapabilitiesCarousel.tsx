@@ -555,8 +555,8 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
                 </div>
 
                 {/* Card Content Anatomy */}
-                <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between gap-5">
-                  <div className="space-y-1.5">
+                <div className="pt-6 sm:pt-7 flex flex-col flex-1 justify-between gap-5">
+                  <div className="px-6 sm:px-7 space-y-1.5">
                     {/* Case Study Title in Satoshi font */}
                     <h5 
                       className="font-satoshi text-sm sm:text-base font-semibold text-zinc-900 tracking-tight leading-snug group-hover:text-[#2563EB] transition-colors"
@@ -574,10 +574,10 @@ export default function RelatedCapabilitiesCarousel({ currentId }: RelatedCapabi
                     </div>
                   </div>
 
-                  {/* Role attribution tags along the bottom border */}
-                  <div className="pt-4 border-t border-zinc-100 flex items-center justify-between text-[11px] sm:text-xs font-mono text-zinc-400 tracking-wider uppercase">
-                    <span className="truncate pr-2">{item.role}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-300 group-hover:text-zinc-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                  {/* Interactive Bottom Container */}
+                  <div className="group/bottom px-6 sm:px-7 pt-4 pb-5 sm:pb-6 border-t border-zinc-100 hover:bg-[#2563EB] hover:border-[#2563EB] transition-colors duration-300 flex items-center justify-between text-[11px] sm:text-xs font-mono text-zinc-400 tracking-wider uppercase">
+                    <span className="truncate pr-2 opacity-0 select-none pointer-events-none">{item.role}</span>
+                    <ArrowUpRight className="w-5 h-5 sm:w-[22px] sm:h-[22px] text-zinc-400 group-hover/bottom:!text-white group-hover/bottom:rotate-45 group-hover/bottom:translate-x-1 transition-all duration-300 ease-out shrink-0" />
                   </div>
                 </div>
               </Component>

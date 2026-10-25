@@ -469,14 +469,15 @@ export default function CaseStudyPage() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-white shadow-xl overflow-hidden"
+                  className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-satoshi font-sans uppercase text-white shadow-xl overflow-hidden"
+                  style={{ fontFamily: "'Satoshi', var(--font-sans), sans-serif" }}
                 >
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Services</button>
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Software & AI Solutions</button>
-                  <button onClick={(e) => { e.preventDefault(); }} className="font-mono uppercase text-sm tracking-wide text-left text-white/50 pb-2 border-b border-white/50 cursor-default">Projects</button>
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">About</button>
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Career</button>
-                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="font-mono uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors cursor-pointer">Collaborate</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Services</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Software & AI Solutions</button>
+                  <button onClick={(e) => { e.preventDefault(); }} className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white/50 pb-2 border-b border-white/50 cursor-default">Projects</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">About</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer">Career</button>
+                  <button onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors cursor-pointer">Collaborate</button>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -839,9 +840,9 @@ export default function CaseStudyPage() {
                 </span>
               </div>
 
-              {/* Design statement from the image */}
-              <h2 className="text-2xl sm:text-4xl md:text-5xl font-sans font-medium tracking-tight text-white !text-[#ffffff] leading-[1.15] max-w-2xl mb-10">
-                Design for those who want to become a better version of themselves.
+              {/* Contact email */}
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-sans font-medium tracking-tight text-white !text-[#ffffff] leading-[1.15] max-w-full mb-10">
+                zulhilminasir999@gmail.com
               </h2>
 
               {/* Get in touch button from the image */}
