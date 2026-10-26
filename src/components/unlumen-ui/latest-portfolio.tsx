@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { WordsStagger } from "../../registry/spell-ui/words-stagger";
 import { useReveal } from "../../context/RevealContext";
@@ -18,6 +18,7 @@ interface PortfolioItem {
   objectFit?: "cover" | "contain";
   imageClassName?: string;
   mobileImageClassName?: string;
+  mobileBgClassName?: string;
   overlayClassName?: string;
 }
 
@@ -51,7 +52,8 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     defaultImage: "/CK Lighting Web/ck1.jpg",
     mobileImage: "/CK Lighting Web/CK_m1.png",
     mobileObjectPosition: "54% center",
-    mobileImageClassName: "scale-[1.08] -translate-y-8",
+    mobileImageClassName: "scale-100 -translate-y-6",
+    mobileBgClassName: "bg-[#3F3F40] sm:bg-zinc-950",
     objectPosition: "center 30%",
     overlayClassName: "bottom-12 sm:bottom-16 lg:bottom-20 -translate-y-28 sm:translate-y-0",
     url: "/case-study-project/ck-lighting",
@@ -84,6 +86,74 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     year: "2025"
   }
 ];
+
+function PortfolioBottomOverlay({ item }: { item: PortfolioItem }) {
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(overlayRef, { once: false, amount: 0.2, margin: "0px 0px -30px 0px" });
+
+  return (
+    <div
+      ref={overlayRef}
+      className={`absolute left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col ${item.overlayClassName || "bottom-8 sm:bottom-12 lg:bottom-14 -translate-y-24 sm:translate-y-0"}`}
+    >
+      {/* Category above the main title (with client appended on mobile) */}
+      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3 drop-shadow-sm">
+        <WordsStagger
+          trigger={isInView}
+          delay={0.05}
+          stagger={0.06}
+          className="text-white/90 [&>span:last-child]:mr-0"
+        >
+          {item.category}
+        </WordsStagger>
+        <span className="inline sm:hidden opacity-75 ml-1.5">
+          <WordsStagger
+            trigger={isInView}
+            delay={0.18}
+            stagger={0.06}
+            className="text-white/75 [&>span:last-child]:mr-0"
+          >
+            {`- ${item.client}`}
+          </WordsStagger>
+        </span>
+      </p>
+
+      <div className="flex flex-row items-center justify-between w-full">
+        {/* Left side: Large Title */}
+        <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-sans font-semibold tracking-tighter text-white leading-[1.1] sm:leading-[1] select-none pr-0 sm:pr-4 drop-shadow-md">
+          <WordsStagger
+            trigger={isInView}
+            delay={0.15}
+            stagger={0.08}
+            className="text-white [&>span:last-child]:mr-0"
+          >
+            {item.title}
+          </WordsStagger>
+        </h3>
+
+        {/* Middle: Horizontal Line */}
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={isInView ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
+          transition={{ duration: 0.8, delay: 0.28, ease: [0.215, 0.61, 0.355, 1] }}
+          className="hidden md:block flex-1 h-[1px] bg-white/30 mx-8 origin-left"
+        />
+
+        {/* Right side: Client/Brand label (hidden on mobile, inline above) */}
+        <div className="hidden sm:block text-right font-sans font-normal text-sm md:text-lg lg:text-xl tracking-tight text-white whitespace-nowrap">
+          <WordsStagger
+            trigger={isInView}
+            delay={0.32}
+            stagger={0.06}
+            className="text-white flex-nowrap whitespace-nowrap [&>span:last-child]:mr-0"
+          >
+            {item.client}
+          </WordsStagger>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function LatestPortfolio() {
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
@@ -144,7 +214,7 @@ export function LatestPortfolio() {
             className="sticky top-0 h-screen w-full flex flex-col justify-end group overflow-hidden cursor-pointer bg-zinc-950"
           >
             {/* Project Image Background */}
-            <div className="absolute inset-0 w-full h-full overflow-hidden bg-zinc-950 flex items-center justify-center">
+            <div className={`absolute inset-0 w-full h-full overflow-hidden ${item.mobileBgClassName || "bg-zinc-950"} flex items-center justify-center`}>
               {item.mobileImage ? (
                 <>
                   <img 
@@ -207,27 +277,7 @@ export function LatestPortfolio() {
             </AnimatePresence>
 
             {/* Bottom Info Overlay */}
-            <div className={`absolute left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col ${item.overlayClassName || "bottom-8 sm:bottom-12 lg:bottom-14 -translate-y-24 sm:translate-y-0"}`}>
-              {/* Category above the main title (with client appended on mobile) */}
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3 drop-shadow-sm">
-                {item.category} <span className="inline sm:hidden opacity-75">- {item.client}</span>
-              </p>
-
-              <div className="flex flex-row items-center justify-between w-full">
-                {/* Left side: Large Title */}
-                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-sans font-semibold tracking-tighter text-white leading-[1.1] sm:leading-[1] select-none pr-0 sm:pr-4 drop-shadow-md">
-                  {item.title}
-                </h3>
-
-                {/* Middle: Horizontal Line */}
-                <div className="hidden md:block flex-1 h-[1px] bg-white/30 mx-8" />
-
-                {/* Right side: Client/Brand label (hidden on mobile, inline above) */}
-                <div className="hidden sm:block text-right font-sans font-normal text-sm md:text-lg lg:text-xl tracking-tight text-white whitespace-nowrap">
-                  {item.client}
-                </div>
-              </div>
-            </div>
+            <PortfolioBottomOverlay item={item} />
           </div>
         ))}
       </div>
