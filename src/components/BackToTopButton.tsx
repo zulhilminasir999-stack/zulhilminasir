@@ -102,7 +102,7 @@ export default function BackToTopButton() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className={`hidden sm:flex fixed bottom-8 right-8 z-[100] w-12 h-12 rounded-full items-center justify-center transition-all duration-500 group cursor-pointer ${
+          className={`hidden md:flex fixed bottom-8 right-8 z-[100] w-12 h-12 rounded-full items-center justify-center transition-all duration-500 group cursor-pointer ${
             isLightSection
               ? "bg-[#2563EB] hover:bg-[#1D4ED8] backdrop-blur-xl border border-blue-400/40 shadow-[0_8px_28px_rgba(37,99,235,0.45)] text-white"
               : "bg-white/20 hover:bg-white/30 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)] text-white"
