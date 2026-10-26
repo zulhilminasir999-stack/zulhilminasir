@@ -458,13 +458,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
 
-    let lastTouchY = 0;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        lastTouchY = e.touches[0].clientY;
-      }
-    };
+    const rafId = requestAnimationFrame(() => {
+      mobileMenuPanelRef.current?.focus({ preventScroll: true });
+    });
 
     const handleTouchMove = (e: TouchEvent) => {
       const panel = mobileMenuPanelRef.current;
@@ -473,19 +469,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         return;
       }
 
-      const currentY = e.touches[0]?.clientY ?? lastTouchY;
-      const deltaY = lastTouchY - currentY;
-      lastTouchY = currentY;
-
-      const { scrollTop, scrollHeight, clientHeight } = panel;
-      const canScrollUp = scrollTop > 0;
-      const canScrollDown = scrollTop + clientHeight < scrollHeight - 1;
-
-      if (
-        scrollHeight <= clientHeight ||
-        (deltaY < 0 && !canScrollUp) ||
-        (deltaY > 0 && !canScrollDown)
-      ) {
+      if (panel.scrollHeight <= panel.clientHeight) {
         if (e.cancelable) e.preventDefault();
       }
     };
@@ -497,15 +481,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         return;
       }
 
-      const { scrollTop, scrollHeight, clientHeight } = panel;
-      const canScrollUp = scrollTop > 0;
-      const canScrollDown = scrollTop + clientHeight < scrollHeight - 1;
-
-      if (
-        scrollHeight <= clientHeight ||
-        (e.deltaY < 0 && !canScrollUp) ||
-        (e.deltaY > 0 && !canScrollDown)
-      ) {
+      if (panel.scrollHeight <= panel.clientHeight) {
         if (e.cancelable) e.preventDefault();
       }
     };
@@ -519,13 +495,12 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       }
     };
 
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("keydown", handleKeyDown, { passive: false });
 
     return () => {
-      window.removeEventListener("touchstart", handleTouchStart);
+      cancelAnimationFrame(rafId);
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
@@ -644,7 +619,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               className={`fixed top-0 left-0 right-0 transition-[background-color,border-color,box-shadow] duration-300 ${
                 isMobile 
                   ? (isMobileMenuOpen 
-                      ? "z-[120] !bg-transparent !border-transparent border-b-0 h-auto shadow-none" 
+                      ? "z-[120] !bg-transparent !border-transparent border-b-0 inset-0 h-[100vh] supports-[height:100dvh]:h-[100dvh] flex flex-col overflow-hidden shadow-none" 
                       : "z-[100] bg-white border-b border-zinc-200/80 h-14 shadow-sm")
                   : "z-[100] bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
               }`}
@@ -947,40 +922,40 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     }}
                     exit={{ opacity: 0, clipPath: "inset(0% 0% 100% 0%)" }}
                     transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                    className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB]/[0.07] backdrop-blur-xs px-6 pt-5 pb-[max(2.5rem,env(safe-area-inset-bottom))] h-[calc(100vh-3.5rem)] supports-[height:100dvh]:h-[calc(100dvh-3.5rem)] w-full flex flex-col font-sans font-semibold uppercase text-white overflow-y-auto overscroll-contain touch-pan-y [-webkit-overflow-scrolling:touch] outline-none"
+                    className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB] backdrop-blur-xs px-6 pt-5 pb-[max(3rem,calc(env(safe-area-inset-bottom)+1.5rem))] flex-1 min-h-0 h-[calc(100vh-3.5rem)] supports-[height:100dvh]:h-[calc(100dvh-3.5rem)] w-full flex flex-col font-sans font-semibold uppercase text-white overflow-y-auto overscroll-y-contain touch-pan-y [-webkit-overflow-scrolling:touch] pointer-events-auto outline-none"
                   >
                     <a
                       href="#services-section"
                       onClick={(e) => handleMobileMenuNavClick(e, "#services-section")}
-                      className="shrink-0 flex items-center justify-end text-right py-2.5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                      className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       Services
                     </a>
                     <a
                       href="#integration-section"
                       onClick={(e) => handleMobileMenuNavClick(e, "#integration-section")}
-                      className="shrink-0 flex items-center justify-end text-right py-2.5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                      className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       Software & AI Solutions
                     </a>
                     <a
                       href="#capabilities-section"
                       onClick={(e) => handleMobileMenuNavClick(e, "#capabilities-section")}
-                      className="shrink-0 flex items-center justify-end text-right py-2.5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                      className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       Projects
                     </a>
                     <a
                       href="#about-section"
                       onClick={(e) => handleMobileMenuNavClick(e, "#about-section")}
-                      className="shrink-0 flex items-center justify-end text-right py-2.5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                      className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       About
                     </a>
                     <a
                       href="#career-section"
                       onClick={(e) => handleMobileMenuNavClick(e, "#career-section")}
-                      className="shrink-0 flex items-center justify-end text-right py-2.5 mb-5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                      className="shrink-0 flex items-center justify-end text-right py-3 mb-7 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       Career
                     </a>
@@ -1022,7 +997,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             className="w-3.5 h-3.5 shrink-0"
                             aria-hidden="true"
                           >
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.817 17.507h-2.346v-3.676c0-.876-.018-2.004-1.222-2.004-1.223 0-1.41.954-1.41 1.94v3.74h-2.345V9.949h2.253v1.03h.03c.315-.594 1.08-1.221 2.224-1.221 2.377 0 2.816 1.564 2.816 3.6v4.149zM7.844 8.914a1.362 1.362 0 1 1 0-2.724 1.362 1.362 0 0 1 0 2.724zm1.177 8.593H6.668V9.949h2.353v7.558z"
+                            />
                           </svg>
                           <span>LinkedIn</span>
                         </a>
@@ -1054,7 +1033,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             className="w-3.5 h-3.5 shrink-0"
                             aria-hidden="true"
                           >
-                            <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.589 6.36h1.913l-4.181 4.778L18.24 17.64h-3.851l-3.016-3.944L7.921 17.64H6.006l4.472-5.112L5.76 6.36h3.949l2.726 3.605L15.589 6.36zm-.672 10.135h1.06L9.133 7.445H7.995l6.922 9.05z"
+                            />
                           </svg>
                           <span>The X</span>
                         </a>
