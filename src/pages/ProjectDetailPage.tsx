@@ -5,7 +5,7 @@ import {
   ArrowLeft,
   ChevronLeft,
   X,
-  Menu,
+  ArrowUpRight,
   Facebook,
   Linkedin,
   Send,
@@ -115,6 +115,80 @@ export default function ProjectDetailPage() {
     } else {
       navigateToHome();
     }
+  };
+
+  const mobileMenuPanelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!(isMobile && isMobileMenuOpen)) {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      lenis?.start();
+      return;
+    }
+
+    lenis?.stop();
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    const rafId = requestAnimationFrame(() => {
+      mobileMenuPanelRef.current?.focus({ preventScroll: true });
+    });
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const panel = mobileMenuPanelRef.current;
+      if (!panel || !panel.contains(e.target as Node)) {
+        if (e.cancelable) e.preventDefault();
+        return;
+      }
+
+      if (panel.scrollHeight <= panel.clientHeight) {
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      const panel = mobileMenuPanelRef.current;
+      if (!panel || !panel.contains(e.target as Node)) {
+        if (e.cancelable) e.preventDefault();
+        return;
+      }
+
+      if (panel.scrollHeight <= panel.clientHeight) {
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const scrollKeys = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
+      if (!scrollKeys.includes(e.key)) return;
+      const panel = mobileMenuPanelRef.current;
+      if (!panel || !panel.contains(e.target as Node)) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("keydown", handleKeyDown, { passive: false });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown);
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      lenis?.start();
+    };
+  }, [isMobile, isMobileMenuOpen, lenis]);
+
+  const handleMobileMenuNavClick = (e: React.MouseEvent<HTMLElement>, targetId: string) => {
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    lenis?.start();
+    setIsMobileMenuOpen(false);
+    handleNavClick(e, targetId);
   };
 
   const project = PORTFOLIO_PROJECTS.find(
@@ -268,21 +342,21 @@ export default function ProjectDetailPage() {
       </div>
       {/* Navigation Header */}
       <AnimatePresence>
-        {headerVisible && (
+        {(headerVisible || (isMobile && isMobileMenuOpen)) && (
           <motion.header
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+            className={`fixed top-0 left-0 right-0 transition-[background-color,border-color,box-shadow] duration-300 ${
               isMobile
                 ? isMobileMenuOpen
-                  ? "bg-white border-b-0 h-auto shadow-none"
-                  : "bg-white border-b border-zinc-200/80 h-14 shadow-sm"
-                : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
+                  ? "z-[120] !bg-transparent !border-transparent border-b-0 inset-0 h-[100vh] supports-[height:100dvh]:h-[100dvh] flex flex-col overflow-hidden shadow-none"
+                  : "z-[100] bg-white border-b border-zinc-200/80 h-14 shadow-sm"
+                : "z-[100] bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
             }`}
           >
-            <div className="w-full px-6 sm:px-12 lg:px-16 h-14 md:h-12 lg:h-14 flex items-center justify-between">
+            <div className="w-full px-6 sm:px-12 lg:px-16 h-14 md:h-12 lg:h-14 shrink-0 bg-white md:bg-transparent flex items-center justify-between">
               {!isMobile ? (
                 <LayoutGroup id="header-project-group">
                   {!isHeaderScrolled ? (
@@ -473,8 +547,16 @@ export default function ProjectDetailPage() {
                 <>
                   <div className="flex items-center">
                     <button
-                      onClick={handleBrandHomeClick}
-                      className="font-display font-semibold text-sm tracking-tight text-[#2563EB] hover:text-[#3B82F6] transition-colors cursor-pointer"
+                      onClick={(e) => {
+                        if (isMobileMenuOpen) {
+                          document.documentElement.style.overflow = "";
+                          document.body.style.overflow = "";
+                          lenis?.start();
+                          setIsMobileMenuOpen(false);
+                        }
+                        handleBrandHomeClick(e);
+                      }}
+                      className="font-display font-semibold text-sm tracking-tight text-[#2563EB] transition-colors cursor-pointer hover:opacity-85 bg-transparent border-none p-0 outline-none"
                     >
                       Zulhilmi Nasir
                     </button>
@@ -482,13 +564,27 @@ export default function ProjectDetailPage() {
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                      className="p-1 px-2 -mr-3 translate-x-1 pl-2 text-[#2563EB] hover:text-[#3B82F6] active:text-[#3B82F6] cursor-pointer rounded-lg focus:outline-none transition-colors"
-                      aria-label="Toggle Menu"
+                      className="p-1 px-2 -mr-3 translate-x-1 pl-2 text-[#2563EB] hover:text-[#3B82F6] active:text-[#3B82F6] transition-colors cursor-pointer"
+                      aria-label="Toggle navigation menu"
                     >
                       {isMobileMenuOpen ? (
-                        <X className="w-5 h-5" />
+                        <X className="h-5 w-5" />
                       ) : (
-                        <Menu className="w-5 h-5" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 28 20"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-5 w-7"
+                          aria-hidden="true"
+                        >
+                          <line x1="2" y1="5" x2="26" y2="5" />
+                          <line x1="14" y1="10" x2="26" y2="10" />
+                          <line x1="2" y1="15" x2="26" y2="15" />
+                        </svg>
                       )}
                     </button>
                   </div>
@@ -500,65 +596,154 @@ export default function ProjectDetailPage() {
             <AnimatePresence>
               {isMobile && isMobileMenuOpen && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-satoshi font-sans uppercase text-white shadow-xl overflow-hidden"
-                  style={{ fontFamily: "'Satoshi', var(--font-sans), sans-serif" }}
+                  ref={mobileMenuPanelRef}
+                  tabIndex={-1}
+                  data-lenis-prevent
+                  data-lenis-prevent-wheel
+                  data-lenis-prevent-touch
+                  initial={{ opacity: 0, clipPath: "inset(0% 0% 100% 0%)" }}
+                  animate={{
+                    opacity: 1,
+                    clipPath: "inset(0% 0% 0% 0%)",
+                    transitionEnd: { clipPath: "none" },
+                  }}
+                  exit={{ opacity: 0, clipPath: "inset(0% 0% 100% 0%)" }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB] backdrop-blur-xs px-6 pt-5 pb-[max(3rem,calc(env(safe-area-inset-bottom)+1.5rem))] flex-1 min-h-0 h-[calc(100vh-3.5rem)] supports-[height:100dvh]:h-[calc(100dvh-3.5rem)] w-full flex flex-col font-sans font-semibold uppercase text-white overflow-y-auto overscroll-y-contain touch-pan-y [-webkit-overflow-scrolling:touch] pointer-events-auto outline-none"
                 >
-                  <button
-                    onClick={(e) => {
-                      setIsMobileMenuOpen(false);
-                      handleNavClick(e, "#services-section");
-                    }}
-                    className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer"
+                  <a
+                    href="#services-section"
+                    onClick={(e) => handleMobileMenuNavClick(e, "#services-section")}
+                    className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                   >
                     Services
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      setIsMobileMenuOpen(false);
-                      handleNavClick(e, "#integration-section");
-                    }}
-                    className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer"
+                  </a>
+                  <a
+                    href="#integration-section"
+                    onClick={(e) => handleMobileMenuNavClick(e, "#integration-section")}
+                    className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                   >
                     Software & AI Solutions
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                    className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white/50 pb-2 border-b border-white/50 cursor-default"
+                  </a>
+                  <a
+                    href="#capabilities-section"
+                    onClick={(e) => handleMobileMenuNavClick(e, "#capabilities-section")}
+                    className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                   >
                     Projects
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      setIsMobileMenuOpen(false);
-                      handleNavClick(e, "#about-section");
-                    }}
-                    className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer"
+                  </a>
+                  <a
+                    href="#about-section"
+                    onClick={(e) => handleMobileMenuNavClick(e, "#about-section")}
+                    className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                   >
                     About
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      setIsMobileMenuOpen(false);
-                      handleNavClick(e, "#career-section");
-                    }}
-                    className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50 cursor-pointer"
+                  </a>
+                  <a
+                    href="#career-section"
+                    onClick={(e) => handleMobileMenuNavClick(e, "#career-section")}
+                    className="shrink-0 flex items-center justify-end text-right py-3 mb-7 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                   >
                     Career
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      setIsMobileMenuOpen(false);
-                      handleNavClick(e, "#contact-section");
-                    }}
-                    className="font-satoshi font-sans uppercase text-sm tracking-wide text-left text-white hover:text-white/80 active:text-white/80 transition-colors cursor-pointer"
-                  >
-                    Collaborate
-                  </button>
+                  </a>
+
+                  <div className="mt-auto shrink-0 w-full border-t border-white/50 pt-7 flex flex-col items-end text-right">
+                    <a
+                      href="#contact-section"
+                      onClick={(e) => handleMobileMenuNavClick(e, "#contact-section")}
+                      className="ml-auto inline-flex items-center justify-end gap-2.5 group active:scale-[0.98] transition-transform"
+                    >
+                      <ArrowUpRight
+                        className="w-7 h-7 sm:w-8 sm:h-8 !text-white stroke-[2.25] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        aria-hidden="true"
+                      />
+                      <span className="inline-flex items-center justify-center whitespace-nowrap bg-white !text-[#2563EB] font-semibold uppercase text-[clamp(1rem,4.8vw,1.35rem)] leading-none tracking-[-0.02em] px-5 py-3 rounded-full shadow-md group-hover:bg-white/95 transition-colors">
+                        LET&apos;S CONNECT
+                      </span>
+                    </a>
+
+                    <a
+                      href="mailto:zulhilminasir999@gmail.com"
+                      className="mt-7 inline-block !text-white hover:opacity-85 active:opacity-75 transition-opacity normal-case font-semibold text-[clamp(1.125rem,5.2vw,1.4rem)] leading-snug tracking-tight text-right"
+                    >
+                      zulhilminasir999@gmail.com
+                    </a>
+
+                    <div className="mt-5 flex flex-col items-end gap-2.5 text-right">
+                      <a
+                        href="https://linkedin.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-3.5 h-3.5 shrink-0"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.817 17.507h-2.346v-3.676c0-.876-.018-2.004-1.222-2.004-1.223 0-1.41.954-1.41 1.94v3.74h-2.345V9.949h2.253v1.03h.03c.315-.594 1.08-1.221 2.224-1.221 2.377 0 2.816 1.564 2.816 3.6v4.149zM7.844 8.914a1.362 1.362 0 1 1 0-2.724 1.362 1.362 0 0 1 0 2.724zm1.177 8.593H6.668V9.949h2.353v7.558z"
+                          />
+                        </svg>
+                        <span>LinkedIn</span>
+                      </a>
+                      <a
+                        href="https://facebook.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-3.5 h-3.5 shrink-0"
+                          aria-hidden="true"
+                        >
+                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                        <span>Facebook</span>
+                      </a>
+                      <a
+                        href="https://x.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-3.5 h-3.5 shrink-0"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.589 6.36h1.913l-4.181 4.778L18.24 17.64h-3.851l-3.016-3.944L7.921 17.64H6.006l4.472-5.112L5.76 6.36h3.949l2.726 3.605L15.589 6.36zm-.672 10.135h1.06L9.133 7.445H7.995l6.922 9.05z"
+                          />
+                        </svg>
+                        <span>The X</span>
+                      </a>
+                      <a
+                        href="https://t.me"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-3.5 h-3.5 shrink-0"
+                          aria-hidden="true"
+                        >
+                          <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                        </svg>
+                        <span>Telegram</span>
+                      </a>
+                    </div>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1485,7 +1670,7 @@ export default function ProjectDetailPage() {
 
       {/* Floating back button */}
       <FloatingMenu
-        visible={showSideMenu}
+        visible={showSideMenu && !isMobileMenuOpen}
         theme="dark"
         onNavClick={(targetId) =>
           handleNavClick({ preventDefault: () => {} } as any, targetId)
