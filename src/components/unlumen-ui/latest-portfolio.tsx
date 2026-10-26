@@ -50,7 +50,8 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "E-commerce Website",
     defaultImage: "/CK Lighting Web/ck1.jpg",
     mobileImage: "/CK Lighting Web/CK_m1.png",
-    mobileImageClassName: "scale-[1.10] -translate-y-6",
+    mobileObjectPosition: "54% center",
+    mobileImageClassName: "scale-[1.08] -translate-y-8",
     objectPosition: "center 30%",
     overlayClassName: "bottom-12 sm:bottom-16 lg:bottom-20 -translate-y-28 sm:translate-y-0",
     url: "/case-study-project/ck-lighting",
@@ -67,6 +68,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     objectPosition: "center center",
     imageClassName: "scale-[1.06] sm:scale-[1.06] sm:group-hover:scale-110",
     mobileImageClassName: "scale-[1.10] -translate-y-6",
+    overlayClassName: "bottom-12 sm:bottom-12 lg:bottom-14 -translate-y-28 sm:translate-y-0",
     url: "/case-study-project/breeze-cargo",
     client: "RepX App",
     year: "2026"

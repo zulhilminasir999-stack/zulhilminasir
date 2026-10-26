@@ -93,7 +93,7 @@ export default function WorkInNumbers({ theme = "light" }: WorkInNumbersProps) {
 
   const stats = [
     { 
-      value: 5, 
+      value: 4, 
       label: "Years Experience", 
       suffix: "+",
       description: "Growing experience in web design & development, and digital solutions since 2020."
