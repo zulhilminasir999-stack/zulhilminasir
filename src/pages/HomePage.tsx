@@ -3,6 +3,7 @@ import { ParallaxCardWrapper } from "../components/ui/parallax-card-wrapper";
 import { motion, AnimatePresence, LayoutGroup, useScroll, useTransform } from "motion/react";
 import { 
   ArrowRight, 
+  ArrowUpRight,
   ExternalLink, 
   Layers, 
   Monitor, 
@@ -16,7 +17,6 @@ import {
   Box,
   Laptop,
   CheckCircle,
-  Menu,
   Heart,
   Sun,
   Moon,
@@ -442,6 +442,109 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     }
   };
 
+  const mobileMenuPanelRef = React.useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!(isMobile && isMobileMenuOpen)) {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      if (!isLoading) {
+        lenis?.start();
+      }
+      return;
+    }
+
+    lenis?.stop();
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    let lastTouchY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        lastTouchY = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const panel = mobileMenuPanelRef.current;
+      if (!panel || !panel.contains(e.target as Node)) {
+        if (e.cancelable) e.preventDefault();
+        return;
+      }
+
+      const currentY = e.touches[0]?.clientY ?? lastTouchY;
+      const deltaY = lastTouchY - currentY;
+      lastTouchY = currentY;
+
+      const { scrollTop, scrollHeight, clientHeight } = panel;
+      const canScrollUp = scrollTop > 0;
+      const canScrollDown = scrollTop + clientHeight < scrollHeight - 1;
+
+      if (
+        scrollHeight <= clientHeight ||
+        (deltaY < 0 && !canScrollUp) ||
+        (deltaY > 0 && !canScrollDown)
+      ) {
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      const panel = mobileMenuPanelRef.current;
+      if (!panel || !panel.contains(e.target as Node)) {
+        if (e.cancelable) e.preventDefault();
+        return;
+      }
+
+      const { scrollTop, scrollHeight, clientHeight } = panel;
+      const canScrollUp = scrollTop > 0;
+      const canScrollDown = scrollTop + clientHeight < scrollHeight - 1;
+
+      if (
+        scrollHeight <= clientHeight ||
+        (e.deltaY < 0 && !canScrollUp) ||
+        (e.deltaY > 0 && !canScrollDown)
+      ) {
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const scrollKeys = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
+      if (!scrollKeys.includes(e.key)) return;
+      const panel = mobileMenuPanelRef.current;
+      if (!panel || !panel.contains(e.target as Node)) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("keydown", handleKeyDown, { passive: false });
+
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown);
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      if (!isLoading) {
+        lenis?.start();
+      }
+    };
+  }, [isMobile, isMobileMenuOpen, isLoading, lenis]);
+
+  const handleMobileMenuNavClick = (e: React.MouseEvent<HTMLElement>, targetId: string) => {
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    lenis?.start();
+    setIsMobileMenuOpen(false);
+    handleNavClick(e, targetId);
+  };
+
   useEffect(() => {
     let prevY = window.scrollY;
 
@@ -530,23 +633,23 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       <div className={`${theme} min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-zinc-700 selection:text-white transition-colors duration-300 relative`}>
       
       {/* Global Navigation Header with dynamic scroll-up layout */}
-      <div className="relative z-[100]">
+      <div className={`relative ${isMobile && isMobileMenuOpen ? "z-[120]" : "z-[100]"}`}>
         <AnimatePresence>
-          {headerVisible && (
+          {(headerVisible || (isMobile && isMobileMenuOpen)) && (
             <motion.header 
               initial={{ y: -100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -100, opacity: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+              className={`fixed top-0 left-0 right-0 transition-[background-color,border-color,box-shadow] duration-300 ${
                 isMobile 
                   ? (isMobileMenuOpen 
-                      ? "bg-white border-b-0 h-auto shadow-none" 
-                      : "bg-white border-b border-zinc-200/80 h-14 shadow-sm")
-                  : "bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
+                      ? "z-[120] !bg-transparent !border-transparent border-b-0 h-auto shadow-none" 
+                      : "z-[100] bg-white border-b border-zinc-200/80 h-14 shadow-sm")
+                  : "z-[100] bg-transparent border-b-0 pt-4 md:pt-2.5 lg:pt-4"
               }`}
             >
-              <div className="w-full px-6 sm:px-12 lg:px-16 h-14 md:h-12 lg:h-14 flex items-center justify-between">
+              <div className="w-full px-6 sm:px-12 lg:px-16 h-14 md:h-12 lg:h-14 shrink-0 bg-white md:bg-transparent flex items-center justify-between">
                 
                 {/* 
                   DESKTOP & TABLET VIEW:
@@ -775,7 +878,15 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                         variants={headerItemReveal}
                         initial="hidden"
                         animate={!isLoading ? "visible" : "hidden"}
-                        onClick={handleBrandHomeClick}
+                        onClick={(e) => {
+                          if (isMobileMenuOpen) {
+                            document.documentElement.style.overflow = "";
+                            document.body.style.overflow = "";
+                            lenis?.start();
+                            setIsMobileMenuOpen(false);
+                          }
+                          handleBrandHomeClick(e);
+                        }}
                         className="font-display font-semibold text-sm tracking-tight text-[#2563EB] transition-colors cursor-pointer hover:opacity-85 bg-transparent border-none p-0 outline-none"
                       >
                         Zulhilmi Nasir
@@ -797,7 +908,21 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                         {isMobileMenuOpen ? (
                           <X className="h-5 w-5" />
                         ) : (
-                          <Menu className="h-5 w-5" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 28 20"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.75"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="h-5 w-7"
+                            aria-hidden="true"
+                          >
+                            <line x1="2" y1="5" x2="26" y2="5" />
+                            <line x1="14" y1="10" x2="26" y2="10" />
+                            <line x1="2" y1="15" x2="26" y2="15" />
+                          </svg>
                         )}
                       </button>
                     </motion.div>
@@ -809,17 +934,148 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               <AnimatePresence>
                 {isMobile && isMobileMenuOpen && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB] p-6 space-y-4 flex flex-col text-sm tracking-wide font-mono uppercase text-white shadow-xl overflow-hidden"
+                    ref={mobileMenuPanelRef}
+                    tabIndex={-1}
+                    data-lenis-prevent
+                    data-lenis-prevent-wheel
+                    data-lenis-prevent-touch
+                    initial={{ opacity: 0, clipPath: "inset(0% 0% 100% 0%)" }}
+                    animate={{
+                      opacity: 1,
+                      clipPath: "inset(0% 0% 0% 0%)",
+                      transitionEnd: { clipPath: "none" },
+                    }}
+                    exit={{ opacity: 0, clipPath: "inset(0% 0% 100% 0%)" }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                    className="md:hidden m-0 mt-0 border-b-0 bg-[#2563EB]/[0.07] backdrop-blur-xs px-6 pt-5 pb-[max(2.5rem,env(safe-area-inset-bottom))] h-[calc(100vh-3.5rem)] supports-[height:100dvh]:h-[calc(100dvh-3.5rem)] w-full flex flex-col font-sans font-semibold uppercase text-white overflow-y-auto overscroll-contain touch-pan-y [-webkit-overflow-scrolling:touch] outline-none"
                   >
-                    <a href="#services-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#services-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Services</a>
-                    <a href="#integration-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#integration-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Software & AI Solutions</a>
-                    <a href="#capabilities-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#capabilities-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Projects</a>
-                    <a href="#about-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#about-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">About</a>
-                    <a href="#career-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#career-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors pb-2 border-b border-white/50">Career</a>
-                    <a href="#contact-section" onClick={(e) => { setIsMobileMenuOpen(false); handleNavClick(e, '#contact-section'); }} className="text-white hover:text-white/80 active:text-white/80 transition-colors">Collaborate</a>
+                    <a
+                      href="#services-section"
+                      onClick={(e) => handleMobileMenuNavClick(e, "#services-section")}
+                      className="shrink-0 flex items-center justify-end text-right py-2.5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                    >
+                      Services
+                    </a>
+                    <a
+                      href="#integration-section"
+                      onClick={(e) => handleMobileMenuNavClick(e, "#integration-section")}
+                      className="shrink-0 flex items-center justify-end text-right py-2.5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                    >
+                      Software & AI Solutions
+                    </a>
+                    <a
+                      href="#capabilities-section"
+                      onClick={(e) => handleMobileMenuNavClick(e, "#capabilities-section")}
+                      className="shrink-0 flex items-center justify-end text-right py-2.5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                    >
+                      Projects
+                    </a>
+                    <a
+                      href="#about-section"
+                      onClick={(e) => handleMobileMenuNavClick(e, "#about-section")}
+                      className="shrink-0 flex items-center justify-end text-right py-2.5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                    >
+                      About
+                    </a>
+                    <a
+                      href="#career-section"
+                      onClick={(e) => handleMobileMenuNavClick(e, "#career-section")}
+                      className="shrink-0 flex items-center justify-end text-right py-2.5 mb-5 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(1.45rem,6.8vw,1.95rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
+                    >
+                      Career
+                    </a>
+
+                    <div className="mt-auto shrink-0 w-full border-t border-white/50 pt-7 flex flex-col items-end text-right">
+                      <a
+                        href="#contact-section"
+                        onClick={(e) => handleMobileMenuNavClick(e, "#contact-section")}
+                        className="ml-auto inline-flex items-center justify-end gap-2.5 group active:scale-[0.98] transition-transform"
+                      >
+                        <ArrowUpRight
+                          className="w-7 h-7 sm:w-8 sm:h-8 !text-white stroke-[2.25] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                          aria-hidden="true"
+                        />
+                        <span className="inline-flex items-center justify-center whitespace-nowrap bg-white !text-[#2563EB] font-semibold uppercase text-[clamp(1rem,4.8vw,1.35rem)] leading-none tracking-[-0.02em] px-5 py-3 rounded-full shadow-md group-hover:bg-white/95 transition-colors">
+                          LET&apos;S CONNECT
+                        </span>
+                      </a>
+
+                      {/* Email address in larger font (above social media menu text) */}
+                      <a
+                        href="mailto:zulhilminasir999@gmail.com"
+                        className="mt-7 inline-block !text-white hover:opacity-85 active:opacity-75 transition-opacity normal-case font-semibold text-[clamp(1.125rem,5.2vw,1.4rem)] leading-snug tracking-tight text-right"
+                      >
+                        zulhilminasir999@gmail.com
+                      </a>
+
+                      {/* Social media links stacked vertically in small font with original brand icons on left */}
+                      <div className="mt-5 flex flex-col items-end gap-2.5 text-right">
+                        <a
+                          href="https://linkedin.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-3.5 h-3.5 shrink-0"
+                            aria-hidden="true"
+                          >
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                          </svg>
+                          <span>LinkedIn</span>
+                        </a>
+                        <a
+                          href="https://facebook.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-3.5 h-3.5 shrink-0"
+                            aria-hidden="true"
+                          >
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                          </svg>
+                          <span>Facebook</span>
+                        </a>
+                        <a
+                          href="https://x.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-3.5 h-3.5 shrink-0"
+                            aria-hidden="true"
+                          >
+                            <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                          </svg>
+                          <span>The X</span>
+                        </a>
+                        <a
+                          href="https://t.me"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-3.5 h-3.5 shrink-0"
+                            aria-hidden="true"
+                          >
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                          </svg>
+                          <span>Telegram</span>
+                        </a>
+                      </div>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -1295,7 +1551,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       </footer>
 
     </div>
-      <FloatingMenu visible={isMobile && showSideMenu} onNavClick={(targetId) => handleNavClick({ preventDefault: () => {} } as any, targetId)} />
+      <FloatingMenu visible={isMobile && showSideMenu && !isMobileMenuOpen} onNavClick={(targetId) => handleNavClick({ preventDefault: () => {} } as any, targetId)} />
     </>
   );
 }

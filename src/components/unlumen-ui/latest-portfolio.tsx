@@ -201,9 +201,9 @@ export function LatestPortfolio() {
           const lastItemImageMask: React.CSSProperties = isLastItem
             ? {
                 maskImage:
-                  "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 56%, rgba(0,0,0,0.92) 66%, rgba(0,0,0,0.65) 76%, rgba(0,0,0,0.28) 87%, rgba(0,0,0,0.06) 95%, rgba(0,0,0,0) 100%)",
+                  "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 78%, rgba(0,0,0,0.92) 84%, rgba(0,0,0,0.68) 89%, rgba(0,0,0,0.34) 94%, rgba(0,0,0,0.08) 98%, rgba(0,0,0,0) 100%)",
                 WebkitMaskImage:
-                  "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 56%, rgba(0,0,0,0.92) 66%, rgba(0,0,0,0.65) 76%, rgba(0,0,0,0.28) 87%, rgba(0,0,0,0.06) 95%, rgba(0,0,0,0) 100%)",
+                  "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 78%, rgba(0,0,0,0.92) 84%, rgba(0,0,0,0.68) 89%, rgba(0,0,0,0.34) 94%, rgba(0,0,0,0.08) 98%, rgba(0,0,0,0) 100%)",
               }
             : {};
 
@@ -272,12 +272,12 @@ export function LatestPortfolio() {
                 />
               )}
               {isLastItem ? (
-                /* Smooth multi-stop #2563EB gradient seamlessly connecting the 5th project image into #gallery-section */
+                /* Compact, smooth multi-stop #2563EB gradient seamlessly connecting the bottom edge into #gallery-section */
                 <div
-                  className="absolute inset-x-0 bottom-0 h-[58%] sm:h-[54%] z-10 pointer-events-none"
+                  className="absolute inset-x-0 bottom-0 h-[26%] sm:h-[28%] z-10 pointer-events-none"
                   style={{
                     background:
-                      "linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.04) 15%, rgba(37, 99, 235, 0.14) 30%, rgba(37, 99, 235, 0.34) 48%, rgba(37, 99, 235, 0.62) 65%, rgba(37, 99, 235, 0.86) 80%, rgba(37, 99, 235, 0.96) 90%, #2563EB 96%, #2563EB 100%)",
+                      "linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.05) 18%, rgba(37, 99, 235, 0.18) 36%, rgba(37, 99, 235, 0.42) 56%, rgba(37, 99, 235, 0.72) 75%, rgba(37, 99, 235, 0.92) 88%, #2563EB 96%, #2563EB 100%)",
                   }}
                 />
               ) : (

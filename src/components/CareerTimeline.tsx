@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "motion/react";
 import { Plus, Minus, ArrowUpRight } from "lucide-react";
 import { WordsStagger } from "../registry/spell-ui/words-stagger";
 
@@ -106,9 +106,44 @@ function TypewriterText({ text, active, isLight }: { text: string; active: boole
   );
 }
 
+function CareerRoleHeading({
+  company,
+  isOpen,
+  index,
+}: {
+  company: string;
+  isOpen: boolean;
+  index: number;
+}) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const isInView = useInView(headingRef, { once: false, amount: 0.2 });
+
+  return (
+    <h3
+      ref={headingRef}
+      className={`text-xl sm:text-2xl md:text-3xl font-medium tracking-tight transition-all duration-500 ${
+        isOpen
+          ? "opacity-100 !text-[#2563EB]"
+          : "opacity-100 text-zinc-700 !text-zinc-700 group-hover:!text-[#2563EB]"
+      }`}
+    >
+      <WordsStagger
+        trigger={isInView}
+        delay={0.05 + index * 0.08}
+        stagger={0.06}
+        className="text-inherit [&>span:last-child]:mr-0"
+      >
+        {company}
+      </WordsStagger>
+    </h3>
+  );
+}
+
 export default function CareerTimeline({ theme }: CareerTimelineProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const isLight = theme === "light";
+  const headerRef = useRef<HTMLHeadingElement>(null);
+  const isHeaderInView = useInView(headerRef, { once: false, amount: 0.2 });
 
   const toggleAccordion = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
@@ -121,21 +156,50 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
       {/* Editorial Header Accent */}
       <div className="pb-10 sm:pb-16 transition-colors duration-300">
         <div className="w-full text-center md:text-center lg:text-left">
-          <h2 className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] sm:leading-[70px] select-none text-center md:text-center lg:text-left text-[#2563EB] !text-[#2563EB]">
-            {/* Mobile: Clean, static fixed title component in modern blue */}
+          <h2
+            ref={headerRef}
+            className="text-[40px] sm:text-5xl md:text-[60px] lg:text-[70px] font-sans font-bold tracking-tighter uppercase leading-[0.85] sm:leading-[70px] select-none text-center md:text-center lg:text-left text-[#2563EB] !text-[#2563EB]"
+          >
+            {/* Mobile: Scroll-triggered staggered blur-up reveal */}
             <span 
               className="block sm:hidden text-[#2563EB] !text-[#2563EB] leading-[42px]"
               style={{ lineHeight: "42px" }}
             >
-              PROFESSIONAL<br />CHRONOLOGY
-            </span>
-            {/* Desktop: Animated staggered words */}
-            <span className="hidden sm:inline text-[#2563EB] !text-[#2563EB]">
-              <WordsStagger className="text-[#2563EB] !text-[#2563EB]">
+              <WordsStagger
+                trigger={isHeaderInView}
+                delay={0.05}
+                stagger={0.08}
+                className="text-[#2563EB] !text-[#2563EB] justify-center [&>span:last-child]:mr-0"
+              >
                 PROFESSIONAL
               </WordsStagger>
               <br />
-              <WordsStagger className="text-[#2563EB] !text-[#2563EB]" delay={0.35}>
+              <WordsStagger
+                trigger={isHeaderInView}
+                delay={0.2}
+                stagger={0.08}
+                className="text-[#2563EB] !text-[#2563EB] justify-center [&>span:last-child]:mr-0"
+              >
+                CHRONOLOGY
+              </WordsStagger>
+            </span>
+            {/* Desktop: Scroll-triggered staggered blur-up reveal */}
+            <span className="hidden sm:inline text-[#2563EB] !text-[#2563EB]">
+              <WordsStagger
+                trigger={isHeaderInView}
+                delay={0.05}
+                stagger={0.08}
+                className="text-[#2563EB] !text-[#2563EB] [&>span:last-child]:mr-0"
+              >
+                PROFESSIONAL
+              </WordsStagger>
+              <br />
+              <WordsStagger
+                trigger={isHeaderInView}
+                delay={0.2}
+                stagger={0.08}
+                className="text-[#2563EB] !text-[#2563EB] [&>span:last-child]:mr-0"
+              >
                 CHRONOLOGY
               </WordsStagger>
             </span>
@@ -145,7 +209,7 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
 
       {/* Accordion Container */}
       <div className="space-y-0">
-        {EXPERIENCE_DATA.map((item) => {
+        {EXPERIENCE_DATA.map((item, index) => {
           const isOpen = expandedId === item.id;
 
           return (
@@ -159,11 +223,11 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                 className={`w-full flex items-center justify-between py-10 sm:py-12 text-left group focus:outline-none ${isOpen ? "is-open" : ""}`}
               >
                 <div className="flex items-baseline gap-4">
-                  <h3 className={`text-xl sm:text-2xl md:text-3xl font-medium tracking-tight transition-all duration-500 ${
-                    isOpen ? "opacity-100 !text-[#2563EB]" : "opacity-100 text-zinc-700 !text-zinc-700 group-hover:!text-[#2563EB]"
-                  }`}>
-                    {item.company}
-                  </h3>
+                  <CareerRoleHeading
+                    company={item.company}
+                    isOpen={isOpen}
+                    index={index}
+                  />
                 </div>
                 
                 <div className="flex items-center gap-6">
