@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { motion, useTransform, MotionValue, useSpring } from "motion/react";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, useTransform, MotionValue, useSpring, useInView } from "motion/react";
 import { IdeasInActionHeader } from "./IdeasInActionHeader";
+import { WordsStagger } from "../registry/spell-ui/words-stagger";
 
 interface TypewriterSectionProps {
   scrollYProgress: MotionValue<number>;
@@ -17,7 +18,17 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   const [isFading, setIsFading] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
 
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
+
   useEffect(() => {
+    if (!isInView) {
+      setDisplayedText("");
+      setCharIndex(0);
+      setIsFading(false);
+      return;
+    }
+
     if (isFading) {
       // Fade out duration is 1000ms. When complete, switch to the next string and reset typing
       const fadeOutTimeout = setTimeout(() => {
@@ -54,7 +65,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
       }, 4000);
       return () => clearTimeout(stayTimeout);
     }
-  }, [charIndex, isFading, stringIndex]);
+  }, [charIndex, isFading, stringIndex, isInView]);
 
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window !== "undefined") {
@@ -146,12 +157,21 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
     return (
       <>
         {/* 1. Typewriter content directly inside the single gallery-section container */}
-        <div className="relative pt-16 pb-14 flex flex-col justify-center z-10 px-6 select-none w-full">
+        <div ref={sectionRef} className="relative pt-16 pb-14 flex flex-col justify-center z-10 px-6 select-none w-full">
           {/* Top Headline: Typewriter sentence aligned like photo with stable height */}
-          <h2 
-            className={`font-sans font-medium text-[19px] text-white tracking-tight leading-[1.3] transition-opacity duration-1000 min-h-[130px] flex flex-col justify-start text-left w-full mt-0 ${
-              isFading ? "opacity-0" : "opacity-100"
-            }`}
+          <motion.h2 
+            initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
+            animate={
+              isInView
+                ? { opacity: isFading ? 0 : 1, y: 0, filter: "blur(0px)" }
+                : { opacity: 0, y: 16, filter: "blur(8px)" }
+            }
+            transition={{
+              opacity: { duration: isFading ? 1.0 : 0.8, delay: isFading ? 0 : 0.05, ease: [0.215, 0.61, 0.355, 1] },
+              y: { duration: 0.8, delay: 0.05, ease: [0.215, 0.61, 0.355, 1] },
+              filter: { duration: 0.8, delay: 0.05, ease: [0.215, 0.61, 0.355, 1] },
+            }}
+            className="font-sans font-medium text-[19px] text-white tracking-tight leading-[1.3] min-h-[130px] flex flex-col justify-start text-left w-full mt-0"
           >
             <span 
               id="typewriter-text" 
@@ -159,52 +179,96 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
             >
               {renderFormattedText(displayedText)}
             </span>
-          </h2>
+          </motion.h2>
 
           {/* Bottom Section: 2 Images on left, Text & Button on right */}
           <div className="w-full flex flex-col items-start gap-4 mt-10 mb-0">
             {/* 2 images located under-left of the sentence */}
             <div className="flex items-center gap-2.5 shrink-0">
-              <div className="relative w-16 h-16 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
+              <motion.div
+                initial={{ opacity: 0, y: 16, scale: 0.94, filter: "blur(8px)" }}
+                animate={
+                  isInView
+                    ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }
+                    : { opacity: 0, y: 16, scale: 0.94, filter: "blur(8px)" }
+                }
+                transition={{ duration: 0.8, delay: 0.14, ease: [0.215, 0.61, 0.355, 1] }}
+                className="relative w-16 h-16 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0"
+              >
                 <img 
                   src="/DemoPic/AI.jpg" 
                   alt="AI Concept" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                 />
-              </div>
-              <div className="relative w-16 h-16 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 16, scale: 0.94, filter: "blur(8px)" }}
+                animate={
+                  isInView
+                    ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }
+                    : { opacity: 0, y: 16, scale: 0.94, filter: "blur(8px)" }
+                }
+                transition={{ duration: 0.8, delay: 0.24, ease: [0.215, 0.61, 0.355, 1] }}
+                className="relative w-16 h-16 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0"
+              >
                 <img 
                   src="/DemoPic/Zul.jpg" 
                   alt="Zulhilmi Nasir Portrait" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                 />
-              </div>
+              </motion.div>
             </div>
 
             {/* Text and Button located on right of images */}
-            <div className="flex flex-col items-start text-left max-w-xl">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+              transition={{ duration: 0.8, delay: 0.28, ease: [0.215, 0.61, 0.355, 1] }}
+              className="flex flex-col items-start text-left max-w-xl"
+            >
               <span className="text-white font-bold text-xs tracking-tight mb-1 select-none">
-                Zulhilmi Nasir's thought
+                <WordsStagger
+                  trigger={isInView}
+                  delay={0.28}
+                  stagger={0.07}
+                  className="text-white [&>span:last-child]:mr-0"
+                >
+                  Zulhilmi Nasir's thought
+                </WordsStagger>
               </span>
               <p className="text-white/80 text-xs leading-relaxed mb-3 font-normal select-none">
-                I collaborate with teams and founders to turn complex AI technologies and product ideas into intuitive, human-centered digital experiences. From early concept to launch, my focus is on building clean, purposeful software that creates real long-term value.
+                <WordsStagger
+                  trigger={isInView}
+                  delay={0.36}
+                  stagger={0.025}
+                  className="text-white/80 [&>span:last-child]:mr-0"
+                >
+                  I collaborate with teams and founders to turn complex AI technologies and product ideas into intuitive, human-centered digital experiences. From early concept to launch, my focus is on building clean, purposeful software that creates real long-term value.
+                </WordsStagger>
               </p>
-              <button
+              <motion.button
                 id="typewriter-create-btn"
+                initial={{ opacity: 0, y: 15, filter: "blur(8px)" }}
+                animate={
+                  isInView
+                    ? { opacity: 1, y: 0, filter: "blur(0px)", transitionEnd: { filter: "none" } }
+                    : { opacity: 0, y: 15, filter: "blur(8px)" }
+                }
+                transition={{ duration: 0.8, delay: 0.52, ease: [0.215, 0.61, 0.355, 1] }}
                 onClick={() => {
                   const contactSection = document.getElementById("contact-section");
                   if (contactSection) {
                     contactSection.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/25 backdrop-blur-2xl active:scale-[0.98] text-white text-xs font-medium px-4 py-2 rounded-xl shadow-lg transition-all duration-200 border border-white/35 select-none cursor-pointer"
+                className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/25 backdrop-blur-2xl active:scale-[0.98] text-white text-xs font-medium px-4 py-2 rounded-xl shadow-lg transition-colors duration-200 border border-white/35 select-none cursor-pointer"
               >
                 <span>Let's Create</span>
                 <span className="inline-block w-1.5 h-1.5 bg-white rounded-[1px]" />
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           </div>
         </div>
 
@@ -220,7 +284,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
   }
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden" style={{ paddingBottom: 0 }}>
+    <div ref={sectionRef} className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden" style={{ paddingBottom: 0 }}>
       {/* 1. Typewriter content without bounding container */}
       <motion.div
         style={{
@@ -234,10 +298,19 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
         } flex flex-col justify-center z-10 px-6 sm:px-12 lg:px-16 select-none w-full`}
       >
         {/* Top Headline: Typewriter sentence aligned like photo with stable height */}
-        <h2 
-          className={`font-sans font-medium text-[19px] sm:text-[30px] md:text-[36px] lg:text-[41px] xl:text-[41px] text-white tracking-tight leading-[1.3] sm:leading-[1.2] transition-opacity duration-1000 min-h-[130px] sm:min-h-[145px] md:min-h-[160px] lg:min-h-[175px] flex flex-col justify-start text-left w-full max-w-[1400px] mt-0 sm:-mt-12 md:-mt-16 ${
-            isFading ? "opacity-0" : "opacity-100"
-          }`}
+        <motion.h2 
+          initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
+          animate={
+            isInView
+              ? { opacity: isFading ? 0 : 1, y: 0, filter: "blur(0px)" }
+              : { opacity: 0, y: 16, filter: "blur(8px)" }
+          }
+          transition={{
+            opacity: { duration: isFading ? 1.0 : 0.8, delay: isFading ? 0 : 0.05, ease: [0.215, 0.61, 0.355, 1] },
+            y: { duration: 0.8, delay: 0.05, ease: [0.215, 0.61, 0.355, 1] },
+            filter: { duration: 0.8, delay: 0.05, ease: [0.215, 0.61, 0.355, 1] },
+          }}
+          className="font-sans font-medium text-[19px] sm:text-[30px] md:text-[36px] lg:text-[41px] xl:text-[41px] text-white tracking-tight leading-[1.3] sm:leading-[1.2] min-h-[130px] sm:min-h-[145px] md:min-h-[160px] lg:min-h-[175px] flex flex-col justify-start text-left w-full max-w-[1400px] mt-0 sm:-mt-12 md:-mt-16"
         >
           <span 
             id="typewriter-text" 
@@ -245,52 +318,96 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
           >
             {renderFormattedText(displayedText)}
           </span>
-        </h2>
+        </motion.h2>
 
         {/* Bottom Section: 2 Images on left, Text & Button on right - fixed position unaffected by typing */}
         <div className="w-full flex flex-col sm:flex-row items-start gap-4 sm:gap-6 md:gap-8 mt-10 sm:mt-[90px] md:mt-[110px] lg:mt-[125px] mb-0">
           {/* 2 images located under-left of the sentence */}
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.94, filter: "blur(8px)" }}
+              animate={
+                isInView
+                  ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }
+                  : { opacity: 0, y: 16, scale: 0.94, filter: "blur(8px)" }
+              }
+              transition={{ duration: 0.8, delay: 0.14, ease: [0.215, 0.61, 0.355, 1] }}
+              className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0"
+            >
               <img 
                 src="/DemoPic/AI.jpg" 
                 alt="AI Concept" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
-            </div>
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.94, filter: "blur(8px)" }}
+              animate={
+                isInView
+                  ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }
+                  : { opacity: 0, y: 16, scale: 0.94, filter: "blur(8px)" }
+              }
+              transition={{ duration: 0.8, delay: 0.24, ease: [0.215, 0.61, 0.355, 1] }}
+              className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 rounded-lg overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 group shrink-0"
+            >
               <img 
                 src="/DemoPic/Zul.jpg" 
                 alt="Zulhilmi Nasir Portrait" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
-            </div>
+            </motion.div>
           </div>
 
           {/* Text and Button located on right of images */}
-          <div className="flex flex-col items-start text-left max-w-xl sm:ml-20 md:ml-[140px] lg:ml-[320px] xl:ml-[420px]">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            transition={{ duration: 0.8, delay: 0.28, ease: [0.215, 0.61, 0.355, 1] }}
+            className="flex flex-col items-start text-left max-w-xl sm:ml-20 md:ml-[140px] lg:ml-[320px] xl:ml-[420px]"
+          >
             <span className="text-white font-bold text-xs sm:text-sm tracking-tight mb-1 select-none">
-              Zulhilmi Nasir's thought
+              <WordsStagger
+                trigger={isInView}
+                delay={0.28}
+                stagger={0.07}
+                className="text-white [&>span:last-child]:mr-0"
+              >
+                Zulhilmi Nasir's thought
+              </WordsStagger>
             </span>
             <p className="text-white/80 text-xs sm:text-sm leading-relaxed mb-3 font-normal select-none">
-              I collaborate with teams and founders to turn complex AI technologies and product ideas into intuitive, human-centered digital experiences. From early concept to launch, my focus is on building clean, purposeful software that creates real long-term value.
+              <WordsStagger
+                trigger={isInView}
+                delay={0.36}
+                stagger={0.025}
+                className="text-white/80 [&>span:last-child]:mr-0"
+              >
+                I collaborate with teams and founders to turn complex AI technologies and product ideas into intuitive, human-centered digital experiences. From early concept to launch, my focus is on building clean, purposeful software that creates real long-term value.
+              </WordsStagger>
             </p>
-            <button
+            <motion.button
               id="typewriter-create-btn"
+              initial={{ opacity: 0, y: 15, filter: "blur(8px)" }}
+              animate={
+                isInView
+                  ? { opacity: 1, y: 0, filter: "blur(0px)", transitionEnd: { filter: "none" } }
+                  : { opacity: 0, y: 15, filter: "blur(8px)" }
+              }
+              transition={{ duration: 0.8, delay: 0.52, ease: [0.215, 0.61, 0.355, 1] }}
               onClick={() => {
                 const contactSection = document.getElementById("contact-section");
                 if (contactSection) {
                   contactSection.scrollIntoView({ behavior: "smooth" });
                 }
               }}
-              className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/25 backdrop-blur-2xl active:scale-[0.98] text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-xl shadow-lg transition-all duration-200 border border-white/35 select-none cursor-pointer"
+              className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/25 backdrop-blur-2xl active:scale-[0.98] text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-xl shadow-lg transition-colors duration-200 border border-white/35 select-none cursor-pointer"
             >
               <span>Let's Create</span>
               <span className="inline-block w-1.5 h-1.5 bg-white rounded-[1px]" />
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
       </motion.div>
 

@@ -1,9 +1,75 @@
+import React, { useState, useEffect, useRef } from "react";
 import { Hand, ChevronDown, ChevronUp } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
-import { motion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { WordsStagger } from "../registry/spell-ui/words-stagger";
 
 interface AboutMeProps {
   theme?: "light" | "dark";
+}
+
+function JustifiedWordsStagger({
+  children,
+  trigger,
+  delay = 0.15,
+  duration = 0.75,
+  stagger = 0.015,
+  yOffset = 14,
+  blurAmount = "8px",
+}: {
+  children: string;
+  trigger: boolean;
+  delay?: number;
+  duration?: number;
+  stagger?: number;
+  yOffset?: number;
+  blurAmount?: string;
+}) {
+  const words = children.trim().split(/\s+/);
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: stagger,
+        delayChildren: delay,
+      },
+    },
+  };
+
+  const wordVariants = {
+    hidden: {
+      opacity: 0,
+      y: yOffset,
+      filter: `blur(${blurAmount})`,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration,
+        ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number],
+      },
+    },
+  };
+
+  return (
+    <motion.p
+      style={{ textAlign: "justify", textAlignLast: "left" }}
+      variants={containerVariants}
+      initial="hidden"
+      animate={trigger ? "visible" : "hidden"}
+    >
+      {words.map((word, index) => (
+        <React.Fragment key={index}>
+          <motion.em variants={wordVariants} className="not-italic inline-block">
+            {word}
+          </motion.em>
+          {index < words.length - 1 ? " " : ""}
+        </React.Fragment>
+      ))}
+    </motion.p>
+  );
 }
 
 // Custom hook-based CountUp animator to smoothly count to target numbers with zero external dependencies
@@ -131,36 +197,81 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
   // Theme is synchronized with website
   const isLight = theme === "light";
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isDesktopSm, setIsDesktopSm] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth >= 640;
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    const checkViewport = () => {
+      setIsDesktopSm(window.innerWidth >= 640);
+    };
+    checkViewport();
+    window.addEventListener("resize", checkViewport);
+    return () => window.removeEventListener("resize", checkViewport);
+  }, []);
+
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  const isHeadlineInView = useInView(headlineRef, { once: false, amount: 0.2 });
+  const isBodyInView = useInView(bodyRef, { once: false, amount: 0.15 });
 
   return (
     <div id="about-me-container" className="w-full text-left">
-      <motion.div 
-        initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="max-w-[850px] mx-auto px-0 sm:px-6 space-y-10"
-      >
+      <div className="max-w-[850px] mx-auto px-0 sm:px-6 space-y-10">
         {/* Bold Headline matching the two-line size of the reference image */}
-        <h2 className="font-sans font-bold text-3xl sm:text-4xl md:text-[50px] leading-[1.12] tracking-tight text-zinc-900">
-          Creating thoughtful digital experiences where design, technology, and AI work together.
+        <h2
+          ref={headlineRef}
+          className="font-sans font-bold text-3xl sm:text-4xl md:text-[50px] leading-[1.12] tracking-tight text-zinc-900"
+        >
+          <WordsStagger
+            trigger={isHeadlineInView}
+            delay={0.05}
+            stagger={0.06}
+            className="text-inherit leading-[1.12] [&>span:last-child]:mr-0"
+          >
+            Creating thoughtful digital experiences where design, technology, and AI work together.
+          </WordsStagger>
         </h2>
 
         {/* Description paragraphs - justified with last line aligned left */}
-        <div className="space-y-6 font-sans text-[17px] sm:text-[19px] leading-[1.65] text-zinc-600 font-normal">
+        <div
+          ref={bodyRef}
+          className="space-y-6 font-sans text-[17px] sm:text-[19px] leading-[1.65] text-zinc-600 font-normal"
+        >
           {/* Paragraph 1: Always visible */}
-          <p style={{ textAlign: "justify", textAlignLast: "left" }}>
+          <JustifiedWordsStagger
+            trigger={isBodyInView}
+            delay={0.12}
+            stagger={0.016}
+          >
             I started my career in visual design, where I learned that great design is more than aesthetics - it's about communication, clarity, and creating memorable user experiences.
-          </p>
+          </JustifiedWordsStagger>
 
           {/* Paragraph 2: Always visible */}
-          <p style={{ textAlign: "justify", textAlignLast: "left" }}>
+          <JustifiedWordsStagger
+            trigger={isBodyInView}
+            delay={0.26}
+            stagger={0.012}
+          >
             Today, I combine UI/UX design, front-end development, AI-powered workflows, and modern website development using Webflow and WordPress to build intuitive, responsive, and high-performing digital experiences. With over four years of experience in visual design, I bridge the gap between design and development, using AI to accelerate research, content creation, wireframing, prototyping, and design exploration.
-          </p>
+          </JustifiedWordsStagger>
 
           {/* Mobile More Button (at bottom of earlier 2 paragraphs when collapsed) */}
           {!isExpanded && (
-            <div className="sm:hidden pt-1">
+            <motion.div
+              initial={{ opacity: 0, y: 14, filter: "blur(8px)" }}
+              animate={
+                isBodyInView
+                  ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                  : { opacity: 0, y: 14, filter: "blur(8px)" }
+              }
+              transition={{ duration: 0.75, delay: 0.38, ease: [0.215, 0.61, 0.355, 1] }}
+              className="sm:hidden pt-1"
+            >
               <button
                 type="button"
                 id="about-me-more-btn"
@@ -170,21 +281,38 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
                 <span>More</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
-            </div>
+            </motion.div>
           )}
 
           {/* Paragraphs 3 & 4: Always visible on desktop (sm:), toggleable on mobile */}
-          <div className={`${isExpanded ? "block" : "hidden"} sm:!block space-y-6 transition-all duration-300`}>
-            <p style={{ textAlign: "justify", textAlignLast: "left" }}>
+          <div className={`${isExpanded ? "block" : "hidden"} sm:!block space-y-6 transition-opacity duration-300`}>
+            <JustifiedWordsStagger
+              trigger={isBodyInView && (isDesktopSm || isExpanded)}
+              delay={isDesktopSm ? 0.40 : 0.04}
+              stagger={0.015}
+            >
               Whether I'm designing digital products, developing websites with Webflow and WordPress, or integrating AI into the creative process, my goal is to deliver solutions that balance usability, aesthetics, performance, accessibility, and business impact.
-            </p>
-            <p style={{ textAlign: "justify", textAlignLast: "left" }}>
+            </JustifiedWordsStagger>
+            <JustifiedWordsStagger
+              trigger={isBodyInView && (isDesktopSm || isExpanded)}
+              delay={isDesktopSm ? 0.54 : 0.16}
+              stagger={0.016}
+            >
               For me, great design isn't just about how something looks - it's about how it works, how it feels, and the value it creates for both users and businesses.
-            </p>
+            </JustifiedWordsStagger>
 
             {/* Mobile Less Button (at bottom of full texts when expanded) */}
             {isExpanded && (
-              <div className="sm:hidden pt-1">
+              <motion.div
+                initial={{ opacity: 0, y: 14, filter: "blur(8px)" }}
+                animate={
+                  isBodyInView && isExpanded
+                    ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                    : { opacity: 0, y: 14, filter: "blur(8px)" }
+                }
+                transition={{ duration: 0.75, delay: 0.28, ease: [0.215, 0.61, 0.355, 1] }}
+                className="sm:hidden pt-1"
+              >
                 <button
                   type="button"
                   id="about-me-less-btn"
@@ -194,7 +322,7 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
                   <span>Less</span>
                   <ChevronUp className="w-4 h-4" />
                 </button>
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
@@ -217,7 +345,7 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
             </span>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

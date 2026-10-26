@@ -196,7 +196,18 @@ export function LatestPortfolio() {
 
       {/* Sticky Stacked Panels Wrapper */}
       <div id="capabilities-section" className="relative w-full flex flex-col">
-        {PORTFOLIO_ITEMS.map((item) => (
+        {PORTFOLIO_ITEMS.map((item, index) => {
+          const isLastItem = index === PORTFOLIO_ITEMS.length - 1;
+          const lastItemImageMask: React.CSSProperties = isLastItem
+            ? {
+                maskImage:
+                  "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 56%, rgba(0,0,0,0.92) 66%, rgba(0,0,0,0.65) 76%, rgba(0,0,0,0.28) 87%, rgba(0,0,0,0.06) 95%, rgba(0,0,0,0) 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 56%, rgba(0,0,0,0.92) 66%, rgba(0,0,0,0.65) 76%, rgba(0,0,0,0.28) 87%, rgba(0,0,0,0.06) 95%, rgba(0,0,0,0) 100%)",
+              }
+            : {};
+
+          return (
           <div
             key={item.id}
             onClick={() => {
@@ -211,10 +222,12 @@ export function LatestPortfolio() {
             onMouseEnter={() => setHoveredCardId(item.id)}
             onMouseLeave={() => setHoveredCardId(null)}
             onMouseMove={handleMouseMove}
-            className="sticky top-0 h-screen w-full flex flex-col justify-end group overflow-hidden cursor-pointer bg-zinc-950"
+            className={`sticky top-0 h-screen w-full flex flex-col justify-end group overflow-hidden cursor-pointer ${
+              isLastItem ? "bg-[#2563EB]" : "bg-zinc-950"
+            }`}
           >
             {/* Project Image Background */}
-            <div className={`absolute inset-0 w-full h-full overflow-hidden ${item.mobileBgClassName || "bg-zinc-950"} flex items-center justify-center`}>
+            <div className={`absolute inset-0 w-full h-full overflow-hidden ${isLastItem ? "bg-[#2563EB]" : (item.mobileBgClassName || "bg-zinc-950")} flex items-center justify-center`}>
               {item.mobileImage ? (
                 <>
                   <img 
@@ -229,14 +242,20 @@ export function LatestPortfolio() {
                       }
                     }}
                     className={`block sm:hidden w-full h-full ${item.objectFit === "contain" ? "object-contain" : "object-cover"} transition-transform duration-1000 ease-out ${item.mobileImageClassName || item.imageClassName || "group-hover:scale-105"} border-none outline-none ring-0 p-0 m-0`}
-                    style={{ objectPosition: item.mobileObjectPosition || "center top" }}
+                    style={{
+                      objectPosition: item.mobileObjectPosition || "center top",
+                      ...lastItemImageMask,
+                    }}
                     referrerPolicy="no-referrer"
                   />
                   <img 
                     src={item.defaultImage}
                     alt={item.title}
                     className={`hidden sm:block w-full h-full ${item.objectFit === "contain" ? "object-contain" : "object-cover"} transition-transform duration-1000 ease-out ${item.imageClassName || "group-hover:scale-105"} border-none outline-none ring-0`}
-                    style={{ objectPosition: item.objectPosition || "center center" }}
+                    style={{
+                      objectPosition: item.objectPosition || "center center",
+                      ...lastItemImageMask,
+                    }}
                     referrerPolicy="no-referrer"
                   />
                 </>
@@ -245,12 +264,26 @@ export function LatestPortfolio() {
                   src={item.defaultImage}
                   alt={item.title}
                   className={`w-full h-full ${item.objectFit === "contain" ? "object-contain" : "object-cover object-top sm:object-center"} transition-transform duration-1000 ease-out ${item.imageClassName || "group-hover:scale-105"} border-none outline-none ring-0 p-0 m-0`}
-                  style={{ objectPosition: item.objectPosition || (item.objectFit === "contain" ? "center center" : "top center") }}
+                  style={{
+                    objectPosition: item.objectPosition || (item.objectFit === "contain" ? "center center" : "top center"),
+                    ...lastItemImageMask,
+                  }}
                   referrerPolicy="no-referrer"
                 />
               )}
-              {/* Elegant dark gradient mask: on mobile, restricted strictly to the bottom so top to middle stays original in color */}
-              <div className="absolute bottom-0 left-0 right-0 h-[45%] sm:h-full sm:top-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent sm:from-black/95 sm:via-black/40 sm:to-transparent z-10 pointer-events-none" />
+              {isLastItem ? (
+                /* Smooth multi-stop #2563EB gradient seamlessly connecting the 5th project image into #gallery-section */
+                <div
+                  className="absolute inset-x-0 bottom-0 h-[58%] sm:h-[54%] z-10 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(to bottom, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.04) 15%, rgba(37, 99, 235, 0.14) 30%, rgba(37, 99, 235, 0.34) 48%, rgba(37, 99, 235, 0.62) 65%, rgba(37, 99, 235, 0.86) 80%, rgba(37, 99, 235, 0.96) 90%, #2563EB 96%, #2563EB 100%)",
+                  }}
+                />
+              ) : (
+                /* Elegant dark gradient mask: on mobile, restricted strictly to the bottom so top to middle stays original in color */
+                <div className="absolute bottom-0 left-0 right-0 h-[45%] sm:h-full sm:top-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent sm:from-black/95 sm:via-black/40 sm:to-transparent z-10 pointer-events-none" />
+              )}
             </div>
 
             {/* Custom Interactive Follower Badge */}
@@ -279,7 +312,8 @@ export function LatestPortfolio() {
             {/* Bottom Info Overlay */}
             <PortfolioBottomOverlay item={item} />
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

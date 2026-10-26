@@ -1004,7 +1004,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         <div 
           id="gallery-section" 
           ref={galleryRef} 
-          className="relative w-full bg-[#2563EB] z-30 pt-0 pb-12 overflow-hidden"
+          className="relative w-full bg-[#2563EB] z-30 pt-0 pb-12 overflow-hidden -mt-1"
         >
           <TypewriterSection scrollYProgress={galleryScrollY} />
         </div>
@@ -1013,7 +1013,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           id="gallery-section" 
           ref={galleryRef} 
           style={{ backgroundColor: galleryBg }} 
-          className="relative w-full sm:h-[220vh] z-30"
+          className="relative w-full sm:h-[220vh] z-30 -mt-1"
         >
           <motion.div 
             style={{ backgroundColor: galleryBg }} 
