@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { AnimatePresence } from "motion/react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { AnimatePresence, frame, cancelFrame } from "motion/react";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CaseStudyPage from "./pages/CaseStudyPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
@@ -9,7 +9,7 @@ import BackToTopButton from "./components/BackToTopButton";
 import { LoadingScreen } from "./components/LoadingScreen";
 import StickyStackScrollDemo from "./components/StickyStackScrollDemo";
 import { RevealProvider } from "./context/RevealContext";
-import { ReactLenis, useLenis } from "lenis/react";
+import { ReactLenis, useLenis, type LenisRef } from "lenis/react";
 import "lenis/dist/lenis.css";
 
 // Disable browser default scroll restoration to avoid uncoordinated jumps
@@ -18,8 +18,6 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
 }
 
 function AppContent() {
-  const location = useLocation();
-  
   // Show intro loading screen with percentage indicator on full browser reload / initial mount
   const [isLoading, setIsLoading] = useState(true);
   
@@ -43,7 +41,6 @@ function AppContent() {
 
   // Coordinate scroll locking with Lenis & document while loading screen is active
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
     if (isLoading) {
       lenis?.stop();
       document.body.style.overflow = "hidden";
@@ -52,6 +49,10 @@ function AppContent() {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
       lenis?.start();
+      const rafId = requestAnimationFrame(() => {
+        lenis?.resize();
+      });
+      return () => cancelAnimationFrame(rafId);
     }
     return () => {
       document.body.style.overflow = "";
@@ -82,15 +83,46 @@ function AppContent() {
 }
 
 export default function App() {
+  const lenisRef = useRef<LenisRef>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleChange = (event: MediaQueryListEvent) => {
+      setPrefersReducedMotion(event.matches);
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  // Synchronize Lenis smooth scroll step directly with Framer Motion's frame loop
+  // so sticky sections, parallax transforms, and scroll progress stay 100% locked in phase
+  useEffect(() => {
+    function update(data: { timestamp: number }) {
+      lenisRef.current?.lenis?.raf(data.timestamp);
+    }
+
+    frame.update(update, true);
+    return () => cancelFrame(update);
+  }, []);
+
   return (
     <ReactLenis
       root
+      ref={lenisRef}
       options={{
-        lerp: 0.08,
-        wheelMultiplier: 1.0,
-        touchMultiplier: 1.5,
-        smoothWheel: true,
+        autoRaf: false,
+        lerp: prefersReducedMotion ? 1 : 0.085,
+        wheelMultiplier: 0.95,
+        touchMultiplier: 1.2,
+        smoothWheel: !prefersReducedMotion,
         syncTouch: false,
+        autoResize: true,
+        overscroll: true,
       }}
     >
       <RevealProvider>

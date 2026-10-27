@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ParallaxCardWrapper } from "../components/ui/parallax-card-wrapper";
-import { motion, AnimatePresence, LayoutGroup, useScroll, useTransform } from "motion/react";
+import { motion, AnimatePresence, LayoutGroup, useScroll, useTransform, useSpring } from "motion/react";
 import { 
   ArrowRight, 
   ArrowUpRight,
@@ -126,10 +126,17 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     offset: ["start start", "end start"],
   });
 
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.94]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.25]);
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "-4%"]);
-  const heroBgY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const smoothHeroProgress = useSpring(scrollYProgress, {
+    stiffness: 200,
+    damping: 32,
+    mass: 0.15,
+    restDelta: 0.0005,
+  });
+
+  const heroScale = useTransform(smoothHeroProgress, [0, 1], [1, 0.94]);
+  const heroOpacity = useTransform(smoothHeroProgress, [0, 1], [1, 0.25]);
+  const heroY = useTransform(smoothHeroProgress, [0, 1], ["0%", "-4%"]);
+  const heroBgY = useTransform(smoothHeroProgress, [0, 1], ["0%", "15%"]);
 
   const galleryRef = React.useRef<HTMLDivElement>(null);
   
@@ -189,52 +196,95 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     };
   }, []);
 
-  // Scroll to hash if present on client-side navigation, otherwise start at the top on app load
+  // Scroll to hash if present on client-side navigation, otherwise start at the top or restore saved position
   useEffect(() => {
     if (!isLoading) {
       const savedScrollPosition = sessionStorage.getItem("home_scroll_position");
-      
       const targetHash = window.location.hash;
       const isInitialAppLoad = mountedWithLoading.current;
 
+      let userInteracted = false;
+      const timers: ReturnType<typeof setTimeout>[] = [];
+
+      const cancelStabilization = () => {
+        userInteracted = true;
+        timers.forEach((id) => clearTimeout(id));
+        timers.length = 0;
+      };
+
+      window.addEventListener("wheel", cancelStabilization, { passive: true, once: true });
+      window.addEventListener("touchstart", cancelStabilization, { passive: true, once: true });
+      window.addEventListener("pointerdown", cancelStabilization, { passive: true, once: true });
+      window.addEventListener("keydown", cancelStabilization, { passive: true, once: true });
+
+      const cleanup = () => {
+        window.removeEventListener("wheel", cancelStabilization);
+        window.removeEventListener("touchstart", cancelStabilization);
+        window.removeEventListener("pointerdown", cancelStabilization);
+        window.removeEventListener("keydown", cancelStabilization);
+        timers.forEach((id) => clearTimeout(id));
+      };
+
       if (targetHash && !isInitialAppLoad) {
         // Client-side navigation with a hash
-        const rawId = targetHash.replace('#', '');
-        
-        const scrollToHash = () => {
+        const rawId = targetHash.replace("#", "");
+        const isMobileViewport = window.innerWidth < 768;
+
+        const scrollToHash = (isSmoothAttempt: boolean = false) => {
+          if (userInteracted) return;
           const el = document.getElementById(rawId);
           if (el) {
             const targetY = el.getBoundingClientRect().top + window.scrollY;
-            window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
-            if (lenis) {
-              lenis.scrollTo(targetY, { immediate: true });
+            if (isMobileViewport && isSmoothAttempt) {
+              if (lenis) {
+                lenis.resize();
+                lenis.scrollTo(targetY, {
+                  duration: 1.1,
+                  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                });
+              } else {
+                window.scrollTo({ top: targetY, behavior: "smooth" });
+              }
+            } else if (!isMobileViewport) {
+              window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
+              if (lenis) {
+                lenis.resize();
+                lenis.scrollTo(targetY, { immediate: true });
+              }
             }
             setActiveSection(rawId);
             setIsHeaderScrolled(targetY > 80);
             setHeaderVisible(true);
           }
         };
-        
-        scrollToHash();
-        const timers = [10, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(scrollToHash, delay));
-        return () => timers.forEach(id => clearTimeout(id));
+
+        if (isMobileViewport) {
+          window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+          timers.push(setTimeout(() => scrollToHash(true), 60));
+        } else {
+          scrollToHash(false);
+          [32, 100].forEach((delay) => timers.push(setTimeout(() => scrollToHash(false), delay)));
+        }
+        return cleanup;
       } else if (savedScrollPosition) {
-        // If we have a saved scroll position (back navigation or reload), restore it smoothly
+        // If we have a saved scroll position (back navigation or reload), restore it cleanly without hijacking scroll
         const targetY = parseInt(savedScrollPosition, 10);
         if (!isNaN(targetY) && targetY > 0) {
           const restoreScroll = () => {
+            if (userInteracted) return;
             window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
             document.documentElement.scrollTop = targetY;
             document.body.scrollTop = targetY;
             if (lenis) {
+              lenis.resize();
               lenis.scrollTo(targetY, { immediate: true });
             }
             setIsHeaderScrolled(targetY > 80);
           };
-          
+
           restoreScroll();
-          const timers = [0, 20, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(restoreScroll, delay));
-          return () => timers.forEach(id => clearTimeout(id));
+          [32, 100].forEach((delay) => timers.push(setTimeout(restoreScroll, delay)));
+          return cleanup;
         }
       } else {
         // If no saved position -> start cleanly at top
@@ -243,11 +293,13 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         }
 
         const forceScrollToTop = () => {
+          if (userInteracted) return;
           sessionStorage.removeItem("capabilities_expanded_index");
           window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
           document.documentElement.scrollTop = 0;
           document.body.scrollTop = 0;
           if (lenis) {
+            lenis.resize();
             lenis.scrollTo(0, { immediate: true });
           }
           setActiveSection("hero-section");
@@ -256,9 +308,11 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         };
 
         forceScrollToTop();
-        const timers = [10, 50, 100, 200, 300, 500, 800, 1200].map(delay => setTimeout(forceScrollToTop, delay));
-        return () => timers.forEach(id => clearTimeout(id));
+        [32, 90].forEach((delay) => timers.push(setTimeout(forceScrollToTop, delay)));
+        return cleanup;
       }
+
+      return cleanup;
     }
   }, [isLoading, lenis]);
 
@@ -413,13 +467,15 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           document.body.scrollTop = targetY;
           if (lenis) {
             lenis.start();
+            lenis.resize();
             lenis.scrollTo(targetY, { immediate: true });
           }
         } else {
           // Mobile device or non-menu bar click: smooth scroll without loading screen
           if (lenis) {
+            lenis.resize();
             lenis.scrollTo(targetY, {
-              duration: 1.2,
+              duration: 1.15,
               easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             });
           } else {
@@ -521,42 +577,60 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   };
 
   useEffect(() => {
-    let prevY = window.scrollY;
+    const sectionIds = [
+      "services-section",
+      "work-in-numbers",
+      "integration-section",
+      "projects-outer-section",
+      "capabilities-section",
+      "hover-list-section",
+      "gallery-section",
+      "creative-approach",
+      "about-section",
+      "career-section",
+      "contact-section",
+    ];
 
-    const handleScroll = () => {
+    let prevY = window.scrollY;
+    let ticking = false;
+    let rafId = 0;
+
+    const evaluateScroll = () => {
+      ticking = false;
       const currentY = window.scrollY;
-      
-      // Toggle side action rail and scrolled capsule state thresholds
-      setShowSideMenu(currentY > 550);
-      setIsHeaderScrolled(currentY >= 80);
+
+      // Toggle side action rail and scrolled capsule state thresholds without redundant re-renders
+      const nextShowSideMenu = currentY > 550;
+      setShowSideMenu((prev) => (prev === nextShowSideMenu ? prev : nextShowSideMenu));
 
       const delta = currentY - prevY;
 
       if (currentY < 80) {
         // At the very top, always show header and button
-        setHeaderVisible(true);
-        setIsScrollingUp(true);
-        setIsHeaderScrolled(false);
+        setHeaderVisible((prev) => (prev ? prev : true));
+        setIsScrollingUp((prev) => (prev ? prev : true));
+        setIsHeaderScrolled((prev) => (prev ? false : prev));
         prevY = currentY;
       } else {
+        setIsHeaderScrolled((prev) => (prev ? prev : true));
         if (delta > 2) {
           // Scrolling down - hide header and button
-          setHeaderVisible(false);
-          setIsScrollingUp(false);
+          setHeaderVisible((prev) => (prev ? false : prev));
+          setIsScrollingUp((prev) => (prev ? false : prev));
           prevY = currentY;
         } else if (delta < -2) {
           // Scrolling up - show header and button
-          setHeaderVisible(true);
-          setIsScrollingUp(true);
-          setIsHeaderScrolled(true);
+          setHeaderVisible((prev) => (prev ? prev : true));
+          setIsScrollingUp((prev) => (prev ? prev : true));
           prevY = currentY;
         }
       }
-      
+
       // Track active section on scroll for desktop menu highlights
       const servicesEl = document.getElementById("services-section");
-      const servicesTop = servicesEl ? servicesEl.getBoundingClientRect().top + currentY : window.innerHeight;
-      const sectionIds = ["services-section", "work-in-numbers", "integration-section", "projects-outer-section", "capabilities-section", "hover-list-section", "gallery-section", "creative-approach", "about-section", "career-section", "contact-section"];
+      const servicesTop = servicesEl
+        ? servicesEl.getBoundingClientRect().top + currentY
+        : window.innerHeight;
       let currentSection = "hero-section";
       const scrollPosition = currentY + 140; // Offset for header height
 
@@ -574,12 +648,24 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
           }
         }
       }
-      setActiveSection(currentSection);
+      setActiveSection((prev) => (prev === currentSection ? prev : currentSection));
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        rafId = window.requestAnimationFrame(evaluateScroll);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    evaluateScroll(); // Initial check
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
   }, []);
 
   const filteredProjects = activeFilter === "ALL"
@@ -1500,8 +1586,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               <div>ALL RIGHTS RESERVED</div>
             </div>
             <div className="text-right">
-              <a href="#" className="hover:text-white/80 transition-colors block">TERMS</a>
-              <a href="#" className="hover:text-white/80 transition-colors block mt-1">PRIVACY POLICY</a>
+              <a href="#contact-section" onClick={(e) => e.preventDefault()} className="hover:text-white/80 transition-colors block">TERMS</a>
+              <a href="#contact-section" onClick={(e) => e.preventDefault()} className="hover:text-white/80 transition-colors block mt-1">PRIVACY POLICY</a>
             </div>
           </div>
 

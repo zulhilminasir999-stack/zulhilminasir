@@ -44,6 +44,9 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         document.body.style.overflow = "";
         document.documentElement.style.overflow = "";
         lenis?.start();
+        requestAnimationFrame(() => {
+          lenis?.resize();
+        });
       }, 350);
     }, 850);
   }, [lenis]);
@@ -68,6 +71,9 @@ export const RevealProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
       lenis?.start();
+      requestAnimationFrame(() => {
+        lenis?.resize();
+      });
     }, 2200);
   }, [lenis]);
 

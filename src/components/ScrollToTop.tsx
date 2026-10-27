@@ -7,7 +7,6 @@ export default function ScrollToTop() {
   const navType = useNavigationType();
   const lenis = useLenis();
   const prevPathRef = useRef<string | null>(null);
-  const isFirstMountRef = useRef(true);
 
   // Keep sessionStorage in sync with the current route
   useEffect(() => {
@@ -15,12 +14,38 @@ export default function ScrollToTop() {
   }, [pathname]);
 
   useEffect(() => {
-    const isPageReload = isFirstMountRef.current;
-    isFirstMountRef.current = false;
     const isSamePath = prevPathRef.current === pathname;
     prevPathRef.current = pathname;
 
-    // Case 1: Navigating to a Case Study / Project page -> ALWAYS start at 0px top
+    // HomePage ("/") coordinates its own initial load, hash scroll, and saved scroll restoration
+    // directly with its intro loading screen so we avoid duplicate competing timers here.
+    if (pathname === "/") {
+      return;
+    }
+
+    let userInteracted = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    const cancelPendingTimers = () => {
+      userInteracted = true;
+      timers.forEach((id) => clearTimeout(id));
+      timers.length = 0;
+    };
+
+    window.addEventListener("wheel", cancelPendingTimers, { passive: true, once: true });
+    window.addEventListener("touchstart", cancelPendingTimers, { passive: true, once: true });
+    window.addEventListener("pointerdown", cancelPendingTimers, { passive: true, once: true });
+    window.addEventListener("keydown", cancelPendingTimers, { passive: true, once: true });
+
+    const cleanupListeners = () => {
+      window.removeEventListener("wheel", cancelPendingTimers);
+      window.removeEventListener("touchstart", cancelPendingTimers);
+      window.removeEventListener("pointerdown", cancelPendingTimers);
+      window.removeEventListener("keydown", cancelPendingTimers);
+      timers.forEach((id) => clearTimeout(id));
+    };
+
+    // Case 1: Navigating to a Case Study / Project page -> start cleanly at 0px top
     if (
       pathname.startsWith("/case-study") ||
       pathname.startsWith("/case-study-project") ||
@@ -29,82 +54,51 @@ export default function ScrollToTop() {
     ) {
       sessionStorage.removeItem(`scroll_pos_${pathname}`);
       const scrollToTop = () => {
+        if (userInteracted) return;
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
         if (lenis) {
+          lenis.resize();
           lenis.scrollTo(0, { immediate: true });
         }
       };
 
       scrollToTop();
-      const timers = [0, 20, 50, 100, 200, 400].map((d) => setTimeout(scrollToTop, d));
-      return () => timers.forEach((id) => clearTimeout(id));
+      [16, 60].forEach((d) => timers.push(setTimeout(scrollToTop, d)));
+      return cleanupListeners;
     }
 
-    // Case 2: Returning to the Home Page ("/") -> Restore home_scroll_position if available
-    if (pathname === "/") {
-      const savedHomePos = sessionStorage.getItem("home_scroll_position");
-      if (savedHomePos && !hash) {
-        const targetY = parseInt(savedHomePos, 10);
-        if (!isNaN(targetY) && targetY > 0) {
-          const restore = () => {
-            window.scrollTo({ top: targetY, left: 0, behavior: "instant" });
-            document.documentElement.scrollTop = targetY;
-            document.body.scrollTop = targetY;
-            if (lenis) {
-              lenis.scrollTo(targetY, { immediate: true });
-            }
-          };
-
-          restore();
-          const timers = [0, 20, 50, 100, 200, 350, 500, 800].map((d) => setTimeout(restore, d));
-          return () => timers.forEach((id) => clearTimeout(id));
-        }
-      }
-
-      // If no saved position and not a hash navigation on initial load:
-      if (!savedHomePos && !hash && !isSamePath) {
-        const scrollToTop = () => {
-          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-          if (lenis) {
-            lenis.scrollTo(0, { immediate: true });
-          }
-        };
-        scrollToTop();
-        const timers = [0, 50, 100, 200].map((d) => setTimeout(scrollToTop, d));
-        return () => timers.forEach((id) => clearTimeout(id));
-      }
-    }
-
-    // Case 3: Other routes without hash
+    // Case 2: Other routes without hash
     if (!isSamePath && !hash) {
       const scrollToTop = () => {
+        if (userInteracted) return;
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
         if (lenis) {
+          lenis.resize();
           lenis.scrollTo(0, { immediate: true });
         }
       };
 
       scrollToTop();
-      const timers = [0, 50, 100, 200].map((d) => setTimeout(scrollToTop, d));
-      return () => timers.forEach((id) => clearTimeout(id));
+      [16, 60].forEach((d) => timers.push(setTimeout(scrollToTop, d)));
+      return cleanupListeners;
     }
 
-    // Case 4: Navigation with a hash (#services-section, #about-section, etc.)
+    // Case 3: Non-home navigation with a hash
     if (hash) {
       const targetId = hash.replace("#", "");
       const scrollToHash = () => {
+        if (userInteracted) return;
         const el = document.getElementById(targetId);
         if (el) {
           const targetY = el.getBoundingClientRect().top + window.scrollY;
           if (lenis) {
+            lenis.resize();
             lenis.scrollTo(targetY, {
-              duration: 1.2,
+              duration: 1.15,
               easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             });
           } else {
@@ -112,9 +106,11 @@ export default function ScrollToTop() {
           }
         }
       };
-      const timers = [150, 350].map((d) => setTimeout(scrollToHash, d));
-      return () => timers.forEach((id) => clearTimeout(id));
+      timers.push(setTimeout(scrollToHash, 120));
+      return cleanupListeners;
     }
+
+    return cleanupListeners;
   }, [pathname, hash, navType, lenis]);
 
   return null;

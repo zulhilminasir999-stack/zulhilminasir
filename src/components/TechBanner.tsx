@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { WordsStagger } from "../registry/spell-ui/words-stagger";
 import techLaptopImg from "../assets/images/tech_laptop.png";
 
@@ -59,6 +59,13 @@ export default function TechBanner() {
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
+  });
+
+  const smoothScrollYProgress = useSpring(scrollYProgress, {
+    stiffness: 180,
+    damping: 30,
+    mass: 0.15,
+    restDelta: 0.0005,
   });
 
   const fullSentence = "Developing intelligent software solutions that combine powerful AI models, scalable web architecture, and sleek digital experiences.";
@@ -282,7 +289,7 @@ export default function TechBanner() {
                   word={word} 
                   index={index} 
                   total={totalWordsCount} 
-                  progress={scrollYProgress} 
+                  progress={smoothScrollYProgress} 
                 />
               ))}
             </p>

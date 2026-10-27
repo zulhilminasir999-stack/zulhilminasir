@@ -221,13 +221,20 @@
    MODERN EDITORIAL LIGHT/DARK MODE STRUCTURAL OVERRIDES
    ========================================================================== */
 
-/* Smooth transitions */
+/* Smooth transitions (yields cleanly to Lenis when active) */
 html:not(.lenis) {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html:not(.lenis) {
+    scroll-behavior: auto;
+  }
+}
+
 html, body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 section[id] {
@@ -936,10 +943,12 @@ html.light .nav-menu-btn.active span {
 }
 
 /* Lenis Recommended CSS Styles */
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 
+html.lenis,
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }

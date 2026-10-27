@@ -246,49 +246,76 @@ export default function ProjectDetailPage() {
   }, [id]);
 
   useEffect(() => {
-    // When entering a case study project page, always ensure the page starts at the top
+    let userInteracted = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    const cancelResetTimers = () => {
+      userInteracted = true;
+      timers.forEach((t) => clearTimeout(t));
+      timers.length = 0;
+    };
+
+    window.addEventListener("wheel", cancelResetTimers, { passive: true, once: true });
+    window.addEventListener("touchstart", cancelResetTimers, { passive: true, once: true });
+    window.addEventListener("pointerdown", cancelResetTimers, { passive: true, once: true });
+    window.addEventListener("keydown", cancelResetTimers, { passive: true, once: true });
+
+    // When entering a case study project page, ensure the page starts cleanly at the top
     const resetToTop = () => {
+      if (userInteracted) return;
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
       if (lenis) {
+        lenis.resize();
         lenis.scrollTo(0, { immediate: true });
       }
     };
 
     resetToTop();
-    const timers = [0, 20, 50, 100, 200, 400, 700].map((d) =>
-      setTimeout(resetToTop, d),
-    );
+    [20, 80].forEach((d) => timers.push(setTimeout(resetToTop, d)));
 
     let prevY = window.scrollY;
+    let ticking = false;
+    let rafId = 0;
 
-    const handleScroll = () => {
+    const evaluateScroll = () => {
+      ticking = false;
       const currentY = window.scrollY;
 
-      setShowSideMenu(currentY > 400);
-      setIsHeaderScrolled(currentY >= 80);
+      const nextShowSideMenu = currentY > 400;
+      setShowSideMenu((prev) => (prev === nextShowSideMenu ? prev : nextShowSideMenu));
+
+      const nextHeaderScrolled = currentY >= 80;
+      setIsHeaderScrolled((prev) => (prev === nextHeaderScrolled ? prev : nextHeaderScrolled));
 
       const delta = currentY - prevY;
 
       if (currentY < 80) {
-        setHeaderVisible(true);
-        setIsScrollingUp(true);
+        setHeaderVisible((prev) => (prev ? prev : true));
+        setIsScrollingUp((prev) => (prev ? prev : true));
         prevY = currentY;
       } else {
         if (delta > 2) {
-          setHeaderVisible(false);
-          setIsScrollingUp(false);
+          setHeaderVisible((prev) => (prev ? false : prev));
+          setIsScrollingUp((prev) => (prev ? false : prev));
           prevY = currentY;
         } else if (delta < -2) {
-          setHeaderVisible(true);
-          setIsScrollingUp(true);
+          setHeaderVisible((prev) => (prev ? prev : true));
+          setIsScrollingUp((prev) => (prev ? prev : true));
           prevY = currentY;
         }
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        rafId = window.requestAnimationFrame(evaluateScroll);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     // Give a small timed delay of 120ms behind the cover to guarantee completely flash-free transition at top
     const revealTimer = setTimeout(() => {
@@ -296,9 +323,16 @@ export default function ProjectDetailPage() {
     }, 120);
 
     return () => {
+      window.removeEventListener("wheel", cancelResetTimers);
+      window.removeEventListener("touchstart", cancelResetTimers);
+      window.removeEventListener("pointerdown", cancelResetTimers);
+      window.removeEventListener("keydown", cancelResetTimers);
       timers.forEach((t) => clearTimeout(t));
       clearTimeout(revealTimer);
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", onScroll);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
     };
   }, [id, lenis]);
 
@@ -1826,13 +1860,15 @@ export default function ProjectDetailPage() {
             </div>
             <div className="text-right">
               <a
-                href="#"
+                href="#contact-section"
+                onClick={(e) => e.preventDefault()}
                 className="hover:text-white/80 transition-colors block"
               >
                 TERMS
               </a>
               <a
-                href="#"
+                href="#contact-section"
+                onClick={(e) => e.preventDefault()}
                 className="hover:text-white/80 transition-colors block mt-1"
               >
                 PRIVACY POLICY

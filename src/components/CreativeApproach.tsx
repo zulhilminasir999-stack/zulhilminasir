@@ -12,7 +12,11 @@ export function CreativeApproach() {
   const [activeIdx, setActiveIdx] = useState(0);
 
   useEffect(() => {
+    let ticking = false;
+    let rafId = 0;
+
     const updateOpacity = () => {
+      ticking = false;
       const windowHeight = window.innerHeight;
       const windowWidth = window.innerWidth;
       const isMobile = windowWidth < 768;
@@ -119,18 +123,29 @@ export function CreativeApproach() {
         });
       }
 
-      setActiveIdx(closestIdx);
+      setActiveIdx((prev) => (prev === closestIdx ? prev : closestIdx));
     };
 
-    window.addEventListener('scroll', updateOpacity, { passive: true });
-    window.addEventListener('resize', updateOpacity, { passive: true });
+    const onScrollOrResize = () => {
+      if (!ticking) {
+        ticking = true;
+        rafId = window.requestAnimationFrame(updateOpacity);
+      }
+    };
+
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize, { passive: true });
     
     updateOpacity();
-    setTimeout(updateOpacity, 50);
+    const initTimer = setTimeout(updateOpacity, 50);
 
     return () => {
-      window.removeEventListener('scroll', updateOpacity);
-      window.removeEventListener('resize', updateOpacity);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+      clearTimeout(initTimer);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
     };
   }, []);
 

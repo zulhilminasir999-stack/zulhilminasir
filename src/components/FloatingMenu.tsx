@@ -52,7 +52,7 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
 
       // At the top of the page -> navigation remains at 100% full size & button hidden
       if (currentScrollY <= 20) {
-        setIsCompact(false);
+        setIsCompact((prev) => (prev ? false : prev));
         lastScrollY = currentScrollY;
         ticking = false;
         return;
@@ -62,13 +62,8 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
 
       // Threshold to prevent flickering from micro scroll movements
       if (Math.abs(diff) >= 6) {
-        if (diff > 0) {
-          // Scrolling down -> compact mode + show upward arrow button
-          setIsCompact(true);
-        } else {
-          // Scrolling upward -> restore normal mode + hide upward arrow button
-          setIsCompact(false);
-        }
+        const nextCompact = diff > 0;
+        setIsCompact((prev) => (prev === nextCompact ? prev : nextCompact));
         lastScrollY = currentScrollY;
       }
 
@@ -90,7 +85,7 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
     setIsCompact(false);
     if (lenis) {
       lenis.scrollTo(0, {
-        duration: 1.2,
+        duration: 1.15,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       });
     } else {
@@ -121,7 +116,11 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
       return;
     }
 
-    const handleScroll = () => {
+    let ticking = false;
+    let rafId = 0;
+
+    const evaluateActiveTab = () => {
+      ticking = false;
       const scrollY = window.scrollY;
       const scrollPosition = scrollY + window.innerHeight / 3;
       let currentTab = "hero";
@@ -140,13 +139,25 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
           }
         });
       });
-      setActiveTab(currentTab);
+      setActiveTab((prev) => (prev === currentTab ? prev : currentTab));
     };
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [currentMenuItems, location.pathname]);
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        rafId = window.requestAnimationFrame(evaluateActiveTab);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    evaluateActiveTab();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, [currentMenuItems, isProjectPage, location.pathname]);
 
   const { triggerReveal, triggerFullLoading } = useReveal();
 
@@ -164,6 +175,7 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
         window.scrollTo({ top: 0, behavior: "instant" });
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
+        lenis?.scrollTo(0, { immediate: true });
         setActiveTab("hero");
       });
       return;
@@ -181,13 +193,20 @@ export function FloatingMenu({ visible = true, theme = "light", onNavClick }: { 
       return;
     }
 
-    const element = document.getElementById(targetSectionId.replace('#', ''));
+    const element = document.getElementById(targetSectionId.replace("#", ""));
     if (element) {
       const targetY = element.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: targetY,
-        behavior: "smooth"
-      });
+      if (lenis) {
+        lenis.scrollTo(targetY, {
+          duration: 1.15,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        });
+      } else {
+        window.scrollTo({
+          top: targetY,
+          behavior: "smooth",
+        });
+      }
       setActiveTab(id);
     }
   };

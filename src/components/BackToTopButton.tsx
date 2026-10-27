@@ -9,33 +9,38 @@ export default function BackToTopButton() {
   const lenis = useLenis();
 
   useEffect(() => {
-    const handleScroll = () => {
+    const targetSectionIds = [
+      "services-section",
+      "hover-list-section",
+      "capabilities-section",
+      "about-section",
+      "career-section",
+      "creative-approach",
+      "creative-approach-section",
+      "workflow-section",
+    ];
+
+    let ticking = false;
+    let rafId = 0;
+
+    const evaluateScroll = () => {
+      ticking = false;
+
+      // Hidden on mobile (< 768px), skip heavy DOM queries on small screens
+      if (window.innerWidth < 768) {
+        return;
+      }
+
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       const buttonCenter = scrollY + windowHeight - 56; // 32px bottom + 24px half-height
+      const nextVisible = scrollY > 450;
 
-      if (scrollY > 450) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
+      setIsVisible((prev) => (prev === nextVisible ? prev : nextVisible));
+
+      if (!nextVisible) {
+        return;
       }
-
-      // Sections that should trigger the modern dark frosted blur styling:
-      // 1. Service (#services-section)
-      // 2. Hoverlist image (#hover-list-section, #capabilities-section)
-      // 3. About (#about-section)
-      // 4. Career (#career-section)
-      // 5. Workflow Steps (#creative-approach, #creative-approach-section, #workflow-section)
-      const targetSectionIds = [
-        "services-section",
-        "hover-list-section",
-        "capabilities-section",
-        "about-section",
-        "career-section",
-        "creative-approach",
-        "creative-approach-section",
-        "workflow-section",
-      ];
 
       let inLight = false;
       for (const id of targetSectionIds) {
@@ -52,10 +57,10 @@ export default function BackToTopButton() {
       }
 
       // Check if on case-study or project detail page (white background above footer)
-      const isProjectOrCaseStudy = 
-        window.location.pathname.startsWith("/case-study") || 
+      const isProjectOrCaseStudy =
+        window.location.pathname.startsWith("/case-study") ||
         window.location.pathname.startsWith("/project");
-      
+
       if (isProjectOrCaseStudy) {
         const footer = document.getElementById("contact-section");
         if (footer) {
@@ -68,27 +73,37 @@ export default function BackToTopButton() {
         }
       }
 
-      setIsLightSection(inLight);
+      setIsLightSection((prev) => (prev === inLight ? prev : inLight));
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
-    handleScroll();
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        rafId = window.requestAnimationFrame(evaluateScroll);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    evaluateScroll();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
     };
   }, []);
 
   const scrollToTop = () => {
     if (lenis) {
       lenis.scrollTo(0, {
-        duration: 1.2,
+        duration: 1.15,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       });
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
