@@ -33,7 +33,7 @@ import {
   Twitter,
   Send
 } from "lucide-react";
-import { PORTFOLIO_PROJECTS, SOFTWARES_LIST, AI_TOOLS_LIST, CAPABILITIES_DATA } from "../data";
+import { PORTFOLIO_PROJECTS, SOFTWARES_LIST, AI_TOOLS_LIST, CAPABILITIES_DATA } from "../data.ts";
 import { Project, ProjectCategory, CapabilityDetail } from "../types";
 import AboutMe30Sec from "../components/AboutMe30Sec";
 import WorkInNumbers from "../components/WorkInNumbers";

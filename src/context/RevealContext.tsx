@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { SectionRevealOverlay } from "../components/SectionRevealOverlay";
-import { LoadingScreen } from "../components/LoadingScreen";
+import { SectionRevealOverlay } from "../components/SectionRevealOverlay.tsx";
+import { LoadingScreen } from "../components/LoadingScreen.tsx";
 import { AnimatePresence } from "motion/react";
 import { useLenis } from "lenis/react";
 

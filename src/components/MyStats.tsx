@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight } from "lucide-react";
 
-import zulPortrait from "../assets/images/zul_portrait_1782401824631.jpg";
+import zulPortrait from "../assets/images/about_me_portrait_1781948512331.jpg";
 
 interface ScrollWordProps {
   word: string;

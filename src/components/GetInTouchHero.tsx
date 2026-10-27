@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Plus, ArrowUpRight } from "lucide-react";
-import PORTRAIT_IMAGE from "../assets/images/zul_portrait_1782401824631.jpg";
+import PORTRAIT_IMAGE from "../assets/images/about_me_portrait_1781948512331.jpg";
 
 // You can replace this image path with your uploaded image!
 // If you upload a file named "my-bg.png" in your file explorer under the public folder, it is served as "/my-bg.png"

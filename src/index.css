@@ -1,5 +1,6 @@
-@import "./fonts.css";
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,800,700,600,500,400,300,301,401,501,701,901&display=swap');
+@import "./fonts.css";
+@import "tailwindcss";
 
 @font-face {
   font-family: 'Madinah Authentic';
@@ -23,8 +24,6 @@
   font-style: normal;
   font-display: swap;
 }
-
-@import "tailwindcss";
 
 @theme {
   --font-serif: "Cormorant Garamond", Georgia, serif;

@@ -29,6 +29,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Corporate Website",
     defaultImage: "/TGPW/tgpw1.jpg",
     mobileImage: "/TGPW/tgpw_m1.png",
+    overlayClassName: "bottom-12 sm:bottom-16 lg:bottom-20 -translate-y-28 sm:translate-y-0",
     url: "/case-study-project/TGPowerWrap",
     client: "TG PowerWrap Sdn Bhd",
     year: "2026"
