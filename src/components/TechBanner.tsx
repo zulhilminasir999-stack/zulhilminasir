@@ -296,7 +296,7 @@ export default function TechBanner() {
           </div>
 
           {/* Copy of Logo grid slide animation aligned left */}
-          <div className="w-full relative mt-3 sm:mt-5 text-left translate-y-32 sm:translate-y-6 md:translate-y-8">
+          <div className="w-full relative mt-3 sm:mt-5 text-left translate-y-24 sm:translate-y-6 md:translate-y-8">
             <div 
               ref={marqueeContainerRef}
               className="relative w-full flex items-center overflow-hidden py-3 sm:py-4 cursor-grab active:cursor-grabbing touch-pan-y translate-y-1 sm:translate-y-2"
@@ -362,6 +362,77 @@ export default function TechBanner() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Mobile-only animated swipe instruction beneath software logos */}
+            <div
+              className="flex sm:hidden items-center justify-center gap-4 mt-6 pointer-events-none select-none"
+              aria-hidden="true"
+            >
+              {/* Left Arrow */}
+              <motion.svg
+                animate={{ x: [0, -5, 0] }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#FFFFFF"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4 shrink-0 text-white"
+              >
+                <path d="M19 12H5" />
+                <path d="m12 19-7-7 7-7" />
+              </motion.svg>
+
+              {/* Centre Swipe Hand Gesture Icon */}
+              <motion.svg
+                animate={{ x: [-5, 5, -5] }}
+                transition={{
+                  duration: 2.6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#FFFFFF"
+                strokeWidth="1.9"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-5 h-5 shrink-0 text-white"
+              >
+                <path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2" />
+                <path d="M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2" />
+                <path d="M10 10.5V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8" />
+                <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
+              </motion.svg>
+
+              {/* Right Arrow */}
+              <motion.svg
+                animate={{ x: [0, 5, 0] }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#FFFFFF"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4 shrink-0 text-white"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </motion.svg>
             </div>
           </div>
         </div>

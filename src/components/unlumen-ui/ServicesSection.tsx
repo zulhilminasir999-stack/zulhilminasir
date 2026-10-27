@@ -101,8 +101,8 @@ export default function ServicesSection() {
             </WordsStagger>
           </h2>
         </div>
-        <div className="col-span-1 md:col-span-12 lg:col-span-4 flex items-center justify-center md:justify-end">
-          <p className="text-zinc-500 text-[14px] leading-relaxed font-sans max-w-sm mx-auto md:ml-auto md:mr-0 md:max-w-xl lg:max-w-sm text-center md:text-right">
+        <div className="col-span-1 md:col-span-12 lg:col-span-4 flex items-center justify-start">
+          <p className="text-zinc-500 text-[14px] leading-relaxed font-sans max-w-sm md:max-w-xl lg:max-w-sm mx-0 text-left">
             I leverage AI, technology, and design to solve problems, simplify complexity, and create smarter digital experiences.
           </p>
         </div>
@@ -112,18 +112,18 @@ export default function ServicesSection() {
         
         <div
           id="services-nav-container"
-          className="flex flex-col justify-between items-center md:items-start z-20 pointer-events-auto w-full md:w-auto min-w-[200px] sm:min-w-[240px] md:min-w-[280px] lg:min-w-[320px] mb-8 md:mb-0 text-center md:text-left"
+          className="flex flex-col justify-between items-start z-20 pointer-events-auto w-full md:w-auto min-w-[200px] sm:min-w-[240px] md:min-w-[280px] lg:min-w-[320px] mb-8 md:mb-0 text-left"
         >
-          <div className="flex flex-col items-center md:items-start space-y-3 sm:space-y-4 lg:space-y-6 pt-4 w-full md:w-auto">
+          <div className="flex flex-col items-start text-left font-semibold space-y-3 sm:space-y-4 lg:space-y-6 pt-4 w-full md:w-auto">
             {SERVICES_DATA.map((service, index) => (
               <button
                 key={service.id}
                 onClick={() => setActiveIndex(index)}
                 onMouseEnter={() => setActiveIndex(index)}
-                className={`text-center md:text-left text-sm md:text-base lg:text-lg font-sans transition-all duration-300 w-fit cursor-pointer mx-auto md:mx-0 ${
+                className={`text-left text-sm md:text-base lg:text-lg font-sans transition-all duration-300 w-fit cursor-pointer mx-0 ${
                   activeIndex === index
-                    ? "font-medium"
-                    : `${mutedTextColor} hover:${textColor}`
+                    ? "font-bold"
+                    : `font-semibold ${mutedTextColor} hover:${textColor}`
                 }`}
                 style={{ color: activeIndex === index ? activeColor : undefined }}
               >
