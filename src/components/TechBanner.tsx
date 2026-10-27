@@ -402,7 +402,7 @@ export default function TechBanner() {
             {/* Mobile-only animated swipe instruction beneath software logos */}
             <div
               className={`flex sm:hidden items-center justify-center gap-2.5 mt-6 pointer-events-none select-none transition-opacity duration-200 ${
-                isTouchingSlider ? "opacity-0 invisible" : "opacity-100 visible"
+                isTouchingSlider ? "opacity-0 invisible" : "opacity-50 visible"
               }`}
               aria-hidden="true"
             >

@@ -1039,7 +1039,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           }
                           handleBrandHomeClick(e);
                         }}
-                        className="font-display font-semibold text-sm tracking-tight text-[#2563EB] transition-colors cursor-pointer hover:opacity-85 bg-transparent border-none p-0 outline-none"
+                        className="font-display font-semibold text-base tracking-tight text-[#2563EB] transition-colors cursor-pointer hover:opacity-85 bg-transparent border-none p-0 outline-none"
                       >
                         Zulhilmi Nasir
                       </motion.button>
