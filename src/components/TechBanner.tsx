@@ -54,6 +54,7 @@ export default function TechBanner() {
   const singleTrackRef = useRef<HTMLDivElement>(null);
 
   const [activeLogo, setActiveLogo] = useState<string | null>(null);
+  const [isTouchingSlider, setIsTouchingSlider] = useState(false);
 
   // Track scroll progress of the banner container for the sticky scroll-reveal text
   const { scrollYProgress } = useScroll({
@@ -173,9 +174,35 @@ export default function TechBanner() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isTouchingSlider) return;
+
+    const handleRelease = () => {
+      setIsTouchingSlider(false);
+    };
+
+    window.addEventListener("pointerup", handleRelease);
+    window.addEventListener("pointercancel", handleRelease);
+    window.addEventListener("touchend", handleRelease);
+    window.addEventListener("touchcancel", handleRelease);
+    window.addEventListener("blur", handleRelease);
+
+    return () => {
+      window.removeEventListener("pointerup", handleRelease);
+      window.removeEventListener("pointercancel", handleRelease);
+      window.removeEventListener("touchend", handleRelease);
+      window.removeEventListener("touchcancel", handleRelease);
+      window.removeEventListener("blur", handleRelease);
+    };
+  }, [isTouchingSlider]);
+
   const handlePointerDown = (e: React.PointerEvent) => {
     const target = e.currentTarget as HTMLDivElement;
     target.setPointerCapture(e.pointerId);
+
+    if (window.innerWidth < 640) {
+      setIsTouchingSlider(true);
+    }
 
     isDraggingRef.current = true;
     inMomentumRef.current = false;
@@ -211,6 +238,7 @@ export default function TechBanner() {
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
+    setIsTouchingSlider(false);
     if (!isDraggingRef.current) return;
     isDraggingRef.current = false;
 
@@ -306,7 +334,14 @@ export default function TechBanner() {
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerUp}
-              onTouchStart={() => setActiveLogo(null)}
+              onTouchStart={() => {
+                setActiveLogo(null);
+                if (window.innerWidth < 640) {
+                  setIsTouchingSlider(true);
+                }
+              }}
+              onTouchEnd={() => setIsTouchingSlider(false)}
+              onTouchCancel={() => setIsTouchingSlider(false)}
               style={{
                 WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
                 maskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)"
@@ -366,35 +401,39 @@ export default function TechBanner() {
 
             {/* Mobile-only animated swipe instruction beneath software logos */}
             <div
-              className="flex sm:hidden items-center justify-center gap-4 mt-6 pointer-events-none select-none"
+              className={`flex sm:hidden items-center justify-center gap-2.5 mt-6 pointer-events-none select-none transition-opacity duration-200 ${
+                isTouchingSlider ? "opacity-0 invisible" : "opacity-100 visible"
+              }`}
               aria-hidden="true"
             >
               {/* Left Arrow */}
               <motion.svg
-                animate={{ x: [0, -5, 0] }}
+                animate={{ scale: [0.65, 1, 0.65, 0.65, 0.65] }}
                 transition={{
-                  duration: 2.2,
+                  duration: 2.6,
+                  times: [0, 0.25, 0.5, 0.75, 1],
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
+                viewBox="0 0 32 24"
                 fill="none"
                 stroke="#FFFFFF"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="w-4 h-4 shrink-0 text-white"
+                className="w-[22px] h-4 shrink-0 text-white origin-center"
               >
-                <path d="M19 12H5" />
+                <path d="M29 12H5" />
                 <path d="m12 19-7-7 7-7" />
               </motion.svg>
 
               {/* Centre Swipe Hand Gesture Icon */}
               <motion.svg
-                animate={{ x: [-5, 5, -5] }}
+                animate={{ x: [0, -6, 0, 6, 0] }}
                 transition={{
                   duration: 2.6,
+                  times: [0, 0.25, 0.5, 0.75, 1],
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
@@ -415,23 +454,24 @@ export default function TechBanner() {
 
               {/* Right Arrow */}
               <motion.svg
-                animate={{ x: [0, 5, 0] }}
+                animate={{ scale: [0.65, 0.65, 0.65, 1, 0.65] }}
                 transition={{
-                  duration: 2.2,
+                  duration: 2.6,
+                  times: [0, 0.25, 0.5, 0.75, 1],
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
+                viewBox="0 0 32 24"
                 fill="none"
                 stroke="#FFFFFF"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="w-4 h-4 shrink-0 text-white"
+                className="w-[22px] h-4 shrink-0 text-white origin-center"
               >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
+                <path d="M3 12h24" />
+                <path d="m20 5 7 7-7 7" />
               </motion.svg>
             </div>
           </div>
