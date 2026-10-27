@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, useTransform, MotionValue, useSpring, useInView } from "motion/react";
+import { ArrowRight } from "lucide-react";
 import { IdeasInActionHeader } from "./IdeasInActionHeader";
 import { WordsStagger } from "../registry/spell-ui/words-stagger";
 
@@ -263,10 +264,12 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
                     contactSection.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
-                className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/25 backdrop-blur-2xl active:scale-[0.98] text-white text-xs font-medium px-4 py-2 rounded-xl shadow-lg transition-colors duration-200 border border-white/35 select-none cursor-pointer"
+                className="group inline-flex items-center gap-2 bg-white/20 hover:bg-white backdrop-blur-2xl active:scale-[0.98] text-white hover:text-[#2563EB] text-xs font-medium px-4 py-2 rounded-xl shadow-lg transition-colors duration-300 border border-white/35 hover:border-white select-none cursor-pointer"
               >
-                <span>Let's Create</span>
-                <span className="inline-block w-1.5 h-1.5 bg-white rounded-[1px]" />
+                <span className="transition-colors duration-300 group-hover:text-[#2563EB]">Let's Create</span>
+                <span className="inline-flex items-center justify-center text-white group-hover:text-[#2563EB] transition-colors duration-300">
+                  <ArrowRight className="w-3.5 h-3.5 -rotate-45 group-hover:rotate-0 transition-transform duration-300 ease-out" strokeWidth={2.25} />
+                </span>
               </motion.button>
             </motion.div>
           </div>
@@ -402,10 +405,12 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
                   contactSection.scrollIntoView({ behavior: "smooth" });
                 }
               }}
-              className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/25 backdrop-blur-2xl active:scale-[0.98] text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-xl shadow-lg transition-colors duration-200 border border-white/35 select-none cursor-pointer"
+              className="group inline-flex items-center gap-2 bg-white/20 hover:bg-white backdrop-blur-2xl active:scale-[0.98] text-white hover:text-[#2563EB] text-xs sm:text-sm font-medium px-4 py-2 rounded-xl shadow-lg transition-colors duration-300 border border-white/35 hover:border-white select-none cursor-pointer"
             >
-              <span>Let's Create</span>
-              <span className="inline-block w-1.5 h-1.5 bg-white rounded-[1px]" />
+              <span className="transition-colors duration-300 group-hover:text-[#2563EB]">Let's Create</span>
+              <span className="inline-flex items-center justify-center text-white group-hover:text-[#2563EB] transition-colors duration-300">
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300 ease-out" strokeWidth={2.25} />
+              </span>
             </motion.button>
           </motion.div>
         </div>

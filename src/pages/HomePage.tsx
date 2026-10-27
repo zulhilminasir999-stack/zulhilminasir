@@ -162,12 +162,36 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   }, []);
 
   const mountedWithLoading = React.useRef(isLoading);
+  const instantJumpLockRef = React.useRef(false);
+  const instantJumpTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Synchronously restore scroll before paint if saved scroll position exists
+  // Synchronously position scroll before paint when restoring saved scroll or arriving via instant hash target
   React.useLayoutEffect(() => {
     const savedPos = sessionStorage.getItem("home_scroll_position");
     const targetHash = window.location.hash;
-    if (!targetHash && savedPos) {
+    if (targetHash && !mountedWithLoading.current) {
+      const rawId = targetHash.replace("#", "");
+      const instantMobileTargets = [
+        "services-section",
+        "integration-section",
+        "capabilities-section",
+        "about-section",
+        "career-section",
+      ];
+      if (window.innerWidth >= 768 || instantMobileTargets.includes(rawId)) {
+        const el = document.getElementById(rawId);
+        if (el) {
+          const targetY = el.getBoundingClientRect().top + window.scrollY;
+          const htmlEl = document.documentElement;
+          const prevBehavior = htmlEl.style.scrollBehavior;
+          htmlEl.style.scrollBehavior = "auto";
+          window.scrollTo({ top: targetY, left: 0, behavior: "instant" as ScrollBehavior });
+          htmlEl.scrollTop = targetY;
+          document.body.scrollTop = targetY;
+          htmlEl.style.scrollBehavior = prevBehavior;
+        }
+      }
+    } else if (!targetHash && savedPos) {
       const targetY = parseInt(savedPos, 10);
       if (!isNaN(targetY) && targetY > 0) {
         window.scrollTo({ top: targetY, behavior: "instant" });
@@ -229,6 +253,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         // Client-side navigation with a hash
         const rawId = targetHash.replace("#", "");
         const isMobileViewport = window.innerWidth < 768;
+        const instantMobileTargets = [
+          "services-section",
+          "integration-section",
+          "capabilities-section",
+          "about-section",
+          "career-section",
+        ];
+        const isInstantMobileTarget = isMobileViewport && instantMobileTargets.includes(rawId);
 
         const scrollToHash = (isSmoothAttempt: boolean = false) => {
           if (userInteracted) return;
@@ -245,8 +277,15 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               } else {
                 window.scrollTo({ top: targetY, behavior: "smooth" });
               }
-            } else if (!isMobileViewport) {
-              window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
+            } else {
+              instantJumpLockRef.current = true;
+              const htmlEl = document.documentElement;
+              const prevBehavior = htmlEl.style.scrollBehavior;
+              htmlEl.style.scrollBehavior = "auto";
+              window.scrollTo({ top: targetY, left: 0, behavior: "instant" as ScrollBehavior });
+              htmlEl.scrollTop = targetY;
+              document.body.scrollTop = targetY;
+              htmlEl.style.scrollBehavior = prevBehavior;
               if (lenis) {
                 lenis.resize();
                 lenis.scrollTo(targetY, { immediate: true });
@@ -255,17 +294,26 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             setActiveSection(rawId);
             setIsHeaderScrolled(targetY > 80);
             setHeaderVisible(true);
+            setIsScrollingUp(true);
           }
         };
 
-        if (isMobileViewport) {
+        if (isMobileViewport && !isInstantMobileTarget) {
           window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
           timers.push(setTimeout(() => scrollToHash(true), 60));
         } else {
           scrollToHash(false);
           [32, 100].forEach((delay) => timers.push(setTimeout(() => scrollToHash(false), delay)));
+          timers.push(
+            setTimeout(() => {
+              instantJumpLockRef.current = false;
+            }, 180)
+          );
         }
-        return cleanup;
+        return () => {
+          instantJumpLockRef.current = false;
+          cleanup();
+        };
       } else if (savedScrollPosition) {
         // If we have a saved scroll position (back navigation or reload), restore it cleanly without hijacking scroll
         const targetY = parseInt(savedScrollPosition, 10);
@@ -413,7 +461,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
   const handleNavClick = (
     e: React.MouseEvent<HTMLElement>,
     targetId: string,
-    isFromMenuBar: boolean = false
+    isFromMenuBar: boolean = false,
+    instantJump: boolean = false
   ) => {
     if (e && e.preventDefault) e.preventDefault();
     
@@ -445,9 +494,36 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
     const isMenuBarTarget = menuTargets.includes(rawId);
     const isDesktopOrTablet = typeof window !== "undefined" && window.innerWidth >= 768;
-    const shouldShowLoadingScreen = isDesktopOrTablet && isFromMenuBar && isMenuBarTarget;
+    const shouldShowLoadingScreen = !instantJump && isDesktopOrTablet && isFromMenuBar && isMenuBarTarget;
 
-    const navigateToSection = (useLoadingScreen: boolean) => {
+    const performInstantJumpToSection = () => {
+      const targetEl = document.getElementById(rawId);
+      if (!targetEl && !isHero) return;
+      const targetY = (targetEl && !isHero) ? targetEl.getBoundingClientRect().top + window.scrollY : 0;
+
+      if (lenis) {
+        lenis.stop();
+      }
+      const htmlEl = document.documentElement;
+      const prevBehavior = htmlEl.style.scrollBehavior;
+      htmlEl.style.scrollBehavior = "auto";
+      window.scrollTo({ top: targetY, left: 0, behavior: "instant" as ScrollBehavior });
+      htmlEl.scrollTop = targetY;
+      document.body.scrollTop = targetY;
+      htmlEl.style.scrollBehavior = prevBehavior;
+      if (lenis) {
+        lenis.start();
+        lenis.resize();
+        lenis.scrollTo(targetY, { immediate: true });
+      }
+
+      setHeaderVisible(true);
+      setIsHeaderScrolled(targetY > 80);
+      setIsScrollingUp(true);
+      setActiveSection(isHero ? "hero-section" : rawId);
+    };
+
+    const navigateToSection = (useInstantPositioning: boolean) => {
       const el = document.getElementById(rawId);
       if (el || isHero) {
         const targetY = (el && !isHero) ? el.getBoundingClientRect().top + window.scrollY : 0;
@@ -457,21 +533,21 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         setIsScrollingUp(true);
         setActiveSection(isHero ? "hero-section" : rawId);
 
-        if (useLoadingScreen) {
-          // Instant jump at the midpoint while the Zulhilmi Nasir curtain covers viewport
-          if (lenis) {
-            lenis.stop();
+        if (useInstantPositioning) {
+          instantJumpLockRef.current = true;
+          if (instantJumpTimeoutRef.current) {
+            clearTimeout(instantJumpTimeoutRef.current);
           }
-          window.scrollTo({ top: targetY, behavior: "instant" as ScrollBehavior });
-          document.documentElement.scrollTop = targetY;
-          document.body.scrollTop = targetY;
-          if (lenis) {
-            lenis.start();
-            lenis.resize();
-            lenis.scrollTo(targetY, { immediate: true });
-          }
+          performInstantJumpToSection();
+          window.requestAnimationFrame(() => {
+            performInstantJumpToSection();
+          });
+          instantJumpTimeoutRef.current = setTimeout(() => {
+            instantJumpLockRef.current = false;
+            instantJumpTimeoutRef.current = null;
+          }, 180);
         } else {
-          // Mobile device or non-menu bar click: smooth scroll without loading screen
+          // Non-instant click: smooth scroll without loading screen
           if (lenis) {
             lenis.resize();
             lenis.scrollTo(targetY, {
@@ -492,6 +568,9 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       triggerReveal(() => {
         navigateToSection(true);
       });
+    } else if (instantJump) {
+      // Auto-direct immediately to landing position with zero scrolling animation
+      navigateToSection(true);
     } else {
       // Mobile device or non-menu bar click: direct smooth scroll without loading screen
       navigateToSection(false);
@@ -568,12 +647,16 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     };
   }, [isMobile, isMobileMenuOpen, isLoading, lenis]);
 
-  const handleMobileMenuNavClick = (e: React.MouseEvent<HTMLElement>, targetId: string) => {
+  const handleMobileMenuNavClick = (
+    e: React.MouseEvent<HTMLElement>,
+    targetId: string,
+    instantJump: boolean = false
+  ) => {
     document.documentElement.style.overflow = "";
     document.body.style.overflow = "";
     lenis?.start();
     setIsMobileMenuOpen(false);
-    handleNavClick(e, targetId);
+    handleNavClick(e, targetId, false, instantJump);
   };
 
   useEffect(() => {
@@ -603,26 +686,34 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
       const nextShowSideMenu = currentY > 550;
       setShowSideMenu((prev) => (prev === nextShowSideMenu ? prev : nextShowSideMenu));
 
-      const delta = currentY - prevY;
-
-      if (currentY < 80) {
-        // At the very top, always show header and button
+      if (instantJumpLockRef.current) {
         setHeaderVisible((prev) => (prev ? prev : true));
         setIsScrollingUp((prev) => (prev ? prev : true));
-        setIsHeaderScrolled((prev) => (prev ? false : prev));
+        const nextScrolled = currentY >= 80;
+        setIsHeaderScrolled((prev) => (prev === nextScrolled ? prev : nextScrolled));
         prevY = currentY;
       } else {
-        setIsHeaderScrolled((prev) => (prev ? prev : true));
-        if (delta > 2) {
-          // Scrolling down - hide header and button
-          setHeaderVisible((prev) => (prev ? false : prev));
-          setIsScrollingUp((prev) => (prev ? false : prev));
-          prevY = currentY;
-        } else if (delta < -2) {
-          // Scrolling up - show header and button
+        const delta = currentY - prevY;
+
+        if (currentY < 80) {
+          // At the very top, always show header and button
           setHeaderVisible((prev) => (prev ? prev : true));
           setIsScrollingUp((prev) => (prev ? prev : true));
+          setIsHeaderScrolled((prev) => (prev ? false : prev));
           prevY = currentY;
+        } else {
+          setIsHeaderScrolled((prev) => (prev ? prev : true));
+          if (delta > 2) {
+            // Scrolling down - hide header and button
+            setHeaderVisible((prev) => (prev ? false : prev));
+            setIsScrollingUp((prev) => (prev ? false : prev));
+            prevY = currentY;
+          } else if (delta < -2) {
+            // Scrolling up - show header and button
+            setHeaderVisible((prev) => (prev ? prev : true));
+            setIsScrollingUp((prev) => (prev ? prev : true));
+            prevY = currentY;
+          }
         }
       }
 
@@ -1012,35 +1103,35 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   >
                     <a
                       href="#services-section"
-                      onClick={(e) => handleMobileMenuNavClick(e, "#services-section")}
+                      onClick={(e) => handleMobileMenuNavClick(e, "#services-section", true)}
                       className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       Services
                     </a>
                     <a
                       href="#integration-section"
-                      onClick={(e) => handleMobileMenuNavClick(e, "#integration-section")}
+                      onClick={(e) => handleMobileMenuNavClick(e, "#integration-section", true)}
                       className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       Software & AI Solutions
                     </a>
                     <a
                       href="#capabilities-section"
-                      onClick={(e) => handleMobileMenuNavClick(e, "#capabilities-section")}
+                      onClick={(e) => handleMobileMenuNavClick(e, "#capabilities-section", true)}
                       className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       Projects
                     </a>
                     <a
                       href="#about-section"
-                      onClick={(e) => handleMobileMenuNavClick(e, "#about-section")}
+                      onClick={(e) => handleMobileMenuNavClick(e, "#about-section", true)}
                       className="shrink-0 flex items-center justify-end text-right py-3 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       About
                     </a>
                     <a
                       href="#career-section"
-                      onClick={(e) => handleMobileMenuNavClick(e, "#career-section")}
+                      onClick={(e) => handleMobileMenuNavClick(e, "#career-section", true)}
                       className="shrink-0 flex items-center justify-end text-right py-3 mb-7 !text-white hover:opacity-80 active:opacity-75 transition-opacity text-[clamp(2rem,8.8vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.02em]"
                     >
                       Career

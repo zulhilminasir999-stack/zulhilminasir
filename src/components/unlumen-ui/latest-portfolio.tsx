@@ -42,6 +42,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     mobileImage: "/Triply/Triply_m1.png",
     mobileObjectPosition: "center 60%",
     mobileImageClassName: "scale-[1.10] -translate-y-6",
+    overlayClassName: "bottom-8 sm:bottom-16 lg:bottom-20 -translate-y-24 sm:translate-y-0",
     url: "/case-study-project/komorebi-editorial",
     client: "Triply App",
     year: "2025"
@@ -56,7 +57,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     mobileImageClassName: "scale-100 -translate-y-6",
     mobileBgClassName: "bg-[#3F3F40] sm:bg-zinc-950",
     objectPosition: "center 30%",
-    overlayClassName: "bottom-12 sm:bottom-16 lg:bottom-20 -translate-y-28 sm:translate-y-0",
+    overlayClassName: "bottom-12 sm:bottom-20 lg:bottom-24 -translate-y-28 sm:translate-y-0",
     url: "/case-study-project/ck-lighting",
     client: "CK Lighting Sdn Bhd",
     year: "2026"
@@ -71,7 +72,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     objectPosition: "center center",
     imageClassName: "scale-[1.06] sm:scale-[1.06] sm:group-hover:scale-110",
     mobileImageClassName: "scale-[1.10] -translate-y-6",
-    overlayClassName: "bottom-12 sm:bottom-12 lg:bottom-14 -translate-y-28 sm:translate-y-0",
+    overlayClassName: "bottom-12 sm:bottom-16 lg:bottom-20 -translate-y-28 sm:translate-y-0",
     url: "/case-study-project/breeze-cargo",
     client: "RepX App",
     year: "2026"
