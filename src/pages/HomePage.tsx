@@ -1166,7 +1166,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           href="https://linkedin.com"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider normal-case py-0.5"
                         >
                           <svg
                             viewBox="0 0 24 24"
@@ -1180,13 +1180,13 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.817 17.507h-2.346v-3.676c0-.876-.018-2.004-1.222-2.004-1.223 0-1.41.954-1.41 1.94v3.74h-2.345V9.949h2.253v1.03h.03c.315-.594 1.08-1.221 2.224-1.221 2.377 0 2.816 1.564 2.816 3.6v4.149zM7.844 8.914a1.362 1.362 0 1 1 0-2.724 1.362 1.362 0 0 1 0 2.724zm1.177 8.593H6.668V9.949h2.353v7.558z"
                             />
                           </svg>
-                          <span>LinkedIn</span>
+                          <span className="normal-case">LinkedIn</span>
                         </a>
                         <a
                           href="https://facebook.com"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider normal-case py-0.5"
                         >
                           <svg
                             viewBox="0 0 24 24"
@@ -1196,13 +1196,13 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           >
                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                           </svg>
-                          <span>Facebook</span>
+                          <span className="normal-case">Facebook</span>
                         </a>
                         <a
                           href="https://x.com"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider normal-case py-0.5"
                         >
                           <svg
                             viewBox="0 0 24 24"
@@ -1216,13 +1216,13 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.589 6.36h1.913l-4.181 4.778L18.24 17.64h-3.851l-3.016-3.944L7.921 17.64H6.006l4.472-5.112L5.76 6.36h3.949l2.726 3.605L15.589 6.36zm-.672 10.135h1.06L9.133 7.445H7.995l6.922 9.05z"
                             />
                           </svg>
-                          <span>The X</span>
+                          <span className="normal-case">The X</span>
                         </a>
                         <a
                           href="https://t.me"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider uppercase py-0.5"
+                          className="inline-flex items-center justify-end gap-2 !text-white/95 hover:!text-white active:!text-white/75 transition-colors text-xs font-medium tracking-wider normal-case py-0.5"
                         >
                           <svg
                             viewBox="0 0 24 24"
@@ -1232,7 +1232,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           >
                             <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
                           </svg>
-                          <span>Telegram</span>
+                          <span className="normal-case">Telegram</span>
                         </a>
                       </div>
                     </div>
