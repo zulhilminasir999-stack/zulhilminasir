@@ -3,6 +3,7 @@ import React, { useState } from "react";
 interface SoftwareLogoBoxProps {
   toolName: string;
   showLabel?: boolean;
+  labelAlign?: "center" | "left";
 }
 
 interface LogoConfig {
@@ -708,6 +709,7 @@ function getLogoConfig(toolName: string): LogoConfig {
 export const SoftwareLogoBox: React.FC<SoftwareLogoBoxProps> = ({
   toolName,
   showLabel = false,
+  labelAlign = "center",
 }) => {
   const config = getLogoConfig(toolName);
   const [candidateIdx, setCandidateIdx] = useState(0);
@@ -766,10 +768,26 @@ export const SoftwareLogoBox: React.FC<SoftwareLogoBoxProps> = ({
     return boxElement;
   }
 
+  const isLeft = labelAlign === "left";
+
   return (
-    <span className="inline-flex flex-col items-center gap-1.5 shrink-0">
+    <span
+      className={`inline-flex flex-col ${
+        isLeft
+          ? "items-start"
+          : `items-center ${config.isWide ? "" : "w-11 sm:w-12"}`
+      } gap-1.5 shrink-0`}
+    >
       {boxElement}
-      <span className="text-xs font-medium text-zinc-600 text-center leading-none">
+      <span
+        className={`text-[11px] sm:text-xs font-medium text-zinc-600 ${
+          isLeft
+            ? "text-left"
+            : "w-max self-center text-center text-balance"
+        } leading-tight ${
+          config.isWide ? "" : "max-w-[60px] sm:max-w-[68px]"
+        }`}
+      >
         {toolName}
       </span>
     </span>

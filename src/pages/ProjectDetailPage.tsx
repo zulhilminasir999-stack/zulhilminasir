@@ -915,7 +915,7 @@ export default function ProjectDetailPage() {
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
                     Software Tools
                   </h4>
-                  <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
+                  <div className="flex flex-wrap justify-start items-start gap-x-5 sm:gap-x-6 gap-y-3.5 pt-0.5">
                     {(project.toolsUsed && project.toolsUsed.length > 0
                       ? project.toolsUsed
                       : [
@@ -925,7 +925,12 @@ export default function ProjectDetailPage() {
                           "Tailwind CSS",
                         ]
                     ).map((tool) => (
-                      <SoftwareLogoBox key={tool} toolName={tool} />
+                      <SoftwareLogoBox
+                        key={tool}
+                        toolName={tool}
+                        showLabel
+                        labelAlign="center"
+                      />
                     ))}
                   </div>
                 </div>

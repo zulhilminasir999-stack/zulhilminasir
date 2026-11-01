@@ -97,7 +97,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     year: "2026",
     imageUrl: "/TGPW/tgpw1.jpg",
     client: "TG PowerWrap Sdn Bhd",
-    toolsUsed: ["Wordpress", "Adobe Illustrator", "Adobe Photoshop", "ChatGPT", "Google Gemini"],
+    toolsUsed: ["Wordpress Elementor", "Adobe Illustrator", "Adobe Photoshop", "ChatGPT", "Google Gemini"],
     codeAssistedTools: ["HTML", "CSS"],
     summary: "Created the complete brand design, structural carton box vectors, and 3D mockups for an ultra-premium organic wild forest honey brand, showcasing a fusion of delicate line art and AI-synthesized botanical details.",
     challenge: "The client wanted a luxurious, high-end, tactile brand finish that conveyed absolute purity while standing out from commercial bright orange honey jars. It required custom laser embossing illustrations and organic texturing.",
@@ -168,12 +168,11 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     imageUrl: "/PFM/PFM2.jpg",
     client: "Tadika Mesra, Sungai Petani",
     toolsUsed: [
-      "Visual Code Studio",
+      "Visual Studio Code",
       "Codex",
       "Kilo Code",
       "Google Antigravity",
-      "Firebase",
-      "Adobe Illustrator"
+      "Firebase"
     ],
     codeAssistedTools: ["HTML", "CSS", "JavaScript"],
     deploymentTools: ["Vercel"],
