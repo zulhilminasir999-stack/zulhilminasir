@@ -886,7 +886,7 @@ export default function ProjectDetailPage() {
                   Visit Live Site
                 </a>
               </div>
-              <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-y-12 gap-x-8">
+              <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-[0.86fr_1.14fr] gap-y-12 gap-x-6">
                 <div className="order-1">
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
                     Client
@@ -915,7 +915,7 @@ export default function ProjectDetailPage() {
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
                     Software Tools
                   </h4>
-                  <div className="flex flex-wrap justify-start items-start gap-x-5 sm:gap-x-6 gap-y-3.5 pt-0.5">
+                  <div className="flex flex-wrap justify-start items-start gap-x-4 sm:gap-x-[18px] gap-y-3.5 pt-0.5">
                     {(project.toolsUsed && project.toolsUsed.length > 0
                       ? project.toolsUsed
                       : [

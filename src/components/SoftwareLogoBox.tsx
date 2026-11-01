@@ -775,17 +775,17 @@ export const SoftwareLogoBox: React.FC<SoftwareLogoBoxProps> = ({
       className={`inline-flex flex-col ${
         isLeft
           ? "items-start"
-          : `items-center ${config.isWide ? "" : "w-11 sm:w-12"}`
+          : `items-center ${config.isWide ? "" : "w-11 sm:w-12 min-w-0"}`
       } gap-1.5 shrink-0`}
     >
       {boxElement}
       <span
-        className={`text-[11px] sm:text-xs font-medium text-zinc-600 ${
+        className={`text-[10px] sm:text-[11px] font-medium text-zinc-600 ${
           isLeft
             ? "text-left"
             : "w-max self-center text-center text-balance"
         } leading-tight ${
-          config.isWide ? "" : "max-w-[60px] sm:max-w-[68px]"
+          config.isWide ? "" : "max-w-[56px] sm:max-w-[60px]"
         }`}
       >
         {toolName}
