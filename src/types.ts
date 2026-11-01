@@ -10,6 +10,8 @@ export interface Project {
   imageUrl: string;
   client: string;
   toolsUsed: string[];
+  codeAssistedTools?: string[];
+  deploymentTools?: string[];
   summary: string;
   challenge: string;
   solution: string;

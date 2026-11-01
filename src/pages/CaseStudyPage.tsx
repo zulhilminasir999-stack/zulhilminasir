@@ -23,6 +23,7 @@ import { CAPABILITIES_DATA } from "../data.ts";
 import { FloatingMenu } from "../components/FloatingMenu";
 import { MobileZoomableModal } from "../components/MobileZoomableModal";
 import RelatedCapabilitiesCarousel from "../components/RelatedCapabilitiesCarousel";
+import { SoftwareLogoBox } from "../components/SoftwareLogoBox";
 import { useReveal } from "../context/RevealContext";
 import { useLenis } from "lenis/react";
 import webDesignMockupImg from "../assets/images/web_design_mockup_1783179228755.jpg";
@@ -846,9 +847,9 @@ export default function CaseStudyPage() {
                 </div>
                 <div>
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">Technology & Stack</h4>
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
                     {capability.toolsUsed.map(tool => (
-                      <span key={tool} className="text-zinc-600 text-[16px] sm:text-sm">{tool}</span>
+                      <SoftwareLogoBox key={tool} toolName={tool} />
                     ))}
                   </div>
                 </div>

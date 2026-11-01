@@ -1583,8 +1583,23 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                 onClick={(e) => handleNavClick(e, '#contact-section')}
                 className="inline-flex items-center gap-2 bg-white text-[#2563EB] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"
               >
-                <span className="text-xs">✦</span>
-                <span>Get in touch</span>
+                <span className="inline-flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-4 h-4 shrink-0"
+                    aria-hidden="true"
+                  >
+                    <path d="M14.25 2.25V6a2.25 2.25 0 0 0 2.25 2.25h3.75l-6-6Z" />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M6 2.25A2.25 2.25 0 0 0 3.75 4.5v15A2.25 2.25 0 0 0 6 21.75h12a2.25 2.25 0 0 0 2.25-2.25V9.75H16.5a3.75 3.75 0 0 1-3.75-3.75V2.25H6Zm1.5 6a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm0 4a.75.75 0 0 0 0 1.5h9a.75.75 0 0 0 0-1.5h-9Zm0 3.75a.75.75 0 0 0 0 1.5h9a.75.75 0 0 0 0-1.5h-9Z"
+                    />
+                  </svg>
+                </span>
+                <span>Download Resume</span>
               </a>
             </div>
 

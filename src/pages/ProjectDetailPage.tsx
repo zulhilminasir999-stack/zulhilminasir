@@ -20,6 +20,7 @@ import { PORTFOLIO_PROJECTS, CAPABILITIES_DATA } from "../data.ts";
 import { FloatingMenu } from "../components/FloatingMenu";
 import { MobileZoomableModal } from "../components/MobileZoomableModal";
 import RelatedCapabilitiesCarousel from "../components/RelatedCapabilitiesCarousel";
+import { SoftwareLogoBox } from "../components/SoftwareLogoBox";
 import { useReveal } from "../context/RevealContext";
 import { useLenis } from "lenis/react";
 
@@ -868,7 +869,13 @@ export default function ProjectDetailPage() {
         </section>
 
         {/* Section 2: Details */}
-        <section className="w-full bg-white sm:bg-zinc-50/95 sm:backdrop-blur-md text-zinc-900 z-30 relative sm:sticky sm:top-0 h-auto sm:h-screen flex flex-col justify-center shadow-none sm:shadow-2xl py-12 sm:py-0">
+        <section
+          className={`w-full bg-white sm:bg-zinc-50/95 sm:backdrop-blur-md text-zinc-900 z-30 relative sm:sticky sm:top-0 ${
+            project.deploymentTools && project.deploymentTools.length > 0
+              ? "h-auto sm:min-h-screen py-12 sm:py-16"
+              : "h-auto sm:h-screen py-12 sm:py-0"
+          } flex flex-col justify-center shadow-none sm:shadow-2xl`}
+        >
           <div className="w-full px-6 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
               <div className="md:col-span-4">
@@ -880,7 +887,7 @@ export default function ProjectDetailPage() {
                 </a>
               </div>
               <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-y-12 gap-x-8">
-                <div>
+                <div className="order-1">
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
                     Client
                   </h4>
@@ -888,7 +895,7 @@ export default function ProjectDetailPage() {
                     {project.client || "Stride Athletics"}
                   </p>
                 </div>
-                <div>
+                <div className="order-2">
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
                     Project Type
                   </h4>
@@ -896,7 +903,7 @@ export default function ProjectDetailPage() {
                     {project.categoryLabel || "Digital Product Design"}
                   </p>
                 </div>
-                <div>
+                <div className="order-3">
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
                     Released
                   </h4>
@@ -904,39 +911,25 @@ export default function ProjectDetailPage() {
                     {project.year || "October 11, 2024"}
                   </p>
                 </div>
-                <div>
+                <div className="order-4">
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
-                    Technology
+                    Software Tools
                   </h4>
-                  <div className="flex flex-col gap-1">
-                    {project.toolsUsed && project.toolsUsed.length > 0 ? (
-                      project.toolsUsed.map((tool) => (
-                        <span
-                          key={tool}
-                          className="text-zinc-600 text-[16px] sm:text-sm"
-                        >
-                          {tool}
-                        </span>
-                      ))
-                    ) : (
-                      <>
-                        <span className="text-zinc-600 text-[16px] sm:text-sm">
-                          React Native
-                        </span>
-                        <span className="text-zinc-600 text-[16px] sm:text-sm">
-                          Motion Analysis API
-                        </span>
-                        <span className="text-zinc-600 text-[16px] sm:text-sm">
-                          Machine Learning
-                        </span>
-                        <span className="text-zinc-600 text-[16px] sm:text-sm">
-                          Cloud Architecture
-                        </span>
-                      </>
-                    )}
+                  <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
+                    {(project.toolsUsed && project.toolsUsed.length > 0
+                      ? project.toolsUsed
+                      : [
+                          "Figma",
+                          "React & Vite",
+                          "Google Gemini",
+                          "Tailwind CSS",
+                        ]
+                    ).map((tool) => (
+                      <SoftwareLogoBox key={tool} toolName={tool} />
+                    ))}
                   </div>
                 </div>
-                <div>
+                <div className="order-7 sm:order-5">
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
                     Timeframe
                   </h4>
@@ -944,6 +937,34 @@ export default function ProjectDetailPage() {
                     3 months
                   </p>
                 </div>
+                {(project.codeAssistedTools === undefined ||
+                  project.codeAssistedTools.length > 0) && (
+                  <div className="order-5 sm:order-6">
+                    <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
+                      Code-Assisted Development
+                    </h4>
+                    <div className="flex flex-wrap items-start gap-2.5 pt-0.5">
+                      {(project.codeAssistedTools && project.codeAssistedTools.length > 0
+                        ? project.codeAssistedTools
+                        : ["HTML", "CSS"]
+                      ).map((tool) => (
+                        <SoftwareLogoBox key={tool} toolName={tool} showLabel />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {project.deploymentTools && project.deploymentTools.length > 0 && (
+                  <div className="order-6 sm:order-7 sm:col-start-2">
+                    <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
+                      Deployment & Hosting
+                    </h4>
+                    <div className="flex flex-wrap items-start gap-2.5 pt-0.5">
+                      {project.deploymentTools.map((tool) => (
+                        <SoftwareLogoBox key={tool} toolName={tool} showLabel />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
