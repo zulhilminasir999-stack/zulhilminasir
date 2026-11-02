@@ -948,7 +948,7 @@ export default function ProjectDetailPage() {
                     <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
                       Code-Assisted Development
                     </h4>
-                    <div className="flex flex-wrap items-start gap-2.5 pt-0.5">
+                    <div className="flex flex-wrap items-start gap-x-4 sm:gap-x-[18px] gap-y-3.5 pt-0.5">
                       {(project.codeAssistedTools && project.codeAssistedTools.length > 0
                         ? project.codeAssistedTools
                         : ["HTML", "CSS"]
