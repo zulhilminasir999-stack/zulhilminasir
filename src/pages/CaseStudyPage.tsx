@@ -1164,6 +1164,24 @@ export default function CaseStudyPage() {
                   Home
                 </button>
                 <button 
+                  onClick={(e) => handleNavClick(e, "#services-section")} 
+                  className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
+                >
+                  Services
+                </button>
+                <button 
+                  onClick={(e) => handleNavClick(e, "#integration-section")} 
+                  className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
+                >
+                  Software &amp; AI Solution
+                </button>
+                <button 
+                  onClick={(e) => handleNavClick(e, "#capabilities-section")} 
+                  className="text-white hover:text-white/80 text-[15px] text-left cursor-default"
+                >
+                  Projects
+                </button>
+                <button 
                   onClick={(e) => handleNavClick(e, "#about-section")} 
                   className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
@@ -1174,18 +1192,6 @@ export default function CaseStudyPage() {
                   className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
                 >
                   Career
-                </button>
-                <button 
-                  onClick={(e) => handleNavClick(e, "#services-section")} 
-                  className="text-white hover:text-white/80 transition-colors text-[15px] text-left cursor-pointer"
-                >
-                  Services
-                </button>
-                <button 
-                  onClick={(e) => handleNavClick(e, "#capabilities-section")} 
-                  className="text-white hover:text-white/80 text-[15px] text-left cursor-default"
-                >
-                  Projects
                 </button>
               </div>
 
@@ -1223,6 +1229,14 @@ export default function CaseStudyPage() {
                   className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Telegram
+                </a>
+                <a 
+                  href="https://github.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
+                >
+                  GitHub
                 </a>
               </div>
             </div>

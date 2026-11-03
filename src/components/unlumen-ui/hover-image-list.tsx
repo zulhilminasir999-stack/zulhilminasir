@@ -98,35 +98,49 @@ function HoverImageListItem({
             setHoveredIndex(null);
           }
         }}
-        className={`group relative w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer transition-all duration-500 px-6 sm:px-12 lg:px-16 ${
-          (isHovered || isExpanded) ? "bg-[#2563EB]" : "sm:hover:bg-[#2563EB]"
-        }`}
+        className="group relative overflow-hidden w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer px-6 sm:px-12 lg:px-16"
       >
+        {/* Contact-page social-button style modern blue (#2563EB) 2px sweep + bottom-up fill */}
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute left-0 bottom-0 h-[2px] w-full bg-[#2563EB] origin-left transition-transform duration-500 ease-[ease] z-[2] ${
+            isHovered || isExpanded ? "scale-x-100" : "scale-x-0"
+          }`}
+        />
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 bg-[#2563EB] origin-bottom transition-transform duration-300 ease-[ease] z-[1] ${
+            isHovered || isExpanded ? "scale-y-100" : "scale-y-0"
+          }`}
+        />
+
         {/* SVG Noise Overlay */}
-        {(isHovered || isExpanded) && (
-          <div className="absolute inset-0 opacity-25 pointer-events-none mix-blend-overlay overflow-hidden">
-            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-              <filter id={`noiseFilterRow-${idx}`}>
-                <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-              </filter>
-              <rect width="100%" height="100%" filter={`url(#noiseFilterRow-${idx})`} />
-            </svg>
-          </div>
-        )}
+        <div
+          className={`absolute inset-0 pointer-events-none mix-blend-overlay overflow-hidden z-[2] transition-opacity duration-300 ease-[ease] ${
+            isHovered || isExpanded ? "opacity-25" : "opacity-0"
+          }`}
+        >
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <filter id={`noiseFilterRow-${idx}`}>
+              <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+            </filter>
+            <rect width="100%" height="100%" filter={`url(#noiseFilterRow-${idx})`} />
+          </svg>
+        </div>
 
         {/* Left side: Wording */}
         <div className="relative z-10 flex items-center flex-1 min-w-0">
           {/* Text and category */}
           <div className="flex flex-col items-start text-left gap-1 sm:gap-2">
-            <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-semibold tracking-tighter transition-colors duration-500 uppercase ${
+            <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-semibold tracking-tighter transition-colors duration-300 ease-[ease] uppercase ${
               (isHovered || isExpanded) ? "text-white" : "text-zinc-700"
             }`}>
               {item.label}
             </div>
             {item.category && (
               <span 
-                className={`text-[12px] font-sans tracking-wider uppercase transition-all duration-500 transform translate-y-1 group-hover:translate-y-0 font-medium ${
-                  (isHovered || isExpanded) ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                className={`text-[12px] font-sans tracking-wider uppercase transition-all duration-300 ease-[ease] transform font-medium ${
+                  (isHovered || isExpanded) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0"
                 }`}
                 style={{ color: (isHovered || isExpanded) ? "rgba(255, 255, 255, 0.8)" : "rgb(113, 113, 122)" }}
               >
@@ -146,9 +160,9 @@ function HoverImageListItem({
                 animate={{ opacity: 1, scale: 1, rotate: -45 }}
                 exit={{ opacity: 0, scale: 0.6, rotate: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border border-white bg-white flex items-center justify-center text-[#2563EB]"
+                className="flex items-center justify-center text-white !text-white"
               >
-                <ArrowUpRight className="w-6 h-6 sm:w-8 sm:h-8" />
+                <ArrowUpRight className="w-8 h-8 sm:w-10 sm:h-10 !text-white" />
               </motion.div>
             ) : (
               <motion.div
@@ -157,7 +171,7 @@ function HoverImageListItem({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className={`flex items-center justify-center transition-colors duration-500 ${
+                className={`flex items-center justify-center transition-colors duration-300 ease-[ease] ${
                   isHovered ? "text-white" : "text-[#2563EB]"
                 }`}
               >
@@ -171,6 +185,11 @@ function HoverImageListItem({
       {/* Showcase Dropdown */}
       <motion.div
         initial={false}
+        onMouseEnter={() => {
+          if (!isMobile) {
+            setHoveredIndex(null);
+          }
+        }}
         animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
         transition={{ duration: (navType === "POP" && expandedIndex === idx) ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
         className={`overflow-hidden transition-colors duration-500 relative ${

@@ -101,6 +101,67 @@
   font-family: 'Anton', 'Antonio', Impact, sans-serif !important;
 }
 
+h1.contact-hero-heading,
+.light h1.contact-hero-heading,
+h2.contact-questions-heading,
+.light h2.contact-questions-heading {
+  font-family: 'Satoshi', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  color: #2563EB !important;
+}
+
+#contact-section h2,
+.light #contact-section h2 {
+  color: #ffffff !important;
+}
+
+.contact-blue-hover-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.35s ease, border-color 0.3s ease;
+}
+
+.contact-blue-hover-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #2563EB;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+  z-index: 2;
+}
+
+.contact-blue-hover-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: #2563EB;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.contact-blue-hover-btn:hover,
+.contact-blue-hover-btn:hover span,
+html.light .contact-blue-hover-btn:hover,
+html.light .contact-blue-hover-btn:hover span {
+  color: #ffffff !important;
+  border-color: #2563EB !important;
+}
+
+.contact-blue-hover-btn:hover::before {
+  transform: scaleX(1);
+}
+
+.contact-blue-hover-btn:hover::after {
+  transform: scaleY(1);
+}
+
 /* ==========================================================================
    DESKTOP DEVICE ONLY: Convert all wording across the entire website into Satoshi font
    ========================================================================== */

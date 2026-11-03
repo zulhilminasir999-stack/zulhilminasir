@@ -1636,6 +1636,27 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   Home
                 </a>
                 <a 
+                  href="#services-section" 
+                  onClick={(e) => handleNavClick(e, '#services-section')} 
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
+                >
+                  Services
+                </a>
+                <a 
+                  href="#integration-section" 
+                  onClick={(e) => handleNavClick(e, '#integration-section')} 
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
+                >
+                  Software &amp; AI Solution
+                </a>
+                <a 
+                  href="#capabilities-section" 
+                  onClick={(e) => handleNavClick(e, '#capabilities-section')} 
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
+                >
+                  Projects
+                </a>
+                <a 
                   href="#about-section" 
                   onClick={(e) => handleNavClick(e, '#about-section')} 
                   className="text-white hover:text-white/80 transition-colors text-[15px]"
@@ -1648,20 +1669,6 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Career
-                </a>
-                <a 
-                  href="#services-section" 
-                  onClick={(e) => handleNavClick(e, '#services-section')} 
-                  className="text-white hover:text-white/80 transition-colors text-[15px]"
-                >
-                  Services
-                </a>
-                <a 
-                  href="#capabilities-section" 
-                  onClick={(e) => handleNavClick(e, '#capabilities-section')} 
-                  className="text-white hover:text-white/80 transition-colors text-[15px]"
-                >
-                  Projects
                 </a>
               </div>
 
@@ -1699,6 +1706,14 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   className="text-white hover:text-white/80 transition-colors text-[15px]"
                 >
                   Telegram
+                </a>
+                <a 
+                  href="https://github.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-white hover:text-white/80 transition-colors text-[15px]"
+                >
+                  GitHub
                 </a>
               </div>
             </div>

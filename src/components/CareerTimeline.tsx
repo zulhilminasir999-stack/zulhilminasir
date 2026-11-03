@@ -208,21 +208,26 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
       </div>
 
       {/* Accordion Container */}
-      <div className="space-y-0">
+      <div className="border-t border-zinc-200">
         {EXPERIENCE_DATA.map((item, index) => {
           const isOpen = expandedId === item.id;
+          const formattedIndex = String(index + 1).padStart(2, "0");
 
           return (
             <div 
               key={item.id} 
-              className={`transition-colors duration-300`}
+              className="border-b border-zinc-200 transition-colors duration-300"
             >
               {/* Trigger Row */}
               <button
                 onClick={() => toggleAccordion(item.id)}
-                className={`w-full flex items-center justify-between py-10 sm:py-12 text-left group focus:outline-none ${isOpen ? "is-open" : ""}`}
+                className={`w-full flex items-center justify-between gap-4 sm:gap-8 py-8 sm:py-10 text-left group cursor-pointer focus:outline-none ${isOpen ? "is-open" : ""}`}
               >
-                <div className="flex items-baseline gap-4">
+                <span className="text-xs text-zinc-400 tabular-nums w-10 sm:w-28 lg:w-44 shrink-0">
+                  {formattedIndex}
+                </span>
+
+                <div className="flex-1 min-w-0 flex items-baseline gap-4">
                   <CareerRoleHeading
                     company={item.company}
                     isOpen={isOpen}
@@ -241,12 +246,12 @@ export default function CareerTimeline({ theme }: CareerTimelineProps) {
                       </span>
                     </div>
                   )}
-                  <div className={`p-2 rounded-full border transition-all duration-500 ${
+                  <div className={`w-8 h-8 flex items-center justify-center shrink-0 transition-all duration-300 ${
                     isOpen 
-                      ? "rotate-45 bg-[#2563EB] border-[#2563EB] text-white" 
-                      : "border-zinc-200 text-zinc-400 group-hover:border-zinc-400 group-hover:text-zinc-900"
+                      ? "rotate-45 text-[#2563EB]" 
+                      : "rotate-0 text-zinc-600 group-hover:text-[#2563EB]"
                   }`}>
-                    <Plus size={18} />
+                    <Plus className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.75]" />
                   </div>
                 </div>
               </button>
