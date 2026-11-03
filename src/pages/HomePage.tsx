@@ -956,7 +956,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent -skew-x-12 animate-[grid-sweep_4s_ease-in-out_infinite]" />
                             </div>
                             <span className="relative z-10 inline-block text-[15px] font-medium">
-                              Get In Touch
+                              Let's Connect
                             </span>
                           </motion.a>
                         </div>
@@ -1035,7 +1035,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             onClick={handleContactPageClick}
                             className={`ml-6 md:ml-3 lg:ml-6 ${isWhiteTextSection ? "get-in-touch-btn-dark" : "get-in-touch-btn"} whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer`}
                           >
-                            <span className="text-[15px]">Get In Touch</span>
+                            <span className="text-[15px]">Let's Connect</span>
                           </motion.a>
                         </motion.div>
                       </div>

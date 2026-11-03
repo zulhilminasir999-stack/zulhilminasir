@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "motion/react";
+import { ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { WordsStagger } from "../../registry/spell-ui/words-stagger";
 import { useReveal } from "../../context/RevealContext";
@@ -96,8 +97,18 @@ function PortfolioBottomOverlay({ item }: { item: PortfolioItem }) {
   return (
     <div
       ref={overlayRef}
-      className={`absolute left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col ${item.overlayClassName || "bottom-8 sm:bottom-12 lg:bottom-14 -translate-y-24 sm:translate-y-0"}`}
+      className={`absolute left-0 w-full px-6 sm:px-12 lg:px-16 z-20 flex flex-col items-start text-left ${item.overlayClassName || "bottom-8 sm:bottom-12 lg:bottom-14 -translate-y-24 sm:translate-y-0"}`}
     >
+      {/* 45-degree upward-right arrow icon located above the text, left-aligned (mobile only) */}
+      <motion.div
+        initial={{ opacity: 0, x: -8, y: 8 }}
+        animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: -8, y: 8 }}
+        transition={{ duration: 0.5, delay: 0.02, ease: [0.215, 0.61, 0.355, 1] }}
+        className="block sm:hidden self-start mb-1.5 -ml-1.5 text-white !text-white drop-shadow-sm"
+      >
+        <ArrowUpRight className="w-7 h-7 text-white !text-white transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1" />
+      </motion.div>
+
       {/* Category above the main title (with client appended on mobile) */}
       <p className="text-sm sm:text-base md:text-lg lg:text-xl font-sans font-medium text-white/90 tracking-tight mb-2 sm:mb-3 drop-shadow-sm">
         <WordsStagger
