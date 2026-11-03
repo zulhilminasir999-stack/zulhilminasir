@@ -50,12 +50,25 @@ function HoverImageListItem({
   navType
 }: HoverImageListItemProps) {
   const rowRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const isHovered = !isMobile && hoveredIndex === idx;
   const isExpanded = expandedIndex === idx;
+  const [isCollapsing, setIsCollapsing] = useState(false);
+  const prevExpandedRef = useRef(isExpanded);
 
-  // Reveal animation similar and aligned to "Ideas In Action" for mobile device only whenever scrolling
+  useEffect(() => {
+    if (prevExpandedRef.current && !isExpanded) {
+      setIsCollapsing(true);
+      const timer = setTimeout(() => setIsCollapsing(false), 500);
+      prevExpandedRef.current = isExpanded;
+      return () => clearTimeout(timer);
+    }
+    prevExpandedRef.current = isExpanded;
+  }, [isExpanded]);
+
+  // Reveal animation aligned to header row for mobile collapsed state only (never shrinks background)
   const { scrollYProgress } = useScroll({
-    target: rowRef,
+    target: headerRef,
     offset: ["start end", "center 45%"]
   });
 
@@ -66,26 +79,28 @@ function HoverImageListItem({
     restDelta: 0.001
   });
 
-  const mobileScale = useTransform(smoothProgress, [0.05, 0.95], [0.8, 1]);
+  const mobileScale = useTransform(smoothProgress, [0.05, 0.95], [0.85, 1]);
   const mobileOpacity = useTransform(smoothProgress, [0.05, 0.40], [0, 1]);
   const mobileY = useTransform(smoothProgress, [0.05, 0.95], [60, 0]);
+  const shouldAnimateMobileCollapsed = isMobile && !isExpanded && !isCollapsing;
 
   return (
     <motion.div 
       ref={rowRef}
-      className="border-b border-zinc-200"
+      className={`w-full border-b transition-colors duration-300 ${
+        isExpanded ? "bg-[#2563EB] border-[#2563EB]" : "border-zinc-200"
+      }`}
       initial={!isMobile ? { opacity: 0, y: 40 } : undefined}
       whileInView={!isMobile ? { opacity: 1, y: 0 } : undefined}
       viewport={!isMobile ? { once: true } : undefined}
       transition={!isMobile ? { duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] } : undefined}
-      style={isMobile ? {
-        scale: mobileScale,
+      style={shouldAnimateMobileCollapsed ? {
         opacity: mobileOpacity,
-        y: mobileY,
-        transformOrigin: "center center"
+        y: mobileY
       } : undefined}
     >
       <div
+        ref={headerRef}
         onMouseEnter={() => {
           if (!isMobile) {
             setHoveredIndex(idx);
@@ -98,7 +113,9 @@ function HoverImageListItem({
             setHoveredIndex(null);
           }
         }}
-        className="group relative overflow-hidden w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer px-6 sm:px-12 lg:px-16"
+        className={`group relative overflow-hidden w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer px-6 sm:px-12 lg:px-16 ${
+          isExpanded ? "bg-[#2563EB]" : ""
+        }`}
       >
         {/* Contact-page social-button style modern blue (#2563EB) 2px sweep + bottom-up fill */}
         <span
@@ -129,7 +146,10 @@ function HoverImageListItem({
         </div>
 
         {/* Left side: Wording */}
-        <div className="relative z-10 flex items-center flex-1 min-w-0">
+        <motion.div
+          className="relative z-10 flex items-center flex-1 min-w-0"
+          style={shouldAnimateMobileCollapsed ? { scale: mobileScale, transformOrigin: "left center" } : undefined}
+        >
           {/* Text and category */}
           <div className="flex flex-col items-start text-left gap-1 sm:gap-2">
             <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-semibold tracking-tighter transition-colors duration-300 ease-[ease] uppercase ${
@@ -148,10 +168,13 @@ function HoverImageListItem({
               </span>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Right side: Curly-braced number or arrow icon */}
-        <div className="relative z-10 flex items-center justify-end shrink-0 pl-4 select-none min-w-[70px] sm:min-w-[96px]">
+        <motion.div
+          className="relative z-10 flex items-center justify-end shrink-0 pl-4 select-none min-w-[70px] sm:min-w-[96px]"
+          style={shouldAnimateMobileCollapsed ? { scale: mobileScale, transformOrigin: "right center" } : undefined}
+        >
           <AnimatePresence mode="wait">
             {isExpanded ? (
               <motion.div
@@ -179,7 +202,7 @@ function HoverImageListItem({
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
 
       {/* Showcase Dropdown */}
@@ -192,7 +215,7 @@ function HoverImageListItem({
         }}
         animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
         transition={{ duration: (navType === "POP" && expandedIndex === idx) ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className={`overflow-hidden transition-colors duration-500 relative ${
+        className={`w-full overflow-hidden transition-colors duration-500 relative ${
           isExpanded ? "bg-[#2563EB]" : "bg-zinc-50/30"
         }`}
       >

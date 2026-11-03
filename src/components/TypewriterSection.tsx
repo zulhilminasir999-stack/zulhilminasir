@@ -18,13 +18,12 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
     if (typeof window !== "undefined" && window.scrollY > 20) {
       sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
     }
-    if (typeof window !== "undefined" && window.innerWidth >= 768) {
-      triggerReveal(() => {
-        navigate("/contact");
-      });
-    } else {
+    triggerReveal(() => {
       navigate("/contact");
-    }
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
   };
   const strings = [
     "        AI accelerates creation, yet exceptional design engineering always begins with human thinking, purposeful decisions, and meaningful creative interaction.",
