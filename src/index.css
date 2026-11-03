@@ -97,6 +97,10 @@
   font-family: 'Monimer Serif', 'Monimer', Georgia, serif !important;
 }
 
+.font-condensed {
+  font-family: 'Anton', 'Antonio', Impact, sans-serif !important;
+}
+
 /* ==========================================================================
    DESKTOP DEVICE ONLY: Convert all wording across the entire website into Satoshi font
    ========================================================================== */
@@ -117,18 +121,18 @@
   }
 
   /* Target all headings, paragraphs, buttons, labels, and text across desktop while preserving specialized cursive signatures and code */
-  h1:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  h2:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  h3:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  h4:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  h5:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  h6:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  p:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  a:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  button:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  input:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  textarea:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono),
-  select:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono) {
+  h1:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  h2:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  h3:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  h4:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  h5:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  h6:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  p:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  a:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  button:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  input:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  textarea:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed),
+  select:not(.font-signature):not(.font-script):not(.font-monimer):not(.font-mono):not(.font-condensed) {
     font-family: 'Satoshi', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 
@@ -976,8 +980,13 @@ html.lenis,
   }
 
   body,
-  body *:not(svg):not(path):not(rect):not(circle):not(g):not(line):not(polyline):not(polygon):not(.font-serif):not(.font-signature):not(.font-mono):not([style*="Cormorant"]):not([style*="Madinah"]):not([style*="JetBrains"]):not([style*="Inter"]) {
+  body *:not(svg):not(path):not(rect):not(circle):not(g):not(line):not(polyline):not(polygon):not(.font-serif):not(.font-signature):not(.font-mono):not(.font-condensed):not([style*="Cormorant"]):not([style*="Madinah"]):not([style*="JetBrains"]):not([style*="Inter"]) {
     font-family: "Satoshi", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  }
+
+  .font-condensed,
+  .font-condensed * {
+    font-family: "Anton", "Antonio", Impact, sans-serif !important;
   }
 
   .font-mono,

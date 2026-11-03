@@ -118,6 +118,23 @@ export default function ProjectDetailPage() {
     }
   };
 
+  const handleContactPageClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (isMobileMenuOpen) {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      lenis?.start();
+      setIsMobileMenuOpen(false);
+    }
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      triggerReveal(() => {
+        navigate("/contact");
+      });
+    } else {
+      navigate("/contact");
+    }
+  };
+
   const mobileMenuPanelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -474,7 +491,7 @@ export default function ProjectDetailPage() {
                             stiffness: 380,
                             damping: 35,
                           }}
-                          onClick={(e) => handleNavClick(e, "#contact-section", true)}
+                          onClick={handleContactPageClick}
                           className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 whitespace-nowrap cursor-pointer"
                         >
                           {/* Shimmer Effect Wrapper */}
@@ -568,7 +585,7 @@ export default function ProjectDetailPage() {
                             stiffness: 380,
                             damping: 35,
                           }}
-                          onClick={(e) => handleNavClick(e, "#contact-section", true)}
+                          onClick={handleContactPageClick}
                           className="ml-6 md:ml-3 lg:ml-6 get-in-touch-btn whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                         >
                           <span className="text-[15px]">Get In Touch</span>
@@ -684,8 +701,8 @@ export default function ProjectDetailPage() {
 
                   <div className="mt-auto shrink-0 w-full border-t border-white/50 pt-7 flex flex-col items-end text-right">
                     <a
-                      href="#contact-section"
-                      onClick={(e) => handleMobileMenuNavClick(e, "#contact-section")}
+                      href="/contact"
+                      onClick={handleContactPageClick}
                       className="ml-auto inline-flex items-center justify-end gap-2.5 group active:scale-[0.98] transition-transform"
                     >
                       <ArrowUpRight

@@ -56,10 +56,11 @@ export default function BackToTopButton() {
         }
       }
 
-      // Check if on case-study or project detail page (white background above footer)
+      // Check if on case-study, project detail, or contact page (light background)
       const isProjectOrCaseStudy =
         window.location.pathname.startsWith("/case-study") ||
-        window.location.pathname.startsWith("/project");
+        window.location.pathname.startsWith("/project") ||
+        window.location.pathname.startsWith("/contact");
 
       if (isProjectOrCaseStudy) {
         const footer = document.getElementById("contact-section");

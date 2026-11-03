@@ -659,6 +659,26 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
     handleNavClick(e, targetId, false, instantJump);
   };
 
+  const handleContactPageClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (isMobileMenuOpen) {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      lenis?.start();
+      setIsMobileMenuOpen(false);
+    }
+    if (window.scrollY > 20) {
+      sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
+    }
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      triggerReveal(() => {
+        navigate("/contact");
+      });
+    } else {
+      navigate("/contact");
+    }
+  };
+
   useEffect(() => {
     const sectionIds = [
       "services-section",
@@ -923,8 +943,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                             variants={headerItemReveal}
                             initial="hidden"
                             animate={!isLoading ? "visible" : "hidden"}
-                            href="#contact-section"
-                            onClick={(e) => handleNavClick(e, '#contact-section', true)}
+                            href="/contact"
+                            onClick={handleContactPageClick}
                             className="group get-in-touch-btn-hero md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer"
                           >
                             {/* Shimmer Effect Wrapper */}
@@ -1011,8 +1031,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                           <motion.a
                             layoutId="header-contact-btn"
                             transition={{ type: "spring", stiffness: 380, damping: 35 }}
-                            href="#contact-section"
-                            onClick={(e) => handleNavClick(e, '#contact-section', true)}
+                            href="/contact"
+                            onClick={handleContactPageClick}
                             className={`ml-6 md:ml-3 lg:ml-6 ${isWhiteTextSection ? "get-in-touch-btn-dark" : "get-in-touch-btn"} whitespace-nowrap md:!py-1.5 md:!px-3.5 lg:!py-1.5 lg:!px-4 cursor-pointer`}
                           >
                             <span className="text-[15px]">Get In Touch</span>
@@ -1139,8 +1159,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
                     <div className="mt-auto shrink-0 w-full border-t border-white/50 pt-7 flex flex-col items-end text-right">
                       <a
-                        href="#contact-section"
-                        onClick={(e) => handleMobileMenuNavClick(e, "#contact-section")}
+                        href="/contact"
+                        onClick={handleContactPageClick}
                         className="ml-auto inline-flex items-center justify-end gap-2.5 group active:scale-[0.98] transition-transform"
                       >
                         <ArrowUpRight

@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CaseStudyPage from "./pages/CaseStudyPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
+import ContactPage from "./pages/ContactPage";
 import ScrollToTop from "./components/ScrollToTop";
 import BackToTopButton from "./components/BackToTopButton";
 import { LoadingScreen } from "./components/LoadingScreen";
@@ -76,6 +77,7 @@ function AppContent() {
         <Route path="/case-study-project/:id" element={<ProjectDetailPage />} />
         <Route path="/case-studies/:id" element={<ProjectDetailPage />} />
         <Route path="/project/:id" element={<ProjectDetailPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/scroll-demo" element={<StickyStackScrollDemo />} />
       </Routes>
     </>
