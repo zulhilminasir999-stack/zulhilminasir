@@ -1,14 +1,31 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, useTransform, MotionValue, useSpring, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { IdeasInActionHeader } from "./IdeasInActionHeader";
 import { WordsStagger } from "../registry/spell-ui/words-stagger";
+import { useReveal } from "../context/RevealContext";
 
 interface TypewriterSectionProps {
   scrollYProgress: MotionValue<number>;
 }
 
 export default function TypewriterSection({ scrollYProgress }: TypewriterSectionProps) {
+  const navigate = useNavigate();
+  const { triggerReveal } = useReveal();
+
+  const handleCreateClick = () => {
+    if (typeof window !== "undefined" && window.scrollY > 20) {
+      sessionStorage.setItem("home_scroll_position", window.scrollY.toString());
+    }
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      triggerReveal(() => {
+        navigate("/contact");
+      });
+    } else {
+      navigate("/contact");
+    }
+  };
   const strings = [
     "        AI accelerates creation, yet exceptional design engineering always begins with human thinking, purposeful decisions, and meaningful creative interaction.",
     "        Behind every intelligent AI solution stands human-centered design engineering, transforming technology into purposeful, practical, and memorable experiences for everyone."
@@ -258,12 +275,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
                     : { opacity: 0, y: 15, filter: "blur(8px)" }
                 }
                 transition={{ duration: 0.8, delay: 0.52, ease: [0.215, 0.61, 0.355, 1] }}
-                onClick={() => {
-                  const contactSection = document.getElementById("contact-section");
-                  if (contactSection) {
-                    contactSection.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
+                onClick={handleCreateClick}
                 className="group inline-flex items-center gap-2 bg-white/20 hover:bg-white backdrop-blur-2xl active:scale-[0.98] text-white hover:text-[#2563EB] text-xs font-medium px-4 py-2 rounded-xl shadow-lg transition-colors duration-300 border border-white/35 hover:border-white select-none cursor-pointer"
               >
                 <span className="transition-colors duration-300 group-hover:text-[#2563EB]">Let's Create</span>
@@ -399,12 +411,7 @@ export default function TypewriterSection({ scrollYProgress }: TypewriterSection
                   : { opacity: 0, y: 15, filter: "blur(8px)" }
               }
               transition={{ duration: 0.8, delay: 0.52, ease: [0.215, 0.61, 0.355, 1] }}
-              onClick={() => {
-                const contactSection = document.getElementById("contact-section");
-                if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
+              onClick={handleCreateClick}
               className="group inline-flex items-center gap-2 bg-white/20 hover:bg-white backdrop-blur-2xl active:scale-[0.98] text-white hover:text-[#2563EB] text-xs sm:text-sm font-medium px-4 py-2 rounded-xl shadow-lg transition-colors duration-300 border border-white/35 hover:border-white select-none cursor-pointer"
             >
               <span className="transition-colors duration-300 group-hover:text-[#2563EB]">Let's Create</span>

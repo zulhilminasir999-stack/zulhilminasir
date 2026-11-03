@@ -461,7 +461,7 @@ export const DUMMY_RECIPES: PromptRecipe[] = [
 export const CAPABILITIES_DATA: CapabilityDetail[] = [
   {
     id: "web-design-cms",
-    label: "WEB DESIGN & DEV",
+    label: "WEB DEV & DESIGN",
     title: "Web Design & CMS Systems",
     subtitle: "High-Performance Responsive Front-Ends & Component Architectures",
     category: "DEVELOPMENT & SYSTEMS",
