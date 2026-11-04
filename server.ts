@@ -1,4 +1,5 @@
 import express from "express";
+import fs from "fs";
 import path from "path";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
@@ -35,6 +36,34 @@ function getGeminiClient(): GoogleGenAI {
 // API Routes
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
+});
+
+// Explicit Resume PDF delivery with proper Content-Type & Content-Disposition headers
+app.get("/Zulhilmi_Nasir_Resume.pdf", (req, res, next) => {
+  const candidates = [
+    path.join(process.cwd(), "dist", "Zulhilmi_Nasir_Resume.pdf"),
+    path.join(process.cwd(), "public", "Zulhilmi_Nasir_Resume.pdf"),
+    path.join(
+      process.cwd(),
+      "public",
+      "assets",
+      "aistudio",
+      "Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_Designer_c2db278a.pdf"
+    ),
+  ];
+
+  const filePath = candidates.find((candidate) => fs.existsSync(candidate));
+  if (!filePath) {
+    return next();
+  }
+
+  const isDownload = req.query.download === "1" || req.query.download === "true";
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    `${isDownload ? "attachment" : "inline"}; filename="Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_Designer.pdf"`
+  );
+  res.sendFile(filePath);
 });
 
 // Advanced Prompt Engineering Enhancer / Designer Tool Endpoint

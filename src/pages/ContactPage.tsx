@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { ArrowUpRight, Check, Copy, Mail, Moon, Plus, Sun, X } from "lucide-react";
 import { useLenis } from "lenis/react";
@@ -981,9 +981,8 @@ export default function ContactPage() {
               </h2>
 
               {/* Download Resume button matching Main Page */}
-              <a
-                href="#contact-section"
-                onClick={(e) => e.preventDefault()}
+              <Link
+                to="/resume"
                 className="inline-flex items-center gap-2 bg-white text-[#2563EB] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"
               >
                 <span className="inline-flex items-center justify-center">
@@ -1003,7 +1002,7 @@ export default function ContactPage() {
                   </svg>
                 </span>
                 <span>Download Resume</span>
-              </a>
+              </Link>
             </div>
 
             {/* Right part: Explore & Socials columns */}

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, frame, cancelFrame } from "motion/react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CaseStudyPage from "./pages/CaseStudyPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import ContactPage from "./pages/ContactPage";
+import ResumePage from "./pages/ResumePage";
 import ScrollToTop from "./components/ScrollToTop";
 import BackToTopButton from "./components/BackToTopButton";
 import { LoadingScreen } from "./components/LoadingScreen";
@@ -19,8 +20,16 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
 }
 
 function AppContent() {
-  // Show intro loading screen with percentage indicator on full browser reload / initial mount
-  const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const isResumeRoute = location.pathname === "/resume";
+
+  // Show intro loading screen with percentage indicator on full browser reload / initial mount (skip on /resume viewer)
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== "undefined" && window.location.pathname === "/resume") {
+      return false;
+    }
+    return true;
+  });
   
   const lenis = useLenis();
 
@@ -64,7 +73,7 @@ function AppContent() {
   return (
     <>
       <ScrollToTop />
-      <BackToTopButton />
+      {!isResumeRoute && <BackToTopButton />}
       <AnimatePresence>
         {isLoading && <LoadingScreen key="loader" showPercentage={true} />}
       </AnimatePresence>
@@ -78,6 +87,7 @@ function AppContent() {
         <Route path="/case-studies/:id" element={<ProjectDetailPage />} />
         <Route path="/project/:id" element={<ProjectDetailPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/resume" element={<ResumePage />} />
         <Route path="/scroll-demo" element={<StickyStackScrollDemo />} />
       </Routes>
     </>

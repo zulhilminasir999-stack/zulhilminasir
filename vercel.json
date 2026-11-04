@@ -1,4 +1,19 @@
 {
+  "headers": [
+    {
+      "source": "/Zulhilmi_Nasir_Resume.pdf",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_Designer.pdf\""
+        }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
