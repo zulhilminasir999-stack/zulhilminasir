@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import {
   ArrowLeft,
@@ -1816,8 +1816,10 @@ export default function ProjectDetailPage() {
               </h2>
 
               {/* Download Resume button matching main page */}
-              <Link
-                to="/resume"
+              <a
+                href="/Zulhilmi_Nasir_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white text-[#2563EB] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"
               >
                 <span className="inline-flex items-center justify-center">
@@ -1837,7 +1839,7 @@ export default function ProjectDetailPage() {
                   </svg>
                 </span>
                 <span>Download Resume</span>
-              </Link>
+              </a>
             </div>
 
             {/* Right part: Explore & Socials columns */}

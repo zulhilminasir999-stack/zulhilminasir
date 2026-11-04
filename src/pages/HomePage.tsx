@@ -44,7 +44,7 @@ import ContactForm from "../components/ContactForm";
 import StripeMeshGradient from "../components/StripeMeshGradient";
 import { FloatingMenu } from "../components/FloatingMenu";
 import ServiceCardSlider from "../components/ServiceCardSlider";
-import { Link, useNavigate, useLocation, useNavigationType } from "react-router-dom";
+import { useNavigate, useLocation, useNavigationType } from "react-router-dom";
 import { HoverImageList } from "@/components/unlumen-ui/hover-image-list";
 import { LatestPortfolio } from "@/components/unlumen-ui/latest-portfolio";
 import { CreativeApproach } from "../components/CreativeApproach";
@@ -1598,8 +1598,10 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
               </h2>
 
               {/* Download Resume button */}
-              <Link
-                to="/resume"
+              <a
+                href="/Zulhilmi_Nasir_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white text-[#2563EB] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"
               >
                 <span className="inline-flex items-center justify-center">
@@ -1619,7 +1621,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   </svg>
                 </span>
                 <span>Download Resume</span>
-              </Link>
+              </a>
             </div>
 
             {/* Right part: Explore & Socials columns */}
