@@ -1620,7 +1620,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                     />
                   </svg>
                 </span>
-                <span>Download Resume</span>
+                <span>View My CV</span>
               </a>
             </div>
 

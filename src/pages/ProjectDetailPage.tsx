@@ -1838,7 +1838,7 @@ export default function ProjectDetailPage() {
                     />
                   </svg>
                 </span>
-                <span>Download Resume</span>
+                <span>View My CV</span>
               </a>
             </div>
 

@@ -1172,7 +1172,7 @@ export default function ContactPage() {
                     />
                   </svg>
                 </span>
-                <span>Download Resume</span>
+                <span>View My CV</span>
               </a>
             </div>
 

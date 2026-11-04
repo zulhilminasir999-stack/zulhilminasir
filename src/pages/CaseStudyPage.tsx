@@ -1165,7 +1165,7 @@ export default function CaseStudyPage() {
                     />
                   </svg>
                 </span>
-                <span>Download Resume</span>
+                <span>View My CV</span>
               </a>
             </div>
 
