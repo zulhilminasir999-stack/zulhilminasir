@@ -72,8 +72,17 @@ export default function ContactPage() {
   const [isEmailHovered, setIsEmailHovered] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [mobileHeldCard, setMobileHeldCard] = useState<"telegram" | "email" | null>(null);
   const emailBoxRef = useRef<HTMLButtonElement | null>(null);
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStateRef = useRef<{
+    card: "telegram" | "email";
+    startX: number;
+    startY: number;
+    isLongHold: boolean;
+  } | null>(null);
+  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastLongHoldEndRef = useRef<number>(0);
 
   const EMAIL_ADDRESS = "zulhilminasir999@gmail.com";
 
@@ -114,7 +123,16 @@ export default function ContactPage() {
 
   useEffect(() => {
     const checkWidth = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setMobileHeldCard(null);
+        touchStateRef.current = null;
+        if (holdTimerRef.current) {
+          clearTimeout(holdTimerRef.current);
+          holdTimerRef.current = null;
+        }
+      }
     };
     checkWidth();
     window.addEventListener("resize", checkWidth);
@@ -214,8 +232,23 @@ export default function ContactPage() {
   }, [isMobile, isMobileMenuOpen, lenis]);
 
   useEffect(() => {
+    const resetHeldState = () => {
+      if (holdTimerRef.current) {
+        clearTimeout(holdTimerRef.current);
+        holdTimerRef.current = null;
+      }
+      touchStateRef.current = null;
+      setMobileHeldCard(null);
+    };
+
+    window.addEventListener("blur", resetHeldState);
+    document.addEventListener("visibilitychange", resetHeldState);
+
     return () => {
+      window.removeEventListener("blur", resetHeldState);
+      document.removeEventListener("visibilitychange", resetHeldState);
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
     };
   }, []);
 
@@ -332,6 +365,80 @@ export default function ContactPage() {
       setEmailCopied(false);
     }, 2400);
   };
+
+  const clearMobileCardHold = (recordLongHoldEnd = false) => {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    if (recordLongHoldEnd && touchStateRef.current?.isLongHold) {
+      lastLongHoldEndRef.current = Date.now();
+    }
+    touchStateRef.current = null;
+    setMobileHeldCard(null);
+  };
+
+  const handleCardTouchStart = (
+    card: "telegram" | "email",
+    e: React.TouchEvent<HTMLElement>
+  ) => {
+    if (!isMobile) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+    }
+    touchStateRef.current = {
+      card,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      isLongHold: false,
+    };
+    setMobileHeldCard(card);
+    holdTimerRef.current = setTimeout(() => {
+      if (touchStateRef.current && touchStateRef.current.card === card) {
+        touchStateRef.current.isLongHold = true;
+      }
+    }, 450);
+  };
+
+  const handleCardTouchMove = (e: React.TouchEvent<HTMLElement>) => {
+    if (!isMobile || !touchStateRef.current) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const insideBounds =
+      touch.clientX >= rect.left &&
+      touch.clientX <= rect.right &&
+      touch.clientY >= rect.top &&
+      touch.clientY <= rect.bottom;
+
+    if (!insideBounds) {
+      clearMobileCardHold(false);
+      return;
+    }
+
+    if (!touchStateRef.current.isLongHold) {
+      const dx = touch.clientX - touchStateRef.current.startX;
+      const dy = touch.clientY - touchStateRef.current.startY;
+      if (Math.hypot(dx, dy) > 12) {
+        clearMobileCardHold(false);
+      }
+    }
+  };
+
+  const handleCardTouchEnd = () => {
+    if (!isMobile) return;
+    clearMobileCardHold(true);
+  };
+
+  const handleCardTouchCancel = () => {
+    if (!isMobile) return;
+    clearMobileCardHold(false);
+  };
+
+  const isTelegramHeldOnMobile = isMobile && mobileHeldCard === "telegram";
+  const isEmailHeldOnMobile = isMobile && mobileHeldCard === "email";
 
   const displayTime = localTime || "05:30";
 
@@ -730,20 +837,43 @@ export default function ContactPage() {
               href="https://t.me"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative h-[136px] sm:h-[180px] lg:h-[205px] border-b md:border-b-0 md:border-r border-zinc-200 flex items-center justify-center overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2563EB]"
+              onTouchStart={(e) => handleCardTouchStart("telegram", e)}
+              onTouchMove={handleCardTouchMove}
+              onTouchEnd={handleCardTouchEnd}
+              onTouchCancel={handleCardTouchCancel}
+              onContextMenu={(e) => {
+                if (isMobile) e.preventDefault();
+              }}
+              onDragStart={(e) => {
+                if (isMobile) e.preventDefault();
+              }}
+              onClick={(e) => {
+                if (isMobile && Date.now() - lastLongHoldEndRef.current < 450) {
+                  e.preventDefault();
+                }
+              }}
+              className="group relative h-[136px] sm:h-[180px] lg:h-[205px] border-b md:border-b-0 md:border-r border-zinc-200 flex items-center justify-center overflow-hidden cursor-pointer max-md:select-none max-md:[-webkit-touch-callout:none] max-md:[-webkit-tap-highlight-color:transparent] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2563EB]"
             >
               {/* Bottom 2px sweep + bottom-up modern blue fill */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute left-0 bottom-0 h-[2px] w-full bg-[#2563EB] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[ease] z-[2]"
+                className={`pointer-events-none absolute left-0 bottom-0 h-[2px] w-full bg-[#2563EB] origin-left ${
+                  isTelegramHeldOnMobile ? "scale-x-100" : "scale-x-0"
+                } group-hover:scale-x-100 transition-transform duration-500 ease-[ease] z-[2]`}
               />
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[#2563EB] origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-300 ease-[ease] z-0"
+                className={`pointer-events-none absolute inset-0 bg-[#2563EB] origin-bottom ${
+                  isTelegramHeldOnMobile ? "scale-y-100" : "scale-y-0"
+                } group-hover:scale-y-100 transition-transform duration-300 ease-[ease] z-0`}
               />
 
               {/* Default Label */}
-              <span className="relative z-10 inline-flex items-center gap-2.5 text-xl sm:text-2xl lg:text-[28px] font-medium text-zinc-900 tracking-tight transition-all duration-300 ease-out group-hover:-translate-y-3 group-hover:opacity-0 whitespace-nowrap">
+              <span
+                className={`relative z-10 inline-flex items-center gap-2.5 text-xl sm:text-2xl lg:text-[28px] font-medium text-zinc-900 tracking-tight transition-all duration-300 ease-out ${
+                  isTelegramHeldOnMobile ? "-translate-y-3 opacity-0" : ""
+                } group-hover:-translate-y-3 group-hover:opacity-0 whitespace-nowrap`}
+              >
                 <span>Telegram</span>
                 <svg
                   viewBox="0 0 24 24"
@@ -762,7 +892,13 @@ export default function ContactPage() {
               </span>
 
               {/* Hover Reveal State */}
-              <span className="absolute inset-0 z-10 flex items-center justify-center gap-2.5 text-lg sm:text-2xl lg:text-[26px] font-medium !text-white tracking-tight opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out whitespace-nowrap px-4">
+              <span
+                className={`absolute inset-0 z-10 flex items-center justify-center gap-2.5 text-lg sm:text-2xl lg:text-[26px] font-medium !text-white tracking-tight ${
+                  isTelegramHeldOnMobile
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-3"
+                } group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out whitespace-nowrap px-4`}
+              >
                 <span className="!text-white">Quickest way to chat</span>
                 <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 !text-white shrink-0" aria-hidden="true" />
               </span>
@@ -772,30 +908,63 @@ export default function ContactPage() {
             <button
               ref={emailBoxRef}
               type="button"
-              onClick={handleCopyEmail}
-              onMouseMove={handleEmailMouseMove}
-              onMouseEnter={() => setIsEmailHovered(true)}
-              onMouseLeave={() => setIsEmailHovered(false)}
-              className="group relative h-[136px] sm:h-[180px] lg:h-[205px] w-full flex items-center justify-center overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2563EB]"
+              onTouchStart={(e) => handleCardTouchStart("email", e)}
+              onTouchMove={handleCardTouchMove}
+              onTouchEnd={handleCardTouchEnd}
+              onTouchCancel={handleCardTouchCancel}
+              onContextMenu={(e) => {
+                if (isMobile) e.preventDefault();
+              }}
+              onClick={(e) => {
+                if (isMobile && Date.now() - lastLongHoldEndRef.current < 450) {
+                  e.preventDefault();
+                  return;
+                }
+                handleCopyEmail();
+              }}
+              onMouseMove={(e) => {
+                if (!isMobile) handleEmailMouseMove(e);
+              }}
+              onMouseEnter={() => {
+                if (!isMobile) setIsEmailHovered(true);
+              }}
+              onMouseLeave={() => {
+                if (!isMobile) setIsEmailHovered(false);
+              }}
+              className="group relative h-[136px] sm:h-[180px] lg:h-[205px] w-full flex items-center justify-center overflow-hidden cursor-pointer max-md:select-none max-md:[-webkit-touch-callout:none] max-md:[-webkit-tap-highlight-color:transparent] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2563EB]"
             >
               {/* Bottom 2px sweep + bottom-up modern blue fill */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute left-0 bottom-0 h-[2px] w-full bg-[#2563EB] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[ease] z-[2]"
+                className={`pointer-events-none absolute left-0 bottom-0 h-[2px] w-full bg-[#2563EB] origin-left ${
+                  isEmailHeldOnMobile ? "scale-x-100" : "scale-x-0"
+                } group-hover:scale-x-100 transition-transform duration-500 ease-[ease] z-[2]`}
               />
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[#2563EB] origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-300 ease-[ease] z-0"
+                className={`pointer-events-none absolute inset-0 bg-[#2563EB] origin-bottom ${
+                  isEmailHeldOnMobile ? "scale-y-100" : "scale-y-0"
+                } group-hover:scale-y-100 transition-transform duration-300 ease-[ease] z-0`}
               />
 
               {/* Default Label */}
-              <span className="relative z-10 inline-flex items-center gap-2.5 text-xl sm:text-2xl lg:text-[28px] font-medium text-zinc-900 tracking-tight transition-all duration-300 ease-out group-hover:-translate-y-3 group-hover:opacity-0 whitespace-nowrap">
+              <span
+                className={`relative z-10 inline-flex items-center gap-2.5 text-xl sm:text-2xl lg:text-[28px] font-medium text-zinc-900 tracking-tight transition-all duration-300 ease-out ${
+                  isEmailHeldOnMobile ? "-translate-y-3 opacity-0" : ""
+                } group-hover:-translate-y-3 group-hover:opacity-0 whitespace-nowrap`}
+              >
                 <span>Email</span>
                 <Copy className="w-5 h-5 sm:w-[21px] sm:h-[21px] stroke-[1.8] shrink-0" aria-hidden="true" />
               </span>
 
               {/* Hover Reveal State */}
-              <span className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out px-4">
+              <span
+                className={`absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 ${
+                  isEmailHeldOnMobile
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-3"
+                } group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out px-4`}
+              >
                 {emailCopied ? (
                   <>
                     <span className="inline-flex items-center gap-2 text-lg sm:text-2xl lg:text-[26px] font-medium !text-white tracking-tight whitespace-nowrap">
