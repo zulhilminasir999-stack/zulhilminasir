@@ -248,7 +248,7 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
             delay={0.12}
             stagger={0.016}
           >
-            I started my career in visual design, where I learned that great design is more than aesthetics - it's about communication, clarity, and creating memorable user experiences.
+            I started my career in visual design, where I developed a strong foundation in digital communication, visual presentation, and creating engaging user experiences. Over time, my interests expanded into website development, digital platforms, and technology-driven solutions.
           </JustifiedWordsStagger>
 
           {/* Paragraph 2: Always visible */}
@@ -257,7 +257,7 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
             delay={0.26}
             stagger={0.012}
           >
-            Today, I combine UI/UX design, front-end development, AI-powered workflows, and modern website development using Webflow and WordPress to build intuitive, responsive, and high-performing digital experiences. With over four years of experience in visual design, I bridge the gap between design and development, using AI to accelerate research, content creation, wireframing, prototyping, and design exploration.
+            Today, I combine web development, UI/UX principles, CMS management, and AI-assisted development to build intuitive, responsive, and user-focused digital solutions. With hands-on experience using Visual Studio Code (VS Code), Figma, WordPress, SiteGiant, HTML, CSS, JavaScript, and AI-powered development tools such as Google Antigravity, Claude Code, Codex, and Cline. I work across website development, interface customisation, wireframing, prototyping, and digital platform management to transform user and business requirements into practical digital solutions.
           </JustifiedWordsStagger>
 
           {/* Mobile More Button (at bottom of earlier 2 paragraphs when collapsed) */}
@@ -291,14 +291,14 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
               delay={isDesktopSm ? 0.40 : 0.04}
               stagger={0.015}
             >
-              Whether I'm designing digital products, developing websites with Webflow and WordPress, or integrating AI into the creative process, my goal is to deliver solutions that balance usability, aesthetics, performance, accessibility, and business impact.
+              Beyond website development, I have also explored building web-based systems, administrative applications, and interactive platforms using technologies such as Firebase, JavaScript, and AI-assisted coding workflows. My approach integrates technical implementation, usability, problem-solving, and continuous improvement to deliver solutions that support both operational efficiency and business objectives.
             </JustifiedWordsStagger>
             <JustifiedWordsStagger
               trigger={isBodyInView && (isDesktopSm || isExpanded)}
               delay={isDesktopSm ? 0.54 : 0.16}
               stagger={0.016}
             >
-              For me, great design isn't just about how something looks - it's about how it works, how it feels, and the value it creates for both users and businesses.
+              For me, successful digital solutions go beyond visual presentation. They are about building functional and intuitive front-end experiences, delivering seamless interactions, simplifying processes, and creating meaningful value for both users and businesses.
             </JustifiedWordsStagger>
 
             {/* Mobile Less Button (at bottom of full texts when expanded) */}
@@ -340,7 +340,7 @@ export default function AboutMe30Sec({ theme = "dark" }: AboutMeProps) {
               Zulhilmi Nasir,
             </span>
             <span className="font-sans text-[13px] sm:text-[14px] text-zinc-500 font-medium tracking-wide mt-1">
-              Web Designer, Wordpress Developer, UI/UX Design Engineer, AI Prompt Engineer
+              Web Developer &amp; AI-Driven Digital Solutions | Front-End Development | UI/UX
             </span>
           </div>
         </div>
