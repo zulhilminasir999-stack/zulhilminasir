@@ -4,6 +4,7 @@ import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { ArrowUpRight, Check, Copy, Mail, Moon, Plus, Sun, X } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { useReveal } from "../context/RevealContext";
+import { FloatingMenu } from "../components/FloatingMenu";
 
 interface FaqItem {
   index: string;
@@ -62,6 +63,8 @@ export default function ContactPage() {
   const [footerLocalTime, setFooterLocalTime] = useState("");
   const [headerVisible, setHeaderVisible] = useState(true);
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
+  const [isScrollingUp, setIsScrollingUp] = useState(true);
+  const [showSideMenu, setShowSideMenu] = useState(false);
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
@@ -147,19 +150,28 @@ export default function ContactPage() {
     const evaluateScroll = () => {
       ticking = false;
       const currentY = window.scrollY;
+
+      // Toggle side menu visibility based on scroll depth (matching Main Page)
+      const nextShowSideMenu = currentY > 350;
+      setShowSideMenu((prev) => (prev === nextShowSideMenu ? prev : nextShowSideMenu));
+
+      const nextHeaderScrolled = currentY >= 80;
+      setIsHeaderScrolled((prev) => (prev === nextHeaderScrolled ? prev : nextHeaderScrolled));
+
       const delta = currentY - prevY;
 
       if (currentY < 80) {
         setHeaderVisible((prev) => (prev ? prev : true));
-        setIsHeaderScrolled((prev) => (prev ? false : prev));
+        setIsScrollingUp((prev) => (prev ? prev : true));
         prevY = currentY;
       } else {
-        setIsHeaderScrolled((prev) => (prev ? prev : true));
         if (delta > 2) {
           setHeaderVisible((prev) => (prev ? false : prev));
+          setIsScrollingUp((prev) => (prev ? false : prev));
           prevY = currentY;
         } else if (delta < -2) {
           setHeaderVisible((prev) => (prev ? prev : true));
+          setIsScrollingUp((prev) => (prev ? prev : true));
           prevY = currentY;
         }
       }
@@ -1330,6 +1342,15 @@ export default function ContactPage() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Bottom Menu Bar Navigation with "To the Top" Button (matching Main Page) */}
+      <FloatingMenu
+        visible={isMobile && showSideMenu && !isMobileMenuOpen}
+        theme="light"
+        onNavClick={(targetId) => {
+          handleSectionNavigate({ preventDefault: () => {} } as any, targetId.replace("#", ""));
+        }}
+      />
     </div>
   );
 }

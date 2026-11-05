@@ -1509,12 +1509,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
         />
 
         {/* Embedded AboutMe30Sec Section */}
-        <motion.section 
+        <section 
           id="about-section" 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
           className={`relative w-full pt-20 sm:pt-28 pb-16 transition-all duration-300 ${
             theme === "light"
               ? "bg-white"
@@ -1525,7 +1521,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             {/* Mount AboutMe30Sec with dynamic theme prop */}
             <AboutMe30Sec theme={theme} />
           </div>
-        </motion.section>
+        </section>
 
         {/* Career Timeline Section */}
         <section id="career-section" className={`relative w-full py-16 sm:py-20 transition-colors duration-300 ${
