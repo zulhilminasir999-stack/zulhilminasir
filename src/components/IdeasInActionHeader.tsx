@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useSpring } from "motion/react";
+import { motion } from "motion/react";
 
 interface IdeasInActionHeaderProps {
   isMobile?: boolean;
@@ -27,22 +27,6 @@ export function IdeasInActionHeader({ isMobile: isMobileProp }: IdeasInActionHea
   }, []);
 
   const isMobile = isMobileProp !== undefined ? isMobileProp : isMobileDevice;
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "center 45%"]
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 26,
-    mass: 0.2,
-    restDelta: 0.001
-  });
-
-  const mobileScale = useTransform(smoothProgress, [0.05, 0.95], [0.15, 1]);
-  const mobileOpacity = useTransform(smoothProgress, [0.05, 0.40], [0, 1]);
-  const mobileY = useTransform(smoothProgress, [0.05, 0.95], [60, 0]);
 
   useEffect(() => {
     const resizeText = () => {
@@ -89,12 +73,10 @@ export function IdeasInActionHeader({ isMobile: isMobileProp }: IdeasInActionHea
   return (
     <motion.div 
       ref={containerRef} 
-      style={isMobile ? {
-        scale: mobileScale,
-        opacity: mobileOpacity,
-        y: mobileY,
-        transformOrigin: "center center"
-      } : undefined}
+      initial={isMobile ? { opacity: 0, y: 36, scale: 0.94 } : undefined}
+      whileInView={isMobile ? { opacity: 1, y: 0, scale: 1 } : undefined}
+      viewport={isMobile ? { once: true, amount: 0.2 } : undefined}
+      transition={isMobile ? { duration: 0.75, ease: [0.16, 1, 0.3, 1] } : undefined}
       className="flex flex-col items-center w-full p-0 m-0 origin-center"
     >
       <div className="w-full flex justify-center items-center overflow-visible">

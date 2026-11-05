@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring, useScroll, useTransform, AnimatePresence } from "motion/react";
+import { motion, useMotionValue, useSpring, AnimatePresence } from "motion/react";
 import { useEffect, useState, useRef, MouseEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useNavigationType } from "react-router-dom";
@@ -53,36 +53,6 @@ function HoverImageListItem({
   const headerRef = useRef<HTMLDivElement>(null);
   const isHovered = !isMobile && hoveredIndex === idx;
   const isExpanded = expandedIndex === idx;
-  const [isCollapsing, setIsCollapsing] = useState(false);
-  const prevExpandedRef = useRef(isExpanded);
-
-  useEffect(() => {
-    if (prevExpandedRef.current && !isExpanded) {
-      setIsCollapsing(true);
-      const timer = setTimeout(() => setIsCollapsing(false), 500);
-      prevExpandedRef.current = isExpanded;
-      return () => clearTimeout(timer);
-    }
-    prevExpandedRef.current = isExpanded;
-  }, [isExpanded]);
-
-  // Reveal animation aligned to header row for mobile collapsed state only (never shrinks background)
-  const { scrollYProgress } = useScroll({
-    target: headerRef,
-    offset: ["start end", "center 45%"]
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 26,
-    mass: 0.2,
-    restDelta: 0.001
-  });
-
-  const mobileScale = useTransform(smoothProgress, [0.05, 0.95], [0.85, 1]);
-  const mobileOpacity = useTransform(smoothProgress, [0.05, 0.40], [0, 1]);
-  const mobileY = useTransform(smoothProgress, [0.05, 0.95], [60, 0]);
-  const shouldAnimateMobileCollapsed = isMobile && !isExpanded && !isCollapsing;
 
   return (
     <motion.div 
@@ -90,14 +60,10 @@ function HoverImageListItem({
       className={`w-full border-b transition-colors duration-300 ${
         isExpanded ? "bg-[#2563EB] border-[#2563EB]" : "border-zinc-200"
       }`}
-      initial={!isMobile ? { opacity: 0, y: 40 } : undefined}
-      whileInView={!isMobile ? { opacity: 1, y: 0 } : undefined}
-      viewport={!isMobile ? { once: true } : undefined}
-      transition={!isMobile ? { duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] } : undefined}
-      style={shouldAnimateMobileCollapsed ? {
-        opacity: mobileOpacity,
-        y: mobileY
-      } : undefined}
+      initial={{ opacity: 0, y: 35 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.7, delay: isMobile ? 0.04 : idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
     >
       <div
         ref={headerRef}
@@ -148,7 +114,6 @@ function HoverImageListItem({
         {/* Left side: Wording */}
         <motion.div
           className="relative z-10 flex items-center flex-1 min-w-0"
-          style={shouldAnimateMobileCollapsed ? { scale: mobileScale, transformOrigin: "left center" } : undefined}
         >
           {/* Text and category */}
           <div className="flex flex-col items-start text-left gap-1 sm:gap-2">
@@ -173,7 +138,6 @@ function HoverImageListItem({
         {/* Right side: Curly-braced number or arrow icon */}
         <motion.div
           className="relative z-10 flex items-center justify-end shrink-0 pl-4 select-none min-w-[70px] sm:min-w-[96px]"
-          style={shouldAnimateMobileCollapsed ? { scale: mobileScale, transformOrigin: "right center" } : undefined}
         >
           <AnimatePresence mode="wait">
             {isExpanded ? (
