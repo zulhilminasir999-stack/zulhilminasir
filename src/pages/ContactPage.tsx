@@ -797,6 +797,44 @@ export default function ContactPage() {
                           <span className="normal-case">Telegram</span>
                         </a>
                       </div>
+
+                      {/* White divider line (similar to above line) and View My CV button */}
+                      <div className="w-full border-t border-white/50 pt-7 mt-7 flex flex-col items-end text-right">
+                        <a
+                          href="/Zulhilmi_Nasir_Resume.pdf"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => {
+                            document.documentElement.style.overflow = "";
+                            document.body.style.overflow = "";
+                            lenis?.start();
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="ml-auto inline-flex items-center justify-end gap-2.5 group active:scale-[0.98] transition-transform"
+                        >
+                          <ArrowUpRight
+                            className="w-7 h-7 sm:w-8 sm:h-8 !text-white stroke-[2.25] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                            aria-hidden="true"
+                          />
+                          <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap bg-white !text-[#2563EB] font-semibold uppercase text-[clamp(1rem,4.8vw,1.35rem)] leading-none tracking-[-0.02em] px-5 py-3 rounded-full shadow-md group-hover:bg-white/95 transition-colors">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="w-4 h-4 shrink-0"
+                              aria-hidden="true"
+                            >
+                              <path d="M14.25 2.25V6a2.25 2.25 0 0 0 2.25 2.25h3.75l-6-6Z" />
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M6 2.25A2.25 2.25 0 0 0 3.75 4.5v15A2.25 2.25 0 0 0 6 21.75h12a2.25 2.25 0 0 0 2.25-2.25V9.75H16.5a3.75 3.75 0 0 1-3.75-3.75V2.25H6Zm1.5 6a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm0 4a.75.75 0 0 0 0 1.5h9a.75.75 0 0 0 0-1.5h-9Zm0 3.75a.75.75 0 0 0 0 1.5h9a.75.75 0 0 0 0-1.5h-9Z"
+                              />
+                            </svg>
+                            <span>View My CV</span>
+                          </span>
+                        </a>
+                      </div>
                     </div>
                   </motion.div>
                 )}
