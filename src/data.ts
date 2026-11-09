@@ -99,14 +99,17 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     client: "TG PowerWrap Sdn Bhd",
     toolsUsed: ["Wordpress Elementor", "Adobe Illustrator", "Adobe Photoshop", "ChatGPT", "Google Gemini"],
     codeAssistedTools: ["HTML", "CSS"],
-    summary: "Created the complete brand design, structural carton box vectors, and 3D mockups for an ultra-premium organic wild forest honey brand, showcasing a fusion of delicate line art and AI-synthesized botanical details.",
-    challenge: "The client wanted a luxurious, high-end, tactile brand finish that conveyed absolute purity while standing out from commercial bright orange honey jars. It required custom laser embossing illustrations and organic texturing.",
-    solution: "Used Google Gemini and ChatGPT to draft refined creative prompts to generate ultra-realistic product packaging style bases in Midjourney. Then, synthesized the generated materials inside Adobe Photoshop, aligning lighting and curves, and mapped them onto a custom 3D cutter-guide drafted inside Adobe Illustrator.",
+    summary: "From its manufacturing roots in Sungai Petani established in 2010, TG Power Wrap has evolved into Malaysia's leading producer of reliable PVC food cling films, dedicated to providing high-performance packaging that maintains food hygiene and extends shelf life for global markets spanning five continents.",
+    overviewP1: "Engineered a high-performance corporate platform for TG PowerWrap to showcase over a decade of manufacturing leadership in sustainable food packaging solutions.",
+    overviewP2: "The design focuses on a clean, professional aesthetic that highlights their global reach across 5 continents, product line versatility (from jumbo rolls to household sizes), and compliance with rigorous international safety standards.",
+    challenge: "TG Power Wrap lacked a cohesive digital platform capable of representing their position as a leading global manufacturer, making it difficult to clearly display their vast product lines and international export network to potential distributors.",
+    userFlow: "Mapped a clear information architecture starting from the Main Page into key categorized sections; About, Services, Blog, and Contact - providing international clients with smooth access to product details, company values, and direct inquiry forms.",
+    solution: "Delivered a modern, minimalist web architecture that transforms a complex manufacturing catalog into an intuitive user experience, effectively spotlighting their industrial scale, product categories, and international distribution network.",
     promptExample: "Premium organic wild forest honey packaging jar mockups, cylindrical amber glass file, minimalist elegant label with deep-embossed gold floral outline patterns, soft studio backlighting, textured cream-white recycled card box background --ar 16:9 --v 6.0",
     results: [
-      "Secured 140% spike in pre-sales conversions on their SiteGiant storefront.",
-      "Voted Top 10 regional packaging designs of the quarter by local marketing associations.",
-      "Achieved a 100% sustainable paperboard specification on cutting matrices."
+      "Intuitive Navigation Architecture: A clean, minimalist layout designed to help international distributors and B2B clients locate product specs efficiently.",
+      "Responsive Multi-Device Design: Fully optimized, high-performance web presentation ensuring seamless viewing across desktop terminals and mobile devices.",
+      "Streamlined Business Inquiry Points: Strategic call-to-action sections and contact touchpoints engineered to simplify quotation requests for global buyers."
     ],
     galleryImages: [
       "/TGPW/tgpw1.jpg",

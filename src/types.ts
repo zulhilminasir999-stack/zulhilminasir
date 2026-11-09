@@ -13,8 +13,11 @@ export interface Project {
   codeAssistedTools?: string[];
   deploymentTools?: string[];
   summary: string;
+  overviewP1?: string;
+  overviewP2?: string;
   challenge: string;
   solution: string;
+  userFlow?: string;
   promptExample?: string;
   results: string[];
   galleryImages?: string[];

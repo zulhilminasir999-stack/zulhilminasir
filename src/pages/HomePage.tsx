@@ -1582,8 +1582,8 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          {/* Left-aligned Display Statement and Get in Touch CTA (stacked below on mobile, right-middle on desktop) */}
-          <div className="absolute inset-0 z-20 flex flex-col items-start justify-center gap-5 md:flex-row md:items-center md:justify-between md:gap-4 px-6 sm:px-12 lg:px-16 pointer-events-none select-none">
+          {/* Left-aligned Display Statement and Get in Touch CTA (stacked below on both mobile and desktop) */}
+          <div className="absolute inset-0 z-20 flex flex-col items-start justify-center gap-5 sm:gap-6 md:gap-7 lg:gap-8 px-6 sm:px-12 lg:px-16 pointer-events-none select-none">
             <h2 
               className="font-satoshi font-sans font-medium text-[32px] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.08] !text-white !text-[#ffffff] text-left"
               style={{ fontFamily: "'Satoshi', var(--font-sans), system-ui, sans-serif", fontWeight: 500 }}

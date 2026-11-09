@@ -1147,8 +1147,8 @@ export default function ContactPage() {
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          {/* Left-aligned Display Statement with equal top and bottom margin */}
-          <div className="absolute inset-0 z-20 flex items-center justify-start px-6 sm:px-12 lg:px-16 pointer-events-none select-none">
+          {/* Left-aligned Display Statement and Get in Touch CTA (stacked below on both mobile and desktop) */}
+          <div className="absolute inset-0 z-20 flex flex-col items-start justify-center gap-5 sm:gap-6 md:gap-7 lg:gap-8 px-6 sm:px-12 lg:px-16 pointer-events-none select-none">
             <h2
               className="font-satoshi font-sans font-medium text-[32px] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.08] !text-white !text-[#ffffff] text-left"
               style={{
@@ -1159,6 +1159,25 @@ export default function ContactPage() {
               <span className="block !text-white font-medium">Turn Ideas</span>
               <span className="block !text-white font-medium">Into AI Solution</span>
             </h2>
+
+            <a
+              href="#top"
+              onClick={(e) => {
+                e.preventDefault();
+                if (lenis) {
+                  lenis.scrollTo(0, { duration: 1.2 });
+                } else {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
+              className="group pointer-events-auto inline-flex items-center gap-1.5 sm:gap-2.5 font-satoshi font-sans font-medium text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight !text-white whitespace-nowrap shrink-0 cursor-pointer transition-opacity duration-300 hover:opacity-90"
+            >
+              <span className="!text-white">Get in Touch</span>
+              <ArrowUpRight
+                className="w-[18px] h-[18px] sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 !text-white stroke-[2] shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
+                aria-hidden="true"
+              />
+            </a>
           </div>
           {/* Smooth multi-stop bottom color blend into footer background */}
           <div

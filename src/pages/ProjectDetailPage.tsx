@@ -1039,11 +1039,13 @@ export default function ProjectDetailPage() {
               </div>
               <div className="md:col-span-8 space-y-6 sm:space-y-8 text-[20px] sm:text-2xl md:text-3xl font-light leading-snug text-zinc-700">
                 <p>
-                  {project.summary ||
+                  {project.overviewP1 ||
+                    project.summary ||
                     "Our solution focused on creating an intuitive digital platform that connects with Stride's performance wear, providing real-time insights and personalized recommendations. The challenge was to make complex performance data accessible and actionable for users of all expertise levels."}
                 </p>
                 <p>
-                  {project.challenge ||
+                  {project.overviewP2 ||
+                    project.challenge ||
                     "Stride Athletics had developed cutting-edge performance wear but lacked the digital interface to unlock its full potential. They needed a digital product that would help athletes understand, customize, and maximize the benefits of their smart athletic wear."}
                 </p>
               </div>
@@ -1345,7 +1347,8 @@ export default function ProjectDetailPage() {
               </div>
               <div className="md:col-span-8 space-y-6 text-2xl md:text-3xl font-light leading-snug text-zinc-700">
                 <p>
-                  {project.solution ||
+                  {project.userFlow ||
+                    project.solution ||
                     "The digital product needed to handle complex data streams from advanced garment technology and user-friendly digital interfaces was limiting the potential of smart athletic wear."}
                 </p>
               </div>
@@ -1686,17 +1689,31 @@ export default function ProjectDetailPage() {
                 </div>
                 <div className="md:col-span-8">
                   <ul className="grid grid-cols-1 gap-6">
-                    {project.results.map((result, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-4 text-xl font-light text-zinc-700 leading-relaxed"
-                      >
-                        <span className="mt-1.5 h-6 w-6 shrink-0 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 flex items-center justify-center text-xs font-mono font-bold">
-                          ✓
-                        </span>
-                        <span>{result}</span>
-                      </li>
-                    ))}
+                    {project.results.map((result, idx) => {
+                      const colonIdx = result.indexOf(":");
+                      return (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-4 text-xl font-light text-zinc-700 leading-relaxed"
+                        >
+                          <span className="mt-1.5 h-6 w-6 shrink-0 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 flex items-center justify-center text-xs font-mono font-bold">
+                            ✓
+                          </span>
+                          <span>
+                            {colonIdx !== -1 ? (
+                              <>
+                                <span className="font-medium text-zinc-900">
+                                  {result.slice(0, colonIdx + 1)}
+                                </span>{" "}
+                                {result.slice(colonIdx + 1).trimStart()}
+                              </>
+                            ) : (
+                              result
+                            )}
+                          </span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>
@@ -1797,8 +1814,8 @@ export default function ProjectDetailPage() {
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          {/* Left-aligned Display Statement with equal top and bottom margin */}
-          <div className="absolute inset-0 z-20 flex items-center justify-start px-6 sm:px-12 lg:px-16 pointer-events-none select-none">
+          {/* Left-aligned Display Statement and Get in Touch CTA (stacked below on both mobile and desktop) */}
+          <div className="absolute inset-0 z-20 flex flex-col items-start justify-center gap-5 sm:gap-6 md:gap-7 lg:gap-8 px-6 sm:px-12 lg:px-16 pointer-events-none select-none">
             <h2
               className="font-satoshi font-sans font-medium text-[32px] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.08] !text-white !text-[#ffffff] text-left"
               style={{ fontFamily: "'Satoshi', var(--font-sans), system-ui, sans-serif", fontWeight: 500 }}
@@ -1806,6 +1823,18 @@ export default function ProjectDetailPage() {
               <span className="block !text-white font-medium">Turn Ideas</span>
               <span className="block !text-white font-medium">Into AI Solution</span>
             </h2>
+
+            <a
+              href="/contact"
+              onClick={handleContactPageClick}
+              className="group pointer-events-auto inline-flex items-center gap-1.5 sm:gap-2.5 font-satoshi font-sans font-medium text-base sm:text-xl md:text-2xl lg:text-3xl tracking-tight !text-white whitespace-nowrap shrink-0 cursor-pointer transition-opacity duration-300 hover:opacity-90"
+            >
+              <span className="!text-white">Get in Touch</span>
+              <ArrowUpRight
+                className="w-[18px] h-[18px] sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 !text-white stroke-[2] shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
+                aria-hidden="true"
+              />
+            </a>
           </div>
           {/* Smooth multi-stop bottom color blend into footer background */}
           <div
