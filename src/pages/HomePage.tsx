@@ -1525,7 +1525,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                 }
                 const lowerTitle = showcase.title.toLowerCase();
                 if (lowerTitle.includes("pre-school fee management") || lowerTitle.includes("official duty")) {
-                  navigate(`/case-study-project/aistudio-brand`);
+                  navigate(`/case-study-project/Pre-school-Fee-Management`);
                   return;
                 }
                 const matchedProject = PORTFOLIO_PROJECTS.find(p => p.title.toLowerCase() === lowerTitle);

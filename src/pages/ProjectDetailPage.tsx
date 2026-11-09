@@ -205,9 +205,27 @@ export default function ProjectDetailPage() {
     handleNavClick(e, targetId);
   };
 
+  const normalizedId =
+    id === "komorebi-editorial"
+      ? "Triply"
+      : id === "breeze-cargo"
+        ? "RepX"
+        : id === "aistudio-brand"
+          ? "Pre-school-Fee-Management"
+          : id;
+
   const project = PORTFOLIO_PROJECTS.find(
-    (p) => p.id === id || (id === "zenith-cms" && p.id === "ck-lighting"),
+    (p) =>
+      p.id === normalizedId ||
+      p.id === id ||
+      (normalizedId === "zenith-cms" && p.id === "ck-lighting"),
   );
+
+  const isTriply = project?.id === "Triply" || project?.id === "komorebi-editorial";
+  const isRepX = project?.id === "RepX" || project?.id === "breeze-cargo";
+  const isPFM = project?.id === "Pre-school-Fee-Management" || project?.id === "aistudio-brand";
+  const isTGPowerWrap = project?.id === "TGPowerWrap";
+  const isCKLighting = project?.id === "ck-lighting";
 
   useEffect(() => {
     const updateTime = () => {
@@ -1068,15 +1086,15 @@ export default function ProjectDetailPage() {
               img1Src.includes("ck2") ||
               img1Src.includes("ck3") ||
               img1Src.includes("ck") ||
-              project?.id === "aistudio-brand";
+              isPFM;
             const finalImg1Src =
-              project?.id === "ck-lighting"
+              isCKLighting
                 ? "/CK Lighting Web/ck2.jpg"
-                : project?.id === "komorebi-editorial"
+                : isTriply
                   ? "/Triply/Triply2.jpg"
-                  : project?.id === "breeze-cargo"
+                  : isRepX
                     ? "/RepX/RepX2.jpg"
-                    : project?.id === "aistudio-brand"
+                    : isPFM
                       ? "/PFM/PFM6.jpg"
                       : img1Src;
 
@@ -1084,12 +1102,12 @@ export default function ProjectDetailPage() {
               return (
                 <div
                   className="z-10 w-full relative sm:sticky cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
-                  style={project?.id === "ck-lighting" || project?.id === "aistudio-brand" ? {} : { bottom: 0 }}
+                  style={isCKLighting || isPFM ? {} : { bottom: 0 }}
                   onClick={() =>
                     handleMobileImageClick(
-                      project?.id === "ck-lighting"
+                      isCKLighting
                         ? "/CK Lighting Web/ck2.jpg"
-                        : project?.id === "aistudio-brand"
+                        : isPFM
                           ? "/PFM/PFM6.jpg"
                           : img1Src,
                     )
@@ -1097,9 +1115,9 @@ export default function ProjectDetailPage() {
                 >
                   <img
                     src={
-                      project?.id === "ck-lighting"
+                      isCKLighting
                         ? "/CK Lighting Web/ck2.jpg"
-                        : project?.id === "aistudio-brand"
+                        : isPFM
                           ? "/PFM/PFM6.jpg"
                           : img1Src
                     }
@@ -1121,7 +1139,7 @@ export default function ProjectDetailPage() {
                   className="w-full h-auto sm:h-full object-contain sm:object-cover block rounded-none"
                   style={{
                     objectPosition:
-                      project?.id === "komorebi-editorial"
+                      isTriply
                         ? "center 30%"
                         : undefined,
                   }}
@@ -1131,16 +1149,16 @@ export default function ProjectDetailPage() {
             );
           })()}
 
-          {(project?.id === "TGPowerWrap" ||
-            project?.id === "komorebi-editorial" ||
-            project?.id === "breeze-cargo") && (
+          {(isTGPowerWrap ||
+            isTriply ||
+            isRepX) && (
             <div
               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full overflow-hidden z-20 bg-transparent sm:bg-zinc-900 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
               onClick={() =>
                 handleMobileImageClick(
-                  project.id === "TGPowerWrap"
+                  isTGPowerWrap
                     ? "/TGPW/6.jpg"
-                    : project.id === "komorebi-editorial"
+                    : isTriply
                       ? "/Triply/Triply3.jpg"
                       : "/RepX/RepX3.jpg",
                 )
@@ -1148,16 +1166,16 @@ export default function ProjectDetailPage() {
             >
               <img
                 src={
-                  project.id === "TGPowerWrap"
+                  isTGPowerWrap
                     ? "/TGPW/6.jpg"
-                    : project.id === "komorebi-editorial"
+                    : isTriply
                       ? "/Triply/Triply3.jpg"
                       : "/RepX/RepX3.jpg"
                 }
                 alt={
-                  project?.id === "TGPowerWrap"
+                  isTGPowerWrap
                     ? "TGPowerWrap 6 Showcase"
-                    : project?.id === "breeze-cargo"
+                    : isRepX
                       ? "RepX 3"
                       : "Gallery 2"
                 }
@@ -1168,14 +1186,14 @@ export default function ProjectDetailPage() {
           )}
 
           {/* Image 3 */}
-          {(project?.id === "komorebi-editorial" ||
-            project?.id === "breeze-cargo") && (
+          {(isTriply ||
+            isRepX) && (
             <div
               id="canvas-image-3"
               className="relative w-full h-auto overflow-visible z-30 bg-transparent sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0 px-0 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-center items-center"
               onClick={() =>
                 handleMobileImageClick(
-                  project.id === "breeze-cargo"
+                  isRepX
                     ? "/RepX/RepX4.jpg"
                     : "/Triply/Triply15.jpg",
                 )
@@ -1183,11 +1201,11 @@ export default function ProjectDetailPage() {
             >
               <img
                 src={
-                  project.id === "breeze-cargo"
+                  isRepX
                     ? "/RepX/RepX4.jpg"
                     : "/Triply/Triply15.jpg"
                 }
-                alt={project?.id === "breeze-cargo" ? "RepX 4" : "Gallery 3"}
+                alt={isRepX ? "RepX 4" : "Gallery 3"}
                 className="w-full h-auto object-contain block select-none p-0 m-0 rounded-none px-0 sm:px-0 box-border"
                 referrerPolicy="no-referrer"
               />
@@ -1219,14 +1237,13 @@ export default function ProjectDetailPage() {
               <div className="md:col-span-6 h-auto sm:h-[600px] lg:h-[800px] overflow-hidden cursor-pointer sm:cursor-default pb-5 sm:pb-0 flex flex-col justify-between">
                 <img
                   src={
-                    project?.id === "TGPowerWrap"
+                    isTGPowerWrap
                       ? "/TGPW/TGPW Mobile.jpg"
-                      : project?.id === "ck-lighting" ||
-                          project?.id === "zenith-cms"
+                      : isCKLighting
                         ? "/CK Lighting Web/ck5.jpg"
-                        : project?.id === "komorebi-editorial"
+                        : isTriply
                           ? "/Triply/Triply11.jpg"
-                          : project?.id === "breeze-cargo"
+                          : isRepX
                             ? "/RepX/RepX12.jpg"
                             : project?.galleryImages &&
                                 project.galleryImages.length > 2
@@ -1237,18 +1254,17 @@ export default function ProjectDetailPage() {
                   style={{
                     objectPosition: "center center",
                   }}
-                  alt={project?.id === "breeze-cargo" ? "RepX 12" : `${project?.title || "Gallery"} 3`}
+                  alt={isRepX ? "RepX 12" : `${project?.title || "Gallery"} 3`}
                   referrerPolicy="no-referrer"
                   onClick={() =>
                     handleMobileImageClick(
-                      project?.id === "TGPowerWrap"
+                      isTGPowerWrap
                         ? "/TGPW/TGPW Mobile.jpg"
-                        : project?.id === "ck-lighting" ||
-                            project?.id === "zenith-cms"
+                        : isCKLighting
                           ? "/CK Lighting Web/ck5.jpg"
-                          : project?.id === "komorebi-editorial"
+                          : isTriply
                             ? "/Triply/Triply11.jpg"
-                            : project?.id === "breeze-cargo"
+                            : isRepX
                               ? "/RepX/RepX12.jpg"
                               : project?.galleryImages &&
                                   project.galleryImages.length > 2
@@ -1262,13 +1278,13 @@ export default function ProjectDetailPage() {
                 <div className="w-full sm:flex-1 px-5 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-center items-center overflow-hidden">
                   <img
                     src={
-                      project?.id === "TGPowerWrap"
+                      isTGPowerWrap
                         ? "/TGPW/5.jpg"
-                        : project?.id === "ck-lighting"
+                        : isCKLighting
                           ? "/CK Lighting Web/ck6.jpg"
-                          : project?.id === "komorebi-editorial"
+                          : isTriply
                             ? "/Triply/Triply6.png"
-                            : project?.id === "breeze-cargo"
+                            : isRepX
                               ? "/RepX/RepX9.jpg"
                               : project?.galleryImages &&
                                   project.galleryImages.length > 5
@@ -1283,13 +1299,13 @@ export default function ProjectDetailPage() {
                     referrerPolicy="no-referrer"
                     onClick={() =>
                       handleMobileImageClick(
-                        project?.id === "TGPowerWrap"
+                        isTGPowerWrap
                           ? "/TGPW/5.jpg"
-                          : project?.id === "ck-lighting"
+                          : isCKLighting
                             ? "/CK Lighting Web/ck6.jpg"
-                            : project?.id === "komorebi-editorial"
+                            : isTriply
                               ? "/Triply/Triply6.png"
-                              : project?.id === "breeze-cargo"
+                              : isRepX
                                 ? "/RepX/RepX9.jpg"
                                 : project?.galleryImages &&
                                     project.galleryImages.length > 5
@@ -1305,11 +1321,11 @@ export default function ProjectDetailPage() {
                 <div className="w-full sm:flex-1 px-5 sm:px-0 pb-5 sm:pb-0 flex flex-col justify-end overflow-hidden">
                   <img
                     src={
-                      project?.id === "TGPowerWrap"
+                      isTGPowerWrap
                         ? "/TGPW/Thumbnail Mobile TGPW.jpg"
-                        : project?.id === "komorebi-editorial"
+                        : isTriply
                           ? "/Triply/Triply5.jpg"
-                          : project?.id === "breeze-cargo"
+                          : isRepX
                             ? "/RepX/RepX11.png"
                             : project?.galleryImages &&
                                 project.galleryImages.length > 3
@@ -1317,15 +1333,15 @@ export default function ProjectDetailPage() {
                               : project?.imageUrl || ""
                     }
                     className="w-full h-auto sm:h-full object-contain sm:object-cover min-h-0 block p-0 m-0 cursor-pointer sm:cursor-default rounded-none object-center"
-                    alt={project?.id === "breeze-cargo" ? "RepX 11" : `${project?.title || "Gallery"} 4`}
+                    alt={isRepX ? "RepX 11" : `${project?.title || "Gallery"} 4`}
                     referrerPolicy="no-referrer"
                     onClick={() =>
                       handleMobileImageClick(
-                        project?.id === "TGPowerWrap"
+                        isTGPowerWrap
                           ? "/TGPW/Thumbnail Mobile TGPW.jpg"
-                          : project?.id === "komorebi-editorial"
+                          : isTriply
                             ? "/Triply/Triply5.jpg"
-                            : project?.id === "breeze-cargo"
+                            : isRepX
                               ? "/RepX/RepX11.png"
                               : project?.galleryImages &&
                                   project.galleryImages.length > 3
@@ -1381,13 +1397,13 @@ export default function ProjectDetailPage() {
             className="relative w-full h-auto overflow-visible flex flex-col justify-center items-center bg-transparent sm:bg-zinc-900 z-10 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() =>
               handleMobileImageClick(
-                project?.id === "aistudio-brand"
+                isPFM
                   ? "/PFM/PFM2.jpg"
-                  : project?.id === "ck-lighting"
+                  : isCKLighting
                     ? "/CK Lighting Web/CK9.jpg"
-                    : project?.id === "komorebi-editorial"
+                    : isTriply
                       ? "/Triply/Triply4.jpg"
-                      : project?.id === "breeze-cargo"
+                      : isRepX
                         ? "/RepX/RepX5.jpg"
                         : project.galleryImages &&
                             project.galleryImages.length > 4
@@ -1398,13 +1414,13 @@ export default function ProjectDetailPage() {
           >
             <img
               src={
-                project?.id === "aistudio-brand"
+                isPFM
                   ? "/PFM/PFM2.jpg"
-                  : project?.id === "ck-lighting"
+                  : isCKLighting
                     ? "/CK Lighting Web/CK9.jpg"
-                    : project?.id === "komorebi-editorial"
+                    : isTriply
                       ? "/Triply/Triply4.jpg"
-                      : project?.id === "breeze-cargo"
+                      : isRepX
                         ? "/RepX/RepX5.jpg"
                         : project.galleryImages &&
                             project.galleryImages.length > 4
@@ -1412,15 +1428,15 @@ export default function ProjectDetailPage() {
                           : "/TGPW/TGPW Site Map.jpg"
               }
               alt={
-                project?.id === "aistudio-brand"
+                isPFM
                   ? "PFM 2 Showcase"
-                  : project?.id === "breeze-cargo"
+                  : isRepX
                     ? "RepX 5"
                     : "Gallery Sticky 1"
               }
               className="w-full h-auto object-contain block select-none rounded-none"
               onError={(e) => {
-                if (project?.id === "breeze-cargo") {
+                if (isRepX) {
                   const target = e.currentTarget;
                   if (target.src.endsWith("/RepX/RepX5.jpg")) {
                     target.src = "/RepX/RepX.jpg";
@@ -1432,7 +1448,7 @@ export default function ProjectDetailPage() {
           </div>
 
           {/* Image 2 (New CK10.jpg for CK Lighting) */}
-          {project?.id === "ck-lighting" && (
+          {isCKLighting && (
             <div
               className="relative sm:sticky sm:top-0 h-auto sm:h-screen w-full z-20 shadow-none sm:shadow-2xl flex flex-col justify-center bg-zinc-900 overflow-hidden cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
               onClick={() =>
@@ -1449,16 +1465,16 @@ export default function ProjectDetailPage() {
           )}
 
           {/* Image 3 (Previously Image 2) */}
-          {project?.id !== "ck-lighting" && (
+          {!isCKLighting && (
             <div
-              className={`relative w-full ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo" || project?.id === "TGPowerWrap" || project?.id === "aistudio-brand") ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-transparent sm:bg-zinc-900"} cursor-pointer sm:cursor-default pb-5 sm:pb-0`}
+              className={`relative w-full ${(isTriply || isRepX || isTGPowerWrap || isPFM) ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-transparent sm:bg-zinc-900"} cursor-pointer sm:cursor-default pb-5 sm:pb-0`}
               onClick={() =>
                 handleMobileImageClick(
-                  project?.id === "aistudio-brand"
+                  isPFM
                     ? "/PFM/PFM9.jpg"
-                    : project?.id === "komorebi-editorial"
+                    : isTriply
                       ? "/Triply/Triply8.jpg"
-                      : project?.id === "breeze-cargo"
+                      : isRepX
                         ? "/RepX/RepX6.jpg"
                         : "/TGPW/TGPW Visual Guideline.jpg",
                 )
@@ -1466,26 +1482,26 @@ export default function ProjectDetailPage() {
             >
               <img
                 src={
-                  project?.id === "aistudio-brand"
+                  isPFM
                     ? "/PFM/PFM9.jpg"
-                    : project?.id === "komorebi-editorial"
+                    : isTriply
                       ? "/Triply/Triply8.jpg"
-                      : project?.id === "breeze-cargo"
+                      : isRepX
                         ? "/RepX/RepX6.jpg"
                         : "/TGPW/TGPW Visual Guideline.jpg"
                 }
               alt={
-                project?.id === "aistudio-brand"
+                isPFM
                   ? "PFM 9 Showcase"
-                  : project?.id === "komorebi-editorial"
+                  : isTriply
                     ? "Triply Design"
-                    : project?.id === "breeze-cargo"
+                    : isRepX
                       ? "RepX 6"
                       : "TGPW Visual Guideline"
               }
-              className={`w-full h-auto ${(project?.id === "komorebi-editorial" || project?.id === "breeze-cargo" || project?.id === "TGPowerWrap" || project?.id === "aistudio-brand") ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
+              className={`w-full h-auto ${(isTriply || isRepX || isTGPowerWrap || isPFM) ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
               onError={(e) => {
-                if (project?.id === "breeze-cargo") {
+                if (isRepX) {
                   const target = e.currentTarget;
                   if (target.src.endsWith("/RepX/RepX6.jpg")) {
                     target.src = "/RepX/RepX.jpg";
@@ -1498,7 +1514,7 @@ export default function ProjectDetailPage() {
         )}
 
           {/* Triply 12 (Directly After Triply 8) - Full original dimension, fully display */}
-          {project?.id === "komorebi-editorial" && (
+          {isTriply && (
             <div
               className="relative w-full h-auto z-25 overflow-visible flex flex-col justify-center bg-transparent cursor-pointer sm:cursor-default pb-5 sm:pb-0"
               onClick={() => handleMobileImageClick("/Triply/Triply12.jpg")}
@@ -1513,7 +1529,7 @@ export default function ProjectDetailPage() {
           )}
 
           {/* Triply 7 (Directly After Triply 12) */}
-          {project?.id === "komorebi-editorial" && (
+          {isTriply && (
             <div
               className="relative w-full h-auto overflow-visible z-35 bg-transparent sm:bg-zinc-900 cursor-pointer sm:cursor-default p-0 m-0 pb-5 sm:pb-0 flex flex-col justify-center items-center"
               onClick={() => handleMobileImageClick("/Triply/Triply7.jpg")}
@@ -1528,7 +1544,7 @@ export default function ProjectDetailPage() {
           )}
 
           {/* RepX 7 (Directly After RepX 6) - Full original dimension, fully display */}
-          {project?.id === "breeze-cargo" && (
+          {isRepX && (
             <div
               className="relative w-full h-auto z-25 overflow-visible flex flex-col justify-center bg-transparent cursor-pointer sm:cursor-default pb-5 sm:pb-0"
               onClick={() => handleMobileImageClick("/RepX/RepX7.jpg")}
@@ -1567,15 +1583,15 @@ export default function ProjectDetailPage() {
           className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
           onClick={() =>
             handleMobileImageClick(
-              project?.id === "aistudio-brand"
+              isPFM
                 ? "/PFM/PFM7.jpg"
-                : project?.id === "ck-lighting"
+                : isCKLighting
                   ? "/CK Lighting Web/CK12.jpg"
-                  : project?.id === "TGPowerWrap"
+                  : isTGPowerWrap
                     ? "/TGPW/TGPW7.jpg"
-                    : project?.id === "breeze-cargo"
+                    : isRepX
                       ? "/RepX/RepX10.jpg"
-                      : project?.id === "komorebi-editorial"
+                      : isTriply
                         ? "/Triply/Triply9.jpg"
                         : project?.galleryImages && project.galleryImages.length > 5
                           ? project.galleryImages[5]
@@ -1585,30 +1601,30 @@ export default function ProjectDetailPage() {
         >
           <img
             src={
-              project?.id === "aistudio-brand"
+              isPFM
                 ? "/PFM/PFM7.jpg"
-                : project?.id === "ck-lighting"
+                : isCKLighting
                   ? "/CK Lighting Web/CK12.jpg"
-                  : project?.id === "TGPowerWrap"
+                  : isTGPowerWrap
                     ? "/TGPW/TGPW7.jpg"
-                    : project?.id === "breeze-cargo"
+                    : isRepX
                       ? "/RepX/RepX10.jpg"
-                      : project?.id === "komorebi-editorial"
+                      : isTriply
                         ? "/Triply/Triply9.jpg"
                         : project?.galleryImages && project.galleryImages.length > 5
                           ? project.galleryImages[5]
                           : project?.imageUrl || ""
             }
             alt={
-              project?.id === "aistudio-brand"
+              isPFM
                 ? "PFM 7 Showcase"
-                : project?.id === "ck-lighting"
+                : isCKLighting
                   ? "CK Lighting 12 Showcase"
-                  : project?.id === "TGPowerWrap"
+                  : isTGPowerWrap
                     ? "TG PowerWrap 7 Showcase"
-                    : project?.id === "breeze-cargo"
+                    : isRepX
                       ? "RepX 10 Showcase"
-                      : project?.id === "komorebi-editorial"
+                      : isTriply
                         ? "Triply 9 Showcase"
                         : "Solution Showcase"
             }
@@ -1618,7 +1634,7 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* PFM 8 Image Section (Directly after PFM 7) */}
-        {project?.id === "aistudio-brand" && (
+        {isPFM && (
           <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() => handleMobileImageClick("/PFM/PFM8.jpg")}
@@ -1633,7 +1649,7 @@ export default function ProjectDetailPage() {
         )}
 
         {/* Triply 10 Image Section */}
-        {project?.id === "komorebi-editorial" && (
+        {isTriply && (
           <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() => handleMobileImageClick("/Triply/Triply10.jpg")}
@@ -1648,7 +1664,7 @@ export default function ProjectDetailPage() {
         )}
 
         {/* Triply 13 Image Section (Directly after Triply 10) */}
-        {project?.id === "komorebi-editorial" && (
+        {isTriply && (
           <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() => handleMobileImageClick("/Triply/Triply13.jpg")}
@@ -1663,7 +1679,7 @@ export default function ProjectDetailPage() {
         )}
 
         {/* RepX 8 Image Section (Directly after RepX 10) */}
-        {project?.id === "breeze-cargo" && (
+        {isRepX && (
           <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() => handleMobileImageClick("/RepX/RepX8.jpg")}
@@ -1722,7 +1738,7 @@ export default function ProjectDetailPage() {
         )}
 
         {/* RepX 13 Image Section (After Key Results) */}
-        {project?.id === "breeze-cargo" && (
+        {isRepX && (
           <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() => handleMobileImageClick("/RepX/RepX13.jpg")}
@@ -1737,7 +1753,7 @@ export default function ProjectDetailPage() {
         )}
 
         {/* RepX 14 Image Section (Directly after RepX 13) */}
-        {project?.id === "breeze-cargo" && (
+        {isRepX && (
           <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() => handleMobileImageClick("/RepX/RepX14.jpg")}
@@ -1752,18 +1768,18 @@ export default function ProjectDetailPage() {
         )}
 
         {/* Section 8: Final Full-width Image */}
-        {project?.id !== "breeze-cargo" && (
+        {!isRepX && (
           <div
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
             onClick={() =>
               handleMobileImageClick(
-                project?.id === "komorebi-editorial"
+                isTriply
                   ? "/Triply/Triply14.jpg"
-                  : project?.id === "TGPowerWrap"
+                  : isTGPowerWrap
                     ? "/TGPW/TGPW8.jpg"
-                    : project?.id === "ck-lighting"
+                    : isCKLighting
                       ? "/CK Lighting Web/ck11.jpg"
-                      : project?.id === "aistudio-brand"
+                      : isPFM
                         ? "/PFM/PFM10.jpg"
                         : project.galleryImages && project.galleryImages.length > 6
                           ? project.galleryImages[6]
@@ -1773,20 +1789,20 @@ export default function ProjectDetailPage() {
           >
             <img
               src={
-                project?.id === "komorebi-editorial"
+                isTriply
                   ? "/Triply/Triply14.jpg"
-                  : project?.id === "TGPowerWrap"
+                  : isTGPowerWrap
                     ? "/TGPW/TGPW8.jpg"
-                    : project?.id === "ck-lighting"
+                    : isCKLighting
                       ? "/CK Lighting Web/ck11.jpg"
-                      : project?.id === "aistudio-brand"
+                      : isPFM
                         ? "/PFM/PFM10.jpg"
                         : project.galleryImages && project.galleryImages.length > 6
                           ? project.galleryImages[6]
                           : "/TGPW/TGPW8.jpg"
               }
-              alt={project?.id === "aistudio-brand" ? "PFM 10 Showcase" : "Final Gallery Image"}
-              className={`w-full ${project?.id === "ck-lighting" || project?.id === "TGPowerWrap" || project?.id === "komorebi-editorial" || project?.id === "aistudio-brand" ? "h-auto block rounded-none" : "h-auto sm:h-screen object-contain sm:object-cover block rounded-none"}`}
+              alt={isPFM ? "PFM 10 Showcase" : "Final Gallery Image"}
+              className={`w-full ${isCKLighting || isTGPowerWrap || isTriply || isPFM ? "h-auto block rounded-none" : "h-auto sm:h-screen object-contain sm:object-cover block rounded-none"}`}
               referrerPolicy="no-referrer"
             />
           </div>

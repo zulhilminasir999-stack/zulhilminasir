@@ -44,7 +44,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     mobileObjectPosition: "center 60%",
     mobileImageClassName: "scale-[1.10] -translate-y-6",
     overlayClassName: "bottom-8 sm:bottom-16 lg:bottom-20 -translate-y-24 sm:translate-y-0",
-    url: "/case-study-project/komorebi-editorial",
+    url: "/case-study-project/Triply",
     client: "Triply App",
     year: "2025"
   },
@@ -74,7 +74,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     imageClassName: "scale-[1.06] sm:scale-[1.06] sm:group-hover:scale-110",
     mobileImageClassName: "scale-[1.10] -translate-y-6",
     overlayClassName: "bottom-12 sm:bottom-16 lg:bottom-20 -translate-y-28 sm:translate-y-0",
-    url: "/case-study-project/breeze-cargo",
+    url: "/case-study-project/RepX",
     client: "RepX App",
     year: "2026"
   },
@@ -84,7 +84,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Web App & System",
     defaultImage: "/PFM/PFM1.jpg",
     mobileImage: "/PFM/PFM1_M.png",
-    url: "/case-study-project/aistudio-brand",
+    url: "/case-study-project/Pre-school-Fee-Management",
     client: "Tadika Mesra, Sungai Petani",
     year: "2025"
   }

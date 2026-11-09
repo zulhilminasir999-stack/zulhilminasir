@@ -127,7 +127,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     ]
   },
   {
-    id: "breeze-cargo",
+    id: "RepX",
     title: "RepX | AI- powered Fitness",
     subtitle: "Mobile UI/UX Design for Fitness & Workout Tracking",
     category: "UI_UX",
@@ -162,7 +162,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     ]
   },
   {
-    id: "aistudio-brand",
+    id: "Pre-school-Fee-Management",
     title: "Pre-school Fee Management",
     subtitle: "Tadika Mesra, Sungai Petani",
     category: "AI_PROMPT",
@@ -264,7 +264,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     ]
   },
   {
-    id: "komorebi-editorial",
+    id: "Triply",
     title: "Triply | AI-powered Travel Companion",
     subtitle: "Mobile UI/UX Design for Travel Planning",
     category: "VISUAL_DESIGN",
@@ -507,8 +507,8 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Figma", "Sleek.design", "Adobe Photoshop", "Framer", "Tailwind CSS"],
     showcases: [
-      { title: "Triply | AI-powered Travel Companion", image: "/Triply/Triply1.jpg", projectId: "komorebi-editorial", url: "/case-study-project/komorebi-editorial" },
-      { title: "RepX | AI-powered Fitness", image: "/RepX/RepX1.jpg", projectId: "breeze-cargo", url: "/case-study-project/breeze-cargo" },
+      { title: "Triply | AI-powered Travel Companion", image: "/Triply/Triply1.jpg", projectId: "Triply", url: "/case-study-project/Triply" },
+      { title: "RepX | AI-powered Fitness", image: "/RepX/RepX1.jpg", projectId: "RepX", url: "/case-study-project/RepX" },
       { title: "AI Workspace Apps", image: "/DemoPic/Demo2.png", isComingSoon: true }
     ],
     gallery: [
@@ -534,7 +534,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["React & Vite", "Node.js & Express", "TypeScript", "Tailwind CSS", "PostgreSQL / Firestore"],
     showcases: [
-      { title: "Pre-school Fee Management System", image: "/PFM/PFM1.jpg", projectId: "aistudio-brand", url: "/case-study-project/aistudio-brand" },
+      { title: "Pre-school Fee Management System", image: "/PFM/PFM1.jpg", projectId: "Pre-school-Fee-Management", url: "/case-study-project/Pre-school-Fee-Management" },
       { title: "Travel Claim Management System", image: "/DemoPic/Demo6.png", isComingSoon: true },
       { title: "Analytics Management Hub", image: "/DemoPic/Demo3.png", isComingSoon: true }
     ],

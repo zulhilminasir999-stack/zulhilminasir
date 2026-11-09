@@ -1079,7 +1079,7 @@ export default function CaseStudyPage() {
         </div>
 
         {/* Added Full-width Image Section (Between Solution & Key Results) */}
-        {(capability?.id === "komorebi-editorial" || capability?.id === "ck-lighting") && (
+        {(capability?.id === "Triply" || capability?.id === "komorebi-editorial" || capability?.id === "ck-lighting") && (
           <div 
             className="w-full relative bg-zinc-900 z-50 cursor-pointer sm:cursor-default"
             onClick={() => handleMobileImageClick(capability?.id === "ck-lighting" ? "/CK Lighting Web/CK12.jpg" : "/Triply/Triply9.jpg")}
