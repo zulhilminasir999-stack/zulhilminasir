@@ -212,7 +212,9 @@ export default function ProjectDetailPage() {
         ? "RepX"
         : id === "aistudio-brand"
           ? "Pre-school-Fee-Management"
-          : id;
+          : (id === "buff-packaging" || id === "buffbox" || id === "BuffBox")
+            ? "BuffBox"
+            : id;
 
   const project = PORTFOLIO_PROJECTS.find(
     (p) =>
@@ -226,6 +228,7 @@ export default function ProjectDetailPage() {
   const isPFM = project?.id === "Pre-school-Fee-Management" || project?.id === "aistudio-brand";
   const isTGPowerWrap = project?.id === "TGPowerWrap";
   const isCKLighting = project?.id === "ck-lighting";
+  const isBuffBox = project?.id === "BuffBox" || project?.id === "buff-packaging";
 
   useEffect(() => {
     const updateTime = () => {
@@ -1086,7 +1089,8 @@ export default function ProjectDetailPage() {
               img1Src.includes("ck2") ||
               img1Src.includes("ck3") ||
               img1Src.includes("ck") ||
-              isPFM;
+              isPFM ||
+              isBuffBox;
             const finalImg1Src =
               isCKLighting
                 ? "/CK Lighting Web/ck2.jpg"
@@ -1096,32 +1100,28 @@ export default function ProjectDetailPage() {
                     ? "/RepX/RepX2.jpg"
                     : isPFM
                       ? "/PFM/PFM6.jpg"
-                      : img1Src;
+                      : isBuffBox
+                        ? "/Buff/Buff Cling Film on Sunlit Grass.png"
+                        : img1Src;
 
             if (isLongImage) {
+              const displaySrc =
+                isCKLighting
+                  ? "/CK Lighting Web/ck2.jpg"
+                  : isPFM
+                    ? "/PFM/PFM6.jpg"
+                    : isBuffBox
+                      ? "/Buff/Buff Cling Film on Sunlit Grass.png"
+                      : img1Src;
               return (
                 <div
                   className="z-10 w-full relative sm:sticky cursor-pointer sm:cursor-default px-5 sm:px-0 pb-5 sm:pb-0"
-                  style={isCKLighting || isPFM ? {} : { bottom: 0 }}
-                  onClick={() =>
-                    handleMobileImageClick(
-                      isCKLighting
-                        ? "/CK Lighting Web/ck2.jpg"
-                        : isPFM
-                          ? "/PFM/PFM6.jpg"
-                          : img1Src,
-                    )
-                  }
+                  style={isCKLighting || isPFM || isBuffBox ? {} : { bottom: 0 }}
+                  onClick={() => handleMobileImageClick(displaySrc)}
                 >
                   <img
-                    src={
-                      isCKLighting
-                        ? "/CK Lighting Web/ck2.jpg"
-                        : isPFM
-                          ? "/PFM/PFM6.jpg"
-                          : img1Src
-                    }
-                    alt="Gallery 1"
+                    src={displaySrc}
+                    alt={isBuffBox ? "Buff Cling Film on Sunlit Grass" : "Gallery 1"}
                     className="w-full h-auto block select-none rounded-none"
                     referrerPolicy="no-referrer"
                   />
@@ -1233,12 +1233,27 @@ export default function ProjectDetailPage() {
             </div>
 
             {/* Gallery Part */}
-            <div className="-mx-6 sm:mx-0 grid grid-cols-1 md:grid-cols-12 gap-0 sm:gap-4 lg:gap-6 items-stretch">
-              <div className="md:col-span-6 h-auto sm:h-[600px] lg:h-[800px] overflow-hidden cursor-pointer sm:cursor-default pb-5 sm:pb-0 flex flex-col justify-between">
+            {isBuffBox ? (
+              <div
+                className="-mx-6 sm:-mx-12 lg:-mx-16 w-auto overflow-hidden cursor-pointer sm:cursor-default pb-5 sm:pb-0"
+                onClick={() =>
+                  handleMobileImageClick("/Buff/Buff Packaging-artwork.jpg")
+                }
+              >
                 <img
-                  src={
-                    isTGPowerWrap
-                      ? "/TGPW/TGPW Mobile.jpg"
+                  src="/Buff/Buff Packaging-artwork.jpg"
+                  className="w-full h-auto block select-none rounded-none m-0 p-0"
+                  alt="Buff Packaging Artwork Blueprint"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            ) : (
+              <div className="-mx-6 sm:mx-0 grid grid-cols-1 md:grid-cols-12 gap-0 sm:gap-4 lg:gap-6 items-stretch">
+                <div className="md:col-span-6 h-auto sm:h-[600px] lg:h-[800px] overflow-hidden cursor-pointer sm:cursor-default pb-5 sm:pb-0 flex flex-col justify-between">
+                  <img
+                    src={
+                      isTGPowerWrap
+                        ? "/TGPW/TGPW Mobile.jpg"
                       : isCKLighting
                         ? "/CK Lighting Web/ck5.jpg"
                         : isTriply
@@ -1353,6 +1368,7 @@ export default function ProjectDetailPage() {
                 </div>
               </div>
             </div>
+            )}
 
             {/* The Solution / User Flow */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 pt-12 md:pt-20 lg:pt-24 pb-6 md:pb-10">
@@ -1467,7 +1483,7 @@ export default function ProjectDetailPage() {
           {/* Image 3 (Previously Image 2) */}
           {!isCKLighting && (
             <div
-              className={`relative w-full ${(isTriply || isRepX || isTGPowerWrap || isPFM) ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-transparent sm:bg-zinc-900"} cursor-pointer sm:cursor-default pb-5 sm:pb-0`}
+              className={`relative w-full ${(isTriply || isRepX || isTGPowerWrap || isPFM || isBuffBox) ? "h-auto z-20 overflow-visible flex flex-col justify-center bg-transparent" : "sm:sticky sm:top-0 h-auto sm:h-screen z-20 shadow-none sm:shadow-2xl overflow-hidden flex flex-col justify-center bg-transparent sm:bg-zinc-900"} cursor-pointer sm:cursor-default pb-5 sm:pb-0`}
               onClick={() =>
                 handleMobileImageClick(
                   isPFM
@@ -1476,7 +1492,9 @@ export default function ProjectDetailPage() {
                       ? "/Triply/Triply8.jpg"
                       : isRepX
                         ? "/RepX/RepX6.jpg"
-                        : "/TGPW/TGPW Visual Guideline.jpg",
+                        : isBuffBox
+                          ? "/Buff/Buff Packaging_mockup 2.jpg"
+                          : "/TGPW/TGPW Visual Guideline.jpg",
                 )
               }
             >
@@ -1488,7 +1506,9 @@ export default function ProjectDetailPage() {
                       ? "/Triply/Triply8.jpg"
                       : isRepX
                         ? "/RepX/RepX6.jpg"
-                        : "/TGPW/TGPW Visual Guideline.jpg"
+                        : isBuffBox
+                          ? "/Buff/Buff Packaging_mockup 2.jpg"
+                          : "/TGPW/TGPW Visual Guideline.jpg"
                 }
               alt={
                 isPFM
@@ -1497,9 +1517,11 @@ export default function ProjectDetailPage() {
                     ? "Triply Design"
                     : isRepX
                       ? "RepX 6"
-                      : "TGPW Visual Guideline"
+                      : isBuffBox
+                        ? "Buff Packaging Mockup"
+                        : "TGPW Visual Guideline"
               }
-              className={`w-full h-auto ${(isTriply || isRepX || isTGPowerWrap || isPFM) ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
+              className={`w-full h-auto ${(isTriply || isRepX || isTGPowerWrap || isPFM || isBuffBox) ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
               onError={(e) => {
                 if (isRepX) {
                   const target = e.currentTarget;
@@ -1593,9 +1615,11 @@ export default function ProjectDetailPage() {
                       ? "/RepX/RepX10.jpg"
                       : isTriply
                         ? "/Triply/Triply9.jpg"
-                        : project?.galleryImages && project.galleryImages.length > 5
-                          ? project.galleryImages[5]
-                          : project?.imageUrl || "",
+                        : isBuffBox
+                          ? "/Buff/Buff Packaging_mockup 4.jpg"
+                          : project?.galleryImages && project.galleryImages.length > 5
+                            ? project.galleryImages[5]
+                            : project?.imageUrl || "",
             )
           }
         >
@@ -1611,9 +1635,11 @@ export default function ProjectDetailPage() {
                       ? "/RepX/RepX10.jpg"
                       : isTriply
                         ? "/Triply/Triply9.jpg"
-                        : project?.galleryImages && project.galleryImages.length > 5
-                          ? project.galleryImages[5]
-                          : project?.imageUrl || ""
+                        : isBuffBox
+                          ? "/Buff/Buff Packaging_mockup 4.jpg"
+                          : project?.galleryImages && project.galleryImages.length > 5
+                            ? project.galleryImages[5]
+                            : project?.imageUrl || ""
             }
             alt={
               isPFM
@@ -1626,7 +1652,9 @@ export default function ProjectDetailPage() {
                       ? "RepX 10 Showcase"
                       : isTriply
                         ? "Triply 9 Showcase"
-                        : "Solution Showcase"
+                        : isBuffBox
+                          ? "Buff Packaging 4 Showcase"
+                          : "Solution Showcase"
             }
             className="w-full h-auto block select-none rounded-none"
             referrerPolicy="no-referrer"
@@ -1781,9 +1809,11 @@ export default function ProjectDetailPage() {
                       ? "/CK Lighting Web/ck11.jpg"
                       : isPFM
                         ? "/PFM/PFM10.jpg"
-                        : project.galleryImages && project.galleryImages.length > 6
-                          ? project.galleryImages[6]
-                          : "/TGPW/TGPW8.jpg",
+                        : isBuffBox
+                          ? "/Buff/Buff Packaging_mockup 5.jpg"
+                          : project.galleryImages && project.galleryImages.length > 6
+                            ? project.galleryImages[6]
+                            : "/TGPW/TGPW8.jpg",
               )
             }
           >
@@ -1797,12 +1827,14 @@ export default function ProjectDetailPage() {
                       ? "/CK Lighting Web/ck11.jpg"
                       : isPFM
                         ? "/PFM/PFM10.jpg"
-                        : project.galleryImages && project.galleryImages.length > 6
-                          ? project.galleryImages[6]
-                          : "/TGPW/TGPW8.jpg"
+                        : isBuffBox
+                          ? "/Buff/Buff Packaging_mockup 5.jpg"
+                          : project.galleryImages && project.galleryImages.length > 6
+                            ? project.galleryImages[6]
+                            : "/TGPW/TGPW8.jpg"
               }
-              alt={isPFM ? "PFM 10 Showcase" : "Final Gallery Image"}
-              className={`w-full ${isCKLighting || isTGPowerWrap || isTriply || isPFM ? "h-auto block rounded-none" : "h-auto sm:h-screen object-contain sm:object-cover block rounded-none"}`}
+              alt={isPFM ? "PFM 10 Showcase" : isBuffBox ? "Buff Packaging 5 Showcase" : "Final Gallery Image"}
+              className={`w-full ${isCKLighting || isTGPowerWrap || isTriply || isPFM || isBuffBox ? "h-auto block rounded-none" : "h-auto sm:h-screen object-contain sm:object-cover block rounded-none"}`}
               referrerPolicy="no-referrer"
             />
           </div>

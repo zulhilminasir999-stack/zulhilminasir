@@ -234,6 +234,39 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     ]
   },
   {
+    id: "BuffBox",
+    title: "Buff Packaging",
+    subtitle: "Eco-Friendly Structural Packaging & Tactile Carton Craft",
+    category: "PACKAGING",
+    categoryLabel: "Product Packaging Design",
+    year: "2025",
+    imageUrl: "/Buff/Buff Packaging_mockup 1.jpg",
+    client: "Buff Organics",
+    toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Google Flow", "Google Gemini"],
+    codeAssistedTools: [],
+    summary: "Engineered sustainable kraft paperboard packaging with tactile debossed geometric patterns and minimalist typography for premium organic wellness and skincare products.",
+    challenge: "Creating eco-conscious packaging that communicates raw luxury without non-recyclable foil coatings or plastic laminates, while maintaining structural durability in shipping.",
+    solution: "Developed custom vector cutter-guides with deep blind embossing on FSC-certified unbleached kraft card stock, paired with soy-based monochrome inks and interlocking folding tabs.",
+    results: [
+      "100% recyclable and biodegradable packaging solution.",
+      "Reduced manufacturing and material costs by 22% while elevating shelf appeal.",
+      "Flawless folding precision and tactile consumer touchpoints."
+    ],
+    galleryImages: [
+      "/Buff/Buff Packaging_mockup 1.jpg",
+      "/Buff/Buff Cling Film on Sunlit Grass.png",
+      "/Buff/Buff Packaging_mockup 3.png",
+      "/Buff/Buff Packaging_mockup 2.jpg",
+      "/Buff/Buff Packaging_mockup 4.jpg",
+      "/Buff/Buff Packaging_mockup 5.jpg",
+      "/Buff/Buff Packaging-artwork.jpg"
+    ],
+    links: [
+      { label: "View Packaging Cutter-Guides", url: "#" },
+      { label: "Material Specifications", url: "#" }
+    ]
+  },
+  {
     id: "atelier-luxe",
     title: "Atelier Botanical Floral Monogram",
     subtitle: "Identity Architecture & Debossed Editorial Assets",
@@ -613,9 +646,9 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
       "Ultra-high-resolution 3D product composite mockups for advertising and marketing.",
       "Premium print specification layers (laser embossing, spot UV, tactile matte finishes)."
     ],
-    toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Midjourney", "Google Gemini Prompting"],
+    toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Google Flow", "Google Gemini Prompting"],
     showcases: [
-      { title: "Buff Packaging", image: "/DemoPic/BP.jpg", isComingSoon: true },
+      { title: "Buff Packaging", image: "/Buff/Buff Packaging_mockup 1.jpg", projectId: "BuffBox", url: "/case-study-project/BuffBox" },
       { title: "BoltDuo", image: "/DemoPic/Front BoltDuo Picture.jpg", isComingSoon: true },
       { title: "DailyWhite by Dollykish", image: "/DemoPic/Dollykish.jpg", isComingSoon: true }
     ],

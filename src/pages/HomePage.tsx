@@ -1524,6 +1524,10 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   return;
                 }
                 const lowerTitle = showcase.title.toLowerCase();
+                if (lowerTitle.includes("buff box") || lowerTitle.includes("buff packaging")) {
+                  navigate(`/case-study-project/BuffBox`);
+                  return;
+                }
                 if (lowerTitle.includes("pre-school fee management") || lowerTitle.includes("official duty")) {
                   navigate(`/case-study-project/Pre-school-Fee-Management`);
                   return;

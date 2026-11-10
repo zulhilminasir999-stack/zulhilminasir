@@ -19,6 +19,17 @@ export interface CarouselCaseItem {
 
 const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
   {
+    id: "BuffBox",
+    slugTitle: "Buff Packaging - Structural Packaging",
+    displayTitle: "Buff Packaging",
+    type: "Structural Packaging",
+    description: "Eco-friendly kraft paperboard carton packaging engineered with tactile debossing, minimalist typography, and precision vector cutter-guides.",
+    role: "LEAD PACKAGING DESIGNER",
+    image: "/Buff/Buff Packaging_mockup 1.jpg",
+    url: "/case-study-project/BuffBox",
+    isProject: true,
+  },
+  {
     id: "TGPowerWrap",
     slugTitle: "TG PowerWrap - Packaging & Web",
     displayTitle: "TG PowerWrap Website",
@@ -226,10 +237,12 @@ const SIMILARITY_MAP: Record<string, string[]> = {
   "web-app-system": ["Pre-school-Fee-Management", "ck-lighting", "RepX", "Triply", "TGPowerWrap", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot"],
   "ai-native-development": ["RepX", "Triply", "Pre-school-Fee-Management", "ck-lighting", "TGPowerWrap", "finsight-ai", "smart-copilot", "genai-orchestrator", "travel-claim-system", "analytics-hub"],
   "brand-identity": ["TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "atelier-luxe", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot"],
-  "packaging": ["TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "atelier-luxe", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot"],
+  "packaging": ["BuffBox", "TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "atelier-luxe", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot"],
   "visual-design": ["TGPowerWrap", "Triply", "RepX", "ck-lighting", "Pre-school-Fee-Management", "helios-exhibition", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot"],
 
-  "TGPowerWrap": ["ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "solareco-website", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
+  "BuffBox": ["TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator"],
+  "buff-packaging": ["BuffBox", "TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator"],
+  "TGPowerWrap": ["BuffBox", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "solareco-website", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
   "RepX": ["Triply", "Pre-school-Fee-Management", "ck-lighting", "TGPowerWrap", "ai-workspace-apps", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
   "breeze-cargo": ["Triply", "Pre-school-Fee-Management", "ck-lighting", "TGPowerWrap", "ai-workspace-apps", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],
   "ck-lighting": ["TGPowerWrap", "Pre-school-Fee-Management", "RepX", "Triply", "solareco-website", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot", "genai-orchestrator"],

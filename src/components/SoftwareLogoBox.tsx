@@ -162,13 +162,18 @@ function getLogoConfig(toolName: string): LogoConfig {
   if (lower.includes("flow")) {
     return {
       candidates: [
+        "/logos/Flow_app_icon_iOS.png",
         "/logos/GoogleFlow.png",
         "/logos/Google Flow.png",
+        "/logos/GoogleFlow-1.png",
         "/logos/googleflow.png",
       ],
-      isWide: true,
-      wideImgClassName:
-        "h-5 sm:h-[22px] w-auto object-contain select-none pointer-events-none",
+      renderFallbackSvg: () => (
+        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="#4285F4" />
+          <path d="M7 12h10M13 8l4 4-4 4" stroke="#FFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
     };
   }
 
