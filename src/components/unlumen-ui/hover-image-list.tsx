@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useSpring, AnimatePresence } from "motion/react";
-import { useEffect, useState, useRef, MouseEvent } from "react";
+import { useEffect, useState, useRef, MouseEvent, TouchEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useNavigationType } from "react-router-dom";
 
@@ -36,6 +36,9 @@ interface HoverImageListItemProps {
   setExpandedIndex: (idx: number | null) => void;
   onItemClick?: (item: HoverImageItem, index: number, showcase?: HoverImageShowcase) => void;
   navType: string;
+  onTouchHoldStart?: (idx: number, clientX: number, clientY: number) => void;
+  onTouchHoldMove?: (clientX: number, clientY: number) => void;
+  onTouchHoldEnd?: () => void;
 }
 
 function HoverImageListItem({
@@ -47,16 +50,131 @@ function HoverImageListItem({
   setHoveredIndex,
   setExpandedIndex,
   onItemClick,
-  navType
+  navType,
+  onTouchHoldStart,
+  onTouchHoldMove,
+  onTouchHoldEnd,
 }: HoverImageListItemProps) {
   const rowRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const isHovered = !isMobile && hoveredIndex === idx;
+  const isHovered = hoveredIndex === idx;
   const isExpanded = expandedIndex === idx;
+
+  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const touchStartTimeRef = useRef<number>(0);
+  const isHoldingRef = useRef<boolean>(false);
+  const justHeldRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    return () => {
+      if (holdTimerRef.current) {
+        clearTimeout(holdTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    touchStartTimeRef.current = Date.now();
+    touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
+    isHoldingRef.current = false;
+
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+    }
+
+    // Small timer (60ms) to detect deliberate hold finger vs quick scroll gesture
+    holdTimerRef.current = setTimeout(() => {
+      isHoldingRef.current = true;
+      onTouchHoldStart?.(idx, touch.clientX, touch.clientY);
+      setHoveredIndex(idx);
+    }, 60);
+  };
+
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchStartPosRef.current.x;
+    const dy = touch.clientY - touchStartPosRef.current.y;
+
+    if (!isHoldingRef.current) {
+      if (Math.abs(dy) > 10 || Math.abs(dx) > 12) {
+        if (holdTimerRef.current) {
+          clearTimeout(holdTimerRef.current);
+          holdTimerRef.current = null;
+        }
+      }
+      return;
+    }
+
+    if (Math.abs(dy) > 45) {
+      isHoldingRef.current = false;
+      onTouchHoldEnd?.();
+      setHoveredIndex(null);
+      return;
+    }
+
+    onTouchHoldMove?.(touch.clientX, touch.clientY);
+
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    const rowElem = element?.closest("[data-row-index]");
+    if (rowElem) {
+      const targetIdx = parseInt(rowElem.getAttribute("data-row-index") || "", 10);
+      if (!isNaN(targetIdx) && targetIdx !== hoveredIndex) {
+        setHoveredIndex(targetIdx);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+
+    const wasHolding = isHoldingRef.current;
+    const elapsed = Date.now() - touchStartTimeRef.current;
+
+    isHoldingRef.current = false;
+    onTouchHoldEnd?.();
+    setHoveredIndex(null);
+
+    // If user held finger to preview, suppress subsequent synthetic click from toggling expansion
+    if (wasHolding || elapsed >= 180) {
+      justHeldRef.current = true;
+      setTimeout(() => {
+        justHeldRef.current = false;
+      }, 350);
+    }
+  };
+
+  const handleTouchCancel = () => {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    isHoldingRef.current = false;
+    onTouchHoldEnd?.();
+    setHoveredIndex(null);
+  };
+
+  const handleClick = () => {
+    if (justHeldRef.current) {
+      return;
+    }
+    const nextExpanded = isExpanded ? null : idx;
+    setExpandedIndex(nextExpanded);
+    if (isMobile) {
+      setHoveredIndex(null);
+    }
+  };
 
   return (
     <motion.div 
       ref={rowRef}
+      data-row-index={idx}
       className={`w-full border-b transition-colors duration-300 ${
         isExpanded ? "bg-[#2563EB] border-[#2563EB]" : "border-zinc-200"
       }`}
@@ -67,19 +185,18 @@ function HoverImageListItem({
     >
       <div
         ref={headerRef}
+        data-row-index={idx}
         onMouseEnter={() => {
           if (!isMobile) {
             setHoveredIndex(idx);
           }
         }}
-        onClick={() => {
-          const nextExpanded = isExpanded ? null : idx;
-          setExpandedIndex(nextExpanded);
-          if (isMobile) {
-            setHoveredIndex(null);
-          }
-        }}
-        className={`group relative overflow-hidden w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer px-6 sm:px-12 lg:px-16 ${
+        onClick={handleClick}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchCancel}
+        className={`group relative overflow-hidden w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer px-6 sm:px-12 lg:px-16 touch-manipulation select-none [-webkit-touch-callout:none] ${
           isExpanded ? "bg-[#2563EB]" : ""
         }`}
       >
@@ -317,6 +434,29 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
     return () => clearInterval(interval);
   }, []);
 
+  const handleTouchHoldStart = (targetIdx: number, clientX: number, clientY: number) => {
+    lastX.current = clientX;
+    setRotate(0);
+    const clampedX = Math.max(95, Math.min(window.innerWidth - 95, clientX));
+    mouseX.set(clampedX);
+    mouseY.set(clientY);
+  };
+
+  const handleTouchHoldMove = (clientX: number, clientY: number) => {
+    const deltaX = clientX - lastX.current;
+    lastX.current = clientX;
+    const targetRotate = Math.min(Math.max(deltaX * 0.22, -15), 15);
+    setRotate(targetRotate);
+
+    const clampedX = Math.max(95, Math.min(window.innerWidth - 95, clientX));
+    mouseX.set(clampedX);
+    mouseY.set(clientY);
+  };
+
+  const handleTouchHoldEnd = () => {
+    setRotate(0);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -346,57 +486,58 @@ export function HoverImageList({ items, onItemClick, onExpandedChange }: HoverIm
           setExpandedIndex={setExpandedIndex}
           onItemClick={onItemClick}
           navType={navType}
+          onTouchHoldStart={handleTouchHoldStart}
+          onTouchHoldMove={handleTouchHoldMove}
+          onTouchHoldEnd={handleTouchHoldEnd}
         />
       ))}
 
-      {/* Floating preview element (Desktop only - disabled on mobile) */}
-      {!isMobile && (
-        <motion.div
-          style={{
-            x,
-            y,
-            translateX: "-50%",
-            translateY: "-50%",
-          }}
-          animate={{
-            scale: (hoveredIndex !== null && expandedIndex === null) ? 1 : 0.8,
-            opacity: (hoveredIndex !== null && expandedIndex === null) ? 1 : 0,
-            rotate: rotate,
-          }}
-          transition={{
-            scale: { type: "spring", damping: 25, stiffness: 200 },
-            opacity: { duration: 0.25, ease: "easeOut" },
-            rotate: { type: "spring", damping: 35, stiffness: 150 },
-          }}
-          className="pointer-events-none fixed top-0 left-0 hidden sm:block w-52 h-[260px] sm:w-[260px] sm:h-[325px] md:w-[310px] md:h-[390px] rounded-xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.25)] bg-zinc-100 border-none z-[9999] origin-center"
-        >
-          {items.map((item, idx) => {
-            const isActive = hoveredIndex === idx;
-            return (
-              <motion.div
-                key={item.label}
-                initial={false}
-                animate={{
-                  opacity: isActive ? 1 : 0,
-                  scale: isActive ? 1 : 1.05,
-                }}
-                transition={{
-                  duration: 0.4,
-                  ease: [0.16, 1, 0.3, 1], // Custom ultra-smooth ease
-                }}
-                className="absolute inset-0 w-full h-full"
-              >
-                <img
-                  src={item.image}
-                  alt={item.label}
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      )}
+      {/* Floating preview element (Desktop hover & Mobile finger hold) */}
+      <motion.div
+        style={{
+          x,
+          y,
+          translateX: "-50%",
+          translateY: isMobile ? "-70%" : "-50%",
+        }}
+        animate={{
+          scale: (hoveredIndex !== null && (isMobile || expandedIndex === null)) ? 1 : 0.8,
+          opacity: (hoveredIndex !== null && (isMobile || expandedIndex === null)) ? 1 : 0,
+          rotate: rotate,
+        }}
+        transition={{
+          scale: { type: "spring", damping: 25, stiffness: 200 },
+          opacity: { duration: 0.25, ease: "easeOut" },
+          rotate: { type: "spring", damping: 35, stiffness: 150 },
+        }}
+        className="pointer-events-none fixed top-0 left-0 block w-48 h-[240px] sm:w-[260px] sm:h-[325px] md:w-[310px] md:h-[390px] rounded-xl overflow-hidden shadow-[0_20px_45px_rgba(0,0,0,0.35)] bg-zinc-100 border-none z-[9999] origin-center"
+      >
+        {items.map((item, idx) => {
+          const isActive = hoveredIndex === idx;
+          return (
+            <motion.div
+              key={item.label}
+              initial={false}
+              animate={{
+                opacity: isActive ? 1 : 0,
+                scale: isActive ? 1 : 1.05,
+              }}
+              transition={{
+                duration: 0.35,
+                ease: [0.16, 1, 0.3, 1], // Custom ultra-smooth ease
+              }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <img
+                src={item.image}
+                alt={item.label}
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </motion.div>
+          );
+        })}
+      </motion.div>
     </div>
   );
 }

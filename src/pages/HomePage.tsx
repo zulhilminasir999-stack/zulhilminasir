@@ -1255,7 +1255,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                       {/* White divider line (similar to above line) and View My CV button */}
                       <div className="w-full border-t border-white/50 pt-7 mt-7 flex flex-col items-end text-right">
                         <a
-                          href="/Zulhilmi_Nasir_Resume.pdf"
+                          href="/assets/aistudio/Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_UXDesigner_b200e43f.pdf"
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => {
@@ -1641,7 +1641,7 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
 
               {/* Download Resume button */}
               <a
-                href="/Zulhilmi_Nasir_Resume.pdf"
+                href="/assets/aistudio/Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_UXDesigner_b200e43f.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white text-[#2563EB] hover:bg-white/90 active:scale-95 transition-all px-7 py-3.5 rounded-full font-sans font-semibold tracking-wide text-sm shadow-xl group cursor-pointer"

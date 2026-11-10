@@ -11,9 +11,10 @@ import {
   ZoomOut,
 } from "lucide-react";
 
-const RESUME_PDF_URL = "/Zulhilmi_Nasir_Resume.pdf";
+const RESUME_PDF_URL =
+  "/assets/aistudio/Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_UXDesigner_b200e43f.pdf";
 const RESUME_DOWNLOAD_FILENAME =
-  "Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_Designer.pdf";
+  "Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_UXDesigner.pdf";
 
 const RESUME_PAGES = [
   {
