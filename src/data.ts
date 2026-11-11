@@ -242,7 +242,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     year: "2025",
     imageUrl: "/Buff/Buff Packaging_mockup 1.jpg",
     client: "Buff Organics",
-    toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Google Flow", "Google Gemini"],
+    toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Adobe Firefly AI", "Google Flow", "Google Gemini"],
     codeAssistedTools: [],
     summary: "Engineered sustainable kraft paperboard packaging with tactile debossed geometric patterns and minimalist typography for premium organic wellness and skincare products.",
     challenge: "Creating eco-conscious packaging that communicates raw luxury without non-recyclable foil coatings or plastic laminates, while maintaining structural durability in shipping.",
@@ -646,7 +646,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
       "Ultra-high-resolution 3D product composite mockups for advertising and marketing.",
       "Premium print specification layers (laser embossing, spot UV, tactile matte finishes)."
     ],
-    toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Google Flow", "Google Gemini Prompting"],
+    toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Adobe Firefly AI", "Google Flow", "Google Gemini Prompting"],
     showcases: [
       { title: "Buff Packaging", image: "/Buff/Buff Packaging_mockup 1.jpg", projectId: "BuffBox", url: "/case-study-project/BuffBox" },
       { title: "BoltDuo", image: "/DemoPic/Front BoltDuo Picture.jpg", isComingSoon: true },

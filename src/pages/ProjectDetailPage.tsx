@@ -1421,10 +1421,12 @@ export default function ProjectDetailPage() {
                       ? "/Triply/Triply4.jpg"
                       : isRepX
                         ? "/RepX/RepX5.jpg"
-                        : project.galleryImages &&
-                            project.galleryImages.length > 4
-                          ? project.galleryImages[4]
-                          : "/TGPW/TGPW Site Map.jpg",
+                        : isBuffBox
+                          ? "/Buff/Buff Packaging_mockup 5.jpg"
+                          : project.galleryImages &&
+                              project.galleryImages.length > 4
+                            ? project.galleryImages[4]
+                            : "/TGPW/TGPW Site Map.jpg",
               )
             }
           >
@@ -1438,17 +1440,21 @@ export default function ProjectDetailPage() {
                       ? "/Triply/Triply4.jpg"
                       : isRepX
                         ? "/RepX/RepX5.jpg"
-                        : project.galleryImages &&
-                            project.galleryImages.length > 4
-                          ? project.galleryImages[4]
-                          : "/TGPW/TGPW Site Map.jpg"
+                        : isBuffBox
+                          ? "/Buff/Buff Packaging_mockup 5.jpg"
+                          : project.galleryImages &&
+                              project.galleryImages.length > 4
+                            ? project.galleryImages[4]
+                            : "/TGPW/TGPW Site Map.jpg"
               }
               alt={
                 isPFM
                   ? "PFM 2 Showcase"
                   : isRepX
                     ? "RepX 5"
-                    : "Gallery Sticky 1"
+                    : isBuffBox
+                      ? "Buff Packaging Mockup 5"
+                      : "Gallery Sticky 1"
               }
               className="w-full h-auto object-contain block select-none rounded-none"
               onError={(e) => {
@@ -1518,7 +1524,7 @@ export default function ProjectDetailPage() {
                     : isRepX
                       ? "RepX 6"
                       : isBuffBox
-                        ? "Buff Packaging Mockup"
+                        ? "Buff Packaging Mockup 2"
                         : "TGPW Visual Guideline"
               }
               className={`w-full h-auto ${(isTriply || isRepX || isTGPowerWrap || isPFM || isBuffBox) ? "object-contain select-none" : "sm:h-full object-contain sm:object-cover"} block rounded-none px-5 sm:px-0 box-border`}
@@ -1810,7 +1816,7 @@ export default function ProjectDetailPage() {
                       : isPFM
                         ? "/PFM/PFM10.jpg"
                         : isBuffBox
-                          ? "/Buff/Buff Packaging_mockup 5.jpg"
+                          ? "/Buff/Buff Packaging_mockup 2.jpg"
                           : project.galleryImages && project.galleryImages.length > 6
                             ? project.galleryImages[6]
                             : "/TGPW/TGPW8.jpg",
@@ -1828,12 +1834,12 @@ export default function ProjectDetailPage() {
                       : isPFM
                         ? "/PFM/PFM10.jpg"
                         : isBuffBox
-                          ? "/Buff/Buff Packaging_mockup 5.jpg"
+                          ? "/Buff/Buff Packaging_mockup 2.jpg"
                           : project.galleryImages && project.galleryImages.length > 6
                             ? project.galleryImages[6]
                             : "/TGPW/TGPW8.jpg"
               }
-              alt={isPFM ? "PFM 10 Showcase" : isBuffBox ? "Buff Packaging 5 Showcase" : "Final Gallery Image"}
+              alt={isPFM ? "PFM 10 Showcase" : isBuffBox ? "Buff Packaging 2 Showcase" : "Final Gallery Image"}
               className={`w-full ${isCKLighting || isTGPowerWrap || isTriply || isPFM || isBuffBox ? "h-auto block rounded-none" : "h-auto sm:h-screen object-contain sm:object-cover block rounded-none"}`}
               referrerPolicy="no-referrer"
             />

@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useSpring, AnimatePresence } from "motion/react";
-import { useEffect, useState, useRef, MouseEvent } from "react";
+import React, { useEffect, useState, useRef, MouseEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useNavigationType } from "react-router-dom";
 
@@ -51,10 +51,94 @@ function HoverImageListItem({
 }: HoverImageListItemProps) {
   const rowRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const [isHeldOnMobile, setIsHeldOnMobile] = useState(false);
+  const touchStateRef = useRef<{ startX: number; startY: number; isLongHold: boolean } | null>(null);
+  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastLongHoldEndRef = useRef<number>(0);
+
+  const clearMobileHold = (recordLongHoldEnd = false) => {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    if (recordLongHoldEnd && touchStateRef.current?.isLongHold) {
+      lastLongHoldEndRef.current = Date.now();
+    }
+    touchStateRef.current = null;
+    setIsHeldOnMobile(false);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
+    if (!isMobile) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+    }
+    touchStateRef.current = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      isLongHold: false,
+    };
+    setIsHeldOnMobile(true);
+    holdTimerRef.current = setTimeout(() => {
+      if (touchStateRef.current) {
+        touchStateRef.current.isLongHold = true;
+      }
+    }, 450);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLElement>) => {
+    if (!isMobile || !touchStateRef.current) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const insideBounds =
+      touch.clientX >= rect.left &&
+      touch.clientX <= rect.right &&
+      touch.clientY >= rect.top &&
+      touch.clientY <= rect.bottom;
+
+    if (!insideBounds) {
+      clearMobileHold(false);
+      return;
+    }
+
+    if (!touchStateRef.current.isLongHold) {
+      const dx = touch.clientX - touchStateRef.current.startX;
+      const dy = touch.clientY - touchStateRef.current.startY;
+      if (Math.hypot(dx, dy) > 12) {
+        clearMobileHold(false);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (!isMobile) return;
+    clearMobileHold(true);
+  };
+
+  const handleTouchCancel = () => {
+    if (!isMobile) return;
+    clearMobileHold(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (holdTimerRef.current) {
+        clearTimeout(holdTimerRef.current);
+      }
+    };
+  }, []);
+
   const isHovered = !isMobile && hoveredIndex === idx;
   const isExpanded = expandedIndex === idx;
+  const isBlueActive = isHovered || isExpanded || isHeldOnMobile;
 
   const handleClick = () => {
+    if (isMobile) {
+      clearMobileHold(false);
+    }
     const nextExpanded = isExpanded ? null : idx;
     setExpandedIndex(nextExpanded);
     if (isMobile) {
@@ -81,7 +165,14 @@ function HoverImageListItem({
           }
         }}
         onClick={handleClick}
-        className={`group relative overflow-hidden w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer px-6 sm:px-12 lg:px-16 touch-manipulation select-none active:bg-[#2563EB] ${
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchCancel}
+        onContextMenu={(e) => {
+          if (isMobile) e.preventDefault();
+        }}
+        className={`group relative overflow-hidden w-full flex items-center justify-between py-4 sm:py-5 md:py-6 cursor-pointer px-6 sm:px-12 lg:px-16 touch-manipulation select-none max-md:select-none max-md:[-webkit-touch-callout:none] max-md:[-webkit-tap-highlight-color:transparent] ${
           isExpanded ? "bg-[#2563EB]" : ""
         }`}
       >
@@ -89,20 +180,20 @@ function HoverImageListItem({
         <span
           aria-hidden="true"
           className={`pointer-events-none absolute left-0 bottom-0 h-[2px] w-full bg-[#2563EB] origin-left transition-transform duration-500 ease-[ease] z-[2] ${
-            isHovered || isExpanded ? "scale-x-100" : "scale-x-0"
+            isBlueActive ? "scale-x-100" : "scale-x-0"
           }`}
         />
         <span
           aria-hidden="true"
           className={`pointer-events-none absolute inset-0 bg-[#2563EB] origin-bottom transition-transform duration-300 ease-[ease] z-[1] ${
-            isHovered || isExpanded ? "scale-y-100" : "scale-y-0"
+            isBlueActive ? "scale-y-100" : "scale-y-0"
           }`}
         />
 
         {/* SVG Noise Overlay */}
         <div
           className={`absolute inset-0 pointer-events-none mix-blend-overlay overflow-hidden z-[2] transition-opacity duration-300 ease-[ease] ${
-            isHovered || isExpanded ? "opacity-25" : "opacity-0"
+            isBlueActive ? "opacity-25" : "opacity-0"
           }`}
         >
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -120,16 +211,16 @@ function HoverImageListItem({
           {/* Text and category */}
           <div className="flex flex-col items-start text-left gap-1 sm:gap-2">
             <div className={`text-2xl sm:text-4xl md:text-5xl lg:text-[44px] font-sans font-semibold tracking-tighter transition-colors duration-300 ease-[ease] uppercase ${
-              (isHovered || isExpanded) ? "text-white" : "text-zinc-700"
+              isBlueActive ? "!text-white" : "text-zinc-700"
             }`}>
               {item.label}
             </div>
             {item.category && (
               <span 
                 className={`text-[12px] font-sans tracking-wider uppercase transition-all duration-300 ease-[ease] transform font-medium ${
-                  (isHovered || isExpanded) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0"
+                  isBlueActive ? "opacity-100 translate-y-0 !text-white/80" : "opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 text-zinc-500"
                 }`}
-                style={{ color: (isHovered || isExpanded) ? "rgba(255, 255, 255, 0.8)" : "rgb(113, 113, 122)" }}
+                style={{ color: isBlueActive ? "rgba(255, 255, 255, 0.8)" : "rgb(113, 113, 122)" }}
               >
                 {item.category}
               </span>
@@ -161,10 +252,12 @@ function HoverImageListItem({
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
                 className={`flex items-center justify-center transition-colors duration-300 ease-[ease] ${
-                  isHovered ? "text-white" : "text-[#2563EB]"
+                  isBlueActive ? "!text-white" : "text-[#2563EB]"
                 }`}
               >
-                <ArrowUpRight className="w-8 h-8 sm:w-10 sm:h-10 rotate-90" />
+                <ArrowUpRight className={`w-8 h-8 sm:w-10 sm:h-10 rotate-90 transition-colors duration-300 ${
+                  isBlueActive ? "!text-white" : "text-[#2563EB]"
+                }`} />
               </motion.div>
             )}
           </AnimatePresence>
