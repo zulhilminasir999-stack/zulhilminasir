@@ -214,7 +214,9 @@ export default function ProjectDetailPage() {
           ? "Pre-school-Fee-Management"
           : (id === "buff-packaging" || id === "buffbox" || id === "BuffBox")
             ? "BuffBox"
-            : id;
+            : (id?.toLowerCase() === "interpack")
+              ? "interpack"
+              : id;
 
   const project = PORTFOLIO_PROJECTS.find(
     (p) =>
@@ -229,6 +231,7 @@ export default function ProjectDetailPage() {
   const isTGPowerWrap = project?.id === "TGPowerWrap";
   const isCKLighting = project?.id === "ck-lighting";
   const isBuffBox = project?.id === "BuffBox" || project?.id === "buff-packaging";
+  const isInterpack = project?.id === "interpack" || project?.id === "Interpack";
 
   useEffect(() => {
     const updateTime = () => {
@@ -1622,7 +1625,7 @@ export default function ProjectDetailPage() {
                       : isTriply
                         ? "/Triply/Triply9.jpg"
                         : isBuffBox
-                          ? "/Buff/Buff Packaging_mockup 4.jpg"
+                          ? "/Buff/Buff Packaging_mockup 3.png"
                           : project?.galleryImages && project.galleryImages.length > 5
                             ? project.galleryImages[5]
                             : project?.imageUrl || "",
@@ -1642,7 +1645,7 @@ export default function ProjectDetailPage() {
                       : isTriply
                         ? "/Triply/Triply9.jpg"
                         : isBuffBox
-                          ? "/Buff/Buff Packaging_mockup 4.jpg"
+                          ? "/Buff/Buff Packaging_mockup 3.png"
                           : project?.galleryImages && project.galleryImages.length > 5
                             ? project.galleryImages[5]
                             : project?.imageUrl || ""
@@ -1659,7 +1662,7 @@ export default function ProjectDetailPage() {
                       : isTriply
                         ? "Triply 9 Showcase"
                         : isBuffBox
-                          ? "Buff Packaging 4 Showcase"
+                          ? "Buff Packaging 3 Showcase"
                           : "Solution Showcase"
             }
             className="w-full h-auto block select-none rounded-none"
@@ -1816,7 +1819,7 @@ export default function ProjectDetailPage() {
                       : isPFM
                         ? "/PFM/PFM10.jpg"
                         : isBuffBox
-                          ? "/Buff/Buff Packaging_mockup 2.jpg"
+                          ? "/Buff/Buff Packaging_mockup 4.jpg"
                           : project.galleryImages && project.galleryImages.length > 6
                             ? project.galleryImages[6]
                             : "/TGPW/TGPW8.jpg",
@@ -1834,12 +1837,12 @@ export default function ProjectDetailPage() {
                       : isPFM
                         ? "/PFM/PFM10.jpg"
                         : isBuffBox
-                          ? "/Buff/Buff Packaging_mockup 2.jpg"
+                          ? "/Buff/Buff Packaging_mockup 4.jpg"
                           : project.galleryImages && project.galleryImages.length > 6
                             ? project.galleryImages[6]
                             : "/TGPW/TGPW8.jpg"
               }
-              alt={isPFM ? "PFM 10 Showcase" : isBuffBox ? "Buff Packaging 2 Showcase" : "Final Gallery Image"}
+              alt={isPFM ? "PFM 10 Showcase" : isBuffBox ? "Buff Packaging 4 Showcase" : "Final Gallery Image"}
               className={`w-full ${isCKLighting || isTGPowerWrap || isTriply || isPFM || isBuffBox ? "h-auto block rounded-none" : "h-auto sm:h-screen object-contain sm:object-cover block rounded-none"}`}
               referrerPolicy="no-referrer"
             />

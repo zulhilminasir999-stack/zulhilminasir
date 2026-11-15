@@ -1532,6 +1532,10 @@ export default function HomePage({ isLoading, setIsLoading }: HomePageProps) {
                   navigate(`/case-study-project/Pre-school-Fee-Management`);
                   return;
                 }
+                if (lowerTitle.includes("interpack")) {
+                  navigate(`/case-study-project/interpack`);
+                  return;
+                }
                 const matchedProject = PORTFOLIO_PROJECTS.find(p => p.title.toLowerCase() === lowerTitle);
                 if (matchedProject) {
                   navigate(`/case-study-project/${matchedProject.id}`);

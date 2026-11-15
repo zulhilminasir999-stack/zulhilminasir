@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "motion/react";
 import { Plus, Minus, ArrowUpRight } from "lucide-react";
 import { WordsStagger } from "../registry/spell-ui/words-stagger";
+import { useLenis } from "lenis/react";
 
 interface CareerTimelineProps {
   theme: "dark" | "light";
@@ -139,15 +140,54 @@ function CareerRoleHeading({
   );
 }
 
+const CAREER_STORAGE_KEY = "career_timeline_expanded_id";
+
 export default function CareerTimeline({ theme }: CareerTimelineProps) {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const lenis = useLenis();
+  const [expandedId, setExpandedId] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = sessionStorage.getItem(CAREER_STORAGE_KEY) ?? localStorage.getItem(CAREER_STORAGE_KEY);
+        if (saved === "collapsed" || saved === "none") {
+          return null;
+        }
+        if (saved && EXPERIENCE_DATA.some((item) => item.id === saved)) {
+          return saved;
+        }
+      } catch {
+        // Fallback gracefully
+      }
+    }
+    return null;
+  });
   const isLight = theme === "light";
   const headerRef = useRef<HTMLHeadingElement>(null);
   const isHeaderInView = useInView(headerRef, { once: false, amount: 0.2 });
 
   const toggleAccordion = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
+    setExpandedId((prev) => (prev === id ? null : id));
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        if (expandedId !== null) {
+          sessionStorage.setItem(CAREER_STORAGE_KEY, expandedId);
+          localStorage.setItem(CAREER_STORAGE_KEY, expandedId);
+        } else {
+          sessionStorage.setItem(CAREER_STORAGE_KEY, "collapsed");
+          localStorage.setItem(CAREER_STORAGE_KEY, "collapsed");
+        }
+      } catch {
+        // Fallback gracefully
+      }
+    }
+    // Update Lenis scroll layout smoothly after accordion expand/collapse transition
+    const timer = setTimeout(() => {
+      lenis?.resize();
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [expandedId, lenis]);
 
   return (
     <div className={`w-full font-sans antialiased select-none ${

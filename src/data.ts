@@ -97,7 +97,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     year: "2026",
     imageUrl: "/TGPW/tgpw1.jpg",
     client: "TG PowerWrap Sdn Bhd",
-    toolsUsed: ["Wordpress Elementor", "Adobe Illustrator", "Adobe Photoshop", "ChatGPT", "Google Gemini"],
+    toolsUsed: ["Wordpress Elementor", "Adobe Illustrator", "Adobe Photoshop", "OpenAI", "Google Gemini"],
     codeAssistedTools: ["HTML", "CSS"],
     summary: "From its manufacturing roots in Sungai Petani established in 2010, TG Power Wrap has evolved into Malaysia's leading producer of reliable PVC food cling films, dedicated to providing high-performance packaging that maintains food hygiene and extends shelf life for global markets spanning five continents.",
     overviewP1: "Engineered a high-performance corporate platform for TG PowerWrap to showcase over a decade of manufacturing leadership in sustainable food packaging solutions.",
@@ -208,7 +208,7 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     imageUrl: "/CK Lighting Web/ck1.jpg",
     objectPosition: "center 30%",
     client: "CK Lighting Sdn Bhd",
-    toolsUsed: ["SiteGiant", "Adobe Illustrator", "Adobe Photoshop", "ChatGPT", "Adobe Firefly"],
+    toolsUsed: ["SiteGiant", "Adobe Illustrator", "Adobe Photoshop", "OpenAI", "Adobe Firefly"],
     codeAssistedTools: [],
     summary: "Constructed an elite corporate CMS portal featuring dynamic product cataloging, regional store highlights, and high responsiveness.",
     challenge: "Traditional templates had poor mobile load times and did not support complex custom integrations for multi-hub product showcases.",
@@ -365,6 +365,40 @@ export const PORTFOLIO_PROJECTS: Project[] = [
     links: [
       { label: "Interactive Custom Poster Web App", url: "#" },
       { label: "Biennale Brand Identity Specification Sheet", url: "#" }
+    ]
+  },
+  {
+    id: "interpack",
+    title: "Interpack Processing & Packaging Event (Germany)",
+    subtitle: "International Trade Fair Exhibition & Booth Visual Design",
+    category: "VISUAL_DESIGN",
+    categoryLabel: "Exhibition & Visual Design",
+    year: "2026",
+    imageUrl: "/DemoPic/IP.jpg",
+    client: "Thong Guan Industries Berhad",
+    toolsUsed: ["Adobe Illustrator", "Adobe Photoshop", "Adobe Firefly", "Google Gemini Prompting"],
+    codeAssistedTools: [],
+    summary: "Comprehensive spatial exhibition visual branding, booth display designs, and countdown promotional collateral engineered for Thong Guan Industries Berhad at Interpack in Düsseldorf, Germany.",
+    overviewP1: "Crafted high-impact countdown campaign graphics and large-scale architectural exhibition graphics for Thong Guan Industries Berhad, spotlighting their cutting-edge TG Stretch film and 'Get Greener with Data' sustainability showcase at Interpack Düsseldorf.",
+    overviewP2: "The design emphasizes structural clarity, bold typography, and technical testing precision (ASTM D4649-03) across spatial booth displays, distributor touchpoints, and international trade fair announcements.",
+    challenge: "Standing out within a world-scale trade fair like Interpack in Düsseldorf requires authoritative visual presence, instant clarity from long hall distances, and seamless communication of technical packaging metrics and sustainability values.",
+    userFlow: "Designed an engaging visual campaign flow starting from social media countdown visuals ('7 Days To Go') to trade hall wayfinding signage, prominent booth identification (Booth No: 10E43), and immersive machine & pallet testing display zones.",
+    solution: "Engineered a striking, high-contrast visual design system utilizing vibrant brand blues, crisp technical data overlays, and clear architectural spatial mockups that elevate company authority on the international trade stage.",
+    promptExample: "International trade fair exhibition booth graphics, Thong Guan Industries Interpack Düsseldorf, modern sustainable packaging trade display, dynamic technical data banners, Booth 10E43, high fidelity industrial rendering --ar 16:9",
+    results: [
+      "Maximum brand visibility and attendee recall across Hall 10 at Messe Düsseldorf.",
+      "Clear spatial communication of Thong Guan's testing capabilities and sustainable film innovations.",
+      "Flawless print and digital execution across countdown graphics and trade booth displays."
+    ],
+    galleryImages: [
+      "/DemoPic/IP.jpg",
+      "/DemoPic/NT.jpg",
+      "/DemoPic/BP.jpg",
+      "/DemoPic/MP.jpg"
+    ],
+    links: [
+      { label: "View Exhibition Visual Guidelines", url: "#" },
+      { label: "Thong Guan Interpack Showcase", url: "#" }
     ]
   }
 ];
@@ -675,7 +709,7 @@ export const CAPABILITIES_DATA: CapabilityDetail[] = [
     ],
     toolsUsed: ["Adobe Photoshop", "Adobe Illustrator", "Adobe Firefly", "Midjourney"],
     showcases: [
-      { title: "Interpack Processing & Packaging Event (Germany)", image: "/DemoPic/IP.jpg", isComingSoon: true },
+      { title: "Interpack Processing & Packaging Event (Germany)", image: "/DemoPic/IP.jpg", projectId: "interpack", url: "/case-study-project/interpack" },
       { title: "Newton R&D Centre | Corporate Social Media Design", image: "/DemoPic/NT.jpg", isComingSoon: true },
       { title: "Money Pocket (CK Lighting X Black Hanifah)", image: "/DemoPic/MP.jpg", isComingSoon: true }
     ],

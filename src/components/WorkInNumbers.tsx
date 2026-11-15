@@ -105,7 +105,7 @@ export default function WorkInNumbers({ theme = "light" }: WorkInNumbersProps) {
       description: "Projects spanning website design, e-commerce, digital interfaces, and branding."
     },
     { 
-      value: 4, 
+      value: 55, 
       label: "Digital Interfaces Developed", 
       suffix: "+",
       description: "Developing intuitive web and mobile interfaces that combine usability, responsive layouts, and functional user experiences."

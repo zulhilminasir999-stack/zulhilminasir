@@ -227,6 +227,18 @@ const ALL_CAROUSEL_CASES: CarouselCaseItem[] = [
     url: "/case-study/visual-design",
     isProject: false,
     isComingSoon: true,
+  },
+  {
+    id: "interpack",
+    slugTitle: "Interpack - Trade Fair Exhibition",
+    displayTitle: "Interpack Processing & Packaging Event (Germany)",
+    type: "Visual Design",
+    description: "Spatial exhibition visual branding, booth display designs, and countdown promotional collateral for Thong Guan Industries at Interpack Düsseldorf.",
+    role: "EXHIBITION & VISUAL DESIGNER",
+    image: "/DemoPic/IP.jpg",
+    url: "/case-study-project/interpack",
+    isProject: true,
+    isComingSoon: false,
   }
 ];
 
@@ -238,7 +250,8 @@ const SIMILARITY_MAP: Record<string, string[]> = {
   "ai-native-development": ["RepX", "Triply", "Pre-school-Fee-Management", "ck-lighting", "TGPowerWrap", "finsight-ai", "smart-copilot", "genai-orchestrator", "travel-claim-system", "analytics-hub"],
   "brand-identity": ["TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "atelier-luxe", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot"],
   "packaging": ["BuffBox", "TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "atelier-luxe", "travel-claim-system", "analytics-hub", "finsight-ai", "smart-copilot"],
-  "visual-design": ["TGPowerWrap", "Triply", "RepX", "ck-lighting", "Pre-school-Fee-Management", "helios-exhibition", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot"],
+  "visual-design": ["interpack", "TGPowerWrap", "Triply", "RepX", "ck-lighting", "Pre-school-Fee-Management", "helios-exhibition", "finsight-ai", "travel-claim-system", "analytics-hub", "smart-copilot"],
+  "interpack": ["TGPowerWrap", "BuffBox", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub"],
 
   "BuffBox": ["TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator"],
   "buff-packaging": ["BuffBox", "TGPowerWrap", "ck-lighting", "RepX", "Triply", "Pre-school-Fee-Management", "finsight-ai", "smart-copilot", "travel-claim-system", "analytics-hub", "genai-orchestrator"],
