@@ -55,6 +55,7 @@ export default function TechBanner() {
 
   const [activeLogo, setActiveLogo] = useState<string | null>(null);
   const [isTouchingSlider, setIsTouchingSlider] = useState(false);
+  const isTouchingSliderRef = useRef(false);
 
   // Track scroll progress of the banner container for the sticky scroll-reveal text
   const { scrollYProgress } = useScroll({
@@ -141,6 +142,11 @@ export default function TechBanner() {
           momentumVelocityRef.current = momentumVelocityRef.current * 0.95 + defaultSpeed * 0.05;
           currentX += momentumVelocityRef.current;
           currentXRef.current = currentX;
+
+          if (isTouchingSliderRef.current && momentumVelocityRef.current > 0.02) {
+            isTouchingSliderRef.current = false;
+            setIsTouchingSlider(false);
+          }
         }
       }
 
@@ -174,33 +180,16 @@ export default function TechBanner() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!isTouchingSlider) return;
-
-    const handleRelease = () => {
-      setIsTouchingSlider(false);
-    };
-
-    window.addEventListener("pointerup", handleRelease);
-    window.addEventListener("pointercancel", handleRelease);
-    window.addEventListener("touchend", handleRelease);
-    window.addEventListener("touchcancel", handleRelease);
-    window.addEventListener("blur", handleRelease);
-
-    return () => {
-      window.removeEventListener("pointerup", handleRelease);
-      window.removeEventListener("pointercancel", handleRelease);
-      window.removeEventListener("touchend", handleRelease);
-      window.removeEventListener("touchcancel", handleRelease);
-      window.removeEventListener("blur", handleRelease);
-    };
-  }, [isTouchingSlider]);
-
   const handlePointerDown = (e: React.PointerEvent) => {
     const target = e.currentTarget as HTMLDivElement;
     target.setPointerCapture(e.pointerId);
 
+    if (e.pointerType !== "mouse") {
+      isHoveredRef.current = false;
+    }
+
     if (window.innerWidth < 640) {
+      isTouchingSliderRef.current = true;
       setIsTouchingSlider(true);
     }
 
@@ -238,7 +227,9 @@ export default function TechBanner() {
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
-    setIsTouchingSlider(false);
+    if (e.pointerType !== "mouse") {
+      isHoveredRef.current = false;
+    }
     if (!isDraggingRef.current) return;
     isDraggingRef.current = false;
 
@@ -336,12 +327,12 @@ export default function TechBanner() {
               onPointerCancel={handlePointerUp}
               onTouchStart={() => {
                 setActiveLogo(null);
+                isHoveredRef.current = false;
                 if (window.innerWidth < 640) {
+                  isTouchingSliderRef.current = true;
                   setIsTouchingSlider(true);
                 }
               }}
-              onTouchEnd={() => setIsTouchingSlider(false)}
-              onTouchCancel={() => setIsTouchingSlider(false)}
               style={{
                 WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
                 maskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)"
