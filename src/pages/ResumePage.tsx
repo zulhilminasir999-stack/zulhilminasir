@@ -12,9 +12,9 @@ import {
 } from "lucide-react";
 
 const RESUME_PDF_URL =
-  "/assets/aistudio/Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_UXDesigner_b200e43f.pdf";
+  "/assets/aistudio/Zulhilmi_Nasir_My_Resume_UIUX_Web_Developer_225a30ba.pdf";
 const RESUME_DOWNLOAD_FILENAME =
-  "Zulhilmi_Nasir_My_Resume_WebDeveloper_Digital_UXDesigner.pdf";
+  "Zulhilmi_Nasir_My_Resume_UIUX_Web_Developer.pdf";
 
 const RESUME_PAGES = [
   {
