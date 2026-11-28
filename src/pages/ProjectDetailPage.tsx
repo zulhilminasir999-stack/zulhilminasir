@@ -980,10 +980,10 @@ export default function ProjectDetailPage() {
                 </div>
                 <div className="order-3">
                   <h4 className="text-[20px] sm:text-sm font-semibold text-zinc-900 mb-2">
-                    Released
+                    {isTriply ? "Project Year" : "Released"}
                   </h4>
                   <p className="text-zinc-600 text-[16px] sm:text-sm">
-                    {project.year || "October 11, 2024"}
+                    {isTriply ? "2026" : project.year || "October 11, 2024"}
                   </p>
                 </div>
                 <div className="order-4">
